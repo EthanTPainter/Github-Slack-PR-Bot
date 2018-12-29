@@ -1,0 +1,35 @@
+service: github-slack-pr-bot
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  timeout: 30
+  deploymentBucket:
+    name: sc-lambda-${opt:stage}
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-prune-plugin
+
+custom:
+  prune:
+    automatic: true
+    number: 2
+  dotenv:
+    path: ./.env
+
+package:
+  - exclude:
+    - ./**
+  - include:
+    - ./node_modules/**
+    - ./dist/**
+
+functions:
+  handler:
+    handler: dist/handler.githubResponseHandler
+    events:
+      - http:
+          path: bot
+          method: post

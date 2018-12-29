@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
+    "target": "es6",
+    "sourceMap": true,
+    "sourceRoot": "src",
+    "outDir": "dist",
+    "baseUrl": ".",
+    "lib": [ "es6", "dom", "esnext.asynciterable"]
+  },
+  "include": [
+    "src/**/*",
+    "test/**/*"
+  ]
+}

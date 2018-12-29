@@ -1,0 +1,57 @@
+{
+  "name": "github-slack-pr-bot",
+  "version": "1.0.0",
+  "description": "Sends alerts to slack after changes to PRs in GitHub",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc -w",
+    "ci": "npm run clean && npm i && npm run lint && npm run build",
+    "clean": "rm -rf ./dist",
+    "generate:docs": "typedoc --out docs/ src/",
+    "serve:docs": "npm run generate:docs && http-server ./docs -p 7000",
+    "deploy:prod": "npm run build && cd dist && serverless deploy -s prod",
+    "deploy:qa": "npm run build && cd dist && serverless deploy -s qa",
+    "deploy:dev": "npm run build && serverless deploy -s dev",
+    "deploy:integration": "npm run build && cd dist && serverless deploy -s build$BUILD_NUMBER",
+    "deploy:intergration:bucket": "aws s3 mb s3://scheduled-job-logger$BUILD_NUMBER",
+    "deploy:info": "cd dist && serverless info -s",
+    "lint:test": "tslint src/**/*.ts",
+    "lint:src": "tslint src/**/*.ts",
+    "lint": "npm run lint:src && npm run lint:test",
+    "test:unit": "mocha -r ts-node/register test/**/*.spec.ts",
+    "test:watch": "npm run test:unit -- --watch",
+    "test": "npm run test:unit",
+    "release": "standard-version"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.119",
+    "@types/request-promise": "^4.1.37",
+    "aws-sdk": "^2.382.0",
+    "axios": "^0.18.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.1.0",
+    "serverless": "^1.25.0",
+    "serverless-dotenv-plugin": "^2.0.1",
+    "serverless-offline": "^3.17.0",
+    "serverless-prune-plugin": "^1.3.2",
+    "standard-version": "^4.3.0",
+    "ts-node": "^4.1.0",
+    "tslint": "^5.9.0",
+    "typedoc": "^0.9.0",
+    "typescript": "^2.9.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EthanTPainter/github-slack-pr-bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EthanTPainter/github-slack-pr-bot/issues"
+  },
+  "homepage": "https://github.com/EthanTPainter/github-slack-pr-bot#readme"
+}
