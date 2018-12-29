@@ -1,5 +1,18 @@
 # GitHub-Slack-PR-Bot
 
+- [Problem to Solve](#problem-to-solve)
+- [Purpose](#purpose)
+  - [Why not use GitHub Slack Integration App](#Why-not-use-the-common-github-slack-integration-app?)
+- [Adding/Modifying User Groups](#adding/modifying-user-groups)
+- [Functionality](#functionality)
+  - [Core](#core)
+    - [Open a PR](#open-a-pr)
+    - [Close a PR](#close-a-pr)
+    - [Comment on a PR](#comment-on-a-pr)
+    - [Request Changes on a PR](#request-changes-on-a-pr)
+    - [Approve a PR](#approve-a-pr)
+  - [Long Term](#long-term)
+
 ## Problem to solve
 
 Consider the situation: a tech company, with more than one small development
@@ -76,37 +89,20 @@ opened or updated by the team members or team leads.
 
 #### Open a PR
 
-If a PR is opened, an alert should be sent in one the following ways:
-This message style is really a question of who we want to notify in slack.
-
-`@slack-user has opened PR(####) in repository sample-repository. Requires Peer and Lead Review`
-
-`@slack-user has opened PR(####) in repository sample-repository. Requires Peer (@peer1, peer2, etc.) and Lead (@lead1) review`
-
-`slack-user has opened PR(####) in repository sample-repository. Requires Peer and Lead Review`
-
-`slack-user has opened PR(####) in repository sample-repository. Requires Peer (@peer1, peer2, etc.) and Lead (@lead1) review`
-
-`slack-user has opened PR(####) in repository sample-repository. Requires Peer Review (@peer1, peer2, etc.) First`
-
-`slack-user has opened PR(####) in repository sample-repository. Requires Peer Review First`
 
 #### Close a PR
-
-If a PR is closed, an alert should be sent in one the following ways:
-
 
 
 #### Comment on a PR
 
 
+#### Request Changes on a PR
+
 
 #### Approve a PR
 
 
-
-#### Request Changes on a PR
-
+#### Merge a PR
 
 
 ### Long Term
@@ -140,8 +136,6 @@ SCP-1234: TITLE OF THE TICKET
 :X: Has Lead Approval
 :X: Can Merge
 ```
-
-
 
 4)
 Slack currently doesn't support hyperlinks so adding links

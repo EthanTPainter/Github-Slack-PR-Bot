@@ -1,4 +1,4 @@
-import { setupSlackPost } from "../api/slack";
+import { setupSlackPost } from "../../api/slack";
 
 export const postMessage: any = (
   slackApiUri: string,
