@@ -80,10 +80,15 @@ If a PR is opened, an alert should be sent in one the following ways:
 This message style is really a question of who we want to notify in slack.
 
 `@slack-user has opened PR(####) in repository sample-repository. Requires Peer and Lead Review`
+
 `@slack-user has opened PR(####) in repository sample-repository. Requires Peer (@peer1, peer2, etc.) and Lead (@lead1) review`
+
 `slack-user has opened PR(####) in repository sample-repository. Requires Peer and Lead Review`
+
 `slack-user has opened PR(####) in repository sample-repository. Requires Peer (@peer1, peer2, etc.) and Lead (@lead1) review`
+
 `slack-user has opened PR(####) in repository sample-repository. Requires Peer Review (@peer1, peer2, etc.) First`
+
 `slack-user has opened PR(####) in repository sample-repository. Requires Peer Review First`
 
 #### Close a PR
