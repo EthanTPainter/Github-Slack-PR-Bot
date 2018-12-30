@@ -1,1 +1,1 @@
-export { Comment } from "./comment";
+export { CommentPR } from "./comment-pr";

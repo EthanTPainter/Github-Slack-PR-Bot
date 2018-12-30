@@ -17,5 +17,5 @@
 export class Base {
   description: string;
   title: string;
-  pull_request_link: string;
+  url: string;
 }

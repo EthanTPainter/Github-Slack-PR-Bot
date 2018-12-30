@@ -1,1 +1,1 @@
-export { RequestChanges } from "./request-changes";
+export { RequestChangesPR } from "./request-changes-pr";

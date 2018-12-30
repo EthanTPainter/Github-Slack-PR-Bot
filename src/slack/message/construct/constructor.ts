@@ -25,13 +25,20 @@ export function constructSlackMessage(
 
   switch (action) {
 
+    // When a PR is opened
     case "opened": {
       slackMessage = "No";
       break;
     }
 
+    // When a user comments on a PR
     case "commented": {
       slackMessage = "Yes";
+      break;
+    }
+
+    case "closed": {
+      slackMessage = "Maybe";
       break;
     }
 

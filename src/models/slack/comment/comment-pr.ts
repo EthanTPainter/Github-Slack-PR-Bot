@@ -7,7 +7,7 @@ import { Base } from "../../base";
  * owner            - User who opened the PR
  * user_commenting  - User who is leaving comments on the PR
  */
-export class Comment extends Base {
+export class CommentPR extends Base {
   owner: string;
   user_commenting: string;
 }
