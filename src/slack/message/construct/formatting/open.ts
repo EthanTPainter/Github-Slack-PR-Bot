@@ -8,7 +8,13 @@ export class Open {
    * @returns String of the description for the slack message
    */
   constructDescription(slackUser: string, slackGroup?: string): string {
-    return "";
+    let desc: string = `@${slackUser} opened this PR. Needs *peer* and *lead* reviews`;
+    if (slackGroup) {
+      desc = desc + ` @${slackGroup}\n`;
+    } else {
+      desc = desc + `\n`;
+    }
+    return desc;
   }
 
   /**
@@ -26,14 +32,4 @@ export class Open {
       throw new Error("event.pull_request.user.login not found in event");
     }
   }
-
-  /**
-   * @author Ethan T Painter
-   * @description Retrieve the Slack group from config files
-   * @param user User
-   */
-  getGroup(user: string): string {
-    return "team";
-  }
-
 }

@@ -31,5 +31,4 @@ export class Close {
       throw new Error("event.sender.login not found in event");
     }
   }
-
 }

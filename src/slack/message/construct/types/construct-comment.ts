@@ -1,4 +1,4 @@
-import { CommentPR } from "../../../models";
+import { CommentPR } from "../../../../models";
 
 export function constructComment(): CommentPR {
 

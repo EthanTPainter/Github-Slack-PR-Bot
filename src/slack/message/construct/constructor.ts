@@ -1,3 +1,5 @@
+import { OpenedPR } from "src/models";
+import { constructOpen } from "./types/construct-open";
 
 /*
  * @Author: Ethan T Painter
@@ -27,7 +29,8 @@ export function constructSlackMessage(
 
     // When a PR is opened
     case "opened": {
-      slackMessage = "No";
+      // Construct OpenPR Object and format slack message
+      const open: OpenedPR = constructOpen(event);
       break;
     }
 

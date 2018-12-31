@@ -1,4 +1,4 @@
-import { ClosePR } from "../../../models";
+import { ClosePR } from "../../../../models";
 
 export function constructClose(): ClosePR {
 
