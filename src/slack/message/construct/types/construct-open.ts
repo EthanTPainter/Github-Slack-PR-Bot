@@ -7,11 +7,12 @@ export function constructOpen(event: any): OpenedPR {
     const base: Base = new Base();
 
     // OpenedPr Properties
+    // GitHub user name
     const owner: string = open.getOwner(event);
 
-    // Use owner variable to grab Slack name/group
-    const slackUser: string = "";
-    const groupName: string = base.getSlackGroup(slackUser);
+    // Use owner variable to grab Slack name and group
+    const slackUser: string = base.getSlackUser(owner);
+    const groupName: string = base.getSlackGroup(owner);
 
     // Base Properties
     let description: string;
