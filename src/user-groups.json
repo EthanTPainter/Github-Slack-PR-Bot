@@ -1,8 +1,8 @@
 {
   "Teams": {
-    "DevTeam": {
-      "DevTeam1": {
-        "Group": "Group Slack Name",
+    "Dev_Team": {
+      "Dev_Team_1": {
+        "Slack_Group": "Group Slack Name",
         "Slack_Token": "TOKEN",
         "Users": {
           "Lead": {
@@ -16,8 +16,8 @@
           }
         }
       },
-      "DevTeam2": {
-        "Group": "Group Slack Name",
+      "Dev_Team_2": {
+        "Slack_Group": "Group Slack Name",
         "Slack_Token": "TOKEN",
         "Users": {
           "Lead": {
@@ -32,9 +32,9 @@
         }
       }
     },
-    "QaTeam":{ 
-      "QaTeam1": {
-        "Group": "Group Slack Name",
+    "Qa_Team":{ 
+      "Qa_Team_1": {
+        "Slack_Group": "Group Slack Name",
         "Slack_Token": "TOKEN",
         "Users": {
           "Lead": {
@@ -48,8 +48,8 @@
           }
         }
       },
-      "QaTeam2": {
-        "Group": "Group Slack Name",
+      "Qa_Team_2": {
+        "Slack_Group": "Group Slack Name",
         "Slack_Token": "TOKEN",
         "Users": {
           "Lead": {
@@ -64,9 +64,9 @@
         }
       }
     },
-    "ProdTeam": {
-      "ProdTeam1": {
-        "Group": "Group Slack Name",
+    "Prod_Team": {
+      "Prod_Team_1": {
+        "Slack_Group": "Group Slack Name",
         "Slack_Token": "TOKEN",
         "Users": {
           "Lead": {
@@ -80,8 +80,8 @@
           }
         }
       },
-      "ProdTeam2": {
-        "Group": "Group Slack Name",
+      "Prod_Team_2": {
+        "Slack_Group": "Group Slack Name",
         "Slack_Token": "TOKEN",
         "Users": {
           "Lead": {
