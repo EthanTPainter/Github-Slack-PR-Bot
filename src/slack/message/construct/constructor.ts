@@ -1,5 +1,6 @@
-import { OpenedPR } from "src/models";
+import { OpenedPR, ClosePR } from "src/models";
 import { constructOpen } from "./types/construct-open";
+import { constructClose } from "./types/construct-close";
 
 /*
  * @Author: Ethan T Painter
@@ -41,6 +42,7 @@ export function constructSlackMessage(
                       + open.url;
       break;
     }
+
     // When a PR is reopened (PR was previously CLOSED)
     case "reopened": {
       // Construct OpenPR Object and format slack message
@@ -56,6 +58,7 @@ export function constructSlackMessage(
                       + open.url;
       break;
     }
+
     // When a user comments on a PR
     // This could get a bit spammy so probably
     // encourage using "request_changes" for many comments
@@ -66,7 +69,17 @@ export function constructSlackMessage(
 
     // When a PR has been closed
     case "closed": {
-      slackMessage = "Maybe";
+      // Construct ClosePR Object and format slack message
+      const close: ClosePR = constructClose(event);
+      /* Construct order of Opened PR Slack message
+       * SLACK MESSAGE APPEARANCE:
+       * -------------- DESCRIPTION --------------
+       * -------------- TITLE --------------------
+       * -------------- URL ----------------------
+       */
+      slackMessage = close.description + "\n"
+                      + close.title + "\n"
+                      + close.url;
       break;
     }
 
@@ -74,7 +87,6 @@ export function constructSlackMessage(
     case "submitted": {
       // Determine if the PR was approved or changes were requested
       const decider: string = event.review.state;
-
       // If PR is approved, construct Approval checkmark
       if (decider === "approved") {
         slackMessage = "";

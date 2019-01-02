@@ -1,16 +1,29 @@
 import { ClosePR } from "../../../../models";
+import { Base, Close } from "../formatting";
 
-export function constructClose(): ClosePR {
+export function constructClose(event: any): ClosePR {
+  const base: Base = new Base();
+  const close: Close = new Close();
 
   try {
-    // Base properties
-    const description: string = "";
-    const title: string = "";
-    const pr_url: string = "";
-
     // ClosePR properties
-    const owner: string = "";
-    const user_closing: string = "";
+    // GitHub user name who opened PR and GtHub user who closed the PR
+    const owner: string = close.getOwner(event);
+    const user_closing: string = close.getUserClosingPR(event);
+
+    // Use owner variable to grab Slack name and group
+    const slackUser: string = base.getSlackUser(owner);
+    const groupName: string = base.getSlackGroup(owner);
+
+    // Base properties
+    let description: string;
+    if (groupName === "") {
+      description = close.constructDescription(slackUser);
+    } else {
+      description = close.constructDescription(slackUser, groupName);
+    }
+    const title: string = base.getTitle(event);
+    const pr_url: string = base.getPRLink(event);
 
     // Construct ClosePR object to return
     const closeObj: ClosePR = {

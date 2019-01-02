@@ -2,10 +2,10 @@ import { OpenedPR } from "../../../../models";
 import { Base, Open } from "../formatting";
 
 export function constructOpen(event: any): OpenedPR {
-  try {
-    const open: Open = new Open();
-    const base: Base = new Base();
+  const open: Open = new Open();
+  const base: Base = new Base();
 
+  try {
     // OpenedPr Properties
     // GitHub user name
     const owner: string = open.getOwner(event);
