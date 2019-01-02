@@ -1,6 +1,8 @@
-import { OpenedPR, ClosePR } from "src/models";
+import { OpenedPR, ClosePR, CommentPR, MergePR } from "src/models";
 import { constructOpen } from "./types/construct-open";
 import { constructClose } from "./types/construct-close";
+import { constructComment } from "./types/construct-comment";
+import { constructMerge } from "./types/construct-merge";
 
 /*
  * @Author: Ethan T Painter
@@ -59,27 +61,36 @@ export function constructSlackMessage(
       break;
     }
 
-    // When a user comments on a PR
-    // This could get a bit spammy so probably
-    // encourage using "request_changes" for many comments
-    case "commented": {
-      slackMessage = "Yes";
-      break;
-    }
-
-    // When a PR has been closed
+    // When a PR has been closed OR merged
     case "closed": {
-      // Construct ClosePR Object and format slack message
-      const close: ClosePR = constructClose(event);
-      /* Construct order of Opened PR Slack message
-       * SLACK MESSAGE APPEARANCE:
-       * -------------- DESCRIPTION --------------
-       * -------------- TITLE --------------------
-       * -------------- URL ----------------------
-       */
-      slackMessage = close.description + "\n"
-                      + close.title + "\n"
-                      + close.url;
+      // Determine if the PR was approved or changes were requested
+      const decider: boolean = event.pull_request.merged;
+      if (decider) {
+        // Construct MergedPR Object and format slack message
+        const merge: MergePR = constructMerge(event);
+        /* Construct order of Opened PR Slack message
+        * SLACK MESSAGE APPEARANCE:
+        * -------------- DESCRIPTION --------------
+        * -------------- TITLE --------------------
+        * -------------- URL ----------------------
+        */
+        slackMessage = merge.description + "\n"
+                        + merge.title + "\n"
+                        + merge.url;
+      }
+      else {
+        // Construct ClosePR Object and format slack message
+        const close: ClosePR = constructClose(event);
+        /* Construct order of Opened PR Slack message
+        * SLACK MESSAGE APPEARANCE:
+        * -------------- DESCRIPTION --------------
+        * -------------- TITLE --------------------
+        * -------------- URL ----------------------
+        */
+        slackMessage = close.description + "\n"
+                        + close.title + "\n"
+                        + close.url;
+      }
       break;
     }
 
@@ -89,10 +100,35 @@ export function constructSlackMessage(
       const decider: string = event.review.state;
       // If PR is approved, construct Approval checkmark
       if (decider === "approved") {
+        // When a user approves a PR. This is arguably the most important feat
+        /* Construct order of Opened PR Slack message
+       * SLACK MESSAGE APPEARANCE:
+       * -------------- DESCRIPTION --------------
+       * ---------------- TITLE ------------------
+       * ----------------- URL -------------------
+       * --------- PEER APPROVAL CHECK -----------
+       * --------- LEAD APPROVAL CHECK -----------
+       * ----------- CAN MERGE CHECK -------------
+       */
         slackMessage = "";
       }
       else if (decider === "changes_requested") {
+        // When a user requests changes on a PR. This is arguably the most important feat
+        /* Construct order of Opened PR Slack message
+       * SLACK MESSAGE APPEARANCE:
+       * -------------- DESCRIPTION --------------
+       * -------------- TITLE --------------------
+       * -------------- URL ----------------------
+       */
         slackMessage = "";
+      }
+      else if (decider === "commented") {
+        // When a user comments on a PR
+        // This could get a bit spammy so probably keep it short
+        // encourage using "request_changes" for many comments
+        const comment: CommentPR = constructComment(event);
+        slackMessage = comment.description + "\n"
+                        + comment.url;
       }
       else {
         // Not approved or requested changes, throw error for unsupported state

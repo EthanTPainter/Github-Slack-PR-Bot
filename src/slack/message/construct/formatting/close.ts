@@ -8,7 +8,6 @@ export class Close {
    * @returns String of the description for the slack message
    */
   constructDescription(slackUser: string, slackGroup?: string): string {
-    // The *...* style means the ... is BOLD in Slack
     let desc: string = `@${slackUser} closed this PR.`;
     if (slackGroup !== "") {
       desc = desc + ` @${slackGroup}`;
