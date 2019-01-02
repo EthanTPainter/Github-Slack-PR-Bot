@@ -26,37 +26,66 @@ export function constructSlackMessage(
   let slackMessage: string = "default";
 
   switch (action) {
-
     // When a PR is opened
     case "opened": {
       // Construct OpenPR Object and format slack message
       const open: OpenedPR = constructOpen(event);
-      // Construct order of Opened PR Slack message
+      /* Construct order of Opened PR Slack message
+       * SLACK MESSAGE APPEARANCE:
+       * -------------- DESCRIPTION --------------
+       * -------------- TITLE --------------------
+       * -------------- URL ----------------------
+       */
       slackMessage = open.description + "\n"
                       + open.title + "\n"
                       + open.url;
       break;
     }
-
     // When a PR is reopened (PR was previously CLOSED)
     case "reopened": {
       // Construct OpenPR Object and format slack message
       const open: OpenedPR = constructOpen(event);
-      // Construct order of Opened PR Slack message
+      /* Construct order of Opened PR Slack message
+       * SLACK MESSAGE APPEARANCE:
+       * -------------- DESCRIPTION --------------
+       * -------------- TITLE --------------------
+       * -------------- URL ----------------------
+       */
       slackMessage = open.description + "\n"
                       + open.title + "\n"
                       + open.url;
       break;
     }
-
     // When a user comments on a PR
+    // This could get a bit spammy so probably
+    // encourage using "request_changes" for many comments
     case "commented": {
       slackMessage = "Yes";
       break;
     }
 
+    // When a PR has been closed
     case "closed": {
       slackMessage = "Maybe";
+      break;
+    }
+
+    // When a review has been submitted for a PR
+    case "submitted": {
+      // Determine if the PR was approved or changes were requested
+      const decider: string = event.review.state;
+
+      // If PR is approved, construct Approval checkmark
+      if (decider === "approved") {
+        slackMessage = "";
+      }
+      else if (decider === "changes_requested") {
+        slackMessage = "";
+      }
+      else {
+        // Not approved or requested changes, throw error for unsupported state
+        throw new Error(`Review submitted for PR. Unsupported event.review.state: ${decider}`);
+      }
       break;
     }
 
