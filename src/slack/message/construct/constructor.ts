@@ -31,6 +31,10 @@ export function constructSlackMessage(
     case "opened": {
       // Construct OpenPR Object and format slack message
       const open: OpenedPR = constructOpen(event);
+      // Constructo order of Opened PR Slack message
+      slackMessage = open.description + "\n"
+                      + open.title + "\n"
+                      + open.url;
       break;
     }
 

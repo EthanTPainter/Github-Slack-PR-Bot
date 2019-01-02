@@ -8,11 +8,10 @@ export class Open {
    * @returns String of the description for the slack message
    */
   constructDescription(slackUser: string, slackGroup?: string): string {
+    // The *...* style means the ... is BOLD in Slack
     let desc: string = `@${slackUser} opened this PR. Needs *peer* and *lead* reviews`;
-    if (slackGroup) {
-      desc = desc + ` @${slackGroup}\n`;
-    } else {
-      desc = desc + `\n`;
+    if (slackGroup !== "") {
+      desc = desc + ` @${slackGroup}`;
     }
     return desc;
   }
