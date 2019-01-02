@@ -1,3 +1,4 @@
+export * from "./github";
 export * from "./slack/approve";
 export * from "./slack/close";
 export * from "./slack/comment";
