@@ -26,11 +26,11 @@ export class Base {
    */
   getPRLink(event: any): string {
     try {
-      const url: string = event.pull_request.url;
+      const url: string = event.pull_request.html_url;
       return url;
     }
     catch (error) {
-      throw new Error("event.pull_request.url not found in event");
+      throw new Error("event.pull_request.html_url not found in event");
     }
   }
 
