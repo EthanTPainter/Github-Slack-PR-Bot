@@ -5,7 +5,7 @@
         "Slack_Group": "Group Slack Name",
         "Slack_Token": "TOKEN",
         "Users": {
-          "Lead": {
+          "Leads": {
             "GitHub_User_1": "Slack_user_1"
           },
           "Members": {
@@ -20,7 +20,7 @@
         "Slack_Group": "Group Slack Name",
         "Slack_Token": "TOKEN",
         "Users": {
-          "Lead": {
+          "Leads": {
             "GitHub_User_1": "Slack_user_1"
           },
           "Members": {
@@ -37,7 +37,7 @@
         "Slack_Group": "Group Slack Name",
         "Slack_Token": "TOKEN",
         "Users": {
-          "Lead": {
+          "Leads": {
             "GitHub_User_1": "Slack_user_1"
           },
           "Members": {
@@ -52,7 +52,7 @@
         "Slack_Group": "Group Slack Name",
         "Slack_Token": "TOKEN",
         "Users": {
-          "Lead": {
+          "Leads": {
             "GitHub_User_1": "Slack_user_1"
           },
           "Members": {
@@ -69,7 +69,7 @@
         "Slack_Group": "Group Slack Name",
         "Slack_Token": "TOKEN",
         "Users": {
-          "Lead": {
+          "Leads": {
             "GitHub_User_1": "Slack_user_1"
           },
           "Members": {
@@ -84,7 +84,7 @@
         "Slack_Group": "Group Slack Name",
         "Slack_Token": "TOKEN",
         "Users": {
-          "Lead": {
+          "Leads": {
             "GitHub_User_1": "Slack_user_1"
           },
           "Members": {

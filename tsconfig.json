@@ -10,7 +10,7 @@
     "sourceRoot": "src",
     "outDir": "dist",
     "baseUrl": ".",
-    "lib": [ "es6", "dom", "esnext.asynciterable"]
+    "lib": [ "es6", "es2017", "dom", "esnext.asynciterable"]
   },
   "include": [
     "src/**/*",
