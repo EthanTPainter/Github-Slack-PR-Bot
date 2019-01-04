@@ -29,8 +29,8 @@ export function getReviews(path: string, privateVal: boolean): any {
     // Make request with axios to retrieve GitHub reviews for a PR
     reviews = getReviewsList(options);
     console.log(`Reviews: ${reviews}`);
-    return reviews;
   }
+  return reviews;
 }
 
 async function getReviewsList(options: any): Promise<any> {

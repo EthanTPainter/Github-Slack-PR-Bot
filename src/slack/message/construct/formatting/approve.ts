@@ -7,9 +7,21 @@ export class Approve {
    * @param slackUserApproving Slack user who is approving the PR
    * @returns string of the description for the Slack Message
    */
-  constructDescription(slackUser: string, slackUserApproving: string): string {
+  constructDescription(slackUser: string,
+                       slackUserApproving: string,
+                      ): string {
+
     const desc: string = `@${slackUser} has approved this PR. (Owner: @${slackUserApproving})`;
     return desc;
+  }
+
+  getApprovals(leadApproved: boolean,
+               peerApproved: boolean,
+               needLeadApprovals: string[],
+               needMemberApprovals: string[],
+               ): string {
+
+    return "";
   }
 
   /**
@@ -56,10 +68,13 @@ export class Approve {
 
   /**
    * @author Ethan T Painter
-   * @description Generate a list of peers
+   * @description Generate a list of members to @ in Slack.
+   *              Will be none, [], if the only member has
+   *              already approve it.
    * @param members Members in a team
    * @param membersExempt Members exempt from being At'ed (@) in Slack
    *        since they're already involved in owning/approving the PR
+   * @returns String[] of members to @ in Slack
    */
   getMemberList(members: string[], membersExempt: string[]): string[] {
     const group: string[] = [];
@@ -111,27 +126,32 @@ export class Approve {
    *        since they're already invovled in owning/approving the PR
    */
   getLeadList(leads: string[], leadsExempt: string[]): string[] {
-    
-    return [];
-  }
-
-  /**
-   * @author Ethan T Painter
-   * @description Retrieve whether the CI/Pipeline was successfully built
-   * @param event Event received from the GitHub webhook
-   * @returns Boolean of whether the pipeline succeeded to build
-   */
-  getCISuccess(event: any): string {
-    return "";
-  }
-
-  /**
-   * @author Ethan T Painter
-   * @description Retrieve whether the current PR is mergable
-   * @param event Event received from the GitHub webhook
-   * @returns Boolean of whether the PR is currently mergable
-   */
-  getMergeableState(event: any): boolean {
-    return false;
+    const group: string[] = [];
+    let counter: number = 0;
+    // Loop through leads. If a lead is in leadsExempt
+    // don't add them to group (they're exempt). Otherwise, add them
+    if (leads.length === 0) {
+      throw new Error("No team leads found");
+    }
+    // Loop through members
+    while (counter < leads.length) {
+      let exemptCounter: number = 0;
+      let found: boolean = false;
+      // Loop through leadsExempt
+      while (exemptCounter < leadsExempt.length) {
+        if (leads[counter] === leadsExempt[exemptCounter]) {
+          found = true;
+        }
+        exemptCounter++;
+      }
+      // After looping through members Exempt once
+      // If found is true, don't add to group
+      // If found is false, add to group
+      if (found === false) {
+        group.push(leads[counter]);
+      }
+      counter++;
+    }
+    return group;
   }
 }

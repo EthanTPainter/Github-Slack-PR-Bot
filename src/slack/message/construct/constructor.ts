@@ -4,6 +4,7 @@ import {
   CommentPR,
   MergePR,
   RequestChangesPR,
+  ApprovePR,
 } from "src/models";
 
 import { constructOpen,
@@ -11,7 +12,9 @@ import { constructOpen,
   constructComment,
   constructMerge,
   constructReqChanges,
+  constructApprove,
 } from "./construct-types";
+
 /*
  * @Author: Ethan T Painter
  * Basis for constructing a Slack message (First step)
@@ -108,15 +111,18 @@ export function constructSlackMessage(
       const decider: string = event.review.state;
       // If PR is approved, construct Approval checkmark
       if (decider === "approved") {
+        const approve: ApprovePR = constructApprove(event);
         // When a user approves a PR. This is arguably the most important feat
-        /* Construct order of Opened PR Slack message
+      /* Construct order of Opened PR Slack message
        * SLACK MESSAGE APPEARANCE:
        * -------------- DESCRIPTION --------------
        * ---------------- TITLE ------------------
        * ----------------- URL -------------------
        * -- PEER CHECK - LEAD CHECK - CAN MERGE --
        */
-        slackMessage = "";
+        slackMessage = approve.description + "\n"
+                        + approve.title + "\n"
+                        + approve.url;
       }
       else if (decider === "changes_requested") {
         const changes: RequestChangesPR = constructReqChanges(event);
