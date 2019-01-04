@@ -3,11 +3,13 @@ export class Approve {
   /**
    * @author Ethan T Painter
    * @description Function used to construct the description
-   * @param Add_something_here_when_I_figure_out_whats_required
+   * @param slackUser Slack user who owns the PR
+   * @param slackUserApproving Slack user who is approving the PR
    * @returns string of the description for the Slack Message
    */
-  constructDescription(): string {
-    return "";
+  constructDescription(slackUser: string, slackUserApproving: string): string {
+    const desc: string = `@${slackUser} has approved this PR. (Owner: @${slackUserApproving})`;
+    return desc;
   }
 
   /**
@@ -18,11 +20,11 @@ export class Approve {
    */
   getOwner(event: any): string {
     try {
-      const owner: string = event;
+      const owner: string = event.pull_request.login;
       return owner;
     }
     catch (error) {
-      throw new Error("");
+      throw new Error("event.pull_request.login not found in event");
     }
   }
 
@@ -33,7 +35,13 @@ export class Approve {
    * @returns String of the user approving the PR
    */
   getUserApproving(event: any): string {
-    return "";
+    try {
+      const user: string = event.sender.login;
+      return user;
+    }
+    catch (error) {
+      throw new Error("event.sender.login not found in event");
+    }
   }
 
   /**
@@ -42,8 +50,45 @@ export class Approve {
    * @param event Event received from the GitHub webhook
    * @returns Boolean of whether a peer has approved the PR or not
    */
-  getPeerApproval(event: any): boolean {
+  getMemberApproval(reviews: any): boolean {
     return false;
+  }
+
+  /**
+   * @author Ethan T Painter
+   * @description Generate a list of peers
+   * @param members Members in a team
+   * @param membersExempt Members exempt from being At'ed (@) in Slack
+   *        since they're already involved in owning/approving the PR
+   */
+  getMemberList(members: string[], membersExempt: string[]): string[] {
+    const group: string[] = [];
+    let counter: number = 0;
+    // Loop through members. If a member is in membersExempt
+    // don't add them to group (they're exempt). Otherwise, add them.
+    if (members.length === 0) {
+      throw new Error("No team members found");
+    }
+    // Loop through members
+    while (counter < members.length) {
+      let exemptCounter: number = 0;
+      let found: boolean = false;
+      // Loop through membersExempt
+      while (exemptCounter < membersExempt.length) {
+        if (members[counter] === membersExempt[exemptCounter]) {
+          found = true;
+        }
+        exemptCounter++;
+      }
+      // After looping through members Exempt once
+      // If found is true, don't add to group
+      // If found is false, add to group
+      if (found === false) {
+        group.push(members[counter]);
+      }
+      counter++;
+    }
+    return group;
   }
 
   /**
@@ -54,6 +99,20 @@ export class Approve {
    */
   getLeadApproval(event: any): boolean {
     return false;
+  }
+
+  /**
+   * @author Ethan T Painter
+   * @description Get list of leads to @ in Slack.
+   *        Will be none, [], if the only lead has
+   *         already approved it.
+   * @param leads Leads in a team
+   * @param leadsExempt Leads exempt from being At'ed (@) in Slack
+   *        since they're already invovled in owning/approving the PR
+   */
+  getLeadList(leads: string[], leadsExempt: string[]): string[] {
+    
+    return [];
   }
 
   /**

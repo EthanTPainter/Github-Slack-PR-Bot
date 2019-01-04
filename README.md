@@ -2,8 +2,8 @@
 
 - [Problem to Solve](#problem-to-solve)
 - [Purpose](#purpose)
-  - [Why not use GitHub Slack Integration App](#Why-not-use-the-common-github-slack-integration-app?)
-- [Adding/Modifying User Groups](#adding/modifying-user-groups)
+  - [Why not use the GitHub Slack Integration App](#why-not-use-the-commmon-github-slack-integration-app?)
+- [Adding or Modifying User Groups](#adding-or-modifying-user-groups)
 - [Functionality](#functionality)
   - [Core](#core)
     - [Open a PR](#open-a-pr)
@@ -66,7 +66,7 @@ dev team only wants to see PR's related to their team's sprint and
 tasks. A dev team shouldn't see updates or alerts about another 
 team's PR's since
 
-## Adding/Modifying User Groups
+## Adding or Modifying User Groups
 
 We want to be able to define user-groups so we can specify multiple lead 
 developers, and multiple dev team members so we can clarify who is 
@@ -109,20 +109,23 @@ opened or updated by the team members or team leads.
 
 Listed below are all optional features that are interesting to include:
 
-1) 
+1) Automatic Team Updates at Scheduled Times
+
 Before each team starts their work day (Time of Standup for each user-group), 
 send a list of available PRs involved in the team's sprint. This 
 could be as simple as checking all available PRs made by user-group
 members in the team and providing status updates around each. This could help
 clarify what team members are working on what, which PRs need reviews, etc.
 
-2)
+2) Extension of Part 1
+
 At the end of each day (4:30/4:45), send a message to each team slack
 chat about the PRs each group-member has opened. These messages should include 
 status updates. 
 
-3)
-Think about adding text in the slack messages for icons to remoive text
+3) Icons > text
+
+Think about adding text in the slack messages for icons to remove text
 Example:
 
 Use :heavy_check_mark: for approvals.
@@ -137,7 +140,24 @@ SCP-1234: TITLE OF THE TICKET
 :X: Can Merge
 ```
 
-4)
+4) Jira Integration
+
+For our team's goals, we like to apply labels to our JIRA 
+sub tasks (`NeedsLeadReview`, `NeedsPeerReview`, 
+`LeadReviewWithComments`, `LeadApproved`, etc.). If we could incorporate 
+some slack integration to automatically mark specific sub tasks for us 
+with updated actions, this might help eliminate some disconnect 
+bewtween our GitHub/Slack/JIRA connections.
+
+5) Jira Integration (Part 2)
+
+If we could automaticlly mark selected sub tasks with labels, we should be able
+to tell the bot to move them along the swimlanes. However, this gets a bit 
+into the configuration of how we manage this, because it's not generic enough to
+apply in different scenarios.
+
+6) Waiting for Slack support
+
 Slack currently doesn't support hyperlinks so adding links
 directly in slack messages may be long. May have to give a 
-link on a separate line
+link on a separate line for now

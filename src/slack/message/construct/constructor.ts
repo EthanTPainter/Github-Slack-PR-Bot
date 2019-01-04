@@ -1,9 +1,17 @@
-import { OpenedPR, ClosePR, CommentPR, MergePR } from "src/models";
-import { constructOpen } from "./types/construct-open";
-import { constructClose } from "./types/construct-close";
-import { constructComment } from "./types/construct-comment";
-import { constructMerge } from "./types/construct-merge";
+import {
+  OpenedPR,
+  ClosePR,
+  CommentPR,
+  MergePR,
+  RequestChangesPR,
+} from "src/models";
 
+import { constructOpen,
+  constructClose,
+  constructComment,
+  constructMerge,
+  constructReqChanges,
+} from "./construct-types";
 /*
  * @Author: Ethan T Painter
  * Basis for constructing a Slack message (First step)
@@ -106,13 +114,12 @@ export function constructSlackMessage(
        * -------------- DESCRIPTION --------------
        * ---------------- TITLE ------------------
        * ----------------- URL -------------------
-       * --------- PEER APPROVAL CHECK -----------
-       * --------- LEAD APPROVAL CHECK -----------
-       * ----------- CAN MERGE CHECK -------------
+       * -- PEER CHECK - LEAD CHECK - CAN MERGE --
        */
         slackMessage = "";
       }
       else if (decider === "changes_requested") {
+        const changes: RequestChangesPR = constructReqChanges(event);
         // When a user requests changes on a PR. This is arguably the most important feat
         /* Construct order of Opened PR Slack message
        * SLACK MESSAGE APPEARANCE:
@@ -120,12 +127,18 @@ export function constructSlackMessage(
        * -------------- TITLE --------------------
        * -------------- URL ----------------------
        */
-        slackMessage = "";
+        slackMessage = changes.description + "\n"
+                        + changes.title + "\n"
+                        + changes.url;
       }
       else if (decider === "commented") {
-        // When a user comments on a PR
-        // This could get a bit spammy so probably keep it short
-        // encourage using "request_changes" for many comments
+        /* When a user comments on a PR
+         * This could get a bit spammy so probably keep it short
+         * encourage using "request_changes" for many comments
+          * SLACK MESSAGE APPEARANCE:
+          * -------------- DESCRIPTION --------------
+          * -------------- URL ----------------------
+         */
         const comment: CommentPR = constructComment(event);
         slackMessage = comment.description + "\n"
                         + comment.url;
