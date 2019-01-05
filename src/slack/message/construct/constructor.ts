@@ -118,7 +118,8 @@ export function constructSlackMessage(
        * -------------- DESCRIPTION --------------
        * ---------------- TITLE ------------------
        * ----------------- URL -------------------
-       * -- PEER CHECK - LEAD CHECK - CAN MERGE --
+       * --------------- PEER CHECK --------------
+       * --------------- LEAD CHECK --------------
        */
         slackMessage = approve.description + "\n"
                         + approve.title + "\n"

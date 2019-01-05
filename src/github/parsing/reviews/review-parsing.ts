@@ -136,3 +136,51 @@ export function getUsersNotApproving(slackOwner: string,
   }
   return usersNotApproving;
 }
+
+/**
+ * @author Ethan T Painter
+ * @description From all slack users not approving
+ *              the PR, select the lead slack users
+ *              not approving the PR.
+ * @param slackUsersNotApproving list of all slack users not approving
+ *                               the PR.
+ * @param slackLeadUsers List of lead slack users
+ * @returns List of lead slack users not approving
+ */
+export function getLeadsNotApproving(slackUsersNotApproving: string[],
+                                     slackLeadUsers: string[],
+                                    ): string[] {
+  const leadsNotApproving: string[] = [];
+  let counter: number = 0;
+  // Loop through all slack users not approving
+  while (counter < slackUsersNotApproving.length) {
+    if (slackLeadUsers.includes(slackUsersNotApproving[counter])) {
+      leadsNotApproving.push(slackUsersNotApproving[counter]);
+    }
+    counter++;
+  }
+  return leadsNotApproving;
+}
+
+/**
+ * @author Ethan T Painter
+ * @description Retrieve members not approving the PR
+ * @param slackUsersNotApproving All Slack users not approving
+ *                               the PR
+ * @param slackMemberUsers List of member slack users
+ * @returns List of member slack users not approving
+ */
+export function getMembersNotApproving(slackUsersNotApproving: string[],
+                                       slackMemberUsers: string[],
+                                      ): string[] {
+  const membersNotApproving: string[] = [];
+  let counter: number = 0;
+  // Loop through all slack users not approving
+  while (counter < slackUsersNotApproving.length) {
+    if (slackMemberUsers.includes(slackUsersNotApproving[counter])){
+      membersNotApproving.push(slackUsersNotApproving[counter]);
+    }
+    counter++;
+  }
+  return membersNotApproving;
+}
