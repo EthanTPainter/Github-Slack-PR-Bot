@@ -1,2 +1,2 @@
 export { constructSlackMessage } from "./constructor";
-export * from "./formatting";
+export * from "./types";

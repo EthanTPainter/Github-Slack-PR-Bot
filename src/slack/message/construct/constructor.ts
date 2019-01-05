@@ -13,7 +13,7 @@ import { constructOpen,
   constructMerge,
   constructReqChanges,
   constructApprove,
-} from "./construct-types";
+} from "./types";
 
 /*
  * @Author: Ethan T Painter

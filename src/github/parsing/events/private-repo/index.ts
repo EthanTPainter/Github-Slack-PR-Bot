@@ -1,0 +1,3 @@
+export {
+  getPrivateProp,
+} from "./privateProp";

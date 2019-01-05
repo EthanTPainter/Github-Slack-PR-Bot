@@ -1,0 +1,3 @@
+export {
+  getTitle,
+} from "./title";

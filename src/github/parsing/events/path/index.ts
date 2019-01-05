@@ -1,0 +1,3 @@
+export {
+  getPath,
+} from "./path";

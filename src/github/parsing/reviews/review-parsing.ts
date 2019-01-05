@@ -1,5 +1,5 @@
+import { getSlackUser } from "../../../json/parse";
 import { Review } from "../../../models/github/reviews";
-import { Base } from "../../../slack/message/construct/formatting";
 
 /**
  * @author Ethan T Painter
@@ -87,7 +87,6 @@ export function getApprovingPRs(latestReviews: any): string[] {
 export function getUsersApproving(reviews: string[],
                                   gitUsers: string[],
                                 ): string[] {
-  const base: Base = new Base();
   const usersApproving: string[] = [];
   let counter = 0;
   // Loop through reviews
@@ -95,7 +94,7 @@ export function getUsersApproving(reviews: string[],
     // An approving user is in the Git Users
     if (gitUsers.includes(reviews[counter])) {
       // Get slakc name and add it to array
-      const slackName: string = base.getSlackUser(reviews[counter]);
+      const slackName: string = getSlackUser(reviews[counter]);
       usersApproving.push(slackName);
     }
     counter++;
