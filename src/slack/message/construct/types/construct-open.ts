@@ -3,15 +3,12 @@ import { getOwner, getTitle, getPRLink } from "../../../../github/parsing";
 import { getSlackUser, getSlackGroup } from "../../../../json/parse";
 import { constructOpenDesc } from "../../formatting";
 
-export function constructOpen(event: any): OpenedPR {
+export function constructOpen(event: any, json: any): OpenedPR {
 
   try {
     // OpenedPr Properties
     // GitHub user name
     const owner: string = getOwner(event);
-
-    // REMOVE THIS JSON FILE FOR THE REAL JSON
-    const json = {};
 
     // Use owner variable to grab Slack name and group
     const slackUser: string = getSlackUser(owner, json);

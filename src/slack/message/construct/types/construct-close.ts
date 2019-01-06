@@ -13,16 +13,13 @@ import {
 import { ClosePR } from "../../../../models";
 import { constructCloseDesc } from "../../formatting";
 
-export function constructClose(event: any): ClosePR {
+export function constructClose(event: any, json: any): ClosePR {
 
   try {
     // ClosePR properties
     // GitHub user name who opened PR and GtHub user who closed the PR
     const owner: string = getOwner(event);
     const user_closing: string = getSender(event);
-
-    // REMOVE JSON WITH REAL JSON FILE
-    const json: any = {};
 
     // Use owner variable to grab Slack name and group
     const slackUser: string = getSlackUser(owner, json);

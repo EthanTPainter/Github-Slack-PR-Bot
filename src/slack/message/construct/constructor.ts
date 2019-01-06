@@ -15,6 +15,8 @@ import { constructOpen,
   constructApprove,
 } from "./types";
 
+import json from "../../../json/src/user-groups.json";
+
 /*
  * @Author: Ethan T Painter
  * Basis for constructing a Slack message (First step)
@@ -43,7 +45,7 @@ export function constructSlackMessage(
     // When a PR is opened
     case "opened": {
       // Construct OpenPR Object and format slack message
-      const open: OpenedPR = constructOpen(event);
+      const open: OpenedPR = constructOpen(event, json);
       /* Construct order of Opened PR Slack message
        * SLACK MESSAGE APPEARANCE:
        * -------------- DESCRIPTION --------------
@@ -59,7 +61,7 @@ export function constructSlackMessage(
     // When a PR is reopened (PR was previously CLOSED)
     case "reopened": {
       // Construct OpenPR Object and format slack message
-      const open: OpenedPR = constructOpen(event);
+      const open: OpenedPR = constructOpen(event, json);
       /* Construct order of Opened PR Slack message
        * SLACK MESSAGE APPEARANCE:
        * -------------- DESCRIPTION --------------
@@ -78,7 +80,7 @@ export function constructSlackMessage(
       const decider: boolean = event.pull_request.merged;
       if (decider) {
         // Construct MergedPR Object and format slack message
-        const merge: MergePR = constructMerge(event);
+        const merge: MergePR = constructMerge(event, json);
         /* Construct order of Opened PR Slack message
         * SLACK MESSAGE APPEARANCE:
         * -------------- DESCRIPTION --------------
@@ -91,7 +93,7 @@ export function constructSlackMessage(
       }
       else {
         // Construct ClosePR Object and format slack message
-        const close: ClosePR = constructClose(event);
+        const close: ClosePR = constructClose(event, json);
         /* Construct order of Opened PR Slack message
         * SLACK MESSAGE APPEARANCE:
         * -------------- DESCRIPTION --------------
@@ -111,7 +113,7 @@ export function constructSlackMessage(
       const decider: string = event.review.state;
       // If PR is approved, construct Approval checkmark
       if (decider === "approved") {
-        const approve: ApprovePR = constructApprove(event);
+        const approve: ApprovePR = constructApprove(event, json);
         // When a user approves a PR. This is arguably the most important feat
       /* Construct order of Opened PR Slack message
        * SLACK MESSAGE APPEARANCE:
@@ -126,7 +128,7 @@ export function constructSlackMessage(
                         + approve.url;
       }
       else if (decider === "changes_requested") {
-        const changes: RequestChangesPR = constructReqChanges(event);
+        const changes: RequestChangesPR = constructReqChanges(event, json);
         // When a user requests changes on a PR. This is arguably the most important feat
         /* Construct order of Opened PR Slack message
        * SLACK MESSAGE APPEARANCE:
@@ -146,7 +148,7 @@ export function constructSlackMessage(
           * -------------- DESCRIPTION --------------
           * -------------- URL ----------------------
          */
-        const comment: CommentPR = constructComment(event);
+        const comment: CommentPR = constructComment(event, json);
         slackMessage = comment.description + "\n"
                         + comment.url;
       }

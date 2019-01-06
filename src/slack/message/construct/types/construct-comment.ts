@@ -9,15 +9,12 @@ import { CommentPR } from "../../../../models";
 import { getSlackUser } from "src/json/parse";
 import { constructCommentDesc } from "../../formatting";
 
-export function constructComment(event: string): CommentPR {
+export function constructComment(event: string, json: any): CommentPR {
 
   try {
     // Comment Properties
     const owner: string = getOwner(event);
     const user_commenting: string = getSender(event);
-
-    // REMOVE JSON WITH REAL JSON FILE
-    const json: any = {};
 
     // Use owner variable to grab Slack name
     const slackUser: string = getSlackUser(owner, json);

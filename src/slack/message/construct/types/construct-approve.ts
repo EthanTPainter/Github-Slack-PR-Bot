@@ -27,16 +27,13 @@ import { ApprovePR } from "../../../../models";
  * @param event Event from the GitHub webhook
  * @returns ApprovePR object with all important characteristics
  */
-export function constructApprove(event: any): ApprovePR {
+export function constructApprove(event: any, json: any): ApprovePR {
 
   try {
     // ApprovePR properties
     // GitHub user name who opened PR and GtHub user who closed the PR
     const owner: string = getOwner(event);
     const userApproving: string = getSender(event);
-
-    // REMOVE JSON WITH REAL JSON FILE
-    const json: any = {};
 
     // Use owner variable to grab Slack name and group
     const slackUser: string = getSlackUser(owner, json);

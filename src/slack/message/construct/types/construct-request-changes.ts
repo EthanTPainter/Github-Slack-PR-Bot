@@ -9,15 +9,12 @@ import { RequestChangesPR } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";
 import { constructReqChangesDesc } from "../../formatting";
 
-export function constructReqChanges(event: any): RequestChangesPR {
+export function constructReqChanges(event: any, json: any): RequestChangesPR {
 
   try {
     // RequestChangesPR properties
     const owner: string = getOwner(event);
     const userRequesting: string = getSender(event);
-
-    // REMOVE JSON WITH REAL JSON FILE
-    const json: any = {};
 
     // Use owner and userRequesting to get Slack names
     const slackUser: string = getSlackUser(owner, json);
