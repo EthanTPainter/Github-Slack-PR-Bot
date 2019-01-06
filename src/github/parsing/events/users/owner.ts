@@ -6,7 +6,7 @@
  */
 export function getOwner(event: any): string {
   try {
-    const owner: string = event.pull_request.login;
+    const owner: string = event.pull_request.user.login;
     return owner;
   }
   catch (error) {

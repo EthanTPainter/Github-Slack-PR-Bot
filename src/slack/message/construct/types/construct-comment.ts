@@ -6,7 +6,7 @@ import {
 } from "../../../../github/parsing";
 
 import { CommentPR } from "../../../../models";
-import { getSlackUser } from "src/json/parse";
+import { getSlackUser } from "../../../../json/parse";
 import { constructCommentDesc } from "../../formatting";
 
 export function constructComment(event: string, json: any): CommentPR {

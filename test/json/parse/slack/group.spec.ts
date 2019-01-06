@@ -122,5 +122,4 @@ describe("getSlackGroup", () => {
     expect(() => getSlackGroup(githubUser, invalidJSON))
       .to.throw(expected.message);
   });
-
 });
