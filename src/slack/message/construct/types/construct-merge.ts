@@ -5,10 +5,10 @@ import {
   getBaseBranch,
   getTitle,
   getPRLink,
-} from "src/github/parsing";
+} from "../../../../github/parsing";
 
 import { MergePR } from "../../../../models";
-import { getSlackUser } from "src/json/parse";
+import { getSlackUser } from "../../../../json/parse";
 import { constructMergeDesc } from "../../formatting";
 
 export function constructMerge(event: string): MergePR {

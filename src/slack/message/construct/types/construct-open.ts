@@ -1,6 +1,6 @@
 import { OpenedPR } from "../../../../models";
-import { getOwner, getTitle, getPRLink } from "src/github/parsing";
-import { getSlackUser, getSlackGroup } from "src/json/parse";
+import { getOwner, getTitle, getPRLink } from "../../../../github/parsing";
+import { getSlackUser, getSlackGroup } from "../../../../json/parse";
 import { constructOpenDesc } from "../../formatting";
 
 export function constructOpen(event: any): OpenedPR {

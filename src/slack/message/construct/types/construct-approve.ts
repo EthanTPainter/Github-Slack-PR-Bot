@@ -15,7 +15,7 @@ import {
   getSlackMembers,
   getSlackLeads,
   getGitHubTeamUsers,
-} from "src/json/parse";
+} from "../../../../json/parse";
 
 import { getReviews } from "../../../../github/api";
 import { getMemberList, constructApproveDesc } from "../../formatting";

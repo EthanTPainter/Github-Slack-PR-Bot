@@ -3,12 +3,12 @@ import {
   getSender,
   getTitle,
   getPRLink,
-} from "src/github/parsing";
+} from "../../../../github/parsing";
 
 import {
   getSlackUser,
   getSlackGroup,
-} from "src/json/parse";
+} from "../../../../json/parse";
 
 import { ClosePR } from "../../../../models";
 import { constructCloseDesc } from "../../formatting";

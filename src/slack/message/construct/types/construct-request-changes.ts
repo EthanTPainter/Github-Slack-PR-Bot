@@ -3,10 +3,10 @@ import {
   getSender,
   getTitle,
   getPRLink,
-} from "src/github/parsing";
+} from "../../../../github/parsing";
 
 import { RequestChangesPR } from "../../../../models";
-import { getSlackUser } from "src/json/parse";
+import { getSlackUser } from "../../../../json/parse";
 import { constructReqChangesDesc } from "../../formatting";
 
 export function constructReqChanges(event: any): RequestChangesPR {
