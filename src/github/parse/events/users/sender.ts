@@ -6,11 +6,15 @@
  * @returns String of the GitHub user sending an event to the PR
  */
 export function getSender(event: any): string {
-  try {
-    const user: string = event.sender.login;
-    return user;
+  if (event === undefined){
+    throw new Error("event is undefined");
   }
-  catch (error) {
-    throw new Error("event.sender.login not found in event");
+  if (event.sender === undefined) {
+    throw new Error("event.sender is undefined");
   }
+  if (event.sender.login === undefined) {
+    throw new Error("event.sender.login is undefined");
+  }
+  const user: string = event.sender.login;
+  return user;
 }

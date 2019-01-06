@@ -1,5 +1,5 @@
 import { OpenedPR } from "../../../../models";
-import { getOwner, getTitle, getPRLink } from "../../../../github/parsing";
+import { getOwner, getTitle, getPRLink } from "../../../../github/parse";
 import { getSlackUser, getSlackGroup } from "../../../../json/parse";
 import { constructOpenDesc } from "../../formatting";
 

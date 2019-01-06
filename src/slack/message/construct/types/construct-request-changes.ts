@@ -3,7 +3,7 @@ import {
   getSender,
   getTitle,
   getPRLink,
-} from "../../../../github/parsing";
+} from "../../../../github/parse";
 
 import { RequestChangesPR } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";

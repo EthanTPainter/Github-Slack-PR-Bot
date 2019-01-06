@@ -1,7 +1,7 @@
 import "mocha";
 import { expect } from "chai";
-import { constructReqChanges } from "../../../../src/slack/message/construct";
-import { getSlackUser } from "../../../../src/json/parse";
+import { constructReqChanges } from "../../../../../src/slack/message/construct";
+import { getSlackUser } from "../../../../../src/json/parse";
 
 describe("constructReqChanges", () => {
 
@@ -38,7 +38,7 @@ describe("constructReqChanges", () => {
     },
   };
 
-  it("construct a valid request for changes to a PR", () => {
+  it("should construct a valid request for changes to a PR", () => {
     const slackOwner = getSlackUser(validEvent.pull_request.user.login, validJSON);
     const slackUserRequest = getSlackUser(validEvent.sender.login, validJSON);
 

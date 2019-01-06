@@ -5,7 +5,7 @@ import {
   getBaseBranch,
   getTitle,
   getPRLink,
-} from "../../../../github/parsing";
+} from "../../../../github/parse";
 
 import { MergePR } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";
