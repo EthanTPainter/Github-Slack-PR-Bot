@@ -21,9 +21,12 @@ export function constructClose(event: any): ClosePR {
     const owner: string = getOwner(event);
     const user_closing: string = getSender(event);
 
+    // REMOVE JSON WITH REAL JSON FILE
+    const json: any = {};
+
     // Use owner variable to grab Slack name and group
-    const slackUser: string = getSlackUser(owner);
-    const groupName: string = getSlackGroup(owner);
+    const slackUser: string = getSlackUser(owner, json);
+    const groupName: string = getSlackGroup(owner, json);
 
     // Base properties
     const description = constructCloseDesc(slackUser, groupName);

@@ -1,5 +1,3 @@
-import json from "../../src/user-groups.json";
-
 /**
  * @author Ethan T Painter
  * @description Using the GitHub username, find the
@@ -7,7 +5,9 @@ import json from "../../src/user-groups.json";
  * @param githubUser GitHub username in JSON file
  * @returns array of Slack users
  */
-export function getSlackLeads(githubUser: string): string[] {
+export function getSlackLeads(githubUser: string,
+                              json: any,
+                            ): string[] {
   const jsonFile: any = json;
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const teams: any = jsonFile.Teams;
@@ -25,13 +25,25 @@ export function getSlackLeads(githubUser: string): string[] {
     const selectedTeamGroup: any = teams[selectedTeam];
     const teamGroupKeys: string[] = Object.keys(selectedTeamGroup);
     let selectedTeamTypeCounter: number = 0;
+    if (teamGroupKeys.length === 0) {
+      // Dev_Team_1, SomethingCool1, etc.
+      throw new Error("No Team Group found in JSON file");
+    }
     // Loop through team groups (DevTeam1, DevTeam2, etc.)
     while (selectedTeamTypeCounter < teamGroupKeys.length) {
-      // Retrieve usersfrom JSON
-      const users: any = selectedTeamGroup.Users;
+      // Retrieve users from JSON
+      const selectedGroupSubTeam = selectedTeamGroup[teamGroupKeys[selectedTeamTypeCounter]];
+      if (selectedGroupSubTeam.Users === undefined) {
+        throw new Error(`No Users defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+      }
+      const users: any = selectedGroupSubTeam.Users;
+
+      if (users.Leads === undefined) {
+        throw new Error(`Leads not defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+      }
+      const leadUsers = users.Leads;
       // Check if githubUser is a Lead for the group
       // There may exist multiple users in Lead json
-      const leadUsers: any = users.Leads;
       const leadKeys: string[] = Object.keys(leadUsers);
       let leadCounter: number = 0;
       // Loop through lead keys for matching GitHub User
@@ -50,6 +62,5 @@ export function getSlackLeads(githubUser: string): string[] {
     // User not found in General Team (DevTeam), look at antoher team
     teamCounter++;
   }
-
   return [];
 }

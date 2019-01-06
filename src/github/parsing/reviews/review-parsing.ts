@@ -93,8 +93,10 @@ export function getUsersApproving(reviews: string[],
   while (counter < reviews.length) {
     // An approving user is in the Git Users
     if (gitUsers.includes(reviews[counter])) {
-      // Get slakc name and add it to array
-      const slackName: string = getSlackUser(reviews[counter]);
+      // Get slack name and add it to array
+      // REMOV THIS JSON WITH THE REAL THING
+      const json = {};
+      const slackName: string = getSlackUser(reviews[counter], json);
       usersApproving.push(slackName);
     }
     counter++;

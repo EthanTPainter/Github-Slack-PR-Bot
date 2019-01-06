@@ -16,9 +16,12 @@ export function constructReqChanges(event: any): RequestChangesPR {
     const owner: string = getOwner(event);
     const userRequesting: string = getSender(event);
 
+    // REMOVE JSON WITH REAL JSON FILE
+    const json: any = {};
+
     // Use owner and userRequesting to get Slack names
-    const slackUser: string = getSlackUser(owner);
-    const slackUserRequest: string = getSlackUser(userRequesting);
+    const slackUser: string = getSlackUser(owner, json);
+    const slackUserRequest: string = getSlackUser(userRequesting, json);
 
     // Base Properties
     const description: string = constructReqChangesDesc(slackUser, slackUserRequest);

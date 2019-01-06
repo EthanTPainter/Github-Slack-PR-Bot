@@ -16,10 +16,13 @@ export function constructComment(event: string): CommentPR {
     const owner: string = getOwner(event);
     const user_commenting: string = getSender(event);
 
+    // REMOVE JSON WITH REAL JSON FILE
+    const json: any = {};
+
     // Use owner variable to grab Slack name
-    const slackUser: string = getSlackUser(owner);
+    const slackUser: string = getSlackUser(owner, json);
     // Use user commenting to grab Slack name
-    const slackCommenter: string = getSlackUser(user_commenting);
+    const slackCommenter: string = getSlackUser(user_commenting, json);
 
     // Base Properties
     const description: string = constructCommentDesc(slackUser, slackCommenter);

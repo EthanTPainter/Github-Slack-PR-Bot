@@ -1,5 +1,3 @@
-import json from "../../src/user-groups.json";
-
 /**
  * @author Ethan T Painter
  * @description Using the GitHub username, find the
@@ -7,7 +5,9 @@ import json from "../../src/user-groups.json";
  * @param githubUser GitHub username in JSON file
  * @returns array of slack users
  */
-export function getSlackMembers(githubUser: string): string[] {
+export function getSlackMembers(githubUser: string,
+                                json: any,
+                              ): string[] {
   const jsonFile: any = json;
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const teams: any = jsonFile.Teams;
@@ -25,12 +25,23 @@ export function getSlackMembers(githubUser: string): string[] {
     const selectedTeamGroup: any = teams[selectedTeam];
     const teamGroupKeys: string[] = Object.keys(selectedTeamGroup);
     let selectedTeamTypeCounter: number = 0;
+    if (teamGroupKeys.length === 0) {
+      // (Dev_Team_1, SomethingCool1, etc.)
+      throw new Error("No Team Group found in JSON file");
+    }
     // Loop through team groups (DevTeam1, DevTeam2, etc.)
     while (selectedTeamTypeCounter < teamGroupKeys.length) {
-      // Retrieve usersfrom JSON
-      const users: any = selectedTeamGroup.Users;
+      // Retrieve users from JSON
+      const selectedGroupSubTeam = selectedTeamGroup[teamGroupKeys[selectedTeamTypeCounter]];
+      if (selectedGroupSubTeam.Users === undefined) {
+        throw new Error(`No Users defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+      }
+      const users: any = selectedGroupSubTeam.Users;
 
       // Check member group
+      if (users.Members === undefined) {
+        throw new Error(`Members not defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+      }
       const memberUsers: any = users.Members;
       const memberKeys: string[] = Object.keys(memberUsers);
       let memberCounter: number = 0;

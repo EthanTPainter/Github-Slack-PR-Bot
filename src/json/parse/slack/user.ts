@@ -1,5 +1,3 @@
-import json from "../../src/user-groups.json";
-
 /**
  * Not enough information about which team the user is in, so search all (for now)
  * @author Ethan T Painter
@@ -7,7 +5,9 @@ import json from "../../src/user-groups.json";
  * @param event Event received from the GitHub webhook
  * @returns String of the slack user corresponding to the Github user provided
  */
-export function getSlackUser(githubUser: string): string {
+export function getSlackUser(githubUser: string,
+                             json: any,
+                            ): string {
   const jsonFile: any = json;
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const teams: any = jsonFile.Teams;
@@ -25,33 +25,49 @@ export function getSlackUser(githubUser: string): string {
     const selectedTeamGroup: any = teams[selectedTeam];
     const teamGroupKeys: string[] = Object.keys(selectedTeamGroup);
     let selectedTeamTypeCounter: number = 0;
+    if (teamGroupKeys.length === 0) {
+      // (Dev_Team_1, SomethingCool1, etc.)
+      throw new Error("No Team Group found in JSON file");
+    }
     // Loop through team groups (DevTeam1, DevTeam2, etc.)
     while (selectedTeamTypeCounter < teamGroupKeys.length) {
-      // Retrieve usersfrom JSON
-      const users: any = selectedTeamGroup.Users;
+      // Retrieve users from JSON
+      const selectedGroupSubTeam = selectedTeamGroup[teamGroupKeys[selectedTeamTypeCounter]];
+      if (selectedGroupSubTeam.Users === undefined) {
+        throw new Error(`No Users defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+      }
+      const users: any = selectedGroupSubTeam.Users;
+
+      if (users.Leads === undefined) {
+        throw new Error(`Leads not defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+      }
+      const leadUsers: any = users.Leads;
+
+      if (users.Members === undefined) {
+        throw new Error(`Members not defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+      }
+      const memberUsers: any = users.Members;
       // Check if githubUser is a Lead for the group
       // There may exist multiple users in Lead json
-      const leadUsers: any = users.Leads;
       const leadKeys: string[] = Object.keys(leadUsers);
       let leadCounter: number = 0;
       // Loop through lead keys for matching GitHub User
       while (leadCounter < leadKeys.length) {
         // Check if key matches GitHub user
         if (leadKeys[leadCounter] === githubUser) {
-          return leadUsers[leadCounter];
+          return leadUsers[githubUser];
         }
         leadCounter++;
       }
 
       // User not found in Lead group. Check member group
-      const memberUsers: any = users.Members;
       const memberKeys: string[] = Object.keys(memberUsers);
       let memberCounter: number = 0;
       // Loop through member keys for matching GitHub User
       while (memberCounter < memberKeys.length) {
         // Check if key matches GitHub user
         if (memberKeys[memberCounter] === githubUser) {
-          return memberUsers[memberCounter];
+          return memberUsers[githubUser];
         }
         memberCounter++;
       }
@@ -65,5 +81,5 @@ export function getSlackUser(githubUser: string): string {
   }
   // Looped through all teams and couldn't find github user
   // Throw error because of user not found
-  throw new Error(`GitHub user: ${githubUser} could not be found in designated JSON file`);
+  throw new Error(`GitHub user: ${githubUser} could not be found in JSON file`);
 }

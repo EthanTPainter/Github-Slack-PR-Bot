@@ -35,9 +35,12 @@ export function constructApprove(event: any): ApprovePR {
     const owner: string = getOwner(event);
     const userApproving: string = getSender(event);
 
+    // REMOVE JSON WITH REAL JSON FILE
+    const json: any = {};
+
     // Use owner variable to grab Slack name and group
-    const slackUser: string = getSlackUser(owner);
-    const slackUserApproving: string = getSlackUser(userApproving);
+    const slackUser: string = getSlackUser(owner, json);
+    const slackUserApproving: string = getSlackUser(userApproving, json);
 
     // Get Path and Private property values for
     // making GET request to GitHub API
@@ -48,12 +51,9 @@ export function constructApprove(event: any): ApprovePR {
     const reviews: any = getReviews(path, privateVal);
 
     // Listing users to know who to alert in Slack
-    const allSlackMembers: string[] = getSlackMembers(owner);
-    const allSlackLeads: string[] = getSlackLeads(owner);
+    const allSlackMembers: string[] = getSlackMembers(owner, json);
+    const allSlackLeads: string[] = getSlackLeads(owner, json);
     const allSlackUsers: string[] = allSlackLeads.concat(allSlackMembers);
-
-    // REMOVE THIS WITH VALID JSON
-    const json = {};
 
     // All GitHub users in slack
     const allGitTeamUsers: string[] = getGitHubTeamUsers(owner, json);

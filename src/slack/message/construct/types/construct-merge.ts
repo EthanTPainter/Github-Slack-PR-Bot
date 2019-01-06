@@ -20,9 +20,12 @@ export function constructMerge(event: string): MergePR {
     const branchWithPR: string = getPRBranch(event);
     const branchMergedTo: string = getBaseBranch(event);
 
+    // REMOVE JSON WITH REAL JSON FILE
+    const json: any = {};
+
     // Use owner variable to grab Slack names
-    const slackUser: string = getSlackUser(owner);
-    const slackUserMerging: string = getSlackUser(userMerging);
+    const slackUser: string = getSlackUser(owner, json);
+    const slackUserMerging: string = getSlackUser(userMerging, json);
 
     // Base Properties
     const description: string = constructMergeDesc(slackUser,
