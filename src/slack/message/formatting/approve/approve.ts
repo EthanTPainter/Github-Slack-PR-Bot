@@ -9,7 +9,13 @@
 export function constructApproveDesc(slackUser: string,
                                      slackUserApproving: string,
                                     ): string {
-  const desc: string = `@${slackUser} has approved this PR. (Owner: @${slackUserApproving})`;
+  if (slackUser === "") {
+    throw new Error("No slackUser provided");
+  }
+  if (slackUserApproving === "") {
+    throw new Error("No slackUserApproving provided");
+  }
+  const desc: string = `${slackUserApproving} has approved this PR. Owner: @${slackUser}`;
   return desc;
 }
 

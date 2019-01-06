@@ -15,12 +15,7 @@ export function constructOpen(event: any): OpenedPR {
     const groupName: string = getSlackGroup(owner);
 
     // Base Properties
-    let description: string;
-    if (groupName === "") {
-      description = constructOpenDesc(slackUser);
-    } else {
-      description = constructOpenDesc(slackUser, groupName);
-    }
+    const description = constructOpenDesc(slackUser, groupName);
     const title: string = getTitle(event);
     const pr_url: string = getPRLink(event);
 

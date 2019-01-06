@@ -1,15 +1,15 @@
 export {
   getSlackGroup,
-} from "./slack-group";
+} from "./group";
 
 export {
   getSlackLeads,
-} from "./slack-leads";
+} from "./leads";
 
 export {
   getSlackMembers,
-} from "./slack-members";
+} from "./members";
 
 export {
   getSlackUser,
-}from "./slack-user";
+}from "./user";

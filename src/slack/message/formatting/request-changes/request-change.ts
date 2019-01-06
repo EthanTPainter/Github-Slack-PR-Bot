@@ -8,6 +8,12 @@
 export function constructReqChangesDesc(slackUser: string,
                                         slackUserRequesting: string,
                                       ): string {
-  const desc: string = `@${slackUserRequesting} is requesting changes to this PR. (Owner: @${slackUser})`;
+  if (slackUser === "") {
+    throw new Error("No slackUser provided");
+  }
+  if (slackUserRequesting === "") {
+    throw new Error("No slackUserRequesting provided");
+  }
+  const desc: string = `${slackUserRequesting} is requesting changes to this PR. Owner: @${slackUser}`;
   return desc;
 }

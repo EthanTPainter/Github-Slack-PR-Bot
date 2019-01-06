@@ -8,6 +8,12 @@
 export function constructCommentDesc(slackUser: string,
                                      commentingUser: string,
                                     ): string {
-  const desc: string = `@${commentingUser} has commented on this PR (Owner: ${slackUser})`;
+  if (slackUser === "") {
+    throw new Error("No slackUser provided");
+  }
+  if (commentingUser === "") {
+    throw new Error("No commentingUser provided");
+  }
+  const desc: string = `${commentingUser} has commented on this PR. Owner: @${slackUser}`;
   return desc;
 }

@@ -7,11 +7,14 @@
  * @returns String of the description for the slack message
  */
 export function constructCloseDesc(slackUser: string,
-                                   slackGroup ?: string,
+                                   slackUserClosing: string,
                                   ): string {
-  let desc: string = `@${slackUser} closed this PR.`;
-  if (slackGroup !== "") {
-    desc = desc + ` @${slackGroup}`;
+  if (slackUser === "") {
+    throw new Error("No slackUser provided");
   }
+  if (slackUserClosing === "") {
+    throw new Error("No slackUserClosing provided");
+  }
+  const desc: string = `${slackUserClosing} closed this PR. Owner: @${slackUser}`;
   return desc;
 }

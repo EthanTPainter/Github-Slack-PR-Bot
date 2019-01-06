@@ -11,9 +11,20 @@ export function constructMergeDesc(slackUser: string,
                                    slackUserMerging: string,
                                    branchWithPR: string,
                                    branchMergedTo: string,
-                                   slackGroup?: string,
                                   ): string {
-  const desc: string = `@${slackUser} merged this PR ` +
-    `from ${branchWithPR} to ${branchMergedTo} (Owner: @${slackUserMerging})`;
+  if (slackUser === "") {
+    throw new Error("No slackUser provided");
+  }
+  if (slackUserMerging === "") {
+    throw new Error("No slackUserMerging provided");
+  }
+  if (branchWithPR === "") {
+    throw new Error("No branchWithPR provided");
+  }
+  if (branchMergedTo === "") {
+    throw new Error("No branchMergedTo provided");
+  }
+  const desc: string = `${slackUserMerging} merged this PR ` +
+    `from ${branchWithPR} to ${branchMergedTo}. Owner: @${slackUser}`;
   return desc;
 }

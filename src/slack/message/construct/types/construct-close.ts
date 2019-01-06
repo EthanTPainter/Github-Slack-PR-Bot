@@ -26,12 +26,7 @@ export function constructClose(event: any): ClosePR {
     const groupName: string = getSlackGroup(owner);
 
     // Base properties
-    let description: string;
-    if (groupName === "") {
-      description = constructCloseDesc(slackUser);
-    } else {
-      description = constructCloseDesc(slackUser, groupName);
-    }
+    const description = constructCloseDesc(slackUser, groupName);
     const title: string = getTitle(event);
     const pr_url: string = getPRLink(event);
 

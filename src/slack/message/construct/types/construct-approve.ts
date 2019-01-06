@@ -51,8 +51,12 @@ export function constructApprove(event: any): ApprovePR {
     const allSlackMembers: string[] = getSlackMembers(owner);
     const allSlackLeads: string[] = getSlackLeads(owner);
     const allSlackUsers: string[] = allSlackLeads.concat(allSlackMembers);
+
+    // REMOVE THIS WITH VALID JSON
+    const json = {};
+
     // All GitHub users in slack
-    const allGitTeamUsers: string[] = getGitHubTeamUsers(owner);
+    const allGitTeamUsers: string[] = getGitHubTeamUsers(owner, json);
 
     // Record only approving reviews of the PR
     const approvingReviews: string[] = getApprovingPRs(reviews);
