@@ -18,13 +18,12 @@ export function getLatestReviews(reviewList: Review[]): any {
   // Start from the end to grab most recent
   if (reviewList.length === 0) {
     // No reviews yet
-    return { None: "No Reviews"};
+    return { None: "No Reviews" };
   }
 
   let counter = reviewList.length - 1;
   while (counter !== -1) {
     const selectedReviewUser: string = reviewList[counter].user.login;
-
     // If processing last review (first time through loop), must be most relevant
     if (counter === reviewList.length - 1) {
       reviews[selectedReviewUser] = reviewList[counter].state;
@@ -32,7 +31,7 @@ export function getLatestReviews(reviewList: Review[]): any {
     else {
       // If user not in reviews, add user: state
       // If user alread in reviews, move to the next review
-      if ( (Object.keys(reviews)).includes(selectedReviewUser) ) {
+      if (!(Object.keys(reviews)).includes(selectedReviewUser)) {
         reviews[selectedReviewUser] = reviewList[counter].state;
       }
     }
@@ -43,9 +42,11 @@ export function getLatestReviews(reviewList: Review[]): any {
 
 /**
  * @author Ethan T Painter
- * @description From latest reviews, retrieve approvals
+ * @description From latest reviews (key/value pairs of github
+ *        users, ), retrieve approvals
  * @param latestReviews Object with keys of Github usernames,
  *        values as state
+ * @returns array of github users who approved the PR
  * @example
  * Input:
  * { "EthanTPainter": "APPROVED",
@@ -53,15 +54,14 @@ export function getLatestReviews(reviewList: Review[]): any {
  *   "DillonSykes": "CHANGES_REQUESTED"
  * }
  * Output:
- * { "EthanTPainter": "APPROVED"}
+ * ["EthanTPainter"]
  */
-export function getApprovingPRs(latestReviews: any): string[] {
+export function getApprovingReviews(latestReviews: any): string[] {
   const approvals: any = [];
   let counter = 0;
   // Check for no reviews
-  if ( Object.keys(latestReviews) === ["None"]
-      && Object.values(latestReviews) === ["No Reviews"]) {
-    console.log("No reviews found");
+  if (Object.keys(latestReviews) === ["None"]
+    && Object.values(latestReviews) === ["No Reviews"]) {
     return [];
   }
 
@@ -70,7 +70,7 @@ export function getApprovingPRs(latestReviews: any): string[] {
     const key = Object.keys(latestReviews)[counter];
     // If GitHub username key has a value of APPROVED, append
     if (latestReviews[key] === "APPROVED") {
-      approvals.push(latestReviews[key]);
+      approvals.push(key);
     }
     counter++;
   }
@@ -81,24 +81,19 @@ export function getApprovingPRs(latestReviews: any): string[] {
  * @author Ethan T Painter
  * @description Retrieve leads listed in reviews
  * @param reviews Array of GitHub users who approved the PR
- * @param gitUsers Array of registered leads in the team
+ * @param json JSON file containing Github/Slack configuration
  * @returns Array of strings of slack usernames who approved the PR
  */
 export function getUsersApproving(reviews: string[],
-                                  gitUsers: string[],
+                                  json: any,
                                 ): string[] {
   const usersApproving: string[] = [];
   let counter = 0;
   // Loop through reviews
   while (counter < reviews.length) {
-    // An approving user is in the Git Users
-    if (gitUsers.includes(reviews[counter])) {
-      // Get slack name and add it to array
-      // REMOV THIS JSON WITH THE REAL THING
-      const json = {};
-      const slackName: string = getSlackUser(reviews[counter], json);
-      usersApproving.push(slackName);
-    }
+    // Find approving user in JSON
+    const slackName: string = getSlackUser(reviews[counter], json);
+    usersApproving.push(slackName);
     counter++;
   }
   return usersApproving;
@@ -144,18 +139,18 @@ export function getUsersNotApproving(slackOwner: string,
  *              the PR, select the lead slack users
  *              not approving the PR.
  * @param slackUsersNotApproving list of all slack users not approving
- *                               the PR.
- * @param slackLeadUsers List of lead slack users
+ *                               the PR from a sub team (DevTeam1)
+ * @param allSlackLeadUsers List of lead slack users for a team (DevTeam)
  * @returns List of lead slack users not approving
  */
 export function getLeadsNotApproving(slackUsersNotApproving: string[],
-                                     slackLeadUsers: string[],
+                                     allSlackLeadUsers: string[],
                                     ): string[] {
   const leadsNotApproving: string[] = [];
   let counter: number = 0;
-  // Loop through all slack users not approving
+  // Loop through all slack lead users not approving
   while (counter < slackUsersNotApproving.length) {
-    if (slackLeadUsers.includes(slackUsersNotApproving[counter])) {
+    if (allSlackLeadUsers.includes(slackUsersNotApproving[counter])) {
       leadsNotApproving.push(slackUsersNotApproving[counter]);
     }
     counter++;
@@ -167,8 +162,8 @@ export function getLeadsNotApproving(slackUsersNotApproving: string[],
  * @author Ethan T Painter
  * @description Retrieve members not approving the PR
  * @param slackUsersNotApproving All Slack users not approving
- *                               the PR
- * @param slackMemberUsers List of member slack users
+ *                               the PR from the sub team (DevTeam1)
+ * @param slackMemberUsers List of member slack users of a team (DevTeam)
  * @returns List of member slack users not approving
  */
 export function getMembersNotApproving(slackUsersNotApproving: string[],
@@ -178,7 +173,7 @@ export function getMembersNotApproving(slackUsersNotApproving: string[],
   let counter: number = 0;
   // Loop through all slack users not approving
   while (counter < slackUsersNotApproving.length) {
-    if (slackMemberUsers.includes(slackUsersNotApproving[counter])){
+    if (slackMemberUsers.includes(slackUsersNotApproving[counter])) {
       membersNotApproving.push(slackUsersNotApproving[counter]);
     }
     counter++;

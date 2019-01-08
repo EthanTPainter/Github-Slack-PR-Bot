@@ -1,6 +1,6 @@
 export {
   getLatestReviews,
-  getApprovingPRs,
+  getApprovingReviews,
   getUsersApproving,
   getUsersNotApproving,
   getLeadsNotApproving,
