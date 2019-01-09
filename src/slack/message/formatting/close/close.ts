@@ -9,12 +9,21 @@
 export function constructCloseDesc(slackUser: string,
                                    slackUserClosing: string,
                                   ): string {
+  // Safety checks
   if (slackUser === "") {
     throw new Error("No slackUser provided");
   }
   if (slackUserClosing === "") {
     throw new Error("No slackUserClosing provided");
   }
-  const desc: string = `${slackUserClosing} closed this PR. Owner: @${slackUser}`;
+  let desc: string = "";
+  // If slackUser and slackUserClosing is the
+  // same user
+  if (slackUser === slackUserClosing) {
+    desc = `${slackUser} closed this PR.`;
+  }
+  else {
+    desc = `${slackUserClosing} closed this PR. Owner: @${slackUser}`;
+  }
   return desc;
 }
