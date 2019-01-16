@@ -9,7 +9,7 @@ import { CommentPR } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";
 import { constructCommentDesc } from "../../formatting";
 
-export function constructComment(event: string, json: any): CommentPR {
+export function constructComment(event: any, json: any): CommentPR {
 
   try {
     // Comment Properties

@@ -4,7 +4,6 @@ import { constructReqChanges } from "../../../../../src/slack/message/construct"
 import { getSlackUser } from "../../../../../src/json/parse";
 
 describe("constructReqChanges", () => {
-
   const validEvent = {
     action: "submitted",
     pull_request: {
@@ -19,7 +18,6 @@ describe("constructReqChanges", () => {
       login: "andrew",
     },
   };
-
   const validJSON = {
     Teams: {
       Team1: {

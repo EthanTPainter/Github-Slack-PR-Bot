@@ -19,14 +19,14 @@ export function constructClose(event: any, json: any): ClosePR {
     // ClosePR properties
     // GitHub user name who opened PR and GtHub user who closed the PR
     const owner: string = getOwner(event);
-    const user_closing: string = getSender(event);
+    const userClosing: string = getSender(event);
 
-    // Use owner variable to grab Slack name and group
+    // Use owner variable to grab Slack name for owner and user closing
     const slackUser: string = getSlackUser(owner, json);
-    const groupName: string = getSlackGroup(owner, json);
+    const slackUserClosing: string = getSlackUser(userClosing, json);
 
     // Base properties
-    const description = constructCloseDesc(slackUser, groupName);
+    const description = constructCloseDesc(slackUser, slackUserClosing);
     const title: string = getTitle(event);
     const pr_url: string = getPRLink(event);
 
@@ -36,7 +36,7 @@ export function constructClose(event: any, json: any): ClosePR {
       title: title,
       url: pr_url,
       owner: owner,
-      user_closing: user_closing,
+      user_closing: userClosing,
     };
 
     return closeObj;

@@ -3,7 +3,7 @@ import {
   getSender,
   getPath,
   getPrivateProp,
-  getApprovingPRs,
+  getApprovingReviews,
   getUsersApproving,
   getUsersNotApproving,
   getTitle,
@@ -42,10 +42,9 @@ export function constructApprove(event: any, json: any): ApprovePR {
     // Get Path and Private property values for
     // making GET request to GitHub API
     const path: string = getPath(event);
-    const privateVal: boolean = getPrivateProp(event);
 
     // Get all existing reviews of the PR
-    const reviews: any = getReviews(path, privateVal);
+    const reviews: any = getReviews(path);
 
     // Listing users to know who to alert in Slack
     const allSlackMembers: string[] = getSlackMembers(owner, json);
@@ -56,7 +55,7 @@ export function constructApprove(event: any, json: any): ApprovePR {
     const allGitTeamUsers: string[] = getGitHubTeamUsers(owner, json);
 
     // Record only approving reviews of the PR
-    const approvingReviews: string[] = getApprovingPRs(reviews);
+    const approvingReviews: string[] = getApprovingReviews(reviews);
 
     // Users approving the Reviews (Slack Usernames)
     const usersApproving: string[] = getUsersApproving(approvingReviews,

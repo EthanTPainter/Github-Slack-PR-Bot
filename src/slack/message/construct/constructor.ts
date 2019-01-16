@@ -15,7 +15,7 @@ import { constructOpen,
   constructApprove,
 } from "./types";
 
-import json from "../../../json/src/user-groups.json";
+import json from "../../../json/src/config.json";
 
 /*
  * @Author: Ethan T Painter

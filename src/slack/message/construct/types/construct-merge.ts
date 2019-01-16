@@ -11,7 +11,7 @@ import { MergePR } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";
 import { constructMergeDesc } from "../../formatting";
 
-export function constructMerge(event: string, json: any): MergePR {
+export function constructMerge(event: any, json: any): MergePR {
 
   try {
     // Merge Properties

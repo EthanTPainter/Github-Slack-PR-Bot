@@ -1,1 +1,1 @@
-export { getReviews } from "./github";
+export { getReviews } from "./reviews";
