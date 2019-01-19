@@ -1,7 +1,9 @@
 {
   "Options": {
     "Num_Required_Lead_Approvals": 1,
-    "Num_Required_Peer_Approvals": 1
+    "Num_Required_Peer_Approvals": 1,
+    "Allow_Cross_Sub_Team_Lead_Approvals": true,
+    "Allow_Cross_Sub_Team_Member_Approvals": true
   },
   "Teams": {
     "Dev_Team": {

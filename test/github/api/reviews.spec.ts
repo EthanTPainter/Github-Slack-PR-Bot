@@ -28,16 +28,4 @@ describe("getReviews", () => {
     expect(parsedActual[3].user.login).to.be.equal(expected[3].user.login);
     expect(parsedActual[3].state).to.be.equal(expected[3].state);
   });
-
-  it("should throw an error (unauthorized)", async () => {
-    const baseURL = "https://api.github.com";
-    const path = "/repos/EthanTPainter/Comparative-Programming/pulls/1/reviews";
-    const errMsg = "User not authorized to make this request" ;
-
-    nock(baseURL)
-      .get(path)
-      .reply(401, errMsg);
-
-    expect(async () => await getReviews(path)).to.throw(errMsg);
-  });
 });

@@ -153,6 +153,6 @@ export const review_result = [
     },
   },
   submitted_at: "2019-01-02T14:48:59Z",
-  commit_id: "03179374ee3f3b72c5e8811061ddb22c28126cad"
+  commit_id: "03179374ee3f3b72c5e8811061ddb22c28126cad",
   },
 ];
