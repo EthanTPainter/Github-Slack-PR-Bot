@@ -6,7 +6,7 @@ import { config } from "../../config";
  * @description Retrieve all reviews for a specific PR
  * @param path The path to add to the BASE_URL to specify the chosen PR
  *             Example: "repos/EthanTPainter/Comparative-Programming/pulls/1/reviews"
- *             This url references the url:
+ *             This path references the url:
  *             https://github.com/EthanTPainter/Comparative-Programming/pull/1/reviews
  */
 export async function getReviews(path: string): Promise<any> {
