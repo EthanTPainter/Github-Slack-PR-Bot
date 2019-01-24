@@ -2,7 +2,7 @@ import "mocha";
 import { constructReqChangesDesc } from "../../../../../src/slack/message/formatting";
 import { expect } from "chai";
 
-describe("constructRedChangesDesc", () => {
+describe("constructReqChangesDesc", () => {
   it("should construct a valid description", () => {
     const slackUser = "EthanPainter";
     const slackUserRequesting = "dsykes";
@@ -13,6 +13,7 @@ describe("constructRedChangesDesc", () => {
 
     expect(result).to.be.equal(expected);
   });
+
   it("should throw an error -- No Slack User provided", () => {
     const slackUser = "";
     const slackUserRequesting = "dsykes";

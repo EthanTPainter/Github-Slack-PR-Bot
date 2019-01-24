@@ -1,6 +1,8 @@
 import * as rp from "request-promise";
 
-export const setupSlackPost: any = (uri: string, slackConfig: any): any => {
+export const setupSlackPost: any = (uri: string,
+                                    slackConfig: any):
+                                  any => {
   const baseOptions: any = {
     body: slackConfig,
     headers: {
