@@ -31,16 +31,28 @@ package:
     - ./dist/**
 
 functions:
-  GitHubSlackCommsManager:
-    handler: dist/src/handler.handler
+  GitHubResponseManager:
+    handler: dist/src/GitHubManager.handler
     events:
       - http:
-          path: bot
+          path: github
           method: post
+
+  SlackResponseManager:
+    handler: dist/src/SlackManager.handler
+    events:
+      - http: 
+        path: slack
+        method: post
 
 resources:
   Resources:
     GitHubSlackCommsManagerLambdaFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        TracingConfig:
+          Mode: Active
+    SlackResponseManagerLambdaFunction:
       Type: AWS::Lambda::Function
       Properties:
         TracingConfig:

@@ -4,6 +4,7 @@
  */
 export class Annotations {
   constructor(
+    public application: string,
     public service: string,
   ) {}
 }

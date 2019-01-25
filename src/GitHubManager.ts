@@ -40,42 +40,32 @@ export function handler(
     console.log("Running with X-Ray disabled");
   } else {
     console.log("Running with X-Ray enabled");
-    const ann = new Annotations("GitHub-Slack-PR-Bot");
-    AWSXRay.captureFunc(ann.service, (subsegment: any) => {
+    const ann = new Annotations(
+      "GitHub-Slack-PR-Bot",
+      "SlackManager",
+    );
+    AWSXRay.captureFunc(ann.application, (subsegment: any) => {
+      subsegment.addAnnotation("application", ann.application);
       subsegment.addAnnotation("service", ann.service);
     });
   }
-
   console.log(`Event: ${JSON.stringify(event)}`);
 
   // Grab body from event
   const body: any = JSON.parse(event.body);
   console.log(`Event body: ${JSON.stringify(body)}`);
 
-  // Determine if Request is from GitHub or Slack
-  if (body.action !== undefined) {
-    // Use action property to format the response
-    const pullRequestAction: string = body.action;
-    console.log(`Action Found: ${pullRequestAction}`);
+  // Use action property to format the response
+  const pullRequestAction: string = body.action;
+  console.log(`Action Found: ${pullRequestAction}`);
 
-    // Construct the Slack message based on PR action and body
-    const slackMessage: string = constructSlackMessage(pullRequestAction, body);
+  // Construct the Slack message based on PR action and body
+  const slackMessage: string = constructSlackMessage(pullRequestAction, body);
 
-    // Provide success statusCode/Message
-    const success: object = {
-      body: "Successfully retrieved event",
-      statusCode: "200",
-    };
-    callback(null, success);
-  }
-  else {
-    const challenge = body.challenge;
-    console.log("Challenge: ", challenge);
-
-    const success: object = {
-      body: body.challenge,
-      statusCode: "200",
-    };
-    callback(null, success);
-  }
+  // Provide success statusCode/Message
+  const success: object = {
+    body: "Successfully retrieved event",
+    statusCode: "200",
+  };
+  callback(null, success);
 }
