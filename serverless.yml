@@ -31,8 +31,8 @@ package:
     - ./dist/**
 
 functions:
-  GitHubResponseManager:
-    handler: dist/src/GitHubManager.handler
+  GitHubSlackCommManager:
+    handler: dist/src/handlers/GitHubManager.handler
     events:
       - http:
           path: github
@@ -40,7 +40,7 @@ functions:
 
 resources:
   Resources:
-    GitHubResponseManagerLambdaFunction:
+    GitHubSlackCommManagerLambdaFunction:
       Type: AWS::Lambda::Function
       Properties:
         TracingConfig:

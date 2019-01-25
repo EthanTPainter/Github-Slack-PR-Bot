@@ -26,7 +26,9 @@ export function handler(
   callback: any,
 ): void {
 
-  // If Running locally
+  // X-Ray
+  // Locally - Disable unless using xray daemon locally
+  // Dpeloyed - Enable
   if (requiredEnvs.DISABLE_XRAY) {
     console.log("Running with X-Ray disabled");
   } else {
@@ -40,23 +42,32 @@ export function handler(
       subsegment.addAnnotation("service", ann.service);
     });
   }
+
   console.log(`Event: ${JSON.stringify(event)}`);
 
   // Grab body from event
   const body: any = JSON.parse(event.body);
   console.log(`Event body: ${JSON.stringify(body)}`);
 
-  // Use action property to format the response
-  const pullRequestAction: string = body.action;
-  console.log(`Action Found: ${pullRequestAction}`);
+  // Determine if GitHub POST or Slack POST
+  // GitHub action (Opened, Closed, etc.) is found
+  if (body.action !== undefined) {
+    // Use action property to format the response
+    const pullRequestAction: string = body.action;
+    console.log(`Action Found: ${pullRequestAction}`);
 
-  // Construct the Slack message based on PR action and body
-  const slackMessage: string = constructSlackMessage(pullRequestAction, body);
+    // Construct the Slack message based on PR action and body
+    const slackMessage: string = constructSlackMessage(pullRequestAction, body);
 
-  // Provide success statusCode/Message
-  const success: object = {
-    body: "Successfully retrieved event",
-    statusCode: "200",
-  };
-  callback(null, success);
+    // Provide success statusCode/Message
+    const success: object = {
+      body: "Successfully retrieved event",
+      statusCode: "200",
+    };
+    callback(null, success);
+  }
+  // Otherwise receiving Slack POST
+  else {
+    console.log("Nothing yet");
+  }
 }
