@@ -15,7 +15,7 @@ plugins:
 custom:
   prune:
     automatic: true
-    number: 2
+    number: 1
   dotenv:
     path: ./.env
 
@@ -28,7 +28,7 @@ package:
 
 functions:
   handler:
-    handler: dist/handler.githubResponseHandler
+    handler: dist/handler.handler
     events:
       - http:
           path: bot
