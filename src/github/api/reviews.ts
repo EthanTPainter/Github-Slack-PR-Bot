@@ -1,5 +1,5 @@
 import * as rp from "request-promise";
-import { config } from "../../config";
+import { requiredEnvs } from "../../required-envs";
 
 /**
  * @author Ethan T Painter
@@ -41,7 +41,7 @@ async function getReviewsList(options: any): Promise<any> {
     method: options.method,
     url: options.url,
     headers: {
-      Authorization: `Bearer ${config.GITHUB_OAUTH2_TOKEN}`,
+      Authorization: `Bearer ${requiredEnvs.GITHUB_OAUTH2_TOKEN}`,
       "User-Agent": "GitHub-Slack-PR-Bot",
     },
   };

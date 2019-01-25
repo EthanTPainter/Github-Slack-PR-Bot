@@ -1,4 +1,5 @@
 import { constructSlackMessage } from "./slack/message/construct/constructor";
+import { requiredEnvs } from "./required-envs";
 
 /**
  * This handler does 2 things:
@@ -29,6 +30,23 @@ export function handler(
   context: any,
   callback: any,
 ): void {
+
+  // If Running locally
+  if (requiredEnvs.DISABLE_XRAY) {
+    console.log("Running with X-Ray disabled");
+  } else {
+    /*
+    console.log("Running with X-Ray enabled");
+    const ann: Annotations = new Annotations(
+      clientId,
+      "ScripterServices",
+      "ScriptServices",
+    );
+    const xRayInitializer: XRayInitializer = new XRayInitializer(ann, logger);
+    xRayInitializer.initXray();
+    */
+  }
+
   console.log(`Event: ${JSON.stringify(event)}`);
 
   // Grab body from event

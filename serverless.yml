@@ -2,10 +2,14 @@ service: github-slack-pr-bot
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   timeout: 30
   deploymentBucket:
     name: sc-lambda-${opt:stage}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: "xray:*"
+      Resource: "*"
 
 plugins:
   - serverless-offline
@@ -27,9 +31,17 @@ package:
     - ./dist/**
 
 functions:
-  handler:
-    handler: dist/handler.handler
+  GitHubSlackCommsManager:
+    handler: dist/src/handler.handler
     events:
       - http:
           path: bot
           method: post
+
+resources:
+  Resources:
+    GitHubSlackCommsManagerLambdaFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        TracingConfig:
+          Mode: Active
