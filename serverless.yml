@@ -38,21 +38,9 @@ functions:
           path: github
           method: post
 
-  SlackResponseManager:
-    handler: dist/src/SlackManager.handler
-    events:
-      - http: 
-        path: slack
-        method: post
-
 resources:
   Resources:
-    GitHubSlackCommsManagerLambdaFunction:
-      Type: AWS::Lambda::Function
-      Properties:
-        TracingConfig:
-          Mode: Active
-    SlackResponseManagerLambdaFunction:
+    GitHubResponseManagerLambdaFunction:
       Type: AWS::Lambda::Function
       Properties:
         TracingConfig:

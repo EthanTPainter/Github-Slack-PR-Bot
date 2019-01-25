@@ -1,6 +1,6 @@
-import { constructSlackMessage } from "./slack/message/construct/constructor";
-import { requiredEnvs } from "./required-envs";
-import { Annotations } from "./models";
+import { constructSlackMessage } from "../slack/message/construct/constructor";
+import { requiredEnvs } from "../required-envs";
+import { Annotations } from "../models";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -11,15 +11,6 @@ AWSXRay.captureHTTPsGlobal(require("http"));
  *    && constructs slack messages to post in team slack channels
  * 2) Receives messages from Slack users sent to the Slack Bot,
  *    and responds with expected information from Dynamo
- *
- * PullRequestEvent - When a PR is opened, closed, or merged
- * https://developer.github.com/v3/activity/events/types/#pullrequestevent
- *
- * PullRequestReviewEvent - When a PR has requested changes
- * https://developer.github.com/v3/activity/events/types/#pullrequestreviewevent
- *
- * PullRequestReviewCommentEvent - When a PR has comments submitted
- * https://developer.github.com/v3/activity/events/types/#pullrequestreviewcommentevent
  *
  * Slack Events API for Slack messaging with Bots
  * https://api.slack.com/events-api
