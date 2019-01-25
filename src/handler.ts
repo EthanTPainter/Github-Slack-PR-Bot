@@ -1,5 +1,9 @@
 import { constructSlackMessage } from "./slack/message/construct/constructor";
 import { requiredEnvs } from "./required-envs";
+import { Annotations } from "./models";
+
+const AWSXRay = require("aws-xray-sdk");
+AWSXRay.captureHTTPsGlobal(require("http"));
 
 /**
  * This handler does 2 things:
@@ -35,16 +39,11 @@ export function handler(
   if (requiredEnvs.DISABLE_XRAY) {
     console.log("Running with X-Ray disabled");
   } else {
-    /*
     console.log("Running with X-Ray enabled");
-    const ann: Annotations = new Annotations(
-      clientId,
-      "ScripterServices",
-      "ScriptServices",
-    );
-    const xRayInitializer: XRayInitializer = new XRayInitializer(ann, logger);
-    xRayInitializer.initXray();
-    */
+    const ann = new Annotations("GitHub-Slack-PR-Bot");
+    AWSXRay.captureFunc(ann.service, (subsegment: any) => {
+      subsegment.addAnnotation("service", ann.service);
+    });
   }
 
   console.log(`Event: ${JSON.stringify(event)}`);

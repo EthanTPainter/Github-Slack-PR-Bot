@@ -15,7 +15,7 @@ import { constructOpen,
   constructApprove,
 } from "./types";
 
-import json from "../../../json/src/config.json";
+import { json } from "../../../json/src/config";
 
 /*
  * @Author: Ethan T Painter
@@ -40,7 +40,6 @@ export function constructSlackMessage(
 ): string {
 
   let slackMessage: string = "default";
-  let slackChannel: string = "default";
 
   switch (action) {
     /* When a PR is opened
@@ -57,7 +56,6 @@ export function constructSlackMessage(
       slackMessage = open.description + "\n"
                       + open.title + "\n"
                       + open.url;
-      slackChannel = "";
       break;
     }
 
@@ -75,7 +73,6 @@ export function constructSlackMessage(
       slackMessage = open.description + "\n"
                       + open.title + "\n"
                       + open.url;
-      slackChannel = "";
       break;
     }
 
@@ -96,7 +93,6 @@ export function constructSlackMessage(
         slackMessage = merge.description + "\n"
                         + merge.title + "\n"
                         + merge.url;
-        slackChannel = "";
       }
       else {
         // Construct ClosePR Object and format slack message
