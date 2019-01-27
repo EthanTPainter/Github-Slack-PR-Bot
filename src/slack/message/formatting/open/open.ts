@@ -7,12 +7,20 @@
  */
 export function constructOpenDesc(slackUser: string,
                                   slackGroup: string,
-                                ): string {
+                                  newPR: boolean,
+                                 ): string {
   // The *...* style means the ... is BOLD in Slack
   if (slackUser === "") {
     throw new Error("No slackUser provided");
   }
-  let desc: string = `${slackUser} opened this PR. Needs *peer* and *lead* reviews`;
+  let desc: string = "";
+  // new PR check
+  if (newPR) {
+    desc = `${slackUser} opened this PR. Needs *peer* and *lead* reviews`;
+  } else {
+    desc =   `${slackUser} reopened this PR. Needs *peer* and *lead* reviews`;
+  }
+  // Add SlackGroup
   if (slackGroup !== "") {
     desc = desc + ` @${slackGroup}`;
   }

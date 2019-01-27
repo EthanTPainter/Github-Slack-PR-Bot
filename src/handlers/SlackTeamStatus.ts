@@ -7,8 +7,8 @@ AWSXRay.captureHTTPsGlobal(require("http"));
 
 /**
  * This handler:
- * 1) Receives webhook POST requests from GitHub repositories
- *    && constructs slack messages to post in team slack channels
+ * 1) Receives messages from Slack users sent to the Slack Bot,
+ *    and responds with expected information from Dynamo
  *
  * Slack Events API for Slack messaging with Bots
  * https://api.slack.com/events-api
@@ -33,7 +33,7 @@ export function handler(
     console.log("Running with X-Ray enabled");
     const ann = new Annotations(
       "GitHub-Slack-PR-Bot",
-      "GitHubManager",
+      "SlackTeamStatus",
     );
     AWSXRay.captureFunc(ann.application, (subsegment: any) => {
       subsegment.addAnnotation("application", ann.application);
@@ -47,17 +47,16 @@ export function handler(
   const body: any = JSON.parse(event.body);
   console.log(`Event body: ${JSON.stringify(body)}`);
 
-  // Use action property to format the response
-  const pullRequestAction: string = body.action;
-  console.log(`Action Found: ${pullRequestAction}`);
+  console.log("Nothing yet");
 
-  // Construct the Slack message based on PR action and body
-  const slackMessage: string = constructSlackMessage(pullRequestAction, body);
-
-  // Provide success statusCode/Message
-  const success: object = {
-    body: "Successfully retrieved event",
-    statusCode: "200",
-  };
-  callback(null, success);
+  // URL Verfication for connecting Slack bots
+  if (body.challenge !== undefined) {
+    const challenge = body.challenge;
+    // Provide success statusCode/Message
+    const success: object = {
+      body: challenge,
+      statusCode: "200",
+    };
+    callback(null, success);
+  }
 }

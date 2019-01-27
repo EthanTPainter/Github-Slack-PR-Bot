@@ -37,10 +37,21 @@ functions:
       - http:
           path: github
           method: post
+  SlackTeamStatusManager:
+    handler: dist/src/handlers/SlackTeamStatus.handler
+    events:
+      - http:
+          path: team-status
+          method: post
 
 resources:
   Resources:
     GitHubSlackCommManagerLambdaFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        TracingConfig:
+          Mode: Active
+    SlackTeamStatusManagerLambdaFunction:
       Type: AWS::Lambda::Function
       Properties:
         TracingConfig:

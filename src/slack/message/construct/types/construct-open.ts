@@ -3,7 +3,10 @@ import { getOwner, getTitle, getPRLink } from "../../../../github/parse";
 import { getSlackUser, getSlackGroup } from "../../../../json/parse";
 import { constructOpenDesc } from "../../formatting";
 
-export function constructOpen(event: any, json: any): OpenedPR {
+export function constructOpen(event: any,
+                              json: any,
+                              newPR: boolean,
+                             ): OpenedPR {
 
   try {
     // OpenedPr Properties
@@ -15,7 +18,7 @@ export function constructOpen(event: any, json: any): OpenedPR {
     const groupName: string = getSlackGroup(owner, json);
 
     // Base Properties
-    const description = constructOpenDesc(slackUser, groupName);
+    const description = constructOpenDesc(slackUser, groupName, newPR);
     const title: string = getTitle(event);
     const pr_url: string = getPRLink(event);
 

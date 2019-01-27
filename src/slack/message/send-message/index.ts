@@ -1,1 +1,1 @@
-export { postMessage } from "./send-message";
+export { setupSlackPost } from "./setup-slack-message";

@@ -46,7 +46,8 @@ export function constructSlackMessage(
      * Construct OpenPR Object and format slack message
      */
      case "opened": {
-      const open: OpenedPR = constructOpen(event, json);
+      const newPR = true;
+      const open: OpenedPR = constructOpen(event, json, newPR);
       /* Construct order of Opened PR Slack message
        * SLACK MESSAGE APPEARANCE:
        * -------------- DESCRIPTION --------------
@@ -63,7 +64,8 @@ export function constructSlackMessage(
      * Construct OpenPR Object and format slack message
      */
      case "reopened": {
-      const open: OpenedPR = constructOpen(event, json);
+      const newPR = false;
+      const open: OpenedPR = constructOpen(event, json, newPR);
       /* Construct order of Opened PR Slack message
        * SLACK MESSAGE APPEARANCE:
        * -------------- DESCRIPTION --------------
@@ -165,8 +167,8 @@ export function constructSlackMessage(
       break;
     }
 
-    case "default": {
-      const unsupportedEventType: string = `event action ${event.action} not supported in this application`;
+    default: {
+      const unsupportedEventType: string = `event action ${action} not supported in this application`;
       slackMessage = unsupportedEventType;
       throw new Error(slackMessage);
     }
