@@ -9,7 +9,9 @@ import { RequestChangesPR } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";
 import { constructReqChangesDesc } from "../../formatting";
 
-export function constructReqChanges(event: any, json: any): RequestChangesPR {
+export function constructReqChanges(event: any,
+                                    json: any,
+                                   ): RequestChangesPR {
 
   try {
     // RequestChangesPR properties

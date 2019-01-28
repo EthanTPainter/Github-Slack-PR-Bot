@@ -8,7 +8,7 @@ describe("constructReqChangesDesc", () => {
     const slackUserRequesting = "dsykes";
 
     const result = constructReqChangesDesc(slackUser, slackUserRequesting);
-    const expected = `${slackUserRequesting} is requesting changes to ` +
+    const expected = `${slackUserRequesting} requested changes to ` +
       `this PR. Owner: @${slackUser}`;
 
     expect(result).to.be.equal(expected);

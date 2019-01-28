@@ -2,7 +2,6 @@ import {
   getOwner,
   getSender,
   getPath,
-  getPrivateProp,
   getApprovingReviews,
   getUsersApproving,
   getUsersNotApproving,
@@ -18,7 +17,13 @@ import {
 } from "../../../../json/parse";
 
 import { getReviews } from "../../../../github/api";
-import { getMemberList, constructApproveDesc } from "../../formatting";
+
+import {
+  getMemberList,
+  getLeadList,
+  constructApproveDesc,
+} from "../../formatting";
+
 import { ApprovePR } from "../../../../models";
 
 /**
@@ -32,26 +37,20 @@ export function constructApprove(event: any, json: any): ApprovePR {
   try {
     // ApprovePR properties
     // GitHub user name who opened PR and GtHub user who closed the PR
+    // Use GitHub user names to select slack user and slack user approving
     const owner: string = getOwner(event);
     const userApproving: string = getSender(event);
-
-    // Use owner variable to grab Slack name and group
     const slackUser: string = getSlackUser(owner, json);
     const slackUserApproving: string = getSlackUser(userApproving, json);
 
-    // Get Path and Private property values for
-    // making GET request to GitHub API
+    // Get Path and GET any existing reviews
     const path: string = getPath(event);
-
-    // Get all existing reviews of the PR
     const reviews: any = getReviews(path);
 
-    // Listing users to know who to alert in Slack
-    const allSlackMembers: string[] = getSlackMembers(owner, json);
-    const allSlackLeads: string[] = getSlackLeads(owner, json);
-    const allSlackUsers: string[] = allSlackLeads.concat(allSlackMembers);
-
-    // All GitHub users in slack
+    // Get All Slack and GitHub users for a team
+    const allSlackTeamMembers: string[] = getSlackMembers(owner, json);
+    const allSlackTeamLeads: string[] = getSlackLeads(owner, json);
+    const allSlackTeamUsers: string[] = allSlackTeamLeads.concat(allSlackTeamMembers);
     const allGitTeamUsers: string[] = getGitHubTeamUsers(owner, json);
 
     // Record only approving reviews of the PR
@@ -63,21 +62,17 @@ export function constructApprove(event: any, json: any): ApprovePR {
 
     // Users not approving the Reviews (Slack usernames)
     const usersNotApproving: string[] = getUsersNotApproving(slackUser,
-      usersApproving, allSlackUsers);
-
-    const checks: string = "";
+      usersApproving, allSlackTeamUsers);
 
     // Construct exemptUsers
     const exemptUsers: string[] = [slackUser, slackUserApproving];
 
     // Get List of Members to @
-    const memberList: string[] = getMemberList(allSlackMembers, exemptUsers);
-    const leadList: string[] = getMemberList(allSlackLeads, exemptUsers);
+    const memberList: string[] = getMemberList(allSlackTeamMembers, exemptUsers);
+    const leadList: string[] = getLeadList(allSlackTeamLeads, exemptUsers);
 
     // Base Properties
-    const description: string = constructApproveDesc(slackUser,
-      slackUserApproving);
-
+    const description: string = constructApproveDesc(slackUser, slackUserApproving);
     const title: string = getTitle(event);
     const pr_url: string = getPRLink(event);
 
@@ -87,7 +82,6 @@ export function constructApprove(event: any, json: any): ApprovePR {
       title: title,
       owner: owner,
       user_approving: userApproving,
-      checks: checks,
       url: pr_url,
     };
 

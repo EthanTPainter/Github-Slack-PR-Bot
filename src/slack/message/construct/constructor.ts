@@ -55,8 +55,8 @@ export function constructSlackMessage(
        * -------------- URL ----------------------
        */
       slackMessage = open.description + "\n"
-                      + open.title + "\n"
-                      + open.url;
+                      + open.title
+                      + "[" + open.url + "]";
       break;
     }
 
@@ -73,8 +73,8 @@ export function constructSlackMessage(
        * -------------- URL ----------------------
        */
       slackMessage = open.description + "\n"
-                      + open.title + "\n"
-                      + open.url;
+                      + open.title
+                      + "[" + open.url + "]";
       break;
     }
 
@@ -93,8 +93,8 @@ export function constructSlackMessage(
         * -------------- URL ----------------------
         */
         slackMessage = merge.description + "\n"
-                        + merge.title + "\n"
-                        + merge.url;
+                        + merge.title
+                        + "[" + merge.url + "]";
       }
       else {
         // Construct ClosePR Object and format slack message
@@ -106,8 +106,8 @@ export function constructSlackMessage(
         * -------------- URL ----------------------
         */
         slackMessage = close.description + "\n"
-                        + close.title + "\n"
-                        + close.url;
+                        + close.title
+                        + "[" + close.url + "]";
       }
       break;
     }
@@ -132,8 +132,8 @@ export function constructSlackMessage(
        * --------------- LEAD CHECK --------------
        */
         slackMessage = approve.description + "\n"
-                        + approve.title + "\n"
-                        + approve.url;
+                        + approve.title
+                        + "[" + approve.url + "]";
       }
       // When a user requests changes on a PR. This is arguably the most important feat
       else if (decider === "changes_requested") {
@@ -145,8 +145,8 @@ export function constructSlackMessage(
        * -------------- URL ----------------------
        */
         slackMessage = changes.description + "\n"
-                        + changes.title + "\n"
-                        + changes.url;
+                        + changes.title
+                        + "[" + changes.url + "]";
       }
       else if (decider === "commented") {
         /* When a user comments on a PR
@@ -158,7 +158,8 @@ export function constructSlackMessage(
          */
         const comment: CommentPR = constructComment(event, json);
         slackMessage = comment.description + "\n"
-                        + comment.url;
+                        + comment.title
+                        + "[" + comment.url + "]";
       }
       else {
         // Not approved or requested changes, throw error for unsupported state

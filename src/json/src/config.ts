@@ -1,5 +1,7 @@
 export const json = {
   Options: {
+    Check_Mark_Style: "green",
+    X_Mark_Style: "base",
     Num_Required_Lead_Approvals: 1,
     Num_Required_Peer_Approvals: 1,
     Allow_Cross_Sub_Team_Lead_Approvals: true,

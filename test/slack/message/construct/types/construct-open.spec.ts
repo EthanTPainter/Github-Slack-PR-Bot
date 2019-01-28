@@ -38,8 +38,9 @@ describe("constructOpen", () => {
   };
   it("should construct an openedPR object", () => {
     const slackOwner = getSlackUser(validEvent.pull_request.user.login, validJSON);
+    const newPR = true;
 
-    const result: OpenedPR = constructOpen(validEvent, validJSON);
+    const result: OpenedPR = constructOpen(validEvent, validJSON, newPR);
 
     expect((result.description).includes(slackOwner)).to.be.equal(true);
     expect((result.description).includes("opened this PR")).to.be.equal(true);
