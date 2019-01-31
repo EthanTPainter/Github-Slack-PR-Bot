@@ -35,7 +35,7 @@ describe("constructApproveDesc", () => {
   });
 });
 
-describe("getMembersList", () => {
+describe("getMemberList", () => {
   it("should return a list of members not in membersExempt", () => {
     const members = ["Ethan", "Dillon", "Joshua", "Daniel"];
     const membersExempt = ["Ethan"];

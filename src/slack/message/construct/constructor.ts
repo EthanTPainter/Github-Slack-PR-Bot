@@ -15,7 +15,7 @@ import { constructOpen,
   constructApprove,
 } from "./types";
 
-import { json } from "../../../json/src/config";
+import { json } from "../../../json/src/json";
 
 /*
  * @Author: Ethan T Painter
@@ -56,7 +56,7 @@ export function constructSlackMessage(
        */
       slackMessage = open.description + "\n"
                       + open.title
-                      + "[" + open.url + "]";
+                      + "  [" + open.url + "]";
       break;
     }
 
@@ -74,7 +74,7 @@ export function constructSlackMessage(
        */
       slackMessage = open.description + "\n"
                       + open.title
-                      + "[" + open.url + "]";
+                      + "  [" + open.url + "]";
       break;
     }
 

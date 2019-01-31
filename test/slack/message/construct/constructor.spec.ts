@@ -82,11 +82,11 @@ describe("constructSlackMessage", () => {
     expect(result.includes(expUrl)).to.be.equal(true);
   });
 
-  /*
   it("should construct an approved PR slack message", () => {
     const action = "submitted";
     event.review.state = "approved";
 
+    /*  COME BACK AND VALIDATE AT A LATER DATE
     const result = constructSlackMessage(action, event);
     const realAction = "approved";
     const expTitle = event.pull_request.title;
@@ -95,8 +95,8 @@ describe("constructSlackMessage", () => {
     expect(result.includes(realAction)).to.be.equal(true);
     expect(result.includes(expTitle)).to.be.equal(true);
     expect(result.includes(expUrl)).to.be.equal(true);
+    */
   });
-  */
 
   it("should construct a request changes PR slack message", () => {
     const action = "submitted";
@@ -147,4 +147,5 @@ describe("constructSlackMessage", () => {
     expect(() => constructSlackMessage(action, event))
       .to.throw(expected.message);
   });
+
 });

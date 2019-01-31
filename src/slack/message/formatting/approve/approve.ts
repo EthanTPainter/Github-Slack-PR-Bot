@@ -31,7 +31,7 @@ export function constructApproveDesc(slackUser: string,
  */
 export function getMemberList(members: string[],
                               membersExempt: string[],
-                            ): string[] {
+                             ): string[] {
   const group: string[] = [];
   let counter: number = 0;
   // Loop through members. If a member is in membersExempt

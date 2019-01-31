@@ -25,6 +25,7 @@ import {
 } from "../../formatting";
 
 import { ApprovePR } from "../../../../models";
+import { getApprovalChecks } from "../checks/approval";
 
 /**
  * @author Ethan T Painter
@@ -56,20 +57,19 @@ export function constructApprove(event: any, json: any): ApprovePR {
     // Record only approving reviews of the PR
     const approvingReviews: string[] = getApprovingReviews(reviews);
 
-    // Users approving the Reviews (Slack Usernames)
+    // Get all Users for a sub team
+    // approving the Reviews (Slack Usernames) and
+    // those not approving (Slack Usernames)
     const usersApproving: string[] = getUsersApproving(approvingReviews,
       allGitTeamUsers);
-
-    // Users not approving the Reviews (Slack usernames)
     const usersNotApproving: string[] = getUsersNotApproving(slackUser,
       usersApproving, allSlackTeamUsers);
 
     // Construct exemptUsers
-    const exemptUsers: string[] = [slackUser, slackUserApproving];
+    const exemptUsers: string[] = [slackUser];
 
-    // Get List of Members to @
-    const memberList: string[] = getMemberList(allSlackTeamMembers, exemptUsers);
-    const leadList: string[] = getLeadList(allSlackTeamLeads, exemptUsers);
+    const approvals = getApprovalChecks(slackUser, approvingReviews,
+                                     allSlackTeamMembers, allSlackTeamLeads);
 
     // Base Properties
     const description: string = constructApproveDesc(slackUser, slackUserApproving);
@@ -83,6 +83,7 @@ export function constructApprove(event: any, json: any): ApprovePR {
       owner: owner,
       user_approving: userApproving,
       url: pr_url,
+      approvals: approvals,
     };
 
     return approveObj;

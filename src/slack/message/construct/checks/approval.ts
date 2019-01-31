@@ -1,13 +1,13 @@
-import { json } from "../../../../json/src/config";
+import { json } from "../../../../json/src/json";
 import { constructPeerCheck } from "./peer";
 import { constructLeadCheck } from "./lead";
-import { getUsersApproving, getUsersNotApproving } from "src/github/parse";
+import { getUsersApproving, getUsersNotApproving } from "../../../../github/parse";
 import {
   getMembersApproving,
   getMembersNotApproving,
   getLeadsApproving,
   getLeadsNotApproving,
-} from "src/github/parse/reviews/approve";
+} from "../../../../github/parse/reviews/approve";
 
 /**
  * @author Ethan T Painter

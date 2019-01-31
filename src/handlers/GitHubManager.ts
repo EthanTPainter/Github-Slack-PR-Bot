@@ -1,6 +1,7 @@
 import { constructSlackMessage } from "../slack/message/construct/constructor";
 import { requiredEnvs } from "../required-envs";
 import { Annotations } from "../models";
+import { postMessage } from "../slack/api";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -18,11 +19,11 @@ AWSXRay.captureHTTPsGlobal(require("http"));
  * @param callback Callback function for using if successfull or failed
  */
 
-export function handler(
+export async function handler(
   event: any,
   context: any,
   callback: any,
-): void {
+): Promise<any> {
 
   // X-Ray
   // Locally - Disable unless using xray daemon locally
@@ -54,6 +55,10 @@ export function handler(
   // Construct the Slack message based on PR action and body
   const slackMessage: string = constructSlackMessage(pullRequestAction, body);
 
+  const result = await postMessage(requiredEnvs.SLACK_API_URI,
+    requiredEnvs.DEV_TEAM_1_SLACK_CHANNEL_NAME,
+    requiredEnvs.DEV_TEAM_1_SLACK_TOKEN,
+    slackMessage);
   // Provide success statusCode/Message
   const success: object = {
     body: "Successfully retrieved event",

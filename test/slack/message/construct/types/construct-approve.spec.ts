@@ -1,5 +1,6 @@
 import "mocha";
 import { expect } from "chai";
+import sinon from "sinon";
 import { constructApprove } from "../../../../../src/slack/message/construct";
 import { getSlackUser } from "../../../../../src/json/parse";
 import { ApprovePR } from "../../../../../src/models";
@@ -43,6 +44,7 @@ describe("constructApprove", () => {
     const slackOwner = getSlackUser(validEvent.pull_request.user.login, validJSON);
     const slackApprover = getSlackUser(validEvent.sender.login, validJSON);
 
-    // COME BACK AND FINISH UP WHEN CONSTRUCT APPROVE IS FULLY FLESHED OUT
+    const result = constructApprove(validEvent, validJSON);
+    console.log(result);
   });
 });
