@@ -6,6 +6,7 @@ describe("constructPeerCheck", () => {
   const validJSON = {
     Options: {
       Check_Mark_Style: "green",
+      X_Mark_Style: "base",
       Num_Required_Peer_Approvals: 0,
     },
   };
@@ -95,4 +96,65 @@ describe("constructPeerCheck", () => {
 
     expect(result).to.be.equal(expected);
   });
+
+  it("construct a peer check with 1 required review, 0 approving, 1 requested changes", () => {
+    validJSON.Options.Num_Required_Peer_Approvals = 1;
+    const membersApproving: string[] = [];
+    const membersReqChanges = ["ethan"];
+    const membersNotApproving = ["dillon"];
+
+    const result = constructPeerCheck(validJSON, membersApproving, membersReqChanges, membersNotApproving);
+    const expected = "1 Required Peer Approval: ethan :X: ";
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("construct a peer check with 2 required reviews, 0 approving, 1 requesting chagnes", () => {
+    validJSON.Options.Num_Required_Peer_Approvals = 2;
+    const membersApproving: string[] = [];
+    const membersReqChanges: string[] = ["Ethan"];
+    const membersNotApproving = ["Dillon"];
+
+    const result = constructPeerCheck(validJSON, membersApproving, membersReqChanges, membersNotApproving);
+    const expected = "2 Required Peer Approvals: Ethan :X: @Dillon ";
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("construct a peer check with 2 required reviews, 0 approving, 2 requesting changes", () => {
+    validJSON.Options.Num_Required_Peer_Approvals = 2;
+    const membersApproving: string[] = [];
+    const membersReqChanges: string[] = ["Ethan", "Daniel"];
+    const membersNotApproving = ["Dillon", "Joshua"];
+
+    const result = constructPeerCheck(validJSON, membersApproving, membersReqChanges, membersNotApproving);
+    const expected = "2 Required Peer Approvals: Ethan :X: Daniel :X: ";
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("construct a peer check with 2 required reviews, 1 approving, 1 requesting changes", () => {
+    validJSON.Options.Num_Required_Peer_Approvals = 2;
+    const membersApproving = ["Ethan"];
+    const membersReqChanges = ["Daniel"];
+    const membersNotApproving = ["Dillon", "Joshua"];
+
+    const result = constructPeerCheck(validJSON, membersApproving, membersReqChanges, membersNotApproving);
+    const expected = "2 Required Peer Approvals: Ethan :heavy_check_mark: Daniel :X: ";
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("construct a peer check with 3 required reviews, 1 approving, 1 requesting changes", () => {
+    validJSON.Options.Num_Required_Peer_Approvals = 3;
+    const membersApproving = ["Ethan"];
+    const membersReqChanges = ["Daniel"];
+    const membersNotApproving = ["Dillon", "Joshua", "Harrison"];
+
+    const result = constructPeerCheck(validJSON, membersApproving, membersReqChanges, membersNotApproving);
+    const expected = "3 Required Peer Approvals: Ethan :heavy_check_mark: Daniel :X: @Dillon @Joshua @Harrison ";
+
+    expect(result).to.be.equal(expected);
+  });
+
 });

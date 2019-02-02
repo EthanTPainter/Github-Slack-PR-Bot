@@ -1,4 +1,5 @@
 import { getCheckMark } from "../../../icons/check-mark";
+import { getXMark } from "../../../icons/x-mark";
 /**
  * @author Ethan T Painter
  * @description Construct string for Peer Approval statement
@@ -35,15 +36,22 @@ export function constructPeerCheck(json: any,
   } else {
     peerCheck = `${json.Options.Num_Required_Peer_Approvals} Required Peer Approvals: `;
   }
-  // Format Who has approved the PR thus far
+
+  // Format who has approved the PR thus far
   membersApproving.forEach((slackMember: string) => {
     const checkMark = getCheckMark(json);
     peerCheck += `${slackMember} ${checkMark} `;
   });
+  // Format who has requested changed to the PR thus far
+  membersReqChanges.forEach((slackMember: string) => {
+    const xMark = getXMark(json);
+    peerCheck += `${slackMember} ${xMark} `;
+  });
 
-  // Determine if current number of approving users
-  // matches or exceeds the expected required Number
-  if (membersApproving.length >= json.Options.Num_Required_Peer_Approvals) {
+  // Determine if current number of approving + requesting changes users
+  // matches or exceeds the expected required number
+  if (membersApproving.length + membersReqChanges.length >=
+        json.Options.Num_Required_Peer_Approvals) {
     return peerCheck;
   }
   else {

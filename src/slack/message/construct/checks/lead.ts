@@ -1,4 +1,5 @@
 import { getCheckMark } from "../../../../../src/slack/icons/check-mark";
+import { getXMark } from "../../../../../src/slack/icons/x-mark";
 
 /**
  * @author Ethan T Painter
@@ -35,10 +36,16 @@ export function constructLeadCheck(json: any,
     const checkMark = getCheckMark(json);
     leadCheck += `${slackLead} ${checkMark} `;
   });
+  // Format who has requested changes to the PR thus far
+  leadsReqChanges.forEach((slackLead: string) => {
+    const xMark = getXMark(json);
+    leadCheck += `${slackLead} ${xMark} `;
+  });
 
   // Determine if current number of approving users
   // matches or exceeds the expected required Number
-  if (leadsApproving.length >= json.Options.Num_Required_Lead_Approvals) {
+  if (leadsApproving.length + leadsReqChanges.length >=
+        json.Options.Num_Required_Lead_Approvals) {
     return leadCheck;
   }
   else {
