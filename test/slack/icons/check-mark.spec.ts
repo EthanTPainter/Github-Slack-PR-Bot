@@ -1,4 +1,3 @@
-import "mocha";
 import { expect } from "chai";
 import { getCheckMark } from "../../../src/slack/icons/check-mark";
 

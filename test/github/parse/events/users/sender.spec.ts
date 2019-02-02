@@ -1,4 +1,3 @@
-import "mocha";
 import { expect } from "chai";
 import { getSender } from "../../../../../src/github/parse/events/users";
 

@@ -1,4 +1,3 @@
-import "mocha";
 import { expect } from "chai";
 import { getPRBranch } from "../../../../../src/github/parse";
 

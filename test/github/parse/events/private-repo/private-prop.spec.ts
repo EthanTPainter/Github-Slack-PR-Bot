@@ -1,4 +1,3 @@
-import "mocha";
 import { expect } from "chai";
 import { getPrivateProp } from "../../../../../src/github/parse";
 

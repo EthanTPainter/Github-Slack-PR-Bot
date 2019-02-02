@@ -1,4 +1,3 @@
-import "mocha";
 import { expect } from "chai";
 import { constructLeadCheck } from "../../../../../src/slack/message/construct/checks/lead";
 import { getLeadsReqChanges } from "src/github/parse";

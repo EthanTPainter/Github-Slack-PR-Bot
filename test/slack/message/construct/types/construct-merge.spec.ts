@@ -1,4 +1,3 @@
-import "mocha";
 import { expect } from "chai";
 import { constructMerge } from "../../../../../src/slack/message/construct";
 import { getSlackUser } from "../../../../../src/json/parse";

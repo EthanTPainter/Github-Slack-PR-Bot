@@ -1,4 +1,3 @@
-import "mocha";
 import { expect } from "chai";
 import { getSlackLeads } from "../../../../src/json/parse";
 

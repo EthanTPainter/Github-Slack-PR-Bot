@@ -1,4 +1,3 @@
-import "mocha";
 import { expect } from "chai";
 import { getTeamName } from "../../../src/json/parse/team-name";
 

@@ -1,4 +1,3 @@
-import "mocha";
 import { review_result, solo_review } from "./review-result";
 import * as sinon from "sinon";
 import { expect } from "chai";

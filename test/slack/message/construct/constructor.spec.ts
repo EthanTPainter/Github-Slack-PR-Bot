@@ -1,4 +1,3 @@
-import "mocha";
 import { constructSlackMessage } from "../../../../src/slack/message/construct";
 
 const chaiAsPromised = require("chai-as-promised");

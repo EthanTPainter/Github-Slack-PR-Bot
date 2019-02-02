@@ -1,4 +1,3 @@
-import "mocha";
 import { expect } from "chai";
 import { Review } from "../../../../src/models";
 import { getLatestReviews } from "../../../../src/github/parse";

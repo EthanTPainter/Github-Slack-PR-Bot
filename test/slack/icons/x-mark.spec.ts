@@ -1,4 +1,3 @@
-import "mocha";
 import { expect } from "chai";
 import { getXMark } from "../../../src/slack/icons/x-mark";
 

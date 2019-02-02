@@ -1,4 +1,3 @@
-import "mocha";
 import { constructCommentDesc } from "../../../../../src/slack/message/formatting";
 import { expect } from "chai";
 

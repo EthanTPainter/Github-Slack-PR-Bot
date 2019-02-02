@@ -1,4 +1,3 @@
-import "mocha";
 import { expect } from "chai";
 import {
   getUsersApproving,
@@ -123,19 +122,55 @@ describe("getUsersReqChanges", () => {
     },
   };
 
+  it("should get one user requesting changes", () => {
+    const reviews = ["EthanTPainter"];
+
+    const result = getUsersReqChanges(reviews, json);
+    const expected = ["ethan2"];
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should get multiple users requesting changes", () => {
+    const reviews = ["EthanTPainter", "Greek8eos"];
+
+    const result = getUsersReqChanges(reviews, json);
+    const expected = ["ethan2", "GeorgeMaurk"];
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should get all users requesting changes", () => {
+    const reviews = ["EthanTPainter", "Greek8eos", "DillonSykes", "andrew"];
+
+    const result = getUsersReqChanges(reviews, json);
+    const expected = ["ethan2", "GeorgeMaurk", "DillPickle", "Andrew1"];
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should not get any users requesting changes", () => {
+    const reviews: string[] = [];
+
+    const result = getUsersReqChanges(reviews, json);
+    const expected: string[] = [];
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
 });
 
 describe("getUsersNotApproving", () => {
-  it("should retrieve all users not approving the PR", () => {
+  it("should retrieve all users not approving or requesting changes to the PR", () => {
     const slackOwner = "ethan";
     const slackUsersApproving = ["daniel"];
-    const slackUsersRequestingChanges: string[] = [];
+    const slackUsersRequestingChanges: string[] = ["dillon"];
     const allSlackUsers = ["andrew", "ethan", "daniel", "dillon"];
 
     const result = getUsersNotApproving(slackOwner, slackUsersApproving,
       slackUsersRequestingChanges, allSlackUsers);
 
-    const expected = ["andrew", "dillon"];
+    const expected = ["andrew"];
 
     expect(result).to.be.deep.equal(expected);
   });
@@ -164,6 +199,34 @@ describe("getUsersNotApproving", () => {
       slackUsersRequestingChanges, allSlackUsers);
 
     const expected = ["andrew", "daniel", "dillon"];
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should retrieve no users when all possible users request changes to the PR", () => {
+    const slackOwner = "ethan";
+    const slackUsersApproving: string[] = [];
+    const slackUsersRequestingChanges: string[] = ["andrew", "daniel", "dillon"];
+    const allSlackUsers = ["andrew", "ethan", "daniel", "dillon"];
+
+    const result = getUsersNotApproving(slackOwner, slackUsersApproving,
+      slackUsersRequestingChanges, allSlackUsers);
+
+    const expected: string[] = [];
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should retrieve remaining users when some approve and request changes to the PR", () => {
+    const slackOwner = "ethan";
+    const slackUsersApproving = ["andrew"];
+    const slackUsersRequestingChanges = ["daniel"];
+    const allSlackUsers = ["andrew", "ethan", "daniel", "dillon"];
+
+    const result = getUsersNotApproving(slackOwner, slackUsersApproving,
+      slackUsersRequestingChanges, allSlackUsers);
+
+    const expected = ["dillon"];
 
     expect(result).to.be.deep.equal(expected);
   });

@@ -1,4 +1,3 @@
-import "mocha";
 import { expect } from "chai";
 import { constructPeerCheck } from "../../../../../src/slack/message/construct/checks/peer";
 
