@@ -1,6 +1,7 @@
 import "mocha";
 import { expect } from "chai";
 import { constructLeadCheck } from "../../../../../src/slack/message/construct/checks/lead";
+import { getLeadsReqChanges } from "src/github/parse";
 
 describe("constructLeadCheck", () => {
 
@@ -14,9 +15,11 @@ describe("constructLeadCheck", () => {
   it("construct a lead check with 0 required reviews and 1 approving", () => {
     validJSON.Options.Num_Required_Lead_Approvals = 0;
     const leadsApproving = ["Andrew"];
+    const leadsReqChanges: string[]  = [];
     const leadsNotApproving = ["Matt"];
 
-    const result = constructLeadCheck(validJSON, leadsApproving, leadsNotApproving);
+    const result = constructLeadCheck(validJSON, leadsApproving,
+                            leadsReqChanges, leadsNotApproving);
     const expected = "0 Required Lead Approvals: Andrew :heavy_check_mark: ";
 
     expect(result).to.be.equal(expected);
@@ -25,9 +28,11 @@ describe("constructLeadCheck", () => {
   it("construct a lead check with 0 required reviews and 0 approving", () => {
     validJSON.Options.Num_Required_Lead_Approvals = 0;
     const leadsApproving: string[] = [];
+    const leadsReqChanges: string[] = [];
     const leadsNotApproving = ["Matt"];
 
-    const result = constructLeadCheck(validJSON, leadsApproving, leadsNotApproving);
+    const result = constructLeadCheck(validJSON, leadsApproving,
+                           leadsReqChanges, leadsNotApproving);
     const expected = "0 Required Lead Approvals: ";
 
     expect(result).to.be.equal(expected);
@@ -35,10 +40,12 @@ describe("constructLeadCheck", () => {
 
   it("construct a lead check with 1 required reviews and 0 approving", () => {
     validJSON.Options.Num_Required_Lead_Approvals = 1;
-    const approving: string[] = [];
-    const notApproving = ["Matt"];
+    const leadsApproving: string[] = [];
+    const leadsReqChanges: string[] = [];
+    const leadsNotApproving = ["Matt"];
 
-    const result = constructLeadCheck(validJSON, approving, notApproving);
+    const result = constructLeadCheck(validJSON, leadsApproving,
+                            leadsReqChanges, leadsNotApproving);
     const expected = "1 Required Lead Approval: @Matt ";
 
     expect(result).to.be.equal(expected);
@@ -47,9 +54,11 @@ describe("constructLeadCheck", () => {
   it("construct a lead check with 1 required reviews and 1 approving", () => {
     validJSON.Options.Num_Required_Lead_Approvals = 1;
     const leadsApproving = ["Andrew"];
+    const leadReqChanges: string[] = [];
     const leadsNotApproving = ["Matt"];
 
-    const result = constructLeadCheck(validJSON, leadsApproving, leadsNotApproving);
+    const result = constructLeadCheck(validJSON, leadsApproving,
+                            leadReqChanges, leadsNotApproving);
     const expected = "1 Required Lead Approval: Andrew :heavy_check_mark: ";
 
     expect(result).to.be.equal(expected);
@@ -58,9 +67,11 @@ describe("constructLeadCheck", () => {
   it("construct a lead check with 2 required reviews and 0 approving", () => {
     validJSON.Options.Num_Required_Lead_Approvals = 2;
     const leadsApproving: string[] = [];
+    const leadsReqChanges: string[] = [];
     const leadsNotApproving = ["Matt", "Andrew"];
 
-    const result = constructLeadCheck(validJSON, leadsApproving, leadsNotApproving);
+    const result = constructLeadCheck(validJSON, leadsApproving,
+                          leadsReqChanges, leadsNotApproving);
     const expected = "2 Required Lead Approvals: @Matt @Andrew ";
 
     expect(result).to.be.equal(expected);
@@ -69,9 +80,11 @@ describe("constructLeadCheck", () => {
   it("construct a lead check with 2 required reviews and 1 approving", () => {
     validJSON.Options.Num_Required_Lead_Approvals = 2;
     const leadsApproving: string[] = ["Andrew"];
+    const leadsReqChanges: string[] = [];
     const leadsNotApproving = ["Matt"];
 
-    const result = constructLeadCheck(validJSON, leadsApproving, leadsNotApproving);
+    const result = constructLeadCheck(validJSON, leadsApproving,
+                          leadsReqChanges, leadsNotApproving);
     const expected = "2 Required Lead Approvals: Andrew :heavy_check_mark: @Matt ";
 
     expect(result).to.be.equal(expected);
@@ -80,9 +93,11 @@ describe("constructLeadCheck", () => {
   it("construct a lead check with 2 required reviews and 2 approving", () => {
     validJSON.Options.Num_Required_Lead_Approvals = 2;
     const leadsApproving = ["Andrew", "Matt"];
+    const leadsReqChanges: string[] = [];
     const leadsNotApproving: string[] = [];
 
-    const result = constructLeadCheck(validJSON, leadsApproving, leadsNotApproving);
+    const result = constructLeadCheck(validJSON, leadsApproving,
+                          leadsReqChanges, leadsNotApproving);
     const expected = "2 Required Lead Approvals: Andrew :heavy_check_mark: Matt :heavy_check_mark: ";
 
     expect(result).to.be.equal(expected);

@@ -18,7 +18,7 @@ export function constructOpenDesc(slackUser: string,
   if (newPR) {
     desc = `${slackUser} opened this PR. Needs *peer* and *lead* reviews`;
   } else {
-    desc =   `${slackUser} reopened this PR. Needs *peer* and *lead* reviews`;
+    desc = `${slackUser} reopened this PR. Needs *peer* and *lead* reviews`;
   }
   // Add SlackGroup
   if (slackGroup !== "") {

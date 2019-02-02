@@ -1,9 +1,10 @@
 import "mocha";
 import { expect } from "chai";
-import sinon from "sinon";
+import * as sinon from "sinon";
 import { constructApprove } from "../../../../../src/slack/message/construct";
 import { getSlackUser } from "../../../../../src/json/parse";
 import { ApprovePR } from "../../../../../src/models";
+import { Review } from "../../../../../src/github/api";
 
 describe("constructApprove", () => {
   const validEvent = {
@@ -43,8 +44,15 @@ describe("constructApprove", () => {
   it("should construct an ApprovePR ojbect", () => {
     const slackOwner = getSlackUser(validEvent.pull_request.user.login, validJSON);
     const slackApprover = getSlackUser(validEvent.sender.login, validJSON);
+    const ReviewClass = new Review();
 
-    const result = constructApprove(validEvent, validJSON);
-    console.log(result);
+    // Stub getReviews
+    sinon.stub(ReviewClass, "getReviews")
+         .resolves();
+
+    expect(1).to.be.equal(2);
+    // COME BACK AND FIX
+    // const result = constructApprove(validEvent, validJSON);
+    // console.log(result);
   });
 });

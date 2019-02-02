@@ -156,3 +156,44 @@ export const review_result = [
   commit_id: "03179374ee3f3b72c5e8811061ddb22c28126cad",
   },
 ];
+
+export const solo_review = [
+  {
+    id: 188427310,
+    node_id: "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MTg4NDI3MzEw",
+    user: {
+      login: "RANDOM_USER_1",
+      id: 25594849,
+      node_id: "MDQ6VXNlcjI1NTk0ODQ5",
+      avatar_url: "https://avatars0.githubusercontent.com/u/25594849?v=4",
+      gravatar_id: "",
+      url: "https://api.github.com/users/EthanTPainter",
+      html_url: "https://github.com/EthanTPainter",
+      followers_url: "https://api.github.com/users/EthanTPainter/followers",
+      following_url: "https://api.github.com/users/EthanTPainter/following{/other_user}",
+      gists_url: "https://api.github.com/users/EthanTPainter/gists{/gist_id}",
+      starred_url: "https://api.github.com/users/EthanTPainter/starred{/owner}{/repo}",
+      subscriptions_url: "https://api.github.com/users/EthanTPainter/subscriptions",
+      organizations_url: "https://api.github.com/users/EthanTPainter/orgs",
+      repos_url: "https://api.github.com/users/EthanTPainter/repos",
+      events_url: "https://api.github.com/users/EthanTPainter/events{/privacy}",
+      received_events_url: "https://api.github.com/users/EthanTPainter/received_events",
+      type: "User",
+      site_admin: false,
+    },
+    body: "Leaving a comment",
+    state: "COMMENTED",
+    html_url: "https://github.com/EthanTPainter/Comparative-Programming/pull/1#pullrequestreview-188427310",
+    pull_request_url: "https://api.github.com/repos/EthanTPainter/Comparative-Programming/pulls/1",
+    author_association: "OWNER",
+    _links: {
+      html: {
+        href: "https://github.com/EthanTPainter/Comparative-Programming/pull/1#pullrequestreview-188427310",
+      },
+      pull_request: {
+        href: "https://api.github.com/repos/EthanTPainter/Comparative-Programming/pulls/1",
+      },
+    },
+    submitted_at: "2018-12-30T03:05:39Z",
+    commit_id: "03179374ee3f3b72c5e8811061ddb22c28126cad",
+  }];

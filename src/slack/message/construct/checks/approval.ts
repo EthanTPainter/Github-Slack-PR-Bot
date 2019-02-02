@@ -1,13 +1,18 @@
 import { json } from "../../../../json/src/json";
 import { constructPeerCheck } from "./peer";
 import { constructLeadCheck } from "./lead";
-import { getUsersApproving, getUsersNotApproving } from "../../../../github/parse";
+
 import {
   getMembersApproving,
+  getMembersReqChanges,
   getMembersNotApproving,
   getLeadsApproving,
+  getLeadsReqChanges,
   getLeadsNotApproving,
-} from "../../../../github/parse/reviews/approve";
+  getUsersApproving,
+  getUsersNotApproving,
+  getReqChangesReviews,
+} from "../../../../github/parse";
 
 /**
  * @author Ethan T Painter
@@ -19,23 +24,29 @@ import {
  * "1 Lead Approvals: @Lead1 @Lead2 @Lead3"
  */
 export function getApprovalChecks(slackOwner: string,
+                                  allReviews: any,
                                   approvingReviews: any,
                                   slackMemberUsers: string[],
                                   slackLeadUsers: string[],
                                   ): string {
-  // Get Users approving the PR
-  const usersApproving: string[] = getUsersApproving(approvingReviews, json);
+  // Get Users approving, requesting changes, and not approving
+  const usersApproving = getUsersApproving(approvingReviews, json);
+  const usersRequestingChanges = getReqChangesReviews(allReviews);
   const usersNotApproving = getUsersNotApproving(slackOwner, usersApproving,
-      slackLeadUsers.concat(slackMemberUsers));
+    usersRequestingChanges, slackLeadUsers.concat(slackMemberUsers));
 
   // Separate users into members and leads
+  // Get members approving, requesting changes, and none
   const membersApproving = getMembersApproving(usersApproving, slackMemberUsers);
+  const membersReqChanges = getMembersReqChanges(usersRequestingChanges, slackMemberUsers);
   const membersNotApproving = getMembersNotApproving(usersNotApproving, slackMemberUsers);
+  // Get leads approving, requesting changes, and none
   const leadsApproving = getLeadsApproving(usersApproving, slackLeadUsers);
+  const leadsReqChanges = getLeadsReqChanges(usersRequestingChanges, slackLeadUsers);
   const leadsNotApproving = getLeadsNotApproving(usersNotApproving, slackLeadUsers);
 
   // Get Peer and Lead Approvals
-  const peerApprovals = constructPeerCheck(json, membersApproving, membersNotApproving);
-  const leadApprovals = constructLeadCheck(json, leadsApproving, leadsNotApproving);
+  const peerApprovals = constructPeerCheck(json, membersApproving, membersReqChanges, membersNotApproving);
+  const leadApprovals = constructLeadCheck(json, leadsApproving, leadsReqChanges, leadsNotApproving);
   return peerApprovals + "\n" + leadApprovals;
 }

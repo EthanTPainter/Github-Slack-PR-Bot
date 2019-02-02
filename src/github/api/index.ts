@@ -1,1 +1,1 @@
-export { getReviews } from "./reviews";
+export { Review } from "./reviews";

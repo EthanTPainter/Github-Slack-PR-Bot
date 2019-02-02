@@ -1,4 +1,3 @@
-import { constructSlackMessage } from "../slack/message/construct/constructor";
 import { requiredEnvs } from "../required-envs";
 import { Annotations } from "../models";
 

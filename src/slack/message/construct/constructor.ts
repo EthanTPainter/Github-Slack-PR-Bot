@@ -1,12 +1,3 @@
-import {
-  OpenedPR,
-  ClosePR,
-  CommentPR,
-  MergePR,
-  RequestChangesPR,
-  ApprovePR,
-} from "src/models";
-
 import { constructOpen,
   constructClose,
   constructComment,
@@ -17,16 +8,6 @@ import { constructOpen,
 
 import { json } from "../../../json/src/json";
 
-/*
- * @Author: Ethan T Painter
- * Basis for constructing a Slack message (First step)
- *
- * Note: The 'action' variable sometimes doesn't provide enough information
- *       by itself to determine whether a PR has been opened, approved, commented,
- *       etc. Additional properties on the event are necessary to check to be sure
- *       of the outcome I anticipate.
- */
-
  /**
   * @author Ethan T Painter
   * @description Main function for constructing the slack message
@@ -34,12 +15,12 @@ import { json } from "../../../json/src/json";
   * @param event Event including pull_request, sender, etc.
   * @returns String of the slack message to send to the team channel
   */
-export function constructSlackMessage(
+export async function constructSlackMessage(
   action: string,
   event: any,
-): string {
+): Promise<string> {
 
-  let slackMessage: string = "default";
+  let slackMessage = "default";
 
   switch (action) {
     /* When a PR is opened
@@ -47,7 +28,7 @@ export function constructSlackMessage(
      */
      case "opened": {
       const newPR = true;
-      const open: OpenedPR = constructOpen(event, json, newPR);
+      const open = constructOpen(event, json, newPR);
       /* Construct order of Opened PR Slack message
        * SLACK MESSAGE APPEARANCE:
        * -------------- DESCRIPTION --------------
@@ -59,13 +40,12 @@ export function constructSlackMessage(
                       + "  [" + open.url + "]";
       break;
     }
-
     /* When a PR is reopened (PR was previously CLOSED)
      * Construct OpenPR Object and format slack message
      */
      case "reopened": {
       const newPR = false;
-      const open: OpenedPR = constructOpen(event, json, newPR);
+      const open = constructOpen(event, json, newPR);
       /* Construct order of Opened PR Slack message
        * SLACK MESSAGE APPEARANCE:
        * -------------- DESCRIPTION --------------
@@ -85,8 +65,8 @@ export function constructSlackMessage(
      case "closed": {
       const decider: boolean = event.pull_request.merged;
       if (decider) {
-        const merge: MergePR = constructMerge(event, json);
-        /* Construct order of Opened PR Slack message
+        const merge = constructMerge(event, json);
+       /* Construct order of Opened PR Slack message
         * SLACK MESSAGE APPEARANCE:
         * -------------- DESCRIPTION --------------
         * -------------- TITLE --------------------
@@ -94,11 +74,11 @@ export function constructSlackMessage(
         */
         slackMessage = merge.description + "\n"
                         + merge.title
-                        + "[" + merge.url + "]";
+                        + "  [" + merge.url + "]";
       }
       else {
         // Construct ClosePR Object and format slack message
-        const close: ClosePR = constructClose(event, json);
+        const close = constructClose(event, json);
         /* Construct order of Opened PR Slack message
         * SLACK MESSAGE APPEARANCE:
         * -------------- DESCRIPTION --------------
@@ -107,7 +87,7 @@ export function constructSlackMessage(
         */
         slackMessage = close.description + "\n"
                         + close.title
-                        + "[" + close.url + "]";
+                        + "  [" + close.url + "]";
       }
       break;
     }
@@ -121,9 +101,9 @@ export function constructSlackMessage(
        * When a user approves a PR. This is arguably the most important feat
        */
       if (decider === "approved") {
-        const approve: ApprovePR = constructApprove(event, json);
+        const approve = await constructApprove(event, json);
 
-         /* Construct order of Opened PR Slack message
+      /* Construct order of Opened PR Slack message
        * SLACK MESSAGE APPEARANCE:
        * -------------- DESCRIPTION --------------
        * ---------------- TITLE ------------------
@@ -133,12 +113,12 @@ export function constructSlackMessage(
        */
         slackMessage = approve.description + "\n"
                         + approve.title
-                        + "[" + approve.url + "]";
+                        + "  [" + approve.url + "]";
       }
       // When a user requests changes on a PR. This is arguably the most important feat
       else if (decider === "changes_requested") {
-        const changes: RequestChangesPR = constructReqChanges(event, json);
-        /* Construct order of Opened PR Slack message
+        const changes = constructReqChanges(event, json);
+      /* Construct order of Opened PR Slack message
        * SLACK MESSAGE APPEARANCE:
        * -------------- DESCRIPTION --------------
        * -------------- TITLE --------------------
@@ -146,7 +126,7 @@ export function constructSlackMessage(
        */
         slackMessage = changes.description + "\n"
                         + changes.title
-                        + "[" + changes.url + "]";
+                        + "  [" + changes.url + "]";
       }
       else if (decider === "commented") {
         /* When a user comments on a PR
@@ -156,10 +136,10 @@ export function constructSlackMessage(
           * -------------- DESCRIPTION --------------
           * -------------- URL ----------------------
          */
-        const comment: CommentPR = constructComment(event, json);
+        const comment = constructComment(event, json);
         slackMessage = comment.description + "\n"
                         + comment.title
-                        + "[" + comment.url + "]";
+                        + "  [" + comment.url + "]";
       }
       else {
         // Not approved or requested changes, throw error for unsupported state

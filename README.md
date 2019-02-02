@@ -54,28 +54,25 @@ for one selected repository can still disrupt team communication.
 
 Other dev, qa, or prod teams should be able to create or update PR's to
 the same repository without sending these updates to the teams that don't 
-require them.
+require them. In other words, we only want to alert a team about their team's 
+activities. If a dev team makes a PR, that team should be the only team 
+notified. This confines information specific to teams and allows them to 
+operate without flooding 
 
-In other words, we only want to alert one team about their team's activities.
-If a dev team makes a PR, that team should be the only team or people notified.
+## Basic Structure
 
-Notifiying the prod or qa teams about dev PR's takes away from engineer 
-productivity. To go even deeper with multiple dev teams, you also want 
-to specify what each dev team is seeing alerts for. For instance, a 
-dev team only wants to see PR's related to their team's sprint and 
-tasks. A dev team shouldn't see updates or alerts about another 
-team's PR's since
+This application is built on a core concept: teams are small enough to have 
+two designated roles: *leads* and *members*.
+
+### Leads
+
+### Members
+
+Also referred to as *peers*.
 
 ## Adding or Modifying User Groups
 
-We want to be able to define user-groups so we can specify multiple lead 
-developers, and multiple dev team members so we can clarify who is 
-commenting, approving, and merging PRs specific to the team they are included in.
-
-These user groups should specify team related material including, but not 
-limited to: slack user names, github user names, Slack team chat names, etc.
-
-This will take some time to configure and make meaningful in the long run.
+See config file(json/src/json.ts)
 
 ## Functionality
 
@@ -104,43 +101,22 @@ opened or updated by the team members or team leads.
 
 #### Merge a PR
 
+### Current Goals
+
+* Adding DynamoDB integration
+
+Besides sending regular updates to slack chat when PR actions are 
+changed there should also be queues maintained in DynamoDB tables.
+
+The goal is that DynamoDB can maintain statues for the team and each 
+individual on a team. This should allow each member from slack to use 
+a slash command with the bot to know what is in their queue.
 
 ### Long Term
 
 Listed below are all optional features that are interesting to include:
 
-1) Automatic Team Updates at Scheduled Times
-
-Before each team starts their work day (Time of Standup for each user-group), 
-send a list of available PRs involved in the team's sprint. This 
-could be as simple as checking all available PRs made by user-group
-members in the team and providing status updates around each. This could help
-clarify what team members are working on what, which PRs need reviews, etc.
-
-2) Extension of Part 1
-
-At the end of each day (4:30/4:45), send a message to each team slack
-chat about the PRs each group-member has opened. These messages should include 
-status updates. 
-
-3) Icons > text
-
-Think about adding text in the slack messages for icons to remove text
-Example:
-
-Use :heavy_check_mark: for approvals.
-Use :X: for requested changes.
-Use :thought_balloon: for comments left
-
-```bash
-PR Statuses for Team: TEAM_1
-SCP-1234: TITLE OF THE TICKET
-:heavy_check_mark: Has Peer Approval
-:X: Has Lead Approval
-:X: Can Merge
-```
-
-4) Jira Integration
+* Jira Integration
 
 For our team's goals, we like to apply labels to our JIRA 
 sub tasks (`NeedsLeadReview`, `NeedsPeerReview`, 
@@ -149,14 +125,14 @@ some slack integration to automatically mark specific sub tasks for us
 with updated actions, this might help eliminate some disconnect 
 bewtween our GitHub/Slack/JIRA connections.
 
-5) Jira Integration (Part 2)
+* Jira Integration (Part 2)
 
 If we could automaticlly mark selected sub tasks with labels, we should be able
 to tell the bot to move them along the swimlanes. However, this gets a bit 
 into the configuration of how we manage this, because it's not generic enough to
 apply in different scenarios.
 
-6) Waiting for Slack support
+* Waiting for Slack support
 
 Slack currently doesn't support hyperlinks so adding links
 directly in slack messages may be long. May have to give a 

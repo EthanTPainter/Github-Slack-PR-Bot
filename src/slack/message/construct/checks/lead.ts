@@ -13,8 +13,10 @@ import { getCheckMark } from "../../../../../src/slack/icons/check-mark";
  */
 export function constructLeadCheck(json: any,
                                    leadsApproving: string[],
+                                   leadsReqChanges: string[],
                                    leadsNotApproving: string[],
-                                  ): any {
+                                  ): string
+{
   if (json.Options.Num_Required_Lead_Approvals === undefined) {
     throw new Error("json.Option.Num_Required_Lead_Approvals is undefined");
   }

@@ -4,8 +4,5 @@ export {
 
 export {
   getApprovingReviews,
-  getUsersApproving,
-  getUsersNotApproving,
-  getLeadsNotApproving,
-  getMembersNotApproving,
-} from "./approve";
+  getReqChangesReviews,
+} from "./get-reviews";

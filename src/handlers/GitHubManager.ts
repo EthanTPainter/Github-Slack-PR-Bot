@@ -53,7 +53,7 @@ export async function handler(
   console.log(`Action Found: ${pullRequestAction}`);
 
   // Construct the Slack message based on PR action and body
-  const slackMessage: string = constructSlackMessage(pullRequestAction, body);
+  const slackMessage = await constructSlackMessage(pullRequestAction, body);
 
   const result = await postMessage(requiredEnvs.SLACK_API_URI,
     requiredEnvs.DEV_TEAM_1_SLACK_CHANNEL_NAME,
