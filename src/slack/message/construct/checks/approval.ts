@@ -1,6 +1,7 @@
 import { json } from "../../../../json/src/json";
 import { constructPeerCheck } from "./peer";
 import { constructLeadCheck } from "./lead";
+import { getApprovingReviews } from "../../../../../src/github/parse/reviews/get-reviews";
 
 import {
   getMembersApproving,
@@ -25,10 +26,12 @@ import {
  */
 export function getApprovalChecks(slackOwner: string,
                                   allReviews: any,
-                                  approvingReviews: any,
                                   slackMemberUsers: string[],
                                   slackLeadUsers: string[],
                                   ): string {
+  // Record only approving reviews of the PR
+  const approvingReviews = getApprovingReviews(allReviews);
+
   // Get Users approving, requesting changes, and not approving
   const usersApproving = getUsersApproving(approvingReviews, json);
   const usersRequestingChanges = getReqChangesReviews(allReviews);

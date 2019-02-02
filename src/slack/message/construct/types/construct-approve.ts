@@ -53,22 +53,10 @@ export async function constructApprove(event: any, json: any): Promise<ApprovePR
     // Get All Slack and GitHub users for a team
     const allSlackTeamMembers = getSlackMembers(owner, json);
     const allSlackTeamLeads = getSlackLeads(owner, json);
-    const allSlackTeamUsers = allSlackTeamLeads.concat(allSlackTeamMembers);
-    const allGitTeamUsers = getGitHubTeamUsers(owner, json);
-
-    // Record only approving reviews of the PR
-    const approvingReviews = getApprovingReviews(reviews);
-    // Get all Users for a sub team
-    // approving the reviews (Slack Usernames) and
-    // those not approving (Slack Usernames)
-    const usersApproving = getUsersApproving(approvingReviews,
-      allGitTeamUsers);
-    const usersNotApproving = getUsersNotApproving(slackUser,
-      reviews, usersApproving, allSlackTeamUsers);
 
     // Construct Peer and Lead Approvals strings
-    const approvals = getApprovalChecks(slackUser, reviews, approvingReviews,
-      allSlackTeamMembers, allSlackTeamLeads);
+    const approvals = getApprovalChecks(slackUser, reviews,
+                  allSlackTeamMembers, allSlackTeamLeads);
 
     // Base Properties
     const description = constructApproveDesc(slackUser, slackUserApproving);
