@@ -6,7 +6,7 @@ import { constructOpen,
   constructApprove,
 } from "./types";
 
-import { json } from "../../../json/src/json";
+import { Review } from "../../../../src/github/api";
 
  /**
   * @author Ethan T Painter
@@ -15,11 +15,12 @@ import { json } from "../../../json/src/json";
   * @param event Event including pull_request, sender, etc.
   * @returns String of the slack message to send to the team channel
   */
-export async function constructSlackMessage(
-  action: string,
-  event: any,
-): Promise<string> {
-
+export async function constructSlackMessage(action: string,
+                                            event: any,
+                                            json: any,
+                                            reviewClass?: Review,
+                                           ): Promise<string>
+{
   let slackMessage = "default";
 
   switch (action) {
@@ -101,7 +102,10 @@ export async function constructSlackMessage(
        * When a user approves a PR. This is arguably the most important feat
        */
       if (decider === "approved") {
-        const approve = await constructApprove(event, json);
+        if (reviewClass === undefined) {
+          throw new Error("reviewClass parameter must be defined");
+        }
+        const approve = await constructApprove(reviewClass, event, json);
 
       /* Construct order of Opened PR Slack message
        * SLACK MESSAGE APPEARANCE:
@@ -113,7 +117,8 @@ export async function constructSlackMessage(
        */
         slackMessage = approve.description + "\n"
                         + approve.title
-                        + "  [" + approve.url + "]";
+                        + "  [" + approve.url + "] \n"
+                        + approve.approvals;
       }
       // When a user requests changes on a PR. This is arguably the most important feat
       else if (decider === "changes_requested") {

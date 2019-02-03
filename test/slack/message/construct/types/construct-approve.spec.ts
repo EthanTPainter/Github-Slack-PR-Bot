@@ -2,7 +2,6 @@ import { expect } from "chai";
 import * as sinon from "sinon";
 import { constructApprove } from "../../../../../src/slack/message/construct";
 import { Review } from "../../../../../src/github/api";
-import { ApprovePR } from "../../../../../src/models";
 
 describe("constructApprove", () => {
 
@@ -80,7 +79,7 @@ describe("constructApprove", () => {
          .resolves(expectedReviews);
 
     const result = await constructApprove(ReviewClass, validEvent, validJSON);
-    console.log(result);
+
     // Expect Slack names to be in ApprovePR description
     expect((result.description)
       .includes(validJSON.Teams.Team1.TeamGroup1.Users.Leads.gwely))

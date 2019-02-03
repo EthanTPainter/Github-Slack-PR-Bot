@@ -1,4 +1,6 @@
+import * as sinon from "sinon";
 import { constructSlackMessage } from "../../../../src/slack/message/construct";
+import { Review } from "../../../../src/github/api";
 
 const chaiAsPromised = require("chai-as-promised");
 const chai = require("chai");
@@ -8,12 +10,13 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 describe("constructSlackMessage", () => {
+
   const event = {
     review: {
       state: "commented",
     },
     sender: {
-      login: "GitHub_User_2",
+      login: "DillonSykes",
     },
     pull_request: {
       url: "https://github.com",
@@ -26,16 +29,40 @@ describe("constructSlackMessage", () => {
       merged: false,
       title: "feature(123): Adding new service",
       user: {
-        login: "GitHub_User_1",
+        login: "EthanTPainter",
       },
       html_url: "https://github.com/",
+    },
+  };
+
+  const json = {
+    Options: {
+      Num_Required_Peer_Approvals: 2,
+      Num_Required_Lead_Approvals: 2,
+      Check_Mark_Style: "green",
+    },
+    Teams: {
+      Team1: {
+        TeamGroup1: {
+          Users: {
+            Leads: {
+              gwely: "andrew.curcie",
+            },
+            Members: {
+              EthanTPainter: "ethan.painter",
+              DillonSykes: "dillon.sykes",
+              DanielLarner: "daniel.larner",
+            },
+          },
+        },
+      },
     },
   };
 
   it("should construct an opened PR slack message", async () => {
     const action = "opened";
 
-    const result = await constructSlackMessage(action, event);
+    const result = await constructSlackMessage(action, event, json);
     const expTitle = event.pull_request.title;
     const expUrl = event.pull_request.html_url;
 
@@ -49,7 +76,7 @@ describe("constructSlackMessage", () => {
   it("should construct a reopened PR slack message", async () => {
     const action = "reopened";
 
-    const result = await constructSlackMessage(action, event);
+    const result = await constructSlackMessage(action, event, json);
     const expTitle = event.pull_request.title;
     const expUrl = event.pull_request.html_url;
 
@@ -64,7 +91,7 @@ describe("constructSlackMessage", () => {
     const action = "closed";
     event.pull_request.merged = false;
 
-    const result = await constructSlackMessage(action, event);
+    const result = await constructSlackMessage(action, event, json);
     const expTitle = event.pull_request.title;
     const expUrl = event.pull_request.html_url;
 
@@ -79,7 +106,7 @@ describe("constructSlackMessage", () => {
     const action = "closed";
     event.pull_request.merged = true;
 
-    const result = await constructSlackMessage(action, event);
+    const result = await constructSlackMessage(action, event, json);
     const realAction = "merged";
     const expTitle = event.pull_request.title;
     const expUrl = event.pull_request.html_url;
@@ -98,25 +125,47 @@ describe("constructSlackMessage", () => {
   it("should construct an approved PR slack message", async () => {
     const action = "submitted";
     event.review.state = "approved";
+    const reviewClass = new Review();
 
-    expect(1).to.be.equal(2);
-    /*  COME BACK AND VALIDATE AT A LATER DATE
-    const result = constructSlackMessage(action, event);
+    const expectedReviews = [{
+        user: { login: "EthanTPainter" },
+        state: "COMMENTED",
+      }, {
+        user: { login: "gwely" },
+        state: "APPROVED",
+      }, {
+        user: { login: "DillonSykes" },
+        state: "CHANGES_REQUESTED",
+      }, {
+          user: { login: "DillonSykes" },
+          state: "APPROVED",
+      }];
+
+    // Stub getReviews
+    sinon.stub(reviewClass, "getReviews")
+         .resolves(expectedReviews);
+
+    const result = await constructSlackMessage(action, event, json, reviewClass);
     const realAction = "approved";
     const expTitle = event.pull_request.title;
     const expUrl = event.pull_request.html_url;
+    const expNumPeer = json.Options.Num_Required_Peer_Approvals;
+    const expNumLead = json.Options.Num_Required_Lead_Approvals;
+
+    console.log("Result: ", result);
 
     expect(result.includes(realAction)).to.be.equal(true);
     expect(result.includes(expTitle)).to.be.equal(true);
     expect(result.includes(expUrl)).to.be.equal(true);
-    */
+    expect(result.includes(expNumPeer + " Required Peer")).to.be.equal(true);
+    expect(result.includes(expNumLead + " Required Lead")).to.be.equal(true);
   });
 
   it("should construct a request changes PR slack message", async () => {
     const action = "submitted";
     event.review.state = "changes_requested";
 
-    const result = await constructSlackMessage(action, event);
+    const result = await constructSlackMessage(action, event, json);
     const realAction = "requested changes";
     const expTitle = event.pull_request.title;
     const expUrl = event.pull_request.html_url;
@@ -132,13 +181,15 @@ describe("constructSlackMessage", () => {
     const action = "submitted";
     event.review.state = "commented";
 
-    const result = await constructSlackMessage(action, event);
+    const result = await constructSlackMessage(action, event, json);
     const realAction = "commented";
+    const expTitle = event.pull_request.title;
     const expUrl = event.pull_request.html_url;
 
     console.log("Commented PR Slack Message: \n", result);
 
     expect(result.includes(realAction)).to.be.equal(true);
+    expect(result.includes(expTitle)).to.be.equal(true);
     expect(result.includes(expUrl)).to.be.equal(true);
   });
 
@@ -153,7 +204,7 @@ describe("constructSlackMessage", () => {
     const expected = new Error(`Review submitted for PR. ` +
       `Unsupported event.review.state: ${invalidEvent.review.state}`);
 
-    await (constructSlackMessage(action, invalidEvent)).should.be.rejectedWith(Error, expected.message);
+    await (constructSlackMessage(action, invalidEvent, json)).should.be.rejectedWith(Error, expected.message);
   });
 
   it("should throw error -- unsupported event type", async () => {
@@ -161,7 +212,16 @@ describe("constructSlackMessage", () => {
 
     const expected = new Error(`event action ${invalidAction} not supported in this application`);
 
-    await (constructSlackMessage(invalidAction, event)).should.be.rejectedWith(Error, expected.message);
+    await (constructSlackMessage(invalidAction, event, json)).should.be.rejectedWith(Error, expected.message);
+  });
+
+  it("should throw error -- approve type but reviewClass not provided", async () => {
+    const action = "submitted";
+    event.review.state = "approved";
+
+    const expected = new Error("reviewClass parameter must be defined");
+
+    await (constructSlackMessage(action, event, json)).should.be.rejectedWith(Error, expected.message);
   });
 
 });

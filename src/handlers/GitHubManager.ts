@@ -1,4 +1,5 @@
 import { constructSlackMessage } from "../slack/message/construct/constructor";
+import { json } from "../json/src/json";
 import { requiredEnvs } from "../required-envs";
 import { Annotations } from "../models";
 import { postMessage } from "../slack/api";
@@ -53,7 +54,7 @@ export async function handler(
   console.log(`Action Found: ${pullRequestAction}`);
 
   // Construct the Slack message based on PR action and body
-  const slackMessage = await constructSlackMessage(pullRequestAction, body);
+  const slackMessage = await constructSlackMessage(pullRequestAction, body, json);
 
   const result = await postMessage(requiredEnvs.SLACK_API_URI,
     requiredEnvs.DEV_TEAM_1_SLACK_CHANNEL_NAME,
