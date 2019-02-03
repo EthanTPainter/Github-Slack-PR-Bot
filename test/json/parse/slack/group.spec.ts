@@ -42,7 +42,7 @@ describe("getSlackGroup", () => {
     expect(result).to.be.equal(expected);
   });
 
-  it("should throw an error with no teams available", () => {
+  it("should throw an error -- No teams available", () => {
     const invalidJSON = {
       Teams: {},
     };
@@ -53,7 +53,7 @@ describe("getSlackGroup", () => {
       .to.throw(expected.message);
   });
 
-  it("should throw an error with no sub teams available", () => {
+  it("should throw an error -- No Sub teams available", () => {
     const invalidJSON = {
       Teams: {
         DevTeam: {},
@@ -66,7 +66,7 @@ describe("getSlackGroup", () => {
       .to.throw(expected.message);
   });
 
-  it("should throw an error with no users defined for the team", () => {
+  it("should throw an error -- No Users defined for the team", () => {
     const invalidJSON = {
       Teams: {
         DevTeam: {
@@ -82,7 +82,7 @@ describe("getSlackGroup", () => {
       .to.throw(expected.message);
   });
 
-  it("should throw an error with no leads defined for the team", () => {
+  it("should throw an error -- No Leads defined for the team", () => {
     const invalidJSON = {
       Teams: {
         DevTeam: {
@@ -100,7 +100,7 @@ describe("getSlackGroup", () => {
       .to.throw(expected.message);
   });
 
-  it("should throw an error with no members defined for the team", () => {
+  it("should throw an error -- No Members defined for the team", () => {
     const invalidJSON = {
       Teams: {
         DevTeam: {

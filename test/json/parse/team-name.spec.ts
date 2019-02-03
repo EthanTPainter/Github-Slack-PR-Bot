@@ -91,7 +91,7 @@ describe("getTeamName", () => {
       .to.throw(expected.message);
   });
 
-  it("should not get team name -- Leads not defined", () => {
+  it("should not get team name -- No Leads defined", () => {
     const githubUser = "ethan";
     const invalidJSON = {
       Teams: {
@@ -109,7 +109,7 @@ describe("getTeamName", () => {
       .to.throw(expected.message);
   });
 
-  it("should not get team name -- Members not defined", () => {
+  it("should not get team name -- No Members defined", () => {
     const githubUser = "ethan";
     const invalidJSON = {
       Teams: {

@@ -134,4 +134,25 @@ describe("getSlackLeads", () => {
     expect(() => getSlackLeads(githubUser, invalidJSON))
       .to.throw(expected.message);
   });
+
+  it("should throw an error -- No Members defined in JSON", () => {
+    const invalidJSON = {
+      Teams: {
+        Team1: {
+          TeamGroup: {
+            Users: {
+              Leads: {},
+            },
+          },
+        },
+      },
+    };
+    const githubUser = "ethan";
+    const subTeam = "TeamGroup";
+
+    const expected = new Error(`Members not defined for team: ${subTeam}`);
+    expect(() => getSlackLeads(githubUser, invalidJSON))
+      .to.throw(expected.message);
+  });
+
 });
