@@ -28,7 +28,7 @@ describe("getSlackLeads", () => {
     expect(result).to.be.deep.equal(expected);
   });
 
-  it("should not get slack lead name -- No existing lead github user", () => {
+  it("should get only slack lead name", () => {
     const validJSON_1 = {
       Teams: {
         Team1: {
@@ -37,6 +37,29 @@ describe("getSlackLeads", () => {
               Leads: {
                 Ethan: "EthanPainter",
               },
+              Members: {
+                Andrew: "AndrewCurcie",
+              },
+            },
+          },
+        },
+      },
+    };
+    const githubUser = "Andrew";
+
+    const result = getSlackLeads(githubUser, validJSON_1);
+    const expected = ["EthanPainter"];
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should not get any slack leads -- No existing slack leads", ()  =>{
+    const validJSON_1 = {
+      Teams: {
+        Team1: {
+          TeamGroup1: {
+            Users: {
+              Leads: {},
               Members: {
                 Andrew: "AndrewCurcie",
               },

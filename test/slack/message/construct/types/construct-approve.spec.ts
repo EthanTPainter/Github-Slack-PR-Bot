@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
 import { constructApprove } from "../../../../../src/slack/message/construct";
-import { getSlackUser } from "../../../../../src/json/parse";
-import { ApprovePR } from "../../../../../src/models";
 import { Review } from "../../../../../src/github/api";
+import { ApprovePR } from "../../../../../src/models";
 
 describe("constructApprove", () => {
+
   const validEvent = {
     action: "submitted",
     pull_request: {
@@ -17,41 +17,96 @@ describe("constructApprove", () => {
       },
     },
     sender: {
-      login: "andrew",
+      login: "gwely",
     },
     repository: {
       private: false,
     },
   };
+
   const validJSON = {
+    Options: {
+      Num_Required_Peer_Approvals: 2,
+      Num_Required_Lead_Approvals: 2,
+      Check_Mark_Style: "green",
+    },
     Teams: {
       Team1: {
         TeamGroup1: {
           Users: {
             Leads: {
-              andrew: "andrew.C",
+              gwely: "andrew.curcie",
             },
             Members: {
-              EthanTPainter: "ethan.P",
-              dillon: "dillon.S",
+              EthanTPainter: "ethan.painter",
+              DillonSykes: "dillon.sykes",
             },
           },
         },
       },
     },
   };
-  it("should construct an ApprovePR ojbect", () => {
-    const slackOwner = getSlackUser(validEvent.pull_request.user.login, validJSON);
-    const slackApprover = getSlackUser(validEvent.sender.login, validJSON);
+
+  it("should construct an ApprovePR object", async () => {
     const ReviewClass = new Review();
+    const expectedReviews = [
+      {
+        user: {
+          login: "EthanTPainter",
+        },
+        state: "COMMENTED",
+      },
+      {
+        user: {
+          login: "gwely",
+        },
+        state: "APPROVED",
+      },
+      {
+        user: {
+          login: "DillonSykes",
+        },
+        state: "CHANGES_REQUESTED",
+      },
+      {
+          user: {
+              login: "DillonSykes",
+          },
+          state: "APPROVED",
+      }];
 
     // Stub getReviews
     sinon.stub(ReviewClass, "getReviews")
-         .resolves();
+         .resolves(expectedReviews);
 
-    expect(1).to.be.equal(2);
-    // COME BACK AND FIX
-    // const result = constructApprove(validEvent, validJSON);
-    // console.log(result);
+    const result = await constructApprove(ReviewClass, validEvent, validJSON);
+    console.log(result);
+    // Expect Slack names to be in ApprovePR description
+    expect((result.description)
+      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Leads.gwely))
+      .to.be.equal(true);
+    expect((result.description)
+      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Members.EthanTPainter))
+      .to.be.equal(true);
+
+    // Expect title, url, owner, and sender in ApprovePR
+    expect(result.title).to.be.equal(validEvent.pull_request.title);
+    expect(result.url).to.be.equal(validEvent.pull_request.html_url);
+    expect(result.owner).to.be.equal(validEvent.pull_request.user.login);
+    expect(result.user_approving).to.be.equal(validEvent.sender.login);
+
+    // Expect approvals to be properly formatted
+    expect((result.approvals)
+      .includes(validJSON.Options.Num_Required_Peer_Approvals
+        + " Required Peer")).to.be.equal(true);
+    expect((result.approvals)
+      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Members.DillonSykes
+        + " :heavy_check_mark:")).to.be.equal(true);
+    expect((result.approvals)
+        .includes(validJSON.Options.Num_Required_Lead_Approvals
+          + " Required Lead")).to.be.equal(true);
+    expect((result.approvals)
+      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Leads.gwely
+        + " :heavy_check_mark:")).to.be.equal(true);
   });
 });

@@ -2,9 +2,6 @@ import {
   getOwner,
   getSender,
   getPath,
-  getApprovingReviews,
-  getUsersApproving,
-  getUsersNotApproving,
   getTitle,
   getPRLink,
   getLatestReviews,
@@ -14,7 +11,6 @@ import {
   getSlackUser,
   getSlackMembers,
   getSlackLeads,
-  getGitHubTeamUsers,
 } from "../../../../json/parse";
 
 import { Review } from "../../../../github/api";
@@ -32,9 +28,11 @@ import { getApprovalChecks } from "../checks/approval";
  * @param event Event from the GitHub webhook
  * @returns ApprovePR object with all important characteristics
  */
-export async function constructApprove(event: any, json: any): Promise<ApprovePR> {
-
-  let approveObj: ApprovePR;
+export async function constructApprove(reviewClass: Review,
+                                       event: any,
+                                       json: any,
+                                      ): Promise<ApprovePR>
+{
   try {
     // ApprovePR properties
     // GitHub user name who opened PR and GtHub user who closed the PR
@@ -45,9 +43,8 @@ export async function constructApprove(event: any, json: any): Promise<ApprovePR
     const slackUserApproving = getSlackUser(userApproving, json);
 
     // Get Path and GET any existing reviews
-    const ReviewClass = new Review();
     const path = getPath(event);
-    const allReviews = await ReviewClass.getReviews(path);
+    const allReviews = await reviewClass.getReviews(path);
     const reviews = getLatestReviews(allReviews);
 
     // Get All Slack and GitHub users for a team
@@ -55,7 +52,7 @@ export async function constructApprove(event: any, json: any): Promise<ApprovePR
     const allSlackTeamLeads = getSlackLeads(owner, json);
 
     // Construct Peer and Lead Approvals strings
-    const approvals = getApprovalChecks(slackUser, reviews,
+    const approvals = getApprovalChecks(json, slackUser, reviews,
                   allSlackTeamMembers, allSlackTeamLeads);
 
     // Base Properties
@@ -64,7 +61,7 @@ export async function constructApprove(event: any, json: any): Promise<ApprovePR
     const pr_url = getPRLink(event);
 
     // Constuct ApprovePR object to return
-    approveObj = {
+    const approveObj = {
       description: description,
       title: title,
       owner: owner,
@@ -72,10 +69,10 @@ export async function constructApprove(event: any, json: any): Promise<ApprovePR
       url: pr_url,
       approvals: approvals,
     };
+
+    return approveObj;
   }
   catch (error) {
     throw new Error(error.message);
   }
-
-  return approveObj;
 }

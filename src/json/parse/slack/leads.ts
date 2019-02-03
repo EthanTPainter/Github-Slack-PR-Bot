@@ -44,8 +44,8 @@ export function getSlackLeads(githubUser: string,
       const leadUsers = users.Leads;
       // Check if githubUser is a Lead for the group
       // There may exist multiple users in Lead json
-      const leadKeys: string[] = Object.keys(leadUsers);
-      let leadCounter: number = 0;
+      const leadKeys = Object.keys(leadUsers);
+      let leadCounter = 0;
       // Loop through lead keys for matching GitHub User
       while (leadCounter < leadKeys.length) {
         // Check if key matches GitHub user
@@ -54,6 +54,16 @@ export function getSlackLeads(githubUser: string,
           return Object.values(users.Leads);
         }
         leadCounter++;
+      }
+
+      const memberUsers = users.Members;
+      const memberKeys = Object.keys(memberUsers);
+      let memberCounter = 0;
+      while (memberCounter < memberKeys.length) {
+        if (memberKeys[memberCounter] === githubUser) {
+          return Object.values(users.Leads);
+        }
+        memberCounter++;
       }
       // If GitHub user not found in lead or member groups
       // The user must be in a different group

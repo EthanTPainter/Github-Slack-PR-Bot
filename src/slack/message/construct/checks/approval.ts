@@ -1,4 +1,3 @@
-import { json } from "../../../../json/src/json";
 import { constructPeerCheck } from "./peer";
 import { constructLeadCheck } from "./lead";
 import { getApprovingReviews } from "../../../../../src/github/parse/reviews/get-reviews";
@@ -24,7 +23,8 @@ import {
  * "2 Peer Approvals: Dillon :CHECK: @Peer2 @Peer3 @Peer4"
  * "1 Lead Approvals: @Lead1 @Lead2 @Lead3"
  */
-export function getApprovalChecks(slackOwner: string,
+export function getApprovalChecks(json: any,
+                                  slackOwner: string,
                                   allReviews: any,
                                   slackMemberUsers: string[],
                                   slackLeadUsers: string[],
