@@ -3,9 +3,12 @@ import { json } from "../json/src/json";
 import { requiredEnvs } from "../required-envs";
 import { Annotations } from "../models";
 import { postMessage } from "../slack/api";
+import { newLogger } from "../logger";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
+
+const logger = newLogger("GitHubManager");
 
 /**
  * This handler:
@@ -30,9 +33,9 @@ export async function handler(
   // Locally - Disable unless using xray daemon locally
   // Dpeloyed - Enable
   if (requiredEnvs.DISABLE_XRAY) {
-    console.log("Running with X-Ray disabled");
+    logger.info("Running with X-Ray disabled");
   } else {
-    console.log("Running with X-Ray enabled");
+    logger.info("Running with X-Ray enabled");
     const ann = new Annotations(
       "GitHub-Slack-PR-Bot",
       "GitHubManager",
@@ -43,23 +46,26 @@ export async function handler(
     });
   }
 
-  console.log(`Event: ${JSON.stringify(event)}`);
+  logger.info(`Event: ${JSON.stringify(event)}`);
 
   // Grab body from event
-  const body: any = JSON.parse(event.body);
-  console.log(`Event body: ${JSON.stringify(body)}`);
+  const body = JSON.parse(event.body);
+  logger.debug(`Event body: ${JSON.stringify(body)}`);
 
   // Use action property to format the response
   const pullRequestAction: string = body.action;
-  console.log(`Action Found: ${pullRequestAction}`);
+  logger.debug(`Action Found: ${pullRequestAction}`);
 
   // Construct the Slack message based on PR action and body
+  logger.info(`Constructing slack message using action (${pullRequestAction})`);
   const slackMessage = await constructSlackMessage(pullRequestAction, body, json);
 
+  logger.debug("Slack Message created:\n" + slackMessage);
   const result = await postMessage(requiredEnvs.SLACK_API_URI,
     requiredEnvs.DEV_TEAM_1_SLACK_CHANNEL_NAME,
     requiredEnvs.DEV_TEAM_1_SLACK_TOKEN,
     slackMessage);
+
   // Provide success statusCode/Message
   const success: object = {
     body: "Successfully retrieved event",

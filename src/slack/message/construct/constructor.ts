@@ -7,6 +7,9 @@ import { constructOpen,
 } from "./types";
 
 import { Review } from "../../../../src/github/api";
+import { newLogger } from "../../../logger";
+
+const logger = newLogger("Constructor");
 
  /**
   * @author Ethan T Painter
@@ -27,7 +30,8 @@ export async function constructSlackMessage(action: string,
     /* When a PR is opened
      * Construct OpenPR Object and format slack message
      */
-     case "opened": {
+    case "opened": {
+      logger.info("Constructing OpenPR slack message...");
       const newPR = true;
       const open = constructOpen(event, json, newPR);
       /* Construct order of Opened PR Slack message
@@ -39,12 +43,15 @@ export async function constructSlackMessage(action: string,
       slackMessage = open.description + "\n"
                       + open.title
                       + "  [" + open.url + "]";
+      logger.debug("Opened Slack Message:\n" + slackMessage);
       break;
     }
+
     /* When a PR is reopened (PR was previously CLOSED)
      * Construct OpenPR Object and format slack message
      */
-     case "reopened": {
+    case "reopened": {
+      logger.info("Constructing Reopened PR slack message...");
       const newPR = false;
       const open = constructOpen(event, json, newPR);
       /* Construct order of Opened PR Slack message
@@ -56,6 +63,7 @@ export async function constructSlackMessage(action: string,
       slackMessage = open.description + "\n"
                       + open.title
                       + "  [" + open.url + "]";
+      logger.debug("Reopened Slack Message:\n" + slackMessage);
       break;
     }
 
@@ -66,6 +74,7 @@ export async function constructSlackMessage(action: string,
      case "closed": {
       const decider: boolean = event.pull_request.merged;
       if (decider) {
+        logger.info("Constructing Merged PR slack message...");
         const merge = constructMerge(event, json);
        /* Construct order of Opened PR Slack message
         * SLACK MESSAGE APPEARANCE:
@@ -76,8 +85,10 @@ export async function constructSlackMessage(action: string,
         slackMessage = merge.description + "\n"
                         + merge.title
                         + "  [" + merge.url + "]";
+        logger.debug("Merged Slack Message:\n" + slackMessage);
       }
       else {
+        logger.info("Constructing Closed PR slack message...");
         // Construct ClosePR Object and format slack message
         const close = constructClose(event, json);
         /* Construct order of Opened PR Slack message
@@ -89,6 +100,7 @@ export async function constructSlackMessage(action: string,
         slackMessage = close.description + "\n"
                         + close.title
                         + "  [" + close.url + "]";
+        logger.debug("Closed Slack Message:\n" + slackMessage);
       }
       break;
     }
@@ -102,6 +114,7 @@ export async function constructSlackMessage(action: string,
        * When a user approves a PR. This is arguably the most important feat
        */
       if (decider === "approved") {
+        logger.info("Constructing ApprovePR slack message...");
         if (reviewClass === undefined) {
           throw new Error("reviewClass parameter must be defined");
         }
@@ -119,9 +132,11 @@ export async function constructSlackMessage(action: string,
                         + approve.title
                         + "  [" + approve.url + "] \n"
                         + approve.approvals;
+        logger.debug("Approved Slack Message:\n" + slackMessage);
       }
       // When a user requests changes on a PR. This is arguably the most important feat
       else if (decider === "changes_requested") {
+        logger.info("Constructing ReqChangesPR slack message...");
         const changes = constructReqChanges(event, json);
       /* Construct order of Opened PR Slack message
        * SLACK MESSAGE APPEARANCE:
@@ -132,8 +147,10 @@ export async function constructSlackMessage(action: string,
         slackMessage = changes.description + "\n"
                         + changes.title
                         + "  [" + changes.url + "]";
+        logger.debug("Requested Changes Slack Message:\n" + slackMessage);
       }
       else if (decider === "commented") {
+        logger.info("Constructing commentPR slack message");
         /* When a user comments on a PR
          * This could get a bit spammy so probably keep it short
          * encourage using "request_changes" for many comments
@@ -145,6 +162,7 @@ export async function constructSlackMessage(action: string,
         slackMessage = comment.description + "\n"
                         + comment.title
                         + "  [" + comment.url + "]";
+        logger.debug("Commented Slack Message:\n" + slackMessage);
       }
       else {
         // Not approved or requested changes, throw error for unsupported state

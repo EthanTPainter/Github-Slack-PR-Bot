@@ -8,6 +8,7 @@ describe("getSlackMembers", () => {
       Developers: {
         PhillyDevTeam: {
           Users: {
+            Leads: {},
             Members: {
               ethan: "ethan.painter",
               dillon: "dillon.sykes",
@@ -77,12 +78,32 @@ describe("getSlackMembers", () => {
       .to.throw(expected.message);
   });
 
-  it("should throw an error -- Ne Members", () => {
+  it("should throw an error -- No Leads", () => {
     const invalidJSON = {
       Teams: {
         NewYork: {
           TeamOne: {
             Users: {},
+          },
+        },
+      },
+    };
+    const githubUser = "ethan";
+    const subTeam = "TeamOne";
+
+    const expected = new Error(`Leads not defined for team: ${subTeam}`);
+    expect(() => getSlackMembers(githubUser, invalidJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- No Members", () => {
+    const invalidJSON = {
+      Teams: {
+        NewYork: {
+          TeamOne: {
+            Users: {
+              Leads: {},
+            },
           },
         },
       },

@@ -1,5 +1,8 @@
 import * as rp from "request-promise";
 import { requiredEnvs } from "../../required-envs";
+import { newLogger } from "../../logger";
+
+const logger = newLogger("reviews");
 
 /**
  * @author Ethan T Painter
@@ -9,10 +12,10 @@ export class Review {
   /**
    * @author Ethan T Painter
    * @description Retrieve all reviews for a specific PR
-   * @param path The path to add to the BASE_URL to specify the chosen PR
-   *             Example: "repos/EthanTPainter/Comparative-Programming/pulls/1/reviews"
-   *             This path references the url:
-   *             https://github.com/EthanTPainter/Comparative-Programming/pull/1/reviews
+   * @param {string} path The path to add to the BASE_URL to specify the chosen PR
+   *         Example: "repos/EthanTPainter/Comparative-Programming/pulls/1/reviews"
+   *         This path references the url:
+   *         https://github.com/EthanTPainter/Comparative-Programming/pull/1/reviews
    */
   async getReviews(path: string): Promise<any> {
     const BASE_URL: string = "https://api.github.com";
@@ -21,6 +24,9 @@ export class Review {
       url: BASE_URL + path,
       method: "get",
     };
+
+    logger.info("Base Options provided: " + JSON.stringify(options));
+
     /*
     * Make request with request-promise to retrieve GitHub reviews for a PR
     * Always add token to retrieve Reviews because of GitHub API rate limtiing
@@ -39,6 +45,8 @@ export class Review {
           "User-Agent": "GitHub-Slack-PR-Bot",
         },
       };
+      logger.info("Final Options: " + JSON.stringify(finalOptions));
+
       const result = await rp(finalOptions);
       return result;
     }

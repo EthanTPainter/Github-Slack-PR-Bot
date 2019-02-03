@@ -1,5 +1,6 @@
-import { getSlackUser } from "../../../json/parse";
+import { newLogger } from "../../../logger";
 
+const logger = newLogger("GetReviews");
 /**
  * @author Ethan T Painter
  * @description From latest reviews (key/value pairs of github
@@ -17,11 +18,11 @@ import { getSlackUser } from "../../../json/parse";
  * ["EthanTPainter"]
  */
 export function getApprovingReviews(latestReviews: any): string[] {
-  const approvals: any = [];
+  const approvals: string[] = [];
   // Check for no reviews
   if (Object.keys(latestReviews) === ["None"]
     && Object.values(latestReviews) === ["No Reviews"]) {
-    return [];
+      return [];
   }
 
   (Object.keys(latestReviews)).forEach((review) => {
@@ -29,6 +30,7 @@ export function getApprovingReviews(latestReviews: any): string[] {
       approvals.push(review);
     }
   });
+  logger.debug("Approving Reviews: " + approvals);
   return approvals;
 }
 
@@ -49,11 +51,11 @@ export function getApprovingReviews(latestReviews: any): string[] {
  * ["DillonSykes"]
  */
 export function getReqChangesReviews(latestReviews: any): string[] {
-  const approvals: any = [];
+  const approvals: string[] = [];
   // Check for no reviews
   if (Object.keys(latestReviews) === ["None"]
     && Object.values(latestReviews) === ["No Reviews"]) {
-    return [];
+      return [];
   }
 
   (Object.keys(latestReviews)).forEach((review) => {
@@ -61,5 +63,6 @@ export function getReqChangesReviews(latestReviews: any): string[] {
       approvals.push(review);
     }
   });
+  logger.debug("Requesting Changes Reviews: " + approvals);
   return approvals;
 }

@@ -8,6 +8,9 @@ import {
 import { CommentPR } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";
 import { constructCommentDesc } from "../../formatting";
+import { newLogger } from "../../../../logger";
+
+const logger = newLogger("ConstructClose");
 
 export function constructComment(event: any, json: any): CommentPR {
 
@@ -34,6 +37,8 @@ export function constructComment(event: any, json: any): CommentPR {
       owner: owner,
       user_commenting: user_commenting,
     };
+
+    logger.debug(`CommentPR: ${JSON.stringify(commentObj)}`);
 
     return commentObj;
   }

@@ -1,4 +1,7 @@
 import { Review } from "../../../models/github/reviews";
+import { newLogger } from "../../../logger";
+
+const logger = newLogger("ReviewParsing");
 
 /**
  * @author Ethan T Painter
@@ -12,11 +15,12 @@ import { Review } from "../../../models/github/reviews";
  */
 
 export function getLatestReviews(reviewList: Review[]): any {
-  const reviews: any = {};
+  const reviews = {};
 
   // Start from the end to grab most recent
   if (reviewList.length === 0) {
     // No reviews yet
+    logger.debug("No reviews found");
     return { None: "No Reviews" };
   }
 
@@ -36,5 +40,6 @@ export function getLatestReviews(reviewList: Review[]): any {
     }
     counter--;
   }
+  logger.debug("Reviews Found: " + JSON.stringify(reviews));
   return reviews;
 }

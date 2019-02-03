@@ -8,6 +8,9 @@ import {
 import { RequestChangesPR } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";
 import { constructReqChangesDesc } from "../../formatting";
+import { newLogger } from "../../../../logger";
+
+const logger = newLogger("ConstructReqChanges");
 
 export function constructReqChanges(event: any,
                                     json: any,
@@ -35,6 +38,8 @@ export function constructReqChanges(event: any,
       owner: owner,
       user_requesting_changes: userRequesting,
     };
+
+    logger.debug(`RequestChangesPR: ${JSON.stringify(changesObj)}`);
 
     return changesObj;
   }

@@ -2,6 +2,9 @@ import { OpenedPR } from "../../../../models";
 import { getOwner, getTitle, getPRLink } from "../../../../github/parse";
 import { getSlackUser, getSlackGroup } from "../../../../json/parse";
 import { constructOpenDesc } from "../../formatting";
+import { newLogger } from "../../../../logger";
+
+const logger = newLogger("ConstructOpen");
 
 export function constructOpen(event: any,
                               json: any,
@@ -29,6 +32,8 @@ export function constructOpen(event: any,
       url: pr_url,
       owner: owner,
     };
+
+    logger.debug(`OpenPR: ${openObj}`);
 
     return openObj;
   }

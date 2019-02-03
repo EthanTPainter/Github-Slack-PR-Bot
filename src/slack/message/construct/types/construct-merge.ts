@@ -10,6 +10,9 @@ import {
 import { MergePR } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";
 import { constructMergeDesc } from "../../formatting";
+import { newLogger } from "../../../../logger";
+
+const logger = newLogger("ConstructMerge");
 
 export function constructMerge(event: any, json: any): MergePR {
 
@@ -41,6 +44,8 @@ export function constructMerge(event: any, json: any): MergePR {
       remote_branch: branchWithPR,
       base_branch: branchMergedTo,
     };
+
+    logger.debug(`MergePR: ${JSON.stringify(mergeObj)}`);
 
     return mergeObj;
   }

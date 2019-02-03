@@ -1,3 +1,7 @@
+import { newLogger } from "../../../../logger";
+
+const logger = newLogger("path");
+
 /**
  * @author Ethan T Painter
  * @description Retrieve core path and modify for API request
@@ -14,7 +18,7 @@ export function getPath(event: any): string {
   if (event.pull_request.url === undefined) {
     throw new Error("event.pull_request.url is undefined");
   }
-  const fullUrl: string = event.pull_request.url;
-  const reviewsUrl: string = fullUrl + "/reviews";
+  const fullUrl = event.pull_request.url;
+  const reviewsUrl = fullUrl + "/reviews";
   return reviewsUrl;
 }

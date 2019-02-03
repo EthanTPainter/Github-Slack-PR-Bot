@@ -7,14 +7,18 @@ import {
 
 import {
   getSlackUser,
-  getSlackGroup,
 } from "../../../../json/parse";
 
 import { ClosePR } from "../../../../models";
 import { constructCloseDesc } from "../../formatting";
+import { newLogger } from "../../../../logger";
 
-export function constructClose(event: any, json: any): ClosePR {
+const logger = newLogger("ConstructClose");
 
+export function constructClose(event: any,
+                               json: any,
+                              ): ClosePR
+{
   try {
     // ClosePR properties
     // GitHub user name who opened PR and GtHub user who closed the PR
@@ -38,6 +42,8 @@ export function constructClose(event: any, json: any): ClosePR {
       owner: owner,
       user_closing: userClosing,
     };
+
+    logger.debug(`ClosePR: ${JSON.stringify(closeObj)}`);
 
     return closeObj;
   }

@@ -8,6 +8,7 @@ describe("getSlackLeads", () => {
       Team1: {
         TeamGroup1: {
           Users: {
+            Members: {},
             Leads: {
               Leader1: "SlackLeadUser1",
               Leader2: "SlackLeadUser2",
@@ -53,7 +54,7 @@ describe("getSlackLeads", () => {
     expect(result).to.be.deep.equal(expected);
   });
 
-  it("should not get any slack leads -- No existing slack leads", ()  =>{
+  it("should not get any slack leads -- No existing slack leads", ()  => {
     const validJSON_1 = {
       Teams: {
         Team1: {

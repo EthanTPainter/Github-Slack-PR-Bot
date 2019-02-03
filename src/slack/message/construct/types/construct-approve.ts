@@ -21,6 +21,9 @@ import {
 
 import { ApprovePR } from "../../../../models";
 import { getApprovalChecks } from "../checks/approval";
+import { newLogger } from "../../../../logger";
+
+const logger = newLogger("ConstructApprove");
 
 /**
  * @author Ethan T Painter
@@ -47,6 +50,8 @@ export async function constructApprove(reviewClass: Review,
     const allReviews = await reviewClass.getReviews(path);
     const reviews = getLatestReviews(allReviews);
 
+    logger.debug("Latest Reviews: " + JSON.stringify(reviews));
+
     // Get All Slack and GitHub users for a team
     const allSlackTeamMembers = getSlackMembers(owner, json);
     const allSlackTeamLeads = getSlackLeads(owner, json);
@@ -69,6 +74,8 @@ export async function constructApprove(reviewClass: Review,
       url: pr_url,
       approvals: approvals,
     };
+
+    logger.debug(`ApprovePR: ${JSON.stringify(approveObj)}`);
 
     return approveObj;
   }
