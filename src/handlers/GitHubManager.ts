@@ -4,6 +4,8 @@ import { requiredEnvs } from "../required-envs";
 import { Annotations } from "../models";
 import { postMessage } from "../slack/api";
 import { newLogger } from "../logger";
+import { getTeamName } from "src/json/parse";
+import { getOwner } from "src/github/parse";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -61,9 +63,16 @@ export async function handler(
   const slackMessage = await constructSlackMessage(pullRequestAction, body, json);
 
   logger.debug("Slack Message created:\n" + slackMessage);
+
+  // Determine which sub team the user belongs to
+  const githubUser = getOwner(event);
+  const teamName = getTeamName(githubUser, json);
+
+  // Use team name to get channel name and slack token from required Envs
+  logger.info("Posting slack message to " + requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]);
   const result = await postMessage(requiredEnvs.SLACK_API_URI,
-    requiredEnvs.DEV_TEAM_1_SLACK_CHANNEL_NAME,
-    requiredEnvs.DEV_TEAM_1_SLACK_TOKEN,
+    requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
+    requiredEnvs[teamName + "_SLACK_TOKEN"],
     slackMessage);
 
   // Provide success statusCode/Message
