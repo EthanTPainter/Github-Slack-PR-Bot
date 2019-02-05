@@ -70,10 +70,10 @@ export async function handler(
 
   // Use team name to get channel name and slack token from required Envs
   logger.info("Posting slack message to " + requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]);
-  const result = await postMessage(requiredEnvs.SLACK_API_URI,
-    requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
-    requiredEnvs[teamName + "_SLACK_TOKEN"],
-    slackMessage);
+  await postMessage(requiredEnvs.SLACK_API_URI,
+                    requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
+                    requiredEnvs[teamName + "_SLACK_TOKEN"],
+                    slackMessage);
 
   // Provide success statusCode/Message
   const success: object = {

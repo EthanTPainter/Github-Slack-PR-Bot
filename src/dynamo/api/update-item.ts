@@ -1,18 +1,19 @@
 import { DynamoDB, AWSError } from "aws-sdk";
+import { DateTime } from "luxon";
 import { newLogger } from "../../logger";
-import { requiredEnvs } from "../../../src/required-envs";
+import { requiredEnvs } from "../../required-envs";
 
 const logger = newLogger("GetItem");
 
-export class DynamoGet {
+export class DynamoUpdate {
 
   /**
    * @author Ethan T Painter
    * @description get Item from DyanmoDB table
    * @param {string} githubUser GitHub username
-   * @returns Result of dynamoDB Get request
+   * @returns
    */
-  async getItem(githubUser: string): Promise<any> {
+  async updateItem(githubUser: string, values: any): Promise<any> {
     try {
 
       logger.info("Connecting to DynamoDB...");
@@ -23,19 +24,22 @@ export class DynamoGet {
         region: requiredEnvs.DYNAMO_REGION,
       });
 
+      // Make timestamp for last updated time
+      const currentTime = DateTime.local().toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS);
+
       // Provide base params as input
       const params = {
         TableName: requiredEnvs.DYNAMO_TABLE,
         Key: { githubUser: githubUser },
-        AttributesToGet: [
-          "contents",
-          "last_updated",
-        ],
-        ReturnValues: "ALL_NEW",
+        UpdateExpression: `set contents = :d, last_updated = :t`,
+        ExpressionAttributeValues: {
+          ":d": values,
+          ":t": currentTime,
+        },
       };
 
-      // DynamoDB getItem request
-      const result = await dynamoDB.get(params).promise();
+      // DynamoDB putItem request
+      const result = await dynamoDB.update(params).promise();
       return result;
     }
     catch (error) {

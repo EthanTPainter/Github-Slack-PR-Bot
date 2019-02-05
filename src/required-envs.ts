@@ -10,6 +10,7 @@ export class EnvModel {
   SLACK_API_URI: string;
   DEV_TEAM_1_SLACK_CHANNEL_NAME: string;
   DEV_TEAM_1_SLACK_TOKEN: string;
+  DYNAMO_TABLE: string;
   DYNAMO_API_VERSION: string;
   DYNAMO_REGION: string;
 }
@@ -20,6 +21,7 @@ export const requiredEnvs = envalid.cleanEnv<EnvModel>(process.env, {
   SLACK_API_URI: str(),
   DEV_TEAM_1_SLACK_CHANNEL_NAME: str(),
   DEV_TEAM_1_SLACK_TOKEN: str(),
+  DYNAMO_TABLE: str(),
   DYNAMO_API_VERSION: str(),
   DYNAMO_REGION: str(),
 }, {
