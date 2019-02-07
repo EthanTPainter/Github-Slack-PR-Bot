@@ -1,41 +1,32 @@
 import * as rp from "request-promise";
 import { newLogger } from "../../logger";
 
-const logger = newLogger("PostEphemeral");
+const logger = newLogger("GetUsers");
 
 /**
  * @author Ethan T Painter
- * @description Post an ephemeral message
+ * @description Get list of users in an org
  * @param slackApiUri Base Slack API Uri
- * @param channel Slack channel
  * @param token Slack Token
- * @param message Slack message
- * @param attachment Attachments for slack messages
  */
-export async function postEphemeral(
+export async function getUsers(
   slackApiUri: string,
-  channel: string,
   token: string,
-  message: string,
-  attachment?: string,
 ): Promise<any> {
 
   const options = {
     body: {
-      channel: channel,
       token: token,
-      text: message,
-      as_user: true,
     },
     headers: {
       Authorization: `Bearer ${token}`,
     },
     json: true,
     method: "POST",
-    uri: `${slackApiUri}/chat.postEphemeral`,
+    uri: `${slackApiUri}/users.list`,
   };
 
-  logger.info("Options: " + JSON.stringify(options));
+  logger.debug("Options: " + JSON.stringify(options));
 
   const result = await rp(options);
   return result;

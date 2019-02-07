@@ -13,11 +13,12 @@ const logger = newLogger("PostMessage");
  * @param {string?} attachment Slack attachment text
  * @returns Response from making request to Slack
  */
-export async function postMessage(slackApiUri: string,
-                                  channel: string,
-                                  token: string,
-                                  message: string,
-                                  attachment?: string,
+export async function postMessage(
+  slackApiUri: string,
+  channel: string,
+  token: string,
+  message: string,
+  attachment?: string,
 ): Promise<any> {
 
   const options: any = {

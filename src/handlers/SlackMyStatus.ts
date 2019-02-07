@@ -7,20 +7,7 @@ import { newLogger } from "../logger";
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
 
-const logger = newLogger("SlackTeamStatus");
-
-/**
- * This handler:
- * 1) Receives messages from Slack users sent to the Slack Bot,
- *    and responds with expected information from Dynamo
- *
- * Slack Events API for Slack messaging with Bots
- * https://api.slack.com/events-api
- *
- * @param event Event passed through
- * @param context Context of the request
- * @param callback Callback function for using if successfull or failed
- */
+const logger = newLogger("SlackMyStatus");
 
 export function handler(
   event: any,
@@ -35,7 +22,7 @@ export function handler(
     logger.info("Running with X-Ray enabled");
     const ann = new Annotations(
       "GitHub-Slack-PR-Bot",
-      "SlackTeamStatus",
+      "SlackMyStatus",
     );
     AWSXRay.captureFunc(ann.application, (subsegment: any) => {
       subsegment.addAnnotation("application", ann.application);
@@ -45,11 +32,12 @@ export function handler(
 
   logger.info(`event: ${JSON.stringify(event)}`);
 
+  // Convert x-www-urlencoded string to JSON notation
   const body = querystring.parse(event.body);
   logger.info(`event.body: ${JSON.stringify(body)}`);
 
   const success: object = {
-    body: "TEAM SUCCESS FOR <subteam here>",
+    body: "MY SUCCESS",
     statusCode: "200",
   };
   callback(null, success);
