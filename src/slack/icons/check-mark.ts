@@ -1,3 +1,4 @@
+
 /**
  * @author Ethan T Painter
  * @description Get check for slack message
@@ -10,9 +11,11 @@
  *          3) ballot
  *          4) custom
  */
-export function getCheckMark(json: any,
-                             custom?: string,
-                            ): string {
+export function getCheckMark(
+  json: any,
+  custom?: string,
+): string {
+
   // Error Handling
   if (json === undefined) {
     throw new Error("JSON is undefined");

@@ -12,7 +12,10 @@ import { newLogger } from "../../../../logger";
 
 const logger = newLogger("ConstructClose");
 
-export function constructComment(event: any, json: any): CommentPR {
+export function constructComment(
+  event: any,
+  json: any,
+): CommentPR {
 
   try {
     // Comment Properties

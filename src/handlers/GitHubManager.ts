@@ -4,8 +4,9 @@ import { requiredEnvs } from "../required-envs";
 import { Annotations } from "../models";
 import { postMessage } from "../slack/api";
 import { newLogger } from "../logger";
-import { getTeamName } from "src/json/parse";
-import { getOwner } from "src/github/parse";
+import { getTeamName} from "../json/parse";
+import { getOwner } from "../github/parse";
+import { updateDynamo } from "../dynamo/update";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -16,9 +17,6 @@ const logger = newLogger("GitHubManager");
  * This handler:
  * 1) Receives webhook POST requests from GitHub repositories
  *    && constructs slack messages to post in team slack channels
- *
- * Slack Events API for Slack messaging with Bots
- * https://api.slack.com/events-api
  *
  * @param event Event passed through
  * @param context Context of the request
@@ -32,8 +30,6 @@ export async function handler(
 ): Promise<any> {
 
   // X-Ray
-  // Locally - Disable unless using xray daemon locally
-  // Dpeloyed - Enable
   if (requiredEnvs.DISABLE_XRAY) {
     logger.info("Running with X-Ray disabled");
   } else {
@@ -56,17 +52,19 @@ export async function handler(
 
   // Use action property to format the response
   const pullRequestAction: string = body.action;
-  logger.debug(`Action Found: ${pullRequestAction}`);
 
   // Construct the Slack message based on PR action and body
   logger.info(`Constructing slack message using action (${pullRequestAction})`);
   const slackMessage = await constructSlackMessage(pullRequestAction, body, json);
-
   logger.debug("Slack Message created:\n" + slackMessage);
 
   // Determine which sub team the user belongs to
   const githubUser = getOwner(event);
   const teamName = getTeamName(githubUser, json);
+
+  // Update DynamoDB with new request
+  logger.info("Updating DynamoDB table");
+  await updateDynamo(githubUser, event, json, pullRequestAction);
 
   // Use team name to get channel name and slack token from required Envs
   logger.info("Posting slack message to " + requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]);

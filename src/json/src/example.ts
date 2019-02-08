@@ -4,8 +4,7 @@ export const json = {
     X_Mark_Style: "base",
     Num_Required_Lead_Approvals: 1,
     Num_Required_Peer_Approvals: 1,
-    Allow_Cross_Sub_Team_Lead_Approvals: true,
-    Allow_Cross_Sub_Team_Member_Approvals: true,
+    Dynamo_Peer_Before_Lead: true,
   },
   Teams: {
     Dev_Team: {

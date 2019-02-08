@@ -1,4 +1,4 @@
-import { DynamoDB, AWSError } from "aws-sdk";
+import { DynamoDB } from "aws-sdk";
 import { DateTime } from "luxon";
 import { newLogger } from "../../logger";
 import { requiredEnvs } from "../../required-envs";
@@ -11,11 +11,14 @@ export class DynamoUpdate {
    * @author Ethan T Painter
    * @description get Item from DyanmoDB table
    * @param {string} githubUser GitHub username
-   * @returns
+   * @param values Contents to put in contents
    */
-  async updateItem(githubUser: string, values: any): Promise<any> {
-    try {
+  async updateItem(
+    githubUser: string,
+    values: any,
+  ): Promise<DynamoDB.DocumentClient.UpdateItemOutput> {
 
+    try {
       logger.info("Connecting to DynamoDB...");
 
       // Setup/Init DocumentClient for DynamoDB

@@ -1,3 +1,4 @@
+
 /**
  * @author Ethan T Painter
  * @description Retrieve a list of github users in a team
@@ -5,10 +6,11 @@
  * @param json JSON file for the GitHub/Slack configuration
  * @returns Array of github usernames (strings)
  */
-export function getGitHubTeamUsers(githubUser: string,
-                                   json: any,
-                                  ): string[]
-{
+export function getGitHubTeamUsers(
+  githubUser: string,
+  json: any,
+): string[] {
+
   let githubUsers: string[];
   const jsonFile = json;
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)

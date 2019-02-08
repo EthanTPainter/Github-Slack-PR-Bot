@@ -1,5 +1,6 @@
 import { getCheckMark } from "../../../icons/check-mark";
 import { getXMark } from "../../../icons/x-mark";
+
 /**
  * @author Ethan T Painter
  * @description Construct string for Peer Approval statement
@@ -17,12 +18,13 @@ import { getXMark } from "../../../icons/x-mark";
  * 4 "2 Required Peer Approvals: Dillon :CHECK: Daniel :X: @Peer3 @Peer4"
  * 5 ""
  */
-export function constructPeerCheck(json: any,
-                                   membersApproving: string[],
-                                   membersReqChanges: string[],
-                                   membersNotApproving: string[],
-                                  ): string
-{
+export function constructPeerCheck(
+  json: any,
+  membersApproving: string[],
+  membersReqChanges: string[],
+  membersNotApproving: string[],
+): string {
+
   if (json.Options.Num_Required_Peer_Approvals === undefined) {
     throw new Error("json.Option.Num_Required_Peer_Approvals is undefined");
   }
@@ -51,7 +53,7 @@ export function constructPeerCheck(json: any,
   // Determine if current number of approving + requesting changes users
   // matches or exceeds the expected required number
   if (membersApproving.length + membersReqChanges.length >=
-        json.Options.Num_Required_Peer_Approvals) {
+    json.Options.Num_Required_Peer_Approvals) {
     return peerCheck;
   }
   else {

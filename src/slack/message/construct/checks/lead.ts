@@ -12,12 +12,13 @@ import { getXMark } from "../../../../../src/slack/icons/x-mark";
  * 2 "1 Required Lead Approval:  @Lead2 @Lead3 @Lead4"
  * 3 "2 Required Lead Approvals: Dillon :CHECK: Daniel :CHECK:"
  */
-export function constructLeadCheck(json: any,
-                                   leadsApproving: string[],
-                                   leadsReqChanges: string[],
-                                   leadsNotApproving: string[],
-                                  ): string
-{
+export function constructLeadCheck(
+  json: any,
+  leadsApproving: string[],
+  leadsReqChanges: string[],
+  leadsNotApproving: string[],
+): string {
+
   if (json.Options.Num_Required_Lead_Approvals === undefined) {
     throw new Error("json.Option.Num_Required_Lead_Approvals is undefined");
   }
@@ -45,7 +46,7 @@ export function constructLeadCheck(json: any,
   // Determine if current number of approving users
   // matches or exceeds the expected required Number
   if (leadsApproving.length + leadsReqChanges.length >=
-        json.Options.Num_Required_Lead_Approvals) {
+    json.Options.Num_Required_Lead_Approvals) {
     return leadCheck;
   }
   else {

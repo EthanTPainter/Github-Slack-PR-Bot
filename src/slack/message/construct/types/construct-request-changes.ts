@@ -12,9 +12,10 @@ import { newLogger } from "../../../../logger";
 
 const logger = newLogger("ConstructReqChanges");
 
-export function constructReqChanges(event: any,
-                                    json: any,
-                                   ): RequestChangesPR {
+export function constructReqChanges(
+  event: any,
+  json: any,
+): RequestChangesPR {
 
   try {
     // RequestChangesPR properties

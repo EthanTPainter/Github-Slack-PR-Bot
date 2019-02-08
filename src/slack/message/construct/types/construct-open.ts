@@ -6,10 +6,11 @@ import { newLogger } from "../../../../logger";
 
 const logger = newLogger("ConstructOpen");
 
-export function constructOpen(event: any,
-                              json: any,
-                              newPR: boolean,
-                             ): OpenedPR {
+export function constructOpen(
+  event: any,
+  json: any,
+  newPR: boolean,
+): OpenedPR {
 
   try {
     // OpenedPr Properties

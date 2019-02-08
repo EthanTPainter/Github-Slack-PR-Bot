@@ -31,11 +31,12 @@ const logger = newLogger("ConstructApprove");
  * @param event Event from the GitHub webhook
  * @returns ApprovePR object with all important characteristics
  */
-export async function constructApprove(reviewClass: Review,
-                                       event: any,
-                                       json: any,
-                                      ): Promise<ApprovePR>
-{
+export async function constructApprove(
+  reviewClass: Review,
+  event: any,
+  json: any,
+): Promise<ApprovePR> {
+
   try {
     // ApprovePR properties
     // GitHub user name who opened PR and GtHub user who closed the PR
@@ -58,7 +59,7 @@ export async function constructApprove(reviewClass: Review,
 
     // Construct Peer and Lead Approvals strings
     const approvals = getApprovalChecks(json, slackUser, reviews,
-                  allSlackTeamMembers, allSlackTeamLeads);
+      allSlackTeamMembers, allSlackTeamLeads);
 
     // Base Properties
     const description = constructApproveDesc(slackUser, slackUserApproving);

@@ -1,4 +1,5 @@
-import { constructOpen,
+import {
+  constructOpen,
   constructClose,
   constructComment,
   constructMerge,
@@ -11,19 +12,20 @@ import { newLogger } from "../../../logger";
 
 const logger = newLogger("Constructor");
 
- /**
-  * @author Ethan T Painter
-  * @description Main function for constructing the slack message
-  * @param action Action from the event
-  * @param event Event including pull_request, sender, etc.
-  * @returns String of the slack message to send to the team channel
-  */
-export async function constructSlackMessage(action: string,
-                                            event: any,
-                                            json: any,
-                                            reviewClass?: Review,
-                                           ): Promise<string>
-{
+/**
+ * @author Ethan T Painter
+ * @description Main function for constructing the slack message
+ * @param action Action from the event
+ * @param event Event including pull_request, sender, etc.
+ * @returns String of the slack message to send to the team channel
+ */
+export async function constructSlackMessage(
+  action: string,
+  event: any,
+  json: any,
+  reviewClass?: Review,
+): Promise<string> {
+
   let slackMessage = "default";
 
   switch (action) {
@@ -41,8 +43,8 @@ export async function constructSlackMessage(action: string,
        * -------------- URL ----------------------
        */
       slackMessage = open.description + "\n"
-                      + open.title
-                      + "  [" + open.url + "]";
+        + open.title
+        + "  [" + open.url + "]";
       logger.debug("Opened Slack Message:\n" + slackMessage);
       break;
     }
@@ -71,17 +73,17 @@ export async function constructSlackMessage(action: string,
      * Determine if the PR was approved or changes were requested
      * Construct MergedPR Object and format slack message
      */
-     case "closed": {
+    case "closed": {
       const decider: boolean = event.pull_request.merged;
       if (decider) {
         logger.info("Constructing Merged PR slack message...");
         const merge = constructMerge(event, json);
-       /* Construct order of Opened PR Slack message
-        * SLACK MESSAGE APPEARANCE:
-        * -------------- DESCRIPTION --------------
-        * -------------- TITLE --------------------
-        * -------------- URL ----------------------
-        */
+        /* Construct order of Opened PR Slack message
+         * SLACK MESSAGE APPEARANCE:
+         * -------------- DESCRIPTION --------------
+         * -------------- TITLE --------------------
+         * -------------- URL ----------------------
+         */
         slackMessage = merge.description + "\n"
                         + merge.title
                         + "  [" + merge.url + "]";
@@ -120,14 +122,14 @@ export async function constructSlackMessage(action: string,
         }
         const approve = await constructApprove(reviewClass, event, json);
 
-      /* Construct order of Opened PR Slack message
-       * SLACK MESSAGE APPEARANCE:
-       * -------------- DESCRIPTION --------------
-       * ---------------- TITLE ------------------
-       * ----------------- URL -------------------
-       * --------------- PEER CHECK --------------
-       * --------------- LEAD CHECK --------------
-       */
+        /* Construct order of Opened PR Slack message
+         * SLACK MESSAGE APPEARANCE:
+         * -------------- DESCRIPTION --------------
+         * ---------------- TITLE ------------------
+         * ----------------- URL -------------------
+         * --------------- PEER CHECK --------------
+         * --------------- LEAD CHECK --------------
+         */
         slackMessage = approve.description + "\n"
                         + approve.title
                         + "  [" + approve.url + "] \n"
@@ -138,12 +140,12 @@ export async function constructSlackMessage(action: string,
       else if (decider === "changes_requested") {
         logger.info("Constructing ReqChangesPR slack message...");
         const changes = constructReqChanges(event, json);
-      /* Construct order of Opened PR Slack message
-       * SLACK MESSAGE APPEARANCE:
-       * -------------- DESCRIPTION --------------
-       * -------------- TITLE --------------------
-       * -------------- URL ----------------------
-       */
+        /* Construct order of Opened PR Slack message
+         * SLACK MESSAGE APPEARANCE:
+         * -------------- DESCRIPTION --------------
+         * -------------- TITLE --------------------
+         * -------------- URL ----------------------
+         */
         slackMessage = changes.description + "\n"
                         + changes.title
                         + "  [" + changes.url + "]";
@@ -172,7 +174,7 @@ export async function constructSlackMessage(action: string,
     }
 
     default: {
-      const unsupportedEventType: string = `event action ${action} not supported in this application`;
+      const unsupportedEventType = `event action ${action} not supported in this application`;
       slackMessage = unsupportedEventType;
       throw new Error(slackMessage);
     }

@@ -23,12 +23,14 @@ import {
  * "2 Peer Approvals: Dillon :CHECK: @Peer2 @Peer3 @Peer4"
  * "1 Lead Approvals: @Lead1 @Lead2 @Lead3"
  */
-export function getApprovalChecks(json: any,
-                                  slackOwner: string,
-                                  allReviews: any,
-                                  slackMemberUsers: string[],
-                                  slackLeadUsers: string[],
-                                  ): string {
+export function getApprovalChecks(
+  json: any,
+  slackOwner: string,
+  allReviews: any,
+  slackMemberUsers: string[],
+  slackLeadUsers: string[],
+): string {
+
   // Record only approving reviews of the PR
   const approvingReviews = getApprovingReviews(allReviews);
 

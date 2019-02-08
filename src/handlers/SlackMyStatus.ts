@@ -15,6 +15,8 @@ export function handler(
   callback: any,
 ): void {
 
+  logger.info(`event: ${JSON.stringify(event)}`);
+
   // X-Ray
   if (requiredEnvs.DISABLE_XRAY) {
     logger.info("Running with X-Ray disabled");
@@ -29,8 +31,6 @@ export function handler(
       subsegment.addAnnotation("service", ann.service);
     });
   }
-
-  logger.info(`event: ${JSON.stringify(event)}`);
 
   // Convert x-www-urlencoded string to JSON notation
   const body = querystring.parse(event.body);

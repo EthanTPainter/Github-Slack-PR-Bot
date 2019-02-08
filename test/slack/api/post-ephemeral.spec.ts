@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import { postMessage } from "../../../src/slack/api";
+import { postEphemeral } from "../../../src/slack/api";
 
-describe("postMessage", () => {
+describe("postEphemeral", () => {
 
   it("successfully post message to slack channel", () => {
     const slackApiUrl = "https://slack.com/api";
@@ -9,7 +9,7 @@ describe("postMessage", () => {
     const slackToken = process.env.DEV_TEAM_1_SLACK_TOKEN!;
     const slackMessage = "Hello from bot! This is success";
 
-    /*const result = postMessage(
+    /*const result = postEphemeral(
       slackApiUrl,
       slackChannel,
       slackToken,

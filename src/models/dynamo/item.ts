@@ -4,7 +4,7 @@ export class Item {
   title: string;
   url: string;
   peerComplete: boolean;
-  peersApproving: object;
+  peersApproving: string[];
   leadComplete: boolean;
-  leadsApproving: object;
+  leadsApproving: string[];
 }

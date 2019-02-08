@@ -1,4 +1,4 @@
-import { DynamoDB, AWSError } from "aws-sdk";
+import { DynamoDB } from "aws-sdk";
 import { newLogger } from "../../logger";
 import { requiredEnvs } from "../../../src/required-envs";
 
@@ -12,9 +12,11 @@ export class DynamoGet {
    * @param {string} githubUser GitHub username
    * @returns Result of dynamoDB Get request
    */
-  async getItem(githubUser: string): Promise<any> {
-    try {
+  async getItem(
+    githubUser: string,
+  ): Promise<DynamoDB.DocumentClient.AttributeMap | undefined> {
 
+    try {
       logger.info("Connecting to DynamoDB...");
 
       // Setup/Init DocumentClient for DynamoDB
@@ -36,7 +38,9 @@ export class DynamoGet {
 
       // DynamoDB getItem request
       const result = await dynamoDB.get(params).promise();
-      return result;
+      const item = result.Item;
+
+      return item;
     }
     catch (error) {
       throw new Error(error.message);

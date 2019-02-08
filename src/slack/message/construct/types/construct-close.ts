@@ -15,10 +15,11 @@ import { newLogger } from "../../../../logger";
 
 const logger = newLogger("ConstructClose");
 
-export function constructClose(event: any,
-                               json: any,
-                              ): ClosePR
-{
+export function constructClose(
+  event: any,
+  json: any,
+): ClosePR {
+
   try {
     // ClosePR properties
     // GitHub user name who opened PR and GtHub user who closed the PR
