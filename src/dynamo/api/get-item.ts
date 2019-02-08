@@ -9,11 +9,11 @@ export class DynamoGet {
   /**
    * @author Ethan T Painter
    * @description get Item from DyanmoDB table
-   * @param {string} githubUser GitHub username
+   * @param {string} slackUser Slack username
    * @returns Result of dynamoDB Get request
    */
   async getItem(
-    githubUser: string,
+    slackUser: string,
   ): Promise<DynamoDB.DocumentClient.AttributeMap | undefined> {
 
     try {
@@ -28,7 +28,7 @@ export class DynamoGet {
       // Provide base params as input
       const params = {
         TableName: requiredEnvs.DYNAMO_TABLE,
-        Key: { githubUser: githubUser },
+        Key: { githubUser: slackUser },
         AttributesToGet: [
           "contents",
           "last_updated",

@@ -14,4 +14,9 @@ export {
 
 export {
   getSlackUser,
-}from "./user";
+} from "./user";
+
+export {
+  getSlackUsers,
+  getSlackUsersAlt,
+} from "./team-users";

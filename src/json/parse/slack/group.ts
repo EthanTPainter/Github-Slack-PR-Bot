@@ -93,7 +93,5 @@ export function getSlackGroup(
     // User not found in General Team (DevTeam), look at antoher team
     teamCounter++;
   }
-  // Looped through all teams and couldn't find github group for user
-  // Return empty string for no group found
-  return "";
+  throw new Error("No Slack Group found in JSON file");
 }

@@ -10,7 +10,6 @@ export const json = {
     Dev_Team: {
       Dev_Team_1: {
         Slack_Group: "Group_Slack_Name",
-        Slack_Token: "TOKEN",
         Users: {
           Leads: {
             GitHub_User_1: "Slack_user_1",
@@ -25,7 +24,6 @@ export const json = {
       },
       Dev_Team_2: {
         Slack_Group: "Group Slack Name",
-        Slack_Token: "TOKEN",
         Users: {
           Leads: {
             GitHub_User_1: "Slack_user_1",

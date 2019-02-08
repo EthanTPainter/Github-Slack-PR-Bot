@@ -1,19 +1,26 @@
+import { DynamoGet, DynamoAppend } from "../../api";
 import { formatItem } from "../../formatting/format-item";
 import { getSlackMembersAlt } from "../../../json/parse";
+import { newLogger } from "../../../logger";
+import { DynamoDB } from "aws-sdk";
+
+const logger = newLogger("UpdateOpen");
 
 /**
  * @author Ethan T Painter
  * @description Update DynamoDB table and add to
  *              all queues necessary.
  * @param slackUser Slack User ID
+ * @param slackTeam Slack Team ID
  * @param event Event from GitHub
  * @param json JSON config file
  */
-export function updateOpen(
+export async function updateOpen(
   slackUser: string,
+  slackTeam: string,
   event: any,
   json: any,
-): void {
+): Promise<DynamoDB.DocumentClient.UpdateItemOutput> {
 
   // Format an item as a Dynamo entry
   const newItem = formatItem(slackUser, event, json);
@@ -30,7 +37,27 @@ export function updateOpen(
     slackUserList = getSlackMembersAlt(slackUser, json);
   }
 
+  // Append newItem to slackUserList contents
   // For each user in the slackUserList,
   // 1) Get Most recent contents for the user
-  // 2) Append newItem to the end
+  // 2) Append newItem to the existing contents array
+
+  const dynamoGet = new DynamoGet();
+  const dynamoUpdate = new DynamoAppend();
+
+  const updateUserQueues = slackUserList.map(async (user) => {
+    const currentItem = await dynamoGet.getItem(user);
+    const currentContents = currentItem!.contents;
+    const updateItems = await dynamoUpdate.appendItem(user, currentContents, newItem);
+  });
+  await Promise.all(updateUserQueues);
+
+  logger.info("Successfully updated all affected slack users");
+
+  // Append newItem to team queue
+  const currentTeamItems = await dynamoGet.getItem(slackTeam);
+  const currentTeamContents = currentTeamItems!.contents;
+  const teamUpdate = await dynamoUpdate.appendItem(slackTeam, currentTeamContents, newItem);
+
+  return teamUpdate;
 }

@@ -1,2 +1,4 @@
 export { DynamoGet } from "./get-item";
-export { DynamoUpdate } from "./update-item";
+export { DynamoAppend } from "./append-item";
+export { DynamoReset } from "./reset-items";
+export { DynamoRemove } from "./remove-item";

@@ -22,6 +22,7 @@ describe("constructOpen", () => {
     Teams: {
       Team1: {
         TeamGroup1: {
+          Slack_Group: "Group_Slack_Name",
           Users: {
             Leads: {
               andrew: "andrew.C",

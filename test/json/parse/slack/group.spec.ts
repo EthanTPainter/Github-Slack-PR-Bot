@@ -33,15 +33,6 @@ describe("getSlackGroup", () => {
     expect(result).to.be.equal(expected);
   });
 
-  it("should not retrieve slack group give github user", () => {
-    const githubUser = "harrison";
-    const result = getSlackGroup(githubUser, validJSON);
-
-    const expected = "";
-
-    expect(result).to.be.equal(expected);
-  });
-
   it("should throw an error -- No teams available", () => {
     const invalidJSON = {
       Teams: {},
@@ -121,4 +112,14 @@ describe("getSlackGroup", () => {
     expect(() => getSlackGroup(githubUser, invalidJSON))
       .to.throw(expected.message);
   });
+
+  it("should not throw an error -- no provided slack group", () => {
+    const githubUser = "harrison";
+
+    const expected = new Error("No Slack Group found in JSON file");
+
+    expect(() => getSlackGroup(githubUser, validJSON))
+      .to.throw(expected.message);
+  });
+
 });

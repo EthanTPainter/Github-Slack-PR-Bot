@@ -44,6 +44,7 @@ describe("constructSlackMessage", () => {
     Teams: {
       Team1: {
         TeamGroup1: {
+          Slack_Group: "Slack_Group_Name",
           Users: {
             Leads: {
               gwely: "andrew.curcie",
