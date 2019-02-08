@@ -3,6 +3,8 @@ import * as querystring from "querystring";
 import { requiredEnvs } from "../required-envs";
 import { Annotations } from "../models";
 import { newLogger } from "../logger";
+import { getSlackGroupAlt } from "../json/parse";
+import { json } from "../json/src/json";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -44,8 +46,18 @@ export function handler(
   }
 
   // Convert x-www-urlencoded string to JSON notation
+  // body using RequestBody notation
   const body = querystring.parse(event.body);
   logger.info(`event.body: ${JSON.stringify(body)}`);
+
+  // Verify user_id property is not malformed
+  if (body.user_id === undefined) {
+    throw new Error("body.user_id not attched to request");
+  }
+  if (typeof body.user_id === "object") {
+    throw new Error("body.user_id sent as an object rather than a string");
+  }
+  const slackUserID = body.user_id;
 
   const success: object = {
     body: "MY SUCCESS",

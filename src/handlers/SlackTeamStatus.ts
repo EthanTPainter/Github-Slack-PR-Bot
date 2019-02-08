@@ -1,8 +1,11 @@
 import * as querystring from "querystring";
 
+import { getSlackGroupAlt } from "../json/parse";
 import { requiredEnvs } from "../required-envs";
 import { Annotations } from "../models";
 import { newLogger } from "../logger";
+import { json } from "../json/src/json";
+import { formatQueue } from "../dynamo/formatting/queue";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -46,8 +49,19 @@ export function handler(
   const body = querystring.parse(event.body);
   logger.info(`event.body: ${JSON.stringify(body)}`);
 
+  // Verify user_id property is not malformed
+  if (body.user_id === undefined) {
+    throw new Error("body.user_id not attched to request");
+  }
+  if (typeof body.user_id === "object") {
+    throw new Error("body.user_id sent as an object rather than a string");
+  }
+  const slackUserID = body.user_id;
+  // const slackGroupName = getSlackGroupAlt(slackUserID, json);
+  // const formattedMessage = formatQueue();
+
   const success: object = {
-    body: "TEAM SUCCESS FOR <subteam here>",
+    body: "TEAM SUCCESS FOR <@UB5EWEB3M>",
     statusCode: "200",
   };
   callback(null, success);

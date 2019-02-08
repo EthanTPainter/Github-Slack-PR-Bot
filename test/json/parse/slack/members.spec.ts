@@ -10,9 +10,18 @@ describe("getSlackMembers", () => {
           Users: {
             Leads: {},
             Members: {
-              ethan: "ethan.painter",
-              dillon: "dillon.sykes",
-              daniel: "daniel.larner",
+              ethan: {
+                Slack_Name: "ethan.painter",
+                Slack_Id: "<@1111>",
+              },
+              dillon: {
+                Slack_Name: "dillon.sykes",
+                Slack_Id: "<@2222>",
+              },
+              daniel: {
+                Slack_Name: "daniel.larner",
+                Slack_Id: "<@3333>",
+              },
             },
           },
         },
@@ -24,7 +33,11 @@ describe("getSlackMembers", () => {
     const githubUser = "ethan";
 
     const result = getSlackMembers(githubUser, validJSON);
-    const expected = ["ethan.painter", "dillon.sykes", "daniel.larner"];
+    const expected = [
+      validJSON.Teams.Developers.PhillyDevTeam.Users.Members.ethan,
+      validJSON.Teams.Developers.PhillyDevTeam.Users.Members.dillon,
+      validJSON.Teams.Developers.PhillyDevTeam.Users.Members.daniel,
+    ];
 
     expect(result).to.be.deep.equal(expected);
   });

@@ -12,13 +12,28 @@ export const json = {
         Slack_Group: "<!subteam^ID|handle>",
         Users: {
           Leads: {
-            GitHub_User_1: "<@ID_0>",
+            GitHub_User_1: {
+              Slack_Name: "user1",
+              Slack_Id: "<@ID_0>",
+            },
           },
           Members: {
-            GitHub_User_2: "<@ID_1>",
-            GitHub_User_3: "<@ID_2>",
-            GitHub_User_4: "<@ID_3>",
-            GitHub_User_5: "<@ID_4>",
+            GitHub_User_2: {
+              Slack_Name: "user2",
+              Slack_Id: "<@ID_1>",
+            },
+            GitHub_User_3: {
+              Slack_Name: "user3",
+              Slack_Id: "<@ID_2>",
+            },
+            GitHub_User_4: {
+              Slack_Name: "user4",
+              Slack_Id: "<@ID_3>",
+            },
+            GitHub_User_5: {
+              Slack_Name: "user5",
+              Slack_Id: "<@ID_4>",
+            },
           },
         },
       },
@@ -26,13 +41,28 @@ export const json = {
         Slack_Group: "<!subteam^ID|handle>",
         Users: {
           Leads: {
-            GitHub_User_1: "<@ID_0>",
+            GitHub_User_1: {
+              Slack_Name: "user6",
+              Slack_Id: "<@ID_0>",
+            },
           },
           Members: {
-            GitHub_User_2: "<@ID_1>",
-            GitHub_User_3: "<@ID_2>",
-            GitHub_User_4: "<@ID_3>",
-            GitHub_User_5: "<@ID_4>",
+            GitHub_User_2: {
+              Slack_Name: "user7",
+              Slack_Id: "<@ID_1>",
+            },
+            GitHub_User_3: {
+              Slack_Name: "user8",
+              Slack_Id: "<@ID_2>",
+            },
+            GitHub_User_4: {
+              Slack_Name: "user9",
+              Slack_Id: "<@ID_3>",
+            },
+            GitHub_User_5: {
+              Slack_Name: "user10",
+              Slack_Id: "<@ID_4>",
+            },
           },
         },
       },

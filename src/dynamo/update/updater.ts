@@ -1,6 +1,6 @@
 import { newLogger } from "../../logger";
 import { updateOpen } from "./types/update-open";
-import { getSlackUser } from "src/json/parse";
+import { getSlackUser, getSlackGroup } from "src/json/parse";
 
 const logger = newLogger("UpdateDynamo");
 
@@ -18,6 +18,7 @@ export async function updateDynamo(
 ): Promise<void> {
 
   const slackUser = getSlackUser(githubUser, json);
+  const slackGroup = getSlackGroup(githubUser, json);
 
   switch (action) {
 
@@ -25,7 +26,7 @@ export async function updateDynamo(
       logger.info("Update DynamoDB for an Opened PR");
 
       try {
-        await updateOpen(slackUser, event, json);
+        await updateOpen(slackUser, slackGroup, event, json);
       }
       catch (error) {
         throw new Error(error.message);

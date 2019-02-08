@@ -27,8 +27,8 @@ export function constructClose(
     const userClosing: string = getSender(event);
 
     // Use owner variable to grab Slack name for owner and user closing
-    const slackUser: string = getSlackUser(owner, json);
-    const slackUserClosing: string = getSlackUser(userClosing, json);
+    const slackUser = getSlackUser(owner, json);
+    const slackUserClosing = getSlackUser(userClosing, json);
 
     // Base properties
     const description = constructCloseDesc(slackUser, slackUserClosing);

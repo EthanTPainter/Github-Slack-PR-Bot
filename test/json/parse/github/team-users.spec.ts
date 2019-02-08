@@ -9,26 +9,46 @@ describe("getGitHubTeamUsers", () => {
         Dev_Team_1: {
           Users: {
             Leads: {
-              andrew: "AndrewCurcie",
+              andrew: {
+                Slack_Name: "AndrewCurcie",
+              },
             },
             Members: {
-              ethan: "EthanPainter",
-              dillon: "DillonSykes",
-              daniel: "DanielLarner",
-              joshua: "JoshuaHarris",
+              ethan: {
+                Slack_Name: "EthanPainter",
+              },
+              dillon: {
+                Slack_Name: "DillonSykes",
+              },
+              daniel: {
+                Slack_Name: "DanielLarner",
+              },
+              joshua: {
+                Slack_Name: "JoshuaHarris",
+              },
             },
           },
         },
         Dev_Team_2: {
           Users: {
             Leads: {
-              mattyIce: "MattDinkel",
+              mattyIce: {
+                Slack_Name: "MattDinkel",
+              },
             },
             Members: {
-              sanket: "SankeyMisal",
-              harrison: "HarrisonCrews",
-              nick: "NicholasTurnquist",
-              shaun: "ShaunBond",
+              sanket: {
+                Slack_Name: "SankeyMisal",
+              },
+              harrison: {
+                Slack_Name: "HarrisonCrews",
+              },
+              nick: {
+                Slack_Name: "NicholasTurnquist",
+              },
+              shaun: {
+                Slack_Name: "ShaunBond",
+              },
             },
           },
         },

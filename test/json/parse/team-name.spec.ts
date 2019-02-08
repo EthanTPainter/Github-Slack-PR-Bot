@@ -9,23 +9,44 @@ describe("getTeamName", () => {
         PhillyDevTeam: {
           Users: {
             Leads: {
-              andrew: "andrew.curcie",
+              andrew: {
+                Slack_Name: "andrew.curcie",
+                Slack_Id: "<1111>",
+              },
             },
             Members: {
-              ethan: "ethan.painter",
-              dillon: "dillon.sykes",
-              daniel: "daniel.larner",
+              ethan: {
+                Slack_Name: "ethan.painter",
+                Slack_Id: "<2222>",
+              },
+              dillon: {
+                Slack_Name: "dillon.sykes",
+                Slack_Id: "<3333>",
+              },
+              daniel: {
+                Slack_Name: "daniel.larner",
+                Slack_Id: "<4444>",
+              },
             },
           },
         },
         FloridaTeam: {
           Users: {
             Leads: {
-              mustang: "Clark",
+              mustang: {
+                Slack_Name: "Clark",
+                Slack_Id: "<5555>",
+              },
             },
             Members: {
-              cam: "Newton",
-              davy: "Jones",
+              cam: {
+                Slack_Name: "Newton",
+                Slack_Id: "<6666>",
+              },
+              davy: {
+                Slack_Name: "Jones",
+                Slack_Id: "<7777>",
+              },
             },
           },
         },

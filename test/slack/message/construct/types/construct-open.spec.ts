@@ -19,17 +19,30 @@ describe("constructOpen", () => {
     },
   };
   const validJSON = {
+    Options: {
+      Num_Required_Peer_Approvals: 1,
+      Num_Required_Lead_Approvals: 1,
+    },
     Teams: {
       Team1: {
         TeamGroup1: {
           Slack_Group: "Group_Slack_Name",
           Users: {
             Leads: {
-              andrew: "andrew.C",
+              andrew: {
+                Slack_Name: "andrew.C",
+                Slack_Id: "<@12345>",
+              },
             },
             Members: {
-              EthanTPainter: "ethan.P",
-              dillon: "dillon.S",
+              EthanTPainter: {
+                Slack_Name: "ethan.P",
+                Slack_Id: "<@123456>",
+              },
+              dillon: {
+                Slack_Name: "dillon.S",
+                Slack_Id: "<@1234567>",
+              },
             },
           },
         },
@@ -42,7 +55,7 @@ describe("constructOpen", () => {
 
     const result: OpenedPR = constructOpen(validEvent, validJSON, newPR);
 
-    expect((result.description).includes(slackOwner)).to.be.equal(true);
+    expect((result.description).includes(slackOwner.Slack_Name)).to.be.equal(true);
     expect((result.description).includes("opened this PR")).to.be.equal(true);
     expect(result.title).to.be.equal(validEvent.pull_request.title);
     expect(result.url).to.be.equal(validEvent.pull_request.html_url);

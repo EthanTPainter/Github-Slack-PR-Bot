@@ -3,62 +3,121 @@ import { expect } from "chai";
 
 describe("constructOpenDesc", () => {
 
-  it("should construct a valid description with slackGroup", () => {
-    const slackUser = "EthanPainter";
-    const slackGroup = "minks";
+  const validJSON = {
+    Options: {
+      Num_Required_Lead_Approvals: 1,
+      Num_Required_Peer_Approvals: 1,
+    },
+  };
+
+  it("should construct a valid description with a new PR", () => {
+    const slackUser = {
+      Slack_Name: "EthanPainter",
+      Slack_Id: "<@1111>",
+    };
+    const slackGroup = "<@12345>";
     const newPR = true;
 
-    const result = constructOpenDesc(slackUser, slackGroup, newPR);
-    const expected = `${slackUser} opened this PR. Needs *peer* ` +
-      `and *lead* reviews @${slackGroup}`;
+    const result = constructOpenDesc(slackUser, slackGroup, newPR, validJSON);
+    const expected = `${slackUser.Slack_Name} opened this PR. Needs `
+      + `*${validJSON.Options.Num_Required_Peer_Approvals} peer* `
+      + `and *${validJSON.Options.Num_Required_Lead_Approvals} lead* `
+      + `reviews ${slackGroup}`;
 
     expect(result).to.be.equal(expected);
   });
 
-  it("should construct a valid description without slackGroup", () => {
-    const slackUser = "EthanPainter";
-    const slackGroup = "";
-    const newPR = true;
-
-    const result = constructOpenDesc(slackUser, slackGroup, newPR);
-    const expected = `${slackUser} opened this PR. Needs *peer* ` +
-      `and *lead* reviews`;
-
-    expect(result).to.be.equal(expected);
-  });
-
-  it("should contruct a valid dsecription with slackGroup and reopened PR", () => {
-    const slackUser = "EthanPainter";
+  it("should contruct a valid description with a reopened PR", () => {
+    const slackUser = {
+      Slack_Name: "EthanPainter",
+      Slack_Id: "<@1111>",
+    };
     const slackGroup = "minks";
     const newPR = false;
 
-    const result = constructOpenDesc(slackUser, slackGroup, newPR);
-    const expected = `${slackUser} reopened this PR. Needs *peer* ` +
-      `and *lead* reviews @${slackGroup}`;
+    const result = constructOpenDesc(slackUser, slackGroup, newPR, validJSON);
+    const expected = `${slackUser.Slack_Name} reopened this PR. Needs `
+      + `*${validJSON.Options.Num_Required_Peer_Approvals} peer* `
+      + `and *${validJSON.Options.Num_Required_Lead_Approvals} lead* `
+      + `reviews ${slackGroup}`;
 
     expect(result).to.be.equal(expected);
   });
 
-  it("should construct a valid description without slackGroup and reopened PR", () => {
-    const slackUser = "EthanPainter";
-    const slackGroup = "";
-    const newPR = false;
+  it("should throw an error -- JSON undefined", () => {
+    const slackUser = {
+      Slack_Name: "EthanPainter",
+      Slack_Id: "<@1111>",
+    };
+    const slackGroup = "minks";
+    const newPR = true;
+    const invalidJSON = undefined;
 
-    const result = constructOpenDesc(slackUser, slackGroup, newPR);
-    const expected = `${slackUser} reopened this PR. Needs *peer* ` +
-      `and *lead* reviews`;
+    const expected = new Error("JSON file is undefined");
 
-    expect(result).to.be.equal(expected);
+    expect(() => constructOpenDesc(slackUser, slackGroup, newPR, invalidJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- Options undefined", () => {
+    const slackUser = {
+      Slack_Name: "EthanPainter",
+      Slack_Id: "<@1111>",
+    };
+    const slackGroup = "minks";
+    const newPR = true;
+    const invalidJSON = {};
+
+    const expected = new Error("json.Options is undefined");
+
+    expect(() => constructOpenDesc(slackUser, slackGroup, newPR, invalidJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- Num_Required_Lead_Approvals undefined", () => {
+    const slackUser = {
+      Slack_Name: "EthanPainter",
+      Slack_Id: "<@1111>",
+    };
+    const slackGroup = "minks";
+    const newPR = true;
+    const invalidJSON = {
+      Options: {},
+    };
+
+    const expected = new Error("json.Options.Num_Required_Lead_Approvals is undefined");
+
+    expect(() => constructOpenDesc(slackUser, slackGroup, newPR, invalidJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- Num_Required_Peer_Approvals undefined", () => {
+    const slackUser = {
+      Slack_Name: "EthanPainter",
+      Slack_Id: "<@UUID1234>",
+    };
+    const slackGroup = "minks";
+    const newPR = true;
+    const invalidJSON = {
+      Options: {
+        Num_Required_Lead_Approvals: 1,
+      },
+    };
+
+    const expected = new Error("json.Options.Num_Required_Peer_Approvals is undefined");
+
+    expect(() => constructOpenDesc(slackUser, slackGroup, newPR, invalidJSON))
+      .to.throw(expected.message);
   });
 
   it("should throw an error -- No Slack user provided", () => {
-    const slackUser = "";
-    const slackGroup = "";
+    const slackUser: any = {};
+    const slackGroup = "<@UUID1234>";
     const newPR = true;
 
-    const expected = new Error("No slackUser provided");
+    const expected = new Error("Slack_Name property not defined");
 
-    expect(() => constructOpenDesc(slackUser, slackGroup, newPR))
+    expect(() => constructOpenDesc(slackUser, slackGroup, newPR, validJSON))
       .to.throw(expected.message);
   });
 });

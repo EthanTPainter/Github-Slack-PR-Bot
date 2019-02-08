@@ -47,12 +47,24 @@ describe("constructSlackMessage", () => {
           Slack_Group: "Slack_Group_Name",
           Users: {
             Leads: {
-              gwely: "andrew.curcie",
+              gwely: {
+                Slack_Name: "andrew.curcie",
+                Slack_Id: "<@1111>",
+              },
             },
             Members: {
-              EthanTPainter: "ethan.painter",
-              DillonSykes: "dillon.sykes",
-              DanielLarner: "daniel.larner",
+              EthanTPainter: {
+                Slack_Name: "ethan.painter",
+                Slack_Id: "<@2222>",
+              },
+              DillonSykes: {
+                Slack_Name: "dillon.sykes",
+                Slack_Id: "<@3333>",
+              },
+              DanielLarner: {
+                Slack_Name: "daniel.larner",
+                Slack_Id: "<@4444>",
+              },
             },
           },
         },

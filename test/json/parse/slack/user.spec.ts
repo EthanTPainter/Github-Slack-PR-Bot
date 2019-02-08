@@ -9,12 +9,24 @@ describe("getSlackUser", () => {
         PhillyDevTeam: {
           Users: {
             Leads: {
-              andrew: "andrew.curcie",
+              andrew: {
+                Slack_Name: "andrew.curcie",
+                Slack_Id: "<@UUID1111>",
+              },
             },
             Members: {
-              ethan: "ethan.painter",
-              dillon: "dillon.sykes",
-              daniel: "daniel.larner",
+              ethan: {
+                Slack_Name: "ethan.painter",
+                Slack_Id: "<@UUID1112>",
+              },
+              dillon: {
+                Slack_Name: "dillon.sykes",
+                Slack_Id: "<@UUID1113>",
+              },
+              daniel: {
+                Slack_Name: "daniel.larner",
+                Slack_Id: "<@UUID1114>",
+              },
             },
           },
         },
@@ -22,16 +34,26 @@ describe("getSlackUser", () => {
     },
   };
 
-  it("should retrieve the slack user name given a github user", () => {
+  it("should retrieve the slack username given a member github user", () => {
     const githubUser = "ethan";
 
     const result = getSlackUser(githubUser, validJSON);
-    const expected = "ethan.painter";
+    const expected = validJSON.Teams.Developers.PhillyDevTeam.Users.Members.ethan;
 
-    expect(result).to.be.equal(expected);
+    expect(result).to.be.deep.equal(expected);
   });
 
-  it("should not retrieve the slack user name given a github user", () => {
+  it("should retrieve the slack username given a lead github user", () => {
+    const githubUser = "andrew";
+
+    const result = getSlackUser(githubUser, validJSON);
+    const expected = validJSON.Teams.Developers.PhillyDevTeam.Users.Leads.andrew;
+
+    console.log(expected);
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should throw an error -- github user not found", () => {
     const githubUser = "dinkel";
 
     const expected = new Error(`GitHub user: ${githubUser} could not be found in JSON file`);
@@ -105,7 +127,10 @@ describe("getSlackUser", () => {
           SubGroup: {
             Users: {
               Leads: {
-                andrew: "andrewSLACK",
+                andrew: {
+                  Slack_Name: "andrewSLACK",
+                  Slack_Id: "<@UUID1111>",
+                },
               },
             },
           },
@@ -116,6 +141,7 @@ describe("getSlackUser", () => {
     const subTeam = "SubGroup";
 
     const expected = new Error(`Members not defined for team: ${subTeam}`);
+
     expect(() => getSlackUser(githubUser, invalidJSON))
       .to.throw(expected.message);
   });

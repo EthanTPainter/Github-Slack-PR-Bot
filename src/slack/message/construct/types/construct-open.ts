@@ -15,16 +15,16 @@ export function constructOpen(
   try {
     // OpenedPr Properties
     // GitHub user name
-    const owner: string = getOwner(event);
+    const owner = getOwner(event);
 
     // Use owner variable to grab Slack name and group
-    const slackUser: string = getSlackUser(owner, json);
-    const groupName: string = getSlackGroup(owner, json);
+    const slackUser = getSlackUser(owner, json);
+    const groupName = getSlackGroup(owner, json);
 
     // Base Properties
-    const description = constructOpenDesc(slackUser, groupName, newPR);
-    const title: string = getTitle(event);
-    const pr_url: string = getPRLink(event);
+    const description = constructOpenDesc(slackUser, groupName, newPR, json);
+    const title = getTitle(event);
+    const pr_url = getPRLink(event);
 
     // Construct OpenPR object to return
     const openObj: OpenedPR = {

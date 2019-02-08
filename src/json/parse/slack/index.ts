@@ -1,5 +1,6 @@
 export {
   getSlackGroup,
+  getSlackGroupAlt,
 } from "./group";
 
 export {

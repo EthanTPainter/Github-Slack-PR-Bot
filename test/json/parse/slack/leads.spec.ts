@@ -10,9 +10,18 @@ describe("getSlackLeads", () => {
           Users: {
             Members: {},
             Leads: {
-              Leader1: "SlackLeadUser1",
-              Leader2: "SlackLeadUser2",
-              Leader3: "SlackLeadUser3",
+              Leader1: {
+                Slack_Name: "SlackLeadUser1",
+                Slack_Id: "<@UUID1111>",
+              },
+              Leader2: {
+                Slack_Name: "SlackLeadUser2",
+                Slack_Id: "<@UUID1112>",
+              },
+              Leader3: {
+                Slack_Name: "SlackLeadUser3",
+                Slack_Id: "<@UUID1113>",
+              },
             },
           },
         },
@@ -24,7 +33,11 @@ describe("getSlackLeads", () => {
     const githubUser = "Leader2";
 
     const result = getSlackLeads(githubUser, validJSON);
-    const expected = ["SlackLeadUser1", "SlackLeadUser2", "SlackLeadUser3"];
+    const expected = [
+      validJSON.Teams.Team1.TeamGroup1.Users.Leads.Leader1,
+      validJSON.Teams.Team1.TeamGroup1.Users.Leads.Leader2,
+      validJSON.Teams.Team1.TeamGroup1.Users.Leads.Leader3,
+    ];
 
     expect(result).to.be.deep.equal(expected);
   });
@@ -36,10 +49,16 @@ describe("getSlackLeads", () => {
           TeamGroup1: {
             Users: {
               Leads: {
-                Ethan: "EthanPainter",
+                Ethan: {
+                  Slack_Name: "EthanPainter",
+                  Slack_Id: "<@UUID1111>",
+                },
               },
               Members: {
-                Andrew: "AndrewCurcie",
+                Andrew: {
+                  Slack_Name: "AndrewCurcie",
+                  Slack_Id: "<@UUID1112>",
+                },
               },
             },
           },
@@ -49,7 +68,9 @@ describe("getSlackLeads", () => {
     const githubUser = "Andrew";
 
     const result = getSlackLeads(githubUser, validJSON_1);
-    const expected = ["EthanPainter"];
+    const expected = [
+      validJSON_1.Teams.Team1.TeamGroup1.Users.Leads.Ethan,
+    ];
 
     expect(result).to.be.deep.equal(expected);
   });
@@ -62,7 +83,10 @@ describe("getSlackLeads", () => {
             Users: {
               Leads: {},
               Members: {
-                Andrew: "AndrewCurcie",
+                Andrew: {
+                  Slack_Name: "AndrewCurcie",
+                  Slack_Id: "<@UUID1112>",
+                },
               },
             },
           },
