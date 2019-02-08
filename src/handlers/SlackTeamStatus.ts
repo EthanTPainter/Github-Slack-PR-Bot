@@ -11,15 +11,13 @@ const logger = newLogger("SlackTeamStatus");
 
 /**
  * This handler:
- * 1) Receives messages from Slack users sent to the Slack Bot,
- *    and responds with expected information from Dynamo
- *
- * Slack Events API for Slack messaging with Bots
- * https://api.slack.com/events-api
+ * 1) Receives POST request from Slack after the
+ *    '/team-queue' command has been used
  *
  * @param event Event passed through
  * @param context Context of the request
  * @param callback Callback function for using if successfull or failed
+ * @returns Current team queue
  */
 
 export function handler(

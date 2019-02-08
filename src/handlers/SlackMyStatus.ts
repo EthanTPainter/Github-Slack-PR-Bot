@@ -9,6 +9,17 @@ AWSXRay.captureHTTPsGlobal(require("http"));
 
 const logger = newLogger("SlackMyStatus");
 
+/**
+ * This handler:
+ * 1) Receives POST request from Slack after the
+ *    '/my-queue' command has been used
+ *
+ * @param event Event passed through
+ * @param context Context of the request
+ * @param callback Callback function for using if
+ *                 successfull or failed
+ * @returns Current queue for requested user
+ */
 export function handler(
   event: any,
   context: any,

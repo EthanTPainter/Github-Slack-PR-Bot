@@ -1,23 +1,22 @@
-import { newLogger } from "../../../logger";
-
-const logger = newLogger("Member");
 /**
  * @author Ethan T Painter
- * @description Using the GitHub username, find the
- *       group and retrieve the members for that group
- * @param githubUser GitHub username in JSON file
- * @returns array of slack members
+ * @description Retrieve a list of slack users in a team
+ * @param {string} githubUser GitHub username registered to a team
+ * @param json JSON file for the GitHub/Slack configuration
+ * @returns Array of github usernames (strings)
  */
-export function getSlackMembers(
+export function getSlackUsers(
   githubUser: string,
   json: any,
 ): string[] {
+
+  let slackUsers: string[];
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const teams = json.Teams;
   const allTeamKeys = Object.keys(teams);
   // If no teams present, return error
   if (allTeamKeys.length === 0) {
-    throw new Error("No Team found in JSON file");
+    throw new Error("No Team (DevTeam, ThisCoolTeam, etc.) found in JSON file");
   }
 
   // Otherwise loop through teams (DevTeam, QaTeam, ProdTeam)
@@ -27,11 +26,10 @@ export function getSlackMembers(
     const selectedTeam = allTeamKeys[teamCounter];
     const selectedTeamGroup = teams[selectedTeam];
     const teamGroupKeys = Object.keys(selectedTeamGroup);
-    let selectedTeamTypeCounter = 0;
     if (teamGroupKeys.length === 0) {
-      // (Dev_Team_1, SomethingCool1, etc.)
-      throw new Error("No Team Group found in JSON file");
+      throw new Error("No Team Group (Dev_Team_1, SomethingCool1, etc.) found in JSON file");
     }
+    let selectedTeamTypeCounter = 0;
     // Loop through team groups (DevTeam1, DevTeam2, etc.)
     while (selectedTeamTypeCounter < teamGroupKeys.length) {
       // Retrieve users from JSON
@@ -44,63 +42,66 @@ export function getSlackMembers(
       if (users.Leads === undefined) {
         throw new Error(`Leads not defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
       }
+      const leadUsers = users.Leads;
+
       if (users.Members === undefined) {
         throw new Error(`Members not defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
       }
-
-      const leadUsers = users.Leads;
       const memberUsers = users.Members;
+      // Check if githubUser is a Lead for the group
+      // There may exist multiple users in Lead json
       const leadKeys = Object.keys(leadUsers);
-      const memberKeys = Object.keys(memberUsers);
-
       let leadCounter = 0;
+      // Loop through lead keys for matching GitHub User
       while (leadCounter < leadKeys.length) {
+        // Check if key matches GitHub user
         if (leadKeys[leadCounter] === githubUser) {
-          logger.debug(`Found GitHub user ${githubUser}. Members: ${Object.values(memberUsers)}`);
-          return Object.values(memberUsers);
+          slackUsers = Object.values(leadUsers);
+          slackUsers = slackUsers.concat(Object.values(memberUsers));
+          return slackUsers;
         }
         leadCounter++;
       }
 
+      // User not found in Lead group. Check member group
+      const memberKeys = Object.keys(memberUsers);
       let memberCounter = 0;
       // Loop through member keys for matching GitHub User
       while (memberCounter < memberKeys.length) {
         // Check if key matches GitHub user
         if (memberKeys[memberCounter] === githubUser) {
-          logger.debug(`Found GitHub user ${githubUser}. Members: ${Object.values(memberUsers)}`);
-          return Object.values(memberUsers);
+          slackUsers = Object.values(leadUsers);
+          slackUsers = slackUsers.concat(Object.values(memberUsers));
+          return slackUsers;
         }
         memberCounter++;
       }
-
-      // If GitHub user not found in lead or member groups
-      // The user must be in a different group
       selectedTeamTypeCounter++;
     }
-    // User not found in General Team (DevTeam), look at antoher team
     teamCounter++;
   }
-  return [];
+  throw new Error(`GitHub user: ${githubUser} could not be found in JSON file`);
 }
 
 /**
  * @author Ethan T Painter
- * @description Alternative Get Slack Member function.
- *              Instead of GitHub user, uses slack user
- * @param slackUser Slakc user
- * @param json JSON config file
- * @returns Array of slack members
+ * @description Retrieve a list of slack users in a team
+ * @param {string} slackUser Slack username registered to a team
+ * @param json JSON file for the GitHub/Slack configuration
+ * @returns Array of slack usernames (strings)
  */
-export function getSlackMembersAlt(
+export function getSlackUsersAlt(
   slackUser: string,
   json: any,
 ): string[] {
+
+  let slackUsers: string[];
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const teams = json.Teams;
   const allTeamKeys = Object.keys(teams);
   // If no teams present, return error
   if (allTeamKeys.length === 0) {
-    throw new Error("No Team found in JSON file");
+    throw new Error("No Team (DevTeam, ThisCoolTeam, etc.) found in JSON file");
   }
 
   // Otherwise loop through teams (DevTeam, QaTeam, ProdTeam)
@@ -110,14 +111,12 @@ export function getSlackMembersAlt(
     const selectedTeam = allTeamKeys[teamCounter];
     const selectedTeamGroup = teams[selectedTeam];
     const teamGroupKeys = Object.keys(selectedTeamGroup);
-    let selectedTeamTypeCounter = 0;
     if (teamGroupKeys.length === 0) {
-      // (Dev_Team_1, SomethingCool1, etc.)
-      throw new Error("No Team Group found in JSON file");
+      throw new Error("No Team Group (Dev_Team_1, SomethingCool1, etc.) found in JSON file");
     }
+    let selectedTeamTypeCounter = 0;
     // Loop through team groups (DevTeam1, DevTeam2, etc.)
     while (selectedTeamTypeCounter < teamGroupKeys.length) {
-      // Retrieve users from JSON
       const selectedGroupSubTeam = selectedTeamGroup[teamGroupKeys[selectedTeamTypeCounter]];
       if (selectedGroupSubTeam.Users === undefined) {
         throw new Error(`No Users defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
@@ -127,31 +126,30 @@ export function getSlackMembersAlt(
       if (users.Leads === undefined) {
         throw new Error(`Leads not defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
       }
+      const leadUsers = users.Leads;
+
       if (users.Members === undefined) {
         throw new Error(`Members not defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
       }
-
-      const leadUsers = users.Leads;
       const memberUsers = users.Members;
       const leadValues = Object.values(leadUsers);
-      const memberValues = Object.values(memberUsers);
-
       let leadCounter = 0;
       while (leadCounter < leadValues.length) {
         if (leadValues[leadCounter] === slackUser) {
-          logger.debug(`Found Slack user ${slackUser}. Members: ${Object.values(memberUsers)}`);
-          return Object.values(memberUsers);
+          slackUsers = Object.values(leadUsers);
+          slackUsers = slackUsers.concat(Object.values(memberUsers));
+          return slackUsers;
         }
         leadCounter++;
       }
 
+      const memberValues = Object.values(memberUsers);
       let memberCounter = 0;
-      // Loop through member keys for matching GitHub User
       while (memberCounter < memberValues.length) {
-        // Check if key matches GitHub user
         if (memberValues[memberCounter] === slackUser) {
-          logger.debug(`Found Slack user ${slackUser}. Members: ${Object.values(memberUsers)}`);
-          return Object.values(memberUsers);
+          slackUsers = Object.values(leadUsers);
+          slackUsers = slackUsers.concat(Object.values(memberUsers));
+          return slackUsers;
         }
         memberCounter++;
       }
@@ -159,5 +157,5 @@ export function getSlackMembersAlt(
     }
     teamCounter++;
   }
-  return [];
+  throw new Error(`Slack user: ${slackUser} could not be found in JSON file`);
 }

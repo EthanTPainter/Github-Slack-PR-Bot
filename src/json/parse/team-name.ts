@@ -5,12 +5,12 @@
  * @param event Event received from the GitHub webhook
  * @returns String of the slack user corresponding to the Github user provided
  */
-export function getTeamName(githubUser: string,
-                            json: any,
-                            ): string {
-  const jsonFile = json;
+export function getTeamName(
+  githubUser: string,
+  json: any,
+): string {
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
-  const teams = jsonFile.Teams;
+  const teams = json.Teams;
   const allTeamKeys = Object.keys(teams);
   // If no teams present, return error
   if (allTeamKeys.length === 0) {

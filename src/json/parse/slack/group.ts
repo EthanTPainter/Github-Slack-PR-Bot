@@ -11,12 +11,12 @@ const logger = newLogger("Group");
  * @note Group may not exist (optional), so return empty string
  *       if it doesn't exist
  */
-export function getSlackGroup(githubUser: string,
-                              json: any,
-                            ): string {
-  const jsonFile = json;
+export function getSlackGroup(
+  githubUser: string,
+  json: any,
+): string {
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
-  const teams = jsonFile.Teams;
+  const teams = json.Teams;
   const allTeamKeys = Object.keys(teams);
   // If no teams present, return error
   if (allTeamKeys.length === 0) {
