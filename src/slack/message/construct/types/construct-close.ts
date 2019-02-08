@@ -21,12 +21,11 @@ export function constructClose(
 ): ClosePR {
 
   try {
-    // ClosePR properties
     // GitHub user name who opened PR and GtHub user who closed the PR
     const owner: string = getOwner(event);
     const userClosing: string = getSender(event);
 
-    // Use owner variable to grab Slack name for owner and user closing
+    // Grab Slack name for owner and user closing
     const slackUser = getSlackUser(owner, json);
     const slackUserClosing = getSlackUser(userClosing, json);
 

@@ -24,11 +24,20 @@ describe("constructClose", () => {
         TeamGroup1: {
           Users: {
             Leads: {
-              andrew: "andrew.C",
+              andrew: {
+                Slack_Name: "andrew.C",
+                Slack_Id: "<@1111>",
+              },
             },
             Members: {
-              EthanTPainter: "ethan.P",
-              dillon: "dillon.S",
+              EthanTPainter: {
+                Slack_Name: "ethan.P",
+                Slack_Id: "<@2222>",
+              },
+              dillon: {
+                Slack_Name: "dillon.S",
+                Slack_Id: "<@3333>",
+              },
             },
           },
         },
@@ -41,8 +50,8 @@ describe("constructClose", () => {
 
     const result: ClosePR = constructClose(validEvent, validJSON);
 
-    expect((result.description).includes(slackOwner)).to.be.equal(true);
-    expect((result.description).includes(slackCloser)).to.be.equal(true);
+    expect((result.description).includes(slackOwner.Slack_Id)).to.be.equal(true);
+    expect((result.description).includes(slackCloser.Slack_Name)).to.be.equal(true);
     expect((result.description).includes("closed this PR")).to.be.equal(true);
     expect(result.title).to.be.equal(validEvent.pull_request.title);
     expect(result.url).to.be.equal(validEvent.pull_request.html_url);
@@ -72,7 +81,7 @@ describe("constructClose", () => {
     const result: ClosePR = constructClose(newEvent, validJSON);
 
     expect(slackOwner).to.be.equal(slackCloser);
-    expect((result.description).includes(slackOwner)).to.be.equal(true);
+    expect((result.description).includes(slackOwner.Slack_Name)).to.be.equal(true);
     expect((result.description).includes("closed this PR")).to.be.equal(true);
     expect(result.title).to.be.equal(newEvent.pull_request.title);
     expect(result.url).to.be.equal(newEvent.pull_request.html_url);

@@ -1,16 +1,23 @@
 import { constructMergeDesc } from "../../../../../src/slack/message/formatting";
 import { expect } from "chai";
+import { SlackUser } from "../../../../../src/models";
 
 describe("constructMergeDesc", () => {
 
-  let slackUser = "EthanPainter";
-  let slackUserMerging = "acurcie";
-  let branchWithPR = "FEATURE-ABC";
-  let branchMergedTo = "master";
+  let slackUser: SlackUser;
+  let slackUserMerging: SlackUser;
+  let branchWithPR: string;
+  let branchMergedTo: string;
 
   beforeEach(() => {
-    slackUser = "EthanPainter";
-    slackUserMerging = "acurcie";
+    slackUser = {
+      Slack_Name: "EthanPainter",
+      Slack_Id: "<@1111>",
+    },
+    slackUserMerging = {
+      Slack_Name: "acurcie",
+      Slack_Id: "<@2222>",
+    };
     branchWithPR = "FEATURE-ABC";
     branchMergedTo = "master";
   });
@@ -20,27 +27,27 @@ describe("constructMergeDesc", () => {
     const result = constructMergeDesc(slackUser, slackUserMerging,
       branchWithPR, branchMergedTo);
 
-    const expected = `${slackUserMerging} merged this PR ` +
-      `from ${branchWithPR} to ${branchMergedTo}. Owner: @${slackUser}`;
+    const expected = `${slackUserMerging.Slack_Name} merged this PR ` +
+      `from ${branchWithPR} to ${branchMergedTo}. Owner: ${slackUser.Slack_Id}`;
 
     expect(result).to.be.equal(expected);
   });
 
-  it("should throw an error -- No Slack User provided", () => {
-    slackUser = "";
+  it("should throw an error -- SlackUser undefined", () => {
+    const invalidSlackUser: any = {};
 
-    const expected = new Error("No slackUser provided");
+    const expected = new Error("slackUser properties undefined");
 
-    expect(() => constructMergeDesc(slackUser, slackUserMerging,
+    expect(() => constructMergeDesc(invalidSlackUser, slackUserMerging,
       branchWithPR, branchMergedTo)).to.throw(expected.message);
   });
 
-  it("should throw an error -- No slackUserMerging provided", () => {
-    slackUserMerging = "";
+  it("should throw an error -- slackUserMerging undefined", () => {
+    const invalidSlackUserMerging: any = {};
 
-    const expected = new Error("No slackUserMerging provided");
+    const expected = new Error("slackUserMerging properties undefined");
 
-    expect(() => constructMergeDesc(slackUser, slackUserMerging,
+    expect(() => constructMergeDesc(slackUser, invalidSlackUserMerging,
       branchWithPR, branchMergedTo)).to.throw(expected.message);
   });
 
