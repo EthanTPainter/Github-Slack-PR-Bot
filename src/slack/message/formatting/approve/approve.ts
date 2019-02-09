@@ -1,3 +1,4 @@
+import { SlackUser } from "../../../../models";
 
 /**
  * @author Ethan T Painter
@@ -6,16 +7,21 @@
  * @param slackUserApproving Slack user who is approving the PR
  * @returns string of the description for the Slack Message
  */
-export function constructApproveDesc(slackUser: string,
-                                     slackUserApproving: string,
-                                    ): string {
-  if (slackUser === "") {
-    throw new Error("No slackUser provided");
+export function constructApproveDesc(
+  slackUser: SlackUser,
+  slackUserApproving: SlackUser,
+): string {
+
+  // Error Handling
+  if (slackUser.Slack_Name === undefined
+    || slackUser.Slack_Id === undefined) {
+    throw new Error("slackUser properties undefined");
   }
-  if (slackUserApproving === "") {
-    throw new Error("No slackUserApproving provided");
+  if (slackUserApproving.Slack_Name === undefined
+    || slackUserApproving.Slack_Id === undefined) {
+    throw new Error("slackUserApproving properties undefined");
   }
-  const desc: string = `${slackUserApproving} has approved this PR. Owner: @${slackUser}`;
+  const desc = `${slackUserApproving.Slack_Name} has approved this PR. Owner: ${slackUser.Slack_Id}`;
   return desc;
 }
 
@@ -29,9 +35,11 @@ export function constructApproveDesc(slackUser: string,
  *        since they're already involved in owning/approving the PR
  * @returns String[] of members to @ in Slack
  */
-export function getMemberList(members: string[],
-                              membersExempt: string[],
-                             ): string[] {
+export function getMemberList(
+  members: string[],
+  membersExempt: string[],
+): string[] {
+
   const group: string[] = [];
   let counter: number = 0;
   // Loop through members. If a member is in membersExempt
@@ -70,9 +78,11 @@ export function getMemberList(members: string[],
  * @param leadsExempt Leads exempt from being At'ed (@) in Slack
  *        since they're already invovled in owning/approving the PR
  */
-export function getLeadList(leads: string[],
-                            leadsExempt: string[],
-                          ): string[] {
+export function getLeadList(
+  leads: string[],
+  leadsExempt: string[],
+): string[] {
+
   const group: string[] = [];
   let counter: number = 0;
   // Loop through leads. If a lead is in leadsExempt

@@ -4,30 +4,43 @@ import { expect } from "chai";
 describe("constructApproveDesc", () => {
 
   it("should construct a valid description", () => {
-    const slackUser = "EthanPainter";
-    const slackUserApproving = "dsykes";
+    const slackUser = {
+      Slack_Name: "EthanPainter",
+      Slack_Id: "<@1111>",
+    };
+    const slackUserApproving = {
+      Slack_Name: "dsykes",
+      Slack_Id: "<@1111>",
+    };
 
     const result = constructApproveDesc(slackUser, slackUserApproving);
-    const expected = `${slackUserApproving} has approved this PR. Owner: @${slackUser}`;
+    const expected = `${slackUserApproving.Slack_Name} has approved this PR.`
+      + ` Owner: ${slackUser.Slack_Id}`;
 
     expect(result).to.be.equal(expected);
   });
 
   it("should throw an error -- No Slack User provided", () => {
-    const slackUser = "";
-    const slackUserApproving = "dsykes";
+    const slackUser: any = {};
+    const slackUserApproving = {
+      Slack_Name: "dsykes",
+      Slack_Id: "<@1111>",
+    };
 
-    const expected = new Error("No slackUser provided");
+    const expected = new Error("slackUser properties undefined");
 
     expect(() => constructApproveDesc(slackUser, slackUserApproving))
       .to.throw(expected.message);
   });
 
   it("should throw an error -- No slackUserApproving provided", () => {
-    const slackUser = "EthanPainter";
-    const slackUserApproving = "";
+    const slackUser = {
+      Slack_Name: "EthanPainter",
+      Slack_Id: "<@1111>",
+    };
+    const slackUserApproving: any = {};
 
-    const expected = new Error("No slackUserApproving provided");
+    const expected = new Error("slackUserApproving properties undefined");
 
     expect(() => constructApproveDesc(slackUser, slackUserApproving))
       .to.throw(expected.message);

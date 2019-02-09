@@ -19,18 +19,17 @@ export function constructComment(
 
   try {
     // Comment Properties
-    const owner: string = getOwner(event);
-    const user_commenting: string = getSender(event);
+    const owner = getOwner(event);
+    const user_commenting = getSender(event);
 
-    // Use owner variable to grab Slack name
-    const slackUser: string = getSlackUser(owner, json);
-    // Use user commenting to grab Slack name
-    const slackCommenter: string = getSlackUser(user_commenting, json);
+    // Grab Slack name
+    const slackUser = getSlackUser(owner, json);
+    const slackCommenter = getSlackUser(user_commenting, json);
 
     // Base Properties
-    const description: string = constructCommentDesc(slackUser, slackCommenter);
-    const title: string = getTitle(event);
-    const pr_url: string = getPRLink(event);
+    const description = constructCommentDesc(slackUser, slackCommenter);
+    const title = getTitle(event);
+    const pr_url = getPRLink(event);
 
     // Construct CommentPR object
     const commentObj: CommentPR = {

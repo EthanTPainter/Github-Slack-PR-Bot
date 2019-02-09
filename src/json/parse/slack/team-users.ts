@@ -1,3 +1,5 @@
+import { SlackUser } from "../../../models";
+
 /**
  * @author Ethan T Painter
  * @description Retrieve a list of slack users in a team
@@ -8,9 +10,8 @@
 export function getSlackUsers(
   githubUser: string,
   json: any,
-): string[] {
-
-  let slackUsers: string[];
+): SlackUser[] {
+  let slackUsers: SlackUser[];
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const teams = json.Teams;
   const allTeamKeys = Object.keys(teams);
@@ -93,9 +94,8 @@ export function getSlackUsers(
 export function getSlackUsersAlt(
   slackUser: string,
   json: any,
-): string[] {
-
-  let slackUsers: string[];
+): SlackUser[] {
+  let slackUsers: SlackUser[];
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const teams = json.Teams;
   const allTeamKeys = Object.keys(teams);

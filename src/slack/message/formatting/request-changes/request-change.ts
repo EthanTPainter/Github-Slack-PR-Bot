@@ -1,3 +1,5 @@
+import { SlackUser } from "src/models";
+
 /**
  * @author Ethan T Painter
  * @description Construct description when a user requests changes
@@ -5,15 +7,22 @@
  * @param SlackUserRequesting Slack user who is requesting PR changes
  * @returns String of the description
  */
-export function constructReqChangesDesc(slackUser: string,
-                                        slackUserRequesting: string,
-                                       ): string {
-  if (slackUser === "") {
-    throw new Error("No slackUser provided");
+export function constructReqChangesDesc(
+  slackUser: SlackUser,
+  slackUserRequestingChanges: SlackUser,
+): string {
+
+  // Error handling
+  if (slackUser.Slack_Name === undefined
+    || slackUser.Slack_Id === undefined) {
+      throw new Error("slackUser properties undefined");
   }
-  if (slackUserRequesting === "") {
-    throw new Error("No slackUserRequesting provided");
+  if (slackUserRequestingChanges.Slack_Name === undefined
+    || slackUserRequestingChanges.Slack_Id === undefined) {
+      throw new Error("slackUserRequestingChanges properties undefined");
   }
-  const desc: string = `${slackUserRequesting} requested changes to this PR. Owner: @${slackUser}`;
+
+  const desc = `${slackUserRequestingChanges.Slack_Name} requested changes to this PR.`
+    + ` Owner: ${slackUser.Slack_Id}`;
   return desc;
 }

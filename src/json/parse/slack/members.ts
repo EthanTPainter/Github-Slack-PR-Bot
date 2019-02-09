@@ -1,4 +1,5 @@
 import { newLogger } from "../../../logger";
+import { SlackUser } from "../../../models";
 
 const logger = newLogger("Member");
 /**
@@ -11,7 +12,7 @@ const logger = newLogger("Member");
 export function getSlackMembers(
   githubUser: string,
   json: any,
-): string[] {
+): SlackUser[] {
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const teams = json.Teams;
   const allTeamKeys = Object.keys(teams);
@@ -87,14 +88,14 @@ export function getSlackMembers(
  * @author Ethan T Painter
  * @description Alternative Get Slack Member function.
  *              Instead of GitHub user, uses slack user
- * @param slackUser Slakc user
+ * @param slackUser Slack user
  * @param json JSON config file
  * @returns Array of slack members
  */
 export function getSlackMembersAlt(
   slackUser: string,
   json: any,
-): string[] {
+): SlackUser[] {
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const teams = json.Teams;
   const allTeamKeys = Object.keys(teams);

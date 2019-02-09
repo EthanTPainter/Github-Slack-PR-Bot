@@ -12,7 +12,9 @@ import {
   getUsersApproving,
   getUsersNotApproving,
   getReqChangesReviews,
+  getUsersReqChanges,
 } from "../../../../github/parse";
+import { SlackUser } from "../../../../models";
 
 /**
  * @author Ethan T Painter
@@ -25,7 +27,7 @@ import {
  */
 export function getApprovalChecks(
   json: any,
-  slackOwner: string,
+  slackOwner: SlackUser,
   allReviews: any,
   slackMemberUsers: string[],
   slackLeadUsers: string[],
@@ -33,10 +35,11 @@ export function getApprovalChecks(
 
   // Record only approving reviews of the PR
   const approvingReviews = getApprovingReviews(allReviews);
+  const requestChangesReviews = getReqChangesReviews();
 
   // Get Users approving, requesting changes, and not approving
   const usersApproving = getUsersApproving(approvingReviews, json);
-  const usersRequestingChanges = getReqChangesReviews(allReviews);
+  const usersRequestingChanges = getUsersReqChanges();
   const usersNotApproving = getUsersNotApproving(slackOwner, usersApproving,
     usersRequestingChanges, slackLeadUsers.concat(slackMemberUsers));
 

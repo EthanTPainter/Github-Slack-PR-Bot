@@ -19,17 +19,17 @@ export function constructReqChanges(
 
   try {
     // RequestChangesPR properties
-    const owner: string = getOwner(event);
-    const userRequesting: string = getSender(event);
+    const owner = getOwner(event);
+    const userRequesting = getSender(event);
 
     // Use owner and userRequesting to get Slack names
-    const slackUser: string = getSlackUser(owner, json);
-    const slackUserRequest: string = getSlackUser(userRequesting, json);
+    const slackUser = getSlackUser(owner, json);
+    const slackUserRequest = getSlackUser(userRequesting, json);
 
     // Base Properties
-    const description: string = constructReqChangesDesc(slackUser, slackUserRequest);
-    const title: string = getTitle(event);
-    const pr_url: string = getPRLink(event);
+    const description = constructReqChangesDesc(slackUser, slackUserRequest);
+    const title = getTitle(event);
+    const pr_url = getPRLink(event);
 
     // Construct RequestChangesPR object to return
     const changesObj: RequestChangesPR = {

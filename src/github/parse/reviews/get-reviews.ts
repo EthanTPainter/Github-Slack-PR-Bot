@@ -37,10 +37,11 @@ export function getApprovingReviews(latestReviews: any): string[] {
 /**
  * @author Ethan T Painter
  * @description From latest reviews (key/value pairs of github
- *        users, ), retrieve approvals
+ *        users), retrieve approvals
  * @param latestReviews Object with keys of Github usernames,
  *        values as state
- * @returns array of github users who approved the PR
+ * @returns array of github users who requested changes to
+ *          the PR
  * @example
  * Input:
  * { "EthanTPainter": "APPROVED",
@@ -50,12 +51,14 @@ export function getApprovingReviews(latestReviews: any): string[] {
  * Output:
  * ["DillonSykes"]
  */
-export function getReqChangesReviews(latestReviews: any): string[] {
+export function getReqChangesReviews(
+  latestReviews: any,
+): string[] {
   const approvals: string[] = [];
   // Check for no reviews
   if (Object.keys(latestReviews) === ["None"]
     && Object.values(latestReviews) === ["No Reviews"]) {
-      return [];
+    return [];
   }
 
   (Object.keys(latestReviews)).forEach((review) => {

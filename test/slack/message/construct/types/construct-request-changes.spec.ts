@@ -23,11 +23,20 @@ describe("constructReqChanges", () => {
         TeamGroup1: {
           Users: {
             Leads: {
-              andrew: "andrew.C",
+              andrew: {
+                Slack_Name: "andrew.C",
+                Slack_Id: "<@1111>",
+              },
             },
             Members: {
-              EthanTPainter: "ethan.P",
-              dillon: "dillon.S",
+              EthanTPainter: {
+                Slack_Name: "ethan.P",
+                Slack_Id: "<@2222>",
+              },
+              dillon: {
+                Slack_Name: "dillon.S",
+                Slack_Id: "<@3333>",
+              },
             },
           },
         },
@@ -41,8 +50,8 @@ describe("constructReqChanges", () => {
 
     const result = constructReqChanges(validEvent, validJSON);
 
-    expect((result.description).includes(slackOwner)).to.be.equal(true);
-    expect((result.description).includes(slackUserRequest)).to.be.equal(true);
+    expect((result.description).includes(slackOwner.Slack_Id)).to.be.equal(true);
+    expect((result.description).includes(slackUserRequest.Slack_Name)).to.be.equal(true);
     expect(result.title).to.be.equal(validEvent.pull_request.title);
     expect(result.url).to.be.equal(validEvent.pull_request.html_url);
     expect(result.owner).to.be.equal(validEvent.pull_request.user.login);

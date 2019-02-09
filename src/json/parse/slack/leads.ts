@@ -1,4 +1,5 @@
 import { newLogger } from "../../../logger";
+import { SlackUser } from "../../../models";
 
 const logger = newLogger("Lead");
 
@@ -7,12 +8,13 @@ const logger = newLogger("Lead");
  * @description Using the GitHub username, find the
  *       group and retrieve the leads for that group
  * @param githubUser GitHub username in JSON file
+ * @param json JSON config file
  * @returns array of Slack users
  */
 export function getSlackLeads(
   githubUser: string,
   json: any,
-): string[] {
+): SlackUser[] {
 
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const teams = json.Teams;
@@ -89,7 +91,7 @@ export function getSlackLeads(
 export function getSlackLeadsAlt(
   slackUser: string,
   json: any,
-): string[] {
+): SlackUser[] {
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const teams = json.Teams;
   const allTeamKeys = Object.keys(teams);

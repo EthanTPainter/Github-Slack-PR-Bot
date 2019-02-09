@@ -34,11 +34,20 @@ describe("constructApprove", () => {
         TeamGroup1: {
           Users: {
             Leads: {
-              gwely: "andrew.curcie",
+              gwely: {
+                Slack_Name: "andrew.curcie",
+                Slack_Id: "<@1111>",
+              },
             },
             Members: {
-              EthanTPainter: "ethan.painter",
-              DillonSykes: "dillon.sykes",
+              EthanTPainter: {
+                Slack_Name: "ethan.painter",
+                Slack_Id: "<@2222>",
+              },
+              DillonSykes: {
+                Slack_Name: "dillon.sykes",
+                Slack_Id: "<@3333>",
+              },
             },
           },
         },

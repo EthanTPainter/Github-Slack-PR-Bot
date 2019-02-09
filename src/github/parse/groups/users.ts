@@ -1,4 +1,5 @@
 import { getSlackUser } from "../../../json/parse";
+import { SlackUser } from "../../../models";
 
 /**
  * @author Ethan T Painter
@@ -7,14 +8,14 @@ import { getSlackUser } from "../../../json/parse";
  * @param reviews Array of GitHub users who approved the PR
  * @param json JSON file containing Github/Slack
  *             configuration
- * @returns Array of strings of slack usernames who
+ * @returns Array of slackUser of slack usernames who
  *          approved the PR
  */
-export function getUsersApproving(reviews: string[],
-                                  json: any,
-                                 ): string[]
-{
-  const usersApproving: string[] = [];
+export function getUsersApproving(
+  reviews: string[],
+  json: any,
+): SlackUser[] {
+  const usersApproving: SlackUser[] = [];
   reviews.forEach((review) => {
     const slackName = getSlackUser(review, json);
     usersApproving.push(slackName);
@@ -31,14 +32,14 @@ export function getUsersApproving(reviews: string[],
  * @param json JSON file containing GitHub/Slack
  *             configuration and relationship between
  *             usernames
- * @returns Arrays of strings of slack usernames who
+ * @returns Array of SlackUser of slack usernames who
  *          requested changes to the PR
  */
-export function getUsersReqChanges(reviews: string[],
-                                   json: any,
-                                  ): string[]
-{
-  const usersReqChanges: string[] = [];
+export function getUsersReqChanges(
+  reviews: string[],
+  json: any,
+): SlackUser[] {
+  const usersReqChanges: SlackUser[] = [];
   reviews.forEach((review) => {
     const slackName = getSlackUser(review, json);
     usersReqChanges.push(slackName);
@@ -56,12 +57,12 @@ export function getUsersReqChanges(reviews: string[],
  * @param allSlackUsers Array of all Slack users in a team
  * @returns Array of all users who have not yet approved the PR
  */
-export function getUsersNotApproving(slackOwner: string,
-                                     slackUsersApproving: string[],
-                                     slackUsersRequestingChanges: string[],
-                                     allSlackUsers: string[],
-                                    ): string[]
-{
+export function getUsersNotApproving(
+  slackOwner: SlackUser,
+  slackUsersApproving: string[],
+  slackUsersRequestingChanges: string[],
+  allSlackUsers: string[],
+): string[] {
   const usersNotApproving: string[] = [];
   allSlackUsers.forEach((slackUser: string) => {
     if (slackUser === slackOwner
