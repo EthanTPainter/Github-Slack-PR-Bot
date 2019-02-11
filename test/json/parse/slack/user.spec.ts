@@ -49,7 +49,6 @@ describe("getSlackUser", () => {
     const result = getSlackUser(githubUser, validJSON);
     const expected = validJSON.Teams.Developers.PhillyDevTeam.Users.Leads.andrew;
 
-    console.log(expected);
     expect(result).to.be.deep.equal(expected);
   });
 

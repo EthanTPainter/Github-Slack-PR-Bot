@@ -89,7 +89,6 @@ describe("constructApprove", () => {
       .resolves(expectedReviews);
 
     const result = await constructApprove(ReviewClass, validEvent, validJSON);
-    console.log("Result: ", result);
 
     // Expect SlackUser slack names to be in ApprovePR description
     expect((result.description)

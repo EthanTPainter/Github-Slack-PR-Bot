@@ -7,7 +7,10 @@ describe("getSlackGroup", () => {
     Teams: {
       FirstTeam: {
         FirstSubTeam: {
-          Slack_Group: "MySlackGroup",
+          Slack_Group: {
+            Slack_Name: "MySlackGroup",
+            Slack_Id: "<@12345>",
+          },
           Users: {
             Leads: {
               andrew: "AndrewCurcie",
@@ -28,9 +31,9 @@ describe("getSlackGroup", () => {
     const githubUser = "ethan";
     const result = getSlackGroup(githubUser, validJSON);
 
-    const expected = "MySlackGroup";
+    const expected = validJSON.Teams.FirstTeam.FirstSubTeam.Slack_Group;
 
-    expect(result).to.be.equal(expected);
+    expect(result).to.be.deep.equal(expected);
   });
 
   it("should throw an error -- No teams available", () => {
