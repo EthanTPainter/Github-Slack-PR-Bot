@@ -12,7 +12,7 @@ import { SlackUser } from "../../../../models";
  */
 export function constructOpenDesc(
   slackUser: SlackUser,
-  slackGroup: string,
+  slackGroup: SlackUser,
   newPR: boolean,
   json: any,
 ): string {
@@ -51,7 +51,7 @@ export function constructOpenDesc(
   }
 
   // Add SlackGroup
-  desc = desc + ` ${slackGroup}`;
+  desc = desc + ` ${slackGroup.Slack_Id}`;
 
   return desc;
 }

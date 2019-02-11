@@ -4,6 +4,7 @@ import {
   getUsersReqChanges,
   getUsersNotApproving,
 } from "../../../../src/github/parse/groups/users";
+import { SlackUser } from "src/models";
 
 describe("getUsersApproving", () => {
 
@@ -162,71 +163,92 @@ describe("getUsersReqChanges", () => {
 
 describe("getUsersNotApproving", () => {
   it("should retrieve all users not approving or requesting changes to the PR", () => {
-    const slackOwner = "ethan";
-    const slackUsersApproving = ["daniel"];
-    const slackUsersRequestingChanges: string[] = ["dillon"];
-    const allSlackUsers = ["andrew", "ethan", "daniel", "dillon"];
+    const slackOwner = { Slack_Name: "ethan", Slack_Id: "<@1111>"  };
+    const slackUsersApproving = [{ Slack_Name: "daniel", Slack_Id: "<@1112>" }];
+    const slackUsersRequestingChanges = [{ Slack_Name: "dillon", Slack_Id: "<@1113>" }];
+    const allSlackUsers = [{ Slack_Name: "andrew", Slack_Id: "<@1110>" },
+                           { Slack_Name: "ethan", Slack_Id: "<@1111>" },
+                           { Slack_Name: "daniel", Slack_Id: "<@1112>" },
+                           { Slack_Name: "dillon", Slack_Id: "<@1113>" }];
 
     const result = getUsersNotApproving(slackOwner, slackUsersApproving,
       slackUsersRequestingChanges, allSlackUsers);
 
-    const expected = ["andrew"];
+    const expected = [{ Slack_Name: "andrew", Slack_Id: "<@1110>" }];
 
     expect(result).to.be.deep.equal(expected);
   });
 
   it("should retrieve no users when all possible users approve the PR", () => {
-    const slackOwner = "ethan";
-    const slackUsersApproving = ["daniel", "andrew", "dillon"];
-    const slackUsersRequestingChanges: string[] = [];
-    const allSlackUsers = ["andrew", "ethan", "daniel", "dillon"];
+    const slackOwner = { Slack_Name: "ethan", Slack_Id: "<@1111>" };
+    const slackUsersApproving = [{ Slack_Name: "daniel", Slack_Id: "<@1111>" },
+                                 { Slack_Name: "andrew", Slack_Id: "<@1112>" },
+                                 { Slack_Name: "dillon", Slack_Id: "<@1113>" }];
+    const slackUsersRequestingChanges: SlackUser[] = [];
+    const allSlackUsers = [{ Slack_Name: "andrew", Slack_Id: "<@1112>" },
+                           { Slack_Name: "ethan", Slack_Id: "<@1114>" },
+                           { Slack_Name: "daniel", Slack_Id: "<@1111>" },
+                           { Slack_Name: "dillon", Slack_Id: "<@1113>" }];
 
     const result = getUsersNotApproving(slackOwner, slackUsersApproving,
       slackUsersRequestingChanges, allSlackUsers);
 
-    const expected: string[] = [];
+    const expected: SlackUser[] = [];
 
     expect(result).to.be.deep.equal(expected);
   });
 
   it("should retrieve all slack users except the owner", () => {
-    const slackOwner = "ethan";
-    const slackUsersApproving: string[] = [];
-    const slackUsersRequestingChanges: string[] = [];
-    const allSlackUsers = ["andrew", "ethan", "daniel", "dillon"];
+    const slackOwner = { Slack_Name: "ethan", Slack_Id: "<@1111>" };
+    const slackUsersApproving: SlackUser[] = [];
+    const slackUsersRequestingChanges: SlackUser[] = [];
+    const allSlackUsers = [{ Slack_Name: "andrew", Slack_Id: "<@1112>" },
+                           { Slack_Name: "ethan", Slack_Id: "<@1111>" },
+                           { Slack_Name: "daniel", Slack_Id: "<@1113>" },
+                           { Slack_Name: "dillon", Slack_Id: "<@1114>" }];
 
     const result = getUsersNotApproving(slackOwner, slackUsersApproving,
       slackUsersRequestingChanges, allSlackUsers);
 
-    const expected = ["andrew", "daniel", "dillon"];
+    const expected = [{ Slack_Name: "andrew", Slack_Id: "<@1112>" },
+                      { Slack_Name: "daniel", Slack_Id: "<@1113>" },
+                      { Slack_Name: "dillon", Slack_Id: "<@1114>" }];
 
     expect(result).to.be.deep.equal(expected);
   });
 
   it("should retrieve no users when all possible users request changes to the PR", () => {
-    const slackOwner = "ethan";
-    const slackUsersApproving: string[] = [];
-    const slackUsersRequestingChanges: string[] = ["andrew", "daniel", "dillon"];
-    const allSlackUsers = ["andrew", "ethan", "daniel", "dillon"];
+    const slackOwner = { Slack_Name: "ethan", Slack_Id: "<@1111>" };
+    const slackUsersApproving: SlackUser[] = [];
+    const slackUsersRequestingChanges = [{ Slack_Name: "andrew", Slack_Id: "<@1112>" },
+                                         { Slack_Name: "daniel", Slack_Id: "<@1113>" },
+                                         { Slack_Name: "dillon", Slack_Id: "<@1114>" }];
+    const allSlackUsers = [{ Slack_Name: "andrew", Slack_Id: "<@1112>" },
+                           { Slack_Name: "ethan", Slack_Id: "<@1111>" },
+                           { Slack_Name: "daniel", Slack_Id: "<@1113>" },
+                           { Slack_Name: "dillon", Slack_Id: "<@1114>" }];
 
     const result = getUsersNotApproving(slackOwner, slackUsersApproving,
       slackUsersRequestingChanges, allSlackUsers);
 
-    const expected: string[] = [];
+    const expected: SlackUser[] = [];
 
     expect(result).to.be.deep.equal(expected);
   });
 
   it("should retrieve remaining users when some approve and request changes to the PR", () => {
-    const slackOwner = "ethan";
-    const slackUsersApproving = ["andrew"];
-    const slackUsersRequestingChanges = ["daniel"];
-    const allSlackUsers = ["andrew", "ethan", "daniel", "dillon"];
+    const slackOwner = { Slack_Name: "ethan", Slack_Id: "<@1111>" };
+    const slackUsersApproving = [{ Slack_Name: "andrew", Slack_Id: "<@1112>" }];
+    const slackUsersRequestingChanges = [{ Slack_Name: "daniel", Slack_Id: "<@1113>" }];
+    const allSlackUsers = [{ Slack_Name: "andrew", Slack_Id: "<@1112>" },
+                           { Slack_Name: "ethan", Slack_Id: "<@1111>" },
+                           { Slack_Name: "daniel", Slack_Id: "<@1113>" },
+                           { Slack_Name: "dillon", Slack_Id: "<@1114>" }];
 
     const result = getUsersNotApproving(slackOwner, slackUsersApproving,
       slackUsersRequestingChanges, allSlackUsers);
 
-    const expected = ["dillon"];
+    const expected = [{ Slack_Name: "dillon", Slack_Id: "<@1114>" }];
 
     expect(result).to.be.deep.equal(expected);
   });

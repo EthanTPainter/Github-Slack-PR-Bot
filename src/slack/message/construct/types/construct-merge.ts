@@ -21,21 +21,21 @@ export function constructMerge(
 
   try {
     // Merge Properties
-    const owner: string = getOwner(event);
-    const userMerging: string = getSender(event);
-    const branchWithPR: string = getPRBranch(event);
-    const branchMergedTo: string = getBaseBranch(event);
+    const owner = getOwner(event);
+    const userMerging = getSender(event);
+    const branchWithPR = getPRBranch(event);
+    const branchMergedTo = getBaseBranch(event);
 
     // Use owner variable to grab Slack names
-    const slackUser: string = getSlackUser(owner, json);
-    const slackUserMerging: string = getSlackUser(userMerging, json);
+    const slackUser = getSlackUser(owner, json);
+    const slackUserMerging = getSlackUser(userMerging, json);
 
     // Base Properties
-    const description: string = constructMergeDesc(slackUser,
+    const description = constructMergeDesc(slackUser,
       slackUserMerging, branchWithPR, branchMergedTo);
 
-    const title: string = getTitle(event);
-    const pr_url: string = getPRLink(event);
+    const title = getTitle(event);
+    const pr_url = getPRLink(event);
 
     // Construct MergePR object to return
     const mergeObj: MergePR = {

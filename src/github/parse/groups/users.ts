@@ -51,25 +51,42 @@ export function getUsersReqChanges(
  * @author Ethan T Painter
  * @description Generate a list of slack users not approving
  *              so we can select these people later on.
- * @param owner Slack user who owns the PR
+ * @param slackOwner SlackUser who owns the PR
  * @param slackUsersApproving Array of all slack users who
  *                            have already approved the PR.
+ * @param slackUsersRequestingChanges Array if SlackUsers who
+ *                                    have requested changes
  * @param allSlackUsers Array of all Slack users in a team
- * @returns Array of all users who have not yet approved the PR
+ * @returns Array of all SlackUsers who have not yet approved the PR
  */
 export function getUsersNotApproving(
   slackOwner: SlackUser,
-  slackUsersApproving: string[],
-  slackUsersRequestingChanges: string[],
-  allSlackUsers: string[],
-): string[] {
-  const usersNotApproving: string[] = [];
-  allSlackUsers.forEach((slackUser: string) => {
-    if (slackUser === slackOwner
-      || slackUsersApproving.includes(slackUser)
-      || slackUsersRequestingChanges.includes(slackUser)) {
-      // Do nothing
-    } else {
+  slackUsersApproving: SlackUser[],
+  slackUsersRequestingChanges: SlackUser[],
+  allSlackUsers: SlackUser[],
+): SlackUser[] {
+  const usersNotApproving: SlackUser[] = [];
+  allSlackUsers.map((slackUser: SlackUser) => {
+    let foundUserApproving = false;
+    let foundUserReqChanges = false;
+    slackUsersApproving.map((userApproving: SlackUser) => {
+      if (userApproving.Slack_Name === slackUser.Slack_Name
+        && userApproving.Slack_Id === slackUser.Slack_Id){
+          foundUserApproving = true;
+      }
+    });
+    slackUsersRequestingChanges.map((userReqChanges: SlackUser) => {
+      if (userReqChanges.Slack_Name === slackUser.Slack_Name
+        && userReqChanges.Slack_Id === slackUser.Slack_Id) {
+          foundUserReqChanges = true;
+      }
+    });
+
+    if (slackUser.Slack_Name === slackOwner.Slack_Name
+        || foundUserApproving || foundUserReqChanges) {
+          // Do nothing
+    }
+    else {
       usersNotApproving.push(slackUser);
     }
   });

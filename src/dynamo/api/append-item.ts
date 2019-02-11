@@ -1,4 +1,4 @@
-import { Item } from "../../models";
+import { Item, SlackUser } from "../../models";
 import { DynamoGet } from "./get-item";
 import { DynamoDB } from "aws-sdk";
 import { DateTime } from "luxon";
@@ -18,7 +18,7 @@ export class DynamoAppend {
    * @param values Contents to put in contents
    */
   async appendItem(
-    githubUser: string,
+    slackUser: SlackUser,
     currentContents: Item[],
     newItem: Item,
   ): Promise<DynamoDB.DocumentClient.UpdateItemOutput> {
@@ -41,7 +41,7 @@ export class DynamoAppend {
       // Provide base params as input
       const params = {
         TableName: requiredEnvs.DYNAMO_TABLE,
-        Key: { githubUser: githubUser },
+        Key: { githubUser: slackUser },
         UpdateExpression: `set contents = :d, last_updated = :t`,
         ExpressionAttributeValues: {
           ":d": currentContents,

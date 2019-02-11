@@ -1,5 +1,6 @@
 import { getCheckMark } from "../../../../../src/slack/icons/check-mark";
 import { getXMark } from "../../../../../src/slack/icons/x-mark";
+import { SlackUser } from "src/models";
 
 /**
  * @author Ethan T Painter
@@ -14,9 +15,9 @@ import { getXMark } from "../../../../../src/slack/icons/x-mark";
  */
 export function constructLeadCheck(
   json: any,
-  leadsApproving: string[],
-  leadsReqChanges: string[],
-  leadsNotApproving: string[],
+  leadsApproving: SlackUser[],
+  leadsReqChanges: SlackUser[],
+  leadsNotApproving: SlackUser[],
 ): string {
 
   if (json.Options.Num_Required_Lead_Approvals === undefined) {
@@ -32,15 +33,17 @@ export function constructLeadCheck(
     leadCheck = `${json.Options.Num_Required_Lead_Approvals} Required Lead Approvals: `;
   }
 
+  // Get Checkmark and Xmark slack text
+  const checkMark = getCheckMark(json);
+  const xMark = getXMark(json);
+
   // Format who has approved the PR thus far
-  leadsApproving.forEach((slackLead: string) => {
-    const checkMark = getCheckMark(json);
-    leadCheck += `${slackLead} ${checkMark} `;
+  leadsApproving.forEach((slackLead: SlackUser) => {
+    leadCheck += `${slackLead.Slack_Name} ${checkMark} `;
   });
   // Format who has requested changes to the PR thus far
-  leadsReqChanges.forEach((slackLead: string) => {
-    const xMark = getXMark(json);
-    leadCheck += `${slackLead} ${xMark} `;
+  leadsReqChanges.forEach((slackLead: SlackUser) => {
+    leadCheck += `${slackLead.Slack_Name} ${xMark} `;
   });
 
   // Determine if current number of approving users
@@ -50,8 +53,8 @@ export function constructLeadCheck(
     return leadCheck;
   }
   else {
-    leadsNotApproving.forEach((slackLead: string) => {
-      leadCheck += `@${slackLead} `;
+    leadsNotApproving.forEach((slackLead: SlackUser) => {
+      leadCheck += `${slackLead.Slack_Id} `;
     });
     return leadCheck;
   }

@@ -1,6 +1,7 @@
 import { DynamoDB } from "aws-sdk";
 import { newLogger } from "../../logger";
 import { requiredEnvs } from "../../../src/required-envs";
+import { SlackUser } from "../../models";
 
 const logger = newLogger("GetItem");
 
@@ -13,7 +14,7 @@ export class DynamoGet {
    * @returns Result of dynamoDB Get request
    */
   async getItem(
-    slackUser: string,
+    slackUser: SlackUser,
   ): Promise<DynamoDB.DocumentClient.AttributeMap | undefined> {
 
     try {

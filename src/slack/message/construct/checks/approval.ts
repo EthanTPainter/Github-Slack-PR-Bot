@@ -20,7 +20,11 @@ import { SlackUser } from "../../../../models";
  * @author Ethan T Painter
  * @description Using all reviews for a PR, construct
  *              peer and lead review string statements
+ * @param json JSON config file
+ * @param slackOwner SlackUser who owns the PR
  * @param allReviews All reviews connected to the PR
+ * @param slackMemberUsers All SlackUser members on the team
+ * @param slackLeadUsers All SlackUser leads on the team
  * @example Example:
  * "2 Peer Approvals: Dillon :CHECK: @Peer2 @Peer3 @Peer4"
  * "1 Lead Approvals: @Lead1 @Lead2 @Lead3"
@@ -29,17 +33,17 @@ export function getApprovalChecks(
   json: any,
   slackOwner: SlackUser,
   allReviews: any,
-  slackMemberUsers: string[],
-  slackLeadUsers: string[],
+  slackMemberUsers: SlackUser[],
+  slackLeadUsers: SlackUser[],
 ): string {
 
   // Record only approving reviews of the PR
   const approvingReviews = getApprovingReviews(allReviews);
-  const requestChangesReviews = getReqChangesReviews();
+  const requestingChangesReviews = getReqChangesReviews(allReviews);
 
   // Get Users approving, requesting changes, and not approving
   const usersApproving = getUsersApproving(approvingReviews, json);
-  const usersRequestingChanges = getUsersReqChanges();
+  const usersRequestingChanges = getUsersReqChanges(requestingChangesReviews, json);
   const usersNotApproving = getUsersNotApproving(slackOwner, usersApproving,
     usersRequestingChanges, slackLeadUsers.concat(slackMemberUsers));
 

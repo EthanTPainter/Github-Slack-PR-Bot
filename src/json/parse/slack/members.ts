@@ -93,7 +93,7 @@ export function getSlackMembers(
  * @returns Array of slack members
  */
 export function getSlackMembersAlt(
-  slackUser: string,
+  slackUser: SlackUser,
   json: any,
 ): SlackUser[] {
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)

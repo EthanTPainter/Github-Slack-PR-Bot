@@ -3,6 +3,7 @@ import { formatItem } from "../../formatting/format-item";
 import { getSlackMembersAlt } from "../../../json/parse";
 import { newLogger } from "../../../logger";
 import { DynamoDB } from "aws-sdk";
+import { SlackUser } from "../../../models";
 
 const logger = newLogger("UpdateOpen");
 
@@ -16,8 +17,8 @@ const logger = newLogger("UpdateOpen");
  * @param json JSON config file
  */
 export async function updateOpen(
-  slackUser: string,
-  slackTeam: string,
+  slackUser: SlackUser,
+  slackTeam: SlackUser,
   event: any,
   json: any,
 ): Promise<DynamoDB.DocumentClient.UpdateItemOutput> {

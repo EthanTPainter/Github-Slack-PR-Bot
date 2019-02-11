@@ -1,18 +1,25 @@
+import { SlackUser } from "../../../models";
+
 /**
  * @author Ethan T Painter
  * @description get all leads approving the PR
  * @param slackUsersApproving All slack users approving this PR
  * @param allSlackLeadUsers All slack lead users in the team
+ * @returns All SlackUsers who are leads and approving the
+ *          PR
  */
-export function getLeadsApproving(slackUsersApproving: string[],
-                                  allSlackLeadUsers: string[],
-                                 ): string[]
-{
-  const leadsApproving: string[] = [];
-  slackUsersApproving.forEach((slackUser: string) => {
-    if (allSlackLeadUsers.includes(slackUser)) {
-      leadsApproving.push(slackUser);
-    }
+export function getLeadsApproving(
+  slackUsersApproving: SlackUser[],
+  allSlackLeadUsers: SlackUser[],
+): SlackUser[] {
+  const leadsApproving: SlackUser[] = [];
+  slackUsersApproving.map((slackUser: SlackUser) => {
+    allSlackLeadUsers.map((leadUser: SlackUser) => {
+      if (leadUser.Slack_Name === slackUser.Slack_Name
+          && leadUser.Slack_Id === slackUser.Slack_Id) {
+            leadsApproving.push(leadUser);
+      }
+    });
   });
   return leadsApproving;
 }
@@ -23,16 +30,21 @@ export function getLeadsApproving(slackUsersApproving: string[],
  * @param slackUsersReqChanges All slack leads requesting changes
  *                             to the PR
  * @param allSlackLeadUsers All slack lead users in the team
+ * @returns All SlackUsers who are leads requesting changes
+ *          to the PR
  */
-export function getLeadsReqChanges(slackUsersReqChanges: string[],
-                                   allSlackLeadUsers: string[],
-                                  ): string[]
-{
-  const leadsReqChanges: string[] = [];
-  slackUsersReqChanges.forEach((slackUser: string) => {
-    if (allSlackLeadUsers.includes(slackUser)) {
-      leadsReqChanges.push(slackUser);
-    }
+export function getLeadsReqChanges(
+  slackUsersReqChanges: SlackUser[],
+  allSlackLeadUsers: SlackUser[],
+): SlackUser[] {
+  const leadsReqChanges: SlackUser[] = [];
+  slackUsersReqChanges.map((slackUser: SlackUser) => {
+    allSlackLeadUsers.map((leadUser: SlackUser) => {
+      if (leadUser.Slack_Name === slackUser.Slack_Name
+          && leadUser.Slack_Id === slackUser.Slack_Id) {
+            leadsReqChanges.push(leadUser);
+      }
+    });
   });
   return leadsReqChanges;
 }
@@ -45,17 +57,20 @@ export function getLeadsReqChanges(slackUsersReqChanges: string[],
  * @param slackUsersNotApproving list of all slack users not approving
  *                               the PR from a sub team (DevTeam1)
  * @param allSlackLeadUsers List of lead slack users for a team (DevTeam)
- * @returns List of lead slack users not approving
+ * @returns List of lead SlackUsers not approving
  */
-export function getLeadsNotApproving(slackUsersNotApproving: string[],
-                                     allSlackLeadUsers: string[],
-                                    ): string[]
-{
-  const leadsNotApproving: string[] = [];
-  slackUsersNotApproving.forEach((notApprover) => {
-    if (allSlackLeadUsers.includes(notApprover)) {
-      leadsNotApproving.push(notApprover);
-    }
+export function getLeadsNotApproving(
+  slackUsersNotApproving: SlackUser[],
+  allSlackLeadUsers: SlackUser[],
+): SlackUser[] {
+  const leadsNotApproving: SlackUser[] = [];
+  slackUsersNotApproving.map((notApprovingUser: SlackUser) => {
+    allSlackLeadUsers.map((leadUser: SlackUser) => {
+      if (leadUser.Slack_Name === notApprovingUser.Slack_Name
+          && leadUser.Slack_Id === notApprovingUser.Slack_Id) {
+            leadsNotApproving.push(leadUser);
+      }
+    });
   });
   return leadsNotApproving;
 }

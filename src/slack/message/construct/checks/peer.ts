@@ -1,5 +1,6 @@
 import { getCheckMark } from "../../../icons/check-mark";
 import { getXMark } from "../../../icons/x-mark";
+import { SlackUser } from "src/models";
 
 /**
  * @author Ethan T Painter
@@ -20,9 +21,9 @@ import { getXMark } from "../../../icons/x-mark";
  */
 export function constructPeerCheck(
   json: any,
-  membersApproving: string[],
-  membersReqChanges: string[],
-  membersNotApproving: string[],
+  membersApproving: SlackUser[],
+  membersReqChanges: SlackUser[],
+  membersNotApproving: SlackUser[],
 ): string {
 
   if (json.Options.Num_Required_Peer_Approvals === undefined) {
@@ -40,14 +41,14 @@ export function constructPeerCheck(
   }
 
   // Format who has approved the PR thus far
-  membersApproving.forEach((slackMember: string) => {
+  membersApproving.forEach((slackMember: SlackUser) => {
     const checkMark = getCheckMark(json);
-    peerCheck += `${slackMember} ${checkMark} `;
+    peerCheck += `${slackMember.Slack_Name} ${checkMark} `;
   });
   // Format who has requested changed to the PR thus far
-  membersReqChanges.forEach((slackMember: string) => {
+  membersReqChanges.forEach((slackMember: SlackUser) => {
     const xMark = getXMark(json);
-    peerCheck += `${slackMember} ${xMark} `;
+    peerCheck += `${slackMember.Slack_Name} ${xMark} `;
   });
 
   // Determine if current number of approving + requesting changes users
@@ -57,8 +58,8 @@ export function constructPeerCheck(
     return peerCheck;
   }
   else {
-    membersNotApproving.forEach((slackMember: string) => {
-      peerCheck += `@${slackMember} `;
+    membersNotApproving.forEach((slackMember: SlackUser) => {
+      peerCheck += `${slackMember.Slack_Id} `;
     });
     return peerCheck;
   }

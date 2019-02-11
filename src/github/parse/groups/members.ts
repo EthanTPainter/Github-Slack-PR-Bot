@@ -1,19 +1,25 @@
+import { SlackUser } from "../../../models";
+
 /**
  * @author Ethan T Painter
- * @description Get all slack members approving the PR
- * @param slackUsersApproving Slack users approving the PR
- * @param slackMemberUsers All Slack member users on the team
- * @returns List of member slack users approving
+ * @description Get all SlackUser members approving the PR
+ * @param slackUsersApproving all SlackUsers approving the PR
+ * @param slackMemberUsers All SlackUser members on the team
+ * @returns List of member slack users approving. Intersection
+ *          of slackUsersApproving and slackMemberUsers
  */
-export function getMembersApproving(slackUsersApproving: string[],
-                                    slackMemberUsers: string[],
-                                   ): string[]
-{
-  const membersApproving: string[] = [];
-  slackUsersApproving.forEach((slackUserApproving: string) => {
-    if (slackMemberUsers.includes(slackUserApproving)) {
-      membersApproving.push(slackUserApproving);
-    }
+export function getMembersApproving(
+  slackUsersApproving: SlackUser[],
+  slackMemberUsers: SlackUser[],
+): SlackUser[] {
+  const membersApproving: SlackUser[] = [];
+  slackUsersApproving.map((slackUserApproving: SlackUser) => {
+    slackMemberUsers.map((slackMember: SlackUser) => {
+      if (slackMember.Slack_Name === slackUserApproving.Slack_Name
+        && slackMember.Slack_Id === slackUserApproving.Slack_Id) {
+          membersApproving.push(slackMember);
+      }
+    });
   });
   return membersApproving;
 }
@@ -21,19 +27,22 @@ export function getMembersApproving(slackUsersApproving: string[],
 /**
  * @author Ethan T Painter
  * @description Get all slack members requesting changes
- * @param slackUsersReqChanges Slack users requesting changes
+ * @param slackUsersReqChanges SlackUsers requesting changes
  * @param slackMemberUsers slack member users on the team
  * @returns List of member slack users requesting changes
  */
-export function getMembersReqChanges(slackUsersReqChanges: string[],
-                                     slackMemberUsers: string[],
-                                    ): string[]
-{
-  const membersRequestingChanges: string[] = [];
-  slackUsersReqChanges.forEach((slackUserReqChanges: string) => {
-    if (slackMemberUsers.includes(slackUserReqChanges)) {
-      membersRequestingChanges.push(slackUserReqChanges);
-    }
+export function getMembersReqChanges(
+  slackUsersReqChanges: SlackUser[],
+  slackMemberUsers: SlackUser[],
+): SlackUser[] {
+  const membersRequestingChanges: SlackUser[] = [];
+  slackUsersReqChanges.map((slackUserReqChanges: SlackUser) => {
+    slackMemberUsers.map((slackMember: SlackUser) => {
+      if (slackMember.Slack_Name === slackUserReqChanges.Slack_Name
+        && slackMember.Slack_Id === slackUserReqChanges.Slack_Id) {
+          membersRequestingChanges.push(slackMember);
+      }
+    });
   });
   return membersRequestingChanges;
 }
@@ -46,15 +55,18 @@ export function getMembersReqChanges(slackUsersReqChanges: string[],
  * @param slackMemberUsers List of member slack users of a team (DevTeam)
  * @returns List of member slack users not approving
  */
-export function getMembersNotApproving(slackUsersNotApproving: string[],
-                                       slackMemberUsers: string[],
-                                      ): string[]
-{
-  const membersNotApproving: string[] = [];
-  slackUsersNotApproving.forEach((notApprover) => {
-    if (slackMemberUsers.includes(notApprover)) {
-      membersNotApproving.push(notApprover);
-    }
+export function getMembersNotApproving(
+  slackUsersNotApproving: SlackUser[],
+  slackMemberUsers: SlackUser[],
+): SlackUser[] {
+  const membersNotApproving: SlackUser[] = [];
+  slackUsersNotApproving.map((notApproving: SlackUser) => {
+    slackMemberUsers.map((slackMember: SlackUser) => {
+      if (slackMember.Slack_Name === notApproving.Slack_Name
+        && slackMember.Slack_Id === notApproving.Slack_Id) {
+          membersNotApproving.push(slackMember);
+      }
+    });
   });
   return membersNotApproving;
 }

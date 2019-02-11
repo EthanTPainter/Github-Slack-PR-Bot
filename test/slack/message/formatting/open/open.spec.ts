@@ -15,14 +15,14 @@ describe("constructOpenDesc", () => {
       Slack_Name: "EthanPainter",
       Slack_Id: "<@1111>",
     };
-    const slackGroup = "<@12345>";
+    const slackGroup = { Slack_Name: "minks", Slack_Id: "<@12345>" };
     const newPR = true;
 
     const result = constructOpenDesc(slackUser, slackGroup, newPR, validJSON);
     const expected = `${slackUser.Slack_Name} opened this PR. Needs `
       + `*${validJSON.Options.Num_Required_Peer_Approvals} peer* `
       + `and *${validJSON.Options.Num_Required_Lead_Approvals} lead* `
-      + `reviews ${slackGroup}`;
+      + `reviews ${slackGroup.Slack_Id}`;
 
     expect(result).to.be.equal(expected);
   });
@@ -32,14 +32,14 @@ describe("constructOpenDesc", () => {
       Slack_Name: "EthanPainter",
       Slack_Id: "<@1111>",
     };
-    const slackGroup = "minks";
+    const slackGroup = { Slack_Name: "minks", Slack_Id: "<@12345>" };
     const newPR = false;
 
     const result = constructOpenDesc(slackUser, slackGroup, newPR, validJSON);
     const expected = `${slackUser.Slack_Name} reopened this PR. Needs `
       + `*${validJSON.Options.Num_Required_Peer_Approvals} peer* `
       + `and *${validJSON.Options.Num_Required_Lead_Approvals} lead* `
-      + `reviews ${slackGroup}`;
+      + `reviews ${slackGroup.Slack_Id}`;
 
     expect(result).to.be.equal(expected);
   });
@@ -49,7 +49,7 @@ describe("constructOpenDesc", () => {
       Slack_Name: "EthanPainter",
       Slack_Id: "<@1111>",
     };
-    const slackGroup = "minks";
+    const slackGroup = { Slack_Name: "minks", Slack_Id: "<@1221>" };
     const newPR = true;
     const invalidJSON = undefined;
 
@@ -64,7 +64,7 @@ describe("constructOpenDesc", () => {
       Slack_Name: "EthanPainter",
       Slack_Id: "<@1111>",
     };
-    const slackGroup = "minks";
+    const slackGroup = { Slack_Name: "minks", Slack_Id: "<@11111>" };
     const newPR = true;
     const invalidJSON = {};
 
@@ -79,7 +79,7 @@ describe("constructOpenDesc", () => {
       Slack_Name: "EthanPainter",
       Slack_Id: "<@1111>",
     };
-    const slackGroup = "minks";
+    const slackGroup = { Slack_Name: "minks", Slack_Id: "<@1>" };
     const newPR = true;
     const invalidJSON = {
       Options: {},
@@ -96,7 +96,7 @@ describe("constructOpenDesc", () => {
       Slack_Name: "EthanPainter",
       Slack_Id: "<@UUID1234>",
     };
-    const slackGroup = "minks";
+    const slackGroup = { Slack_Name: "minks", Slack_Id: "<@123>" };
     const newPR = true;
     const invalidJSON = {
       Options: {
@@ -112,7 +112,7 @@ describe("constructOpenDesc", () => {
 
   it("should throw an error -- No Slack user provided", () => {
     const slackUser: any = {};
-    const slackGroup = "<@UUID1234>";
+    const slackGroup = { Slack_Name: "TeamName", Slack_Id: "<@123>" };
     const newPR = true;
 
     const expected = new Error("Slack_Name property not defined");

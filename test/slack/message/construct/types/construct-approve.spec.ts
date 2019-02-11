@@ -28,6 +28,7 @@ describe("constructApprove", () => {
       Num_Required_Peer_Approvals: 2,
       Num_Required_Lead_Approvals: 2,
       Check_Mark_Style: "green",
+      X_Mark_Style: "base",
     },
     Teams: {
       Team1: {
@@ -77,24 +78,25 @@ describe("constructApprove", () => {
         state: "CHANGES_REQUESTED",
       },
       {
-          user: {
-              login: "DillonSykes",
-          },
-          state: "APPROVED",
+        user: {
+          login: "DillonSykes",
+        },
+        state: "APPROVED",
       }];
 
     // Stub getReviews
     sinon.stub(ReviewClass, "getReviews")
-         .resolves(expectedReviews);
+      .resolves(expectedReviews);
 
     const result = await constructApprove(ReviewClass, validEvent, validJSON);
+    console.log("Result: ", result);
 
-    // Expect Slack names to be in ApprovePR description
+    // Expect SlackUser slack names to be in ApprovePR description
     expect((result.description)
-      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Leads.gwely))
+      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Leads.gwely.Slack_Name))
       .to.be.equal(true);
     expect((result.description)
-      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Members.EthanTPainter))
+      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Members.EthanTPainter.Slack_Id))
       .to.be.equal(true);
 
     // Expect title, url, owner, and sender in ApprovePR
@@ -108,13 +110,13 @@ describe("constructApprove", () => {
       .includes(validJSON.Options.Num_Required_Peer_Approvals
         + " Required Peer")).to.be.equal(true);
     expect((result.approvals)
-      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Members.DillonSykes
+      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Members.DillonSykes.Slack_Name
         + " :heavy_check_mark:")).to.be.equal(true);
     expect((result.approvals)
-        .includes(validJSON.Options.Num_Required_Lead_Approvals
-          + " Required Lead")).to.be.equal(true);
+      .includes(validJSON.Options.Num_Required_Lead_Approvals
+        + " Required Lead")).to.be.equal(true);
     expect((result.approvals)
-      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Leads.gwely
+      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Leads.gwely.Slack_Name
         + " :heavy_check_mark:")).to.be.equal(true);
   });
 });

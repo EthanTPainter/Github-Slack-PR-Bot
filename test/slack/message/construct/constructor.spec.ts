@@ -40,6 +40,7 @@ describe("constructSlackMessage", () => {
       Num_Required_Peer_Approvals: 2,
       Num_Required_Lead_Approvals: 2,
       Check_Mark_Style: "green",
+      X_Mark_Style: "base",
     },
     Teams: {
       Team1: {

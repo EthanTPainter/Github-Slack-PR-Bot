@@ -9,7 +9,10 @@ export const json = {
   Teams: {
     Dev_Team: {
       Dev_Team_1: {
-        Slack_Group: "Group_Slack_Name",
+        Slack_Group: {
+          Slack_Name: "Group_Slack_Name",
+          Slack_Id: "<@SLACK_ID>",
+        },
         Users: {
           Leads: {
             GitHub_User_1: {

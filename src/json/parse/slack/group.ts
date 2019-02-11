@@ -1,4 +1,5 @@
 import { newLogger } from "../../../logger";
+import { SlackUser } from "./../../../models";
 
 const logger = newLogger("Group");
 
@@ -13,7 +14,7 @@ const logger = newLogger("Group");
 export function getSlackGroup(
   githubUser: string,
   json: any,
-): string {
+): SlackUser {
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const teams = json.Teams;
   const allTeamKeys = Object.keys(teams);
@@ -106,7 +107,7 @@ export function getSlackGroup(
 export function getSlackGroupAlt(
   slackUser: string,
   json: any,
-): string {
+): SlackUser {
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const teams = json.Teams;
   const allTeamKeys = Object.keys(teams);

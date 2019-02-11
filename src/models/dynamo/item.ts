@@ -1,6 +1,7 @@
+import { SlackUser } from "../slack";
 
 export class Item {
-  owner: string;
+  owner: SlackUser;
   title: string;
   url: string;
   peerComplete: boolean;

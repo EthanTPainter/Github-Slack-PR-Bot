@@ -9,7 +9,7 @@ describe("putItem", () => {
     const dynamo = new DynamoAppend();
     const githubUser = "testUser";
     const data: Item = {
-      owner: "testUser",
+      owner: { Slack_Name: "ethan", Slack_Id: "<@1111>" },
       title: "New title",
       url: "my url",
       peerComplete: false,

@@ -1,5 +1,5 @@
 import { getTitle, getPRLink } from "../../github/parse";
-import { Item } from "../../models";
+import { Item, SlackUser } from "../../models";
 
 /**
  * @author Ethan T Painter
@@ -11,7 +11,7 @@ import { Item } from "../../models";
  * @param json JSON config file
  */
 export function formatItem(
-  slackUser: string,
+  slackUser: SlackUser,
   event: any,
   json: any,
 ): Item {
