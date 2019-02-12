@@ -4,7 +4,7 @@ import { getSlackGroup } from "../../../../src/json/parse";
 describe("getSlackGroup", () => {
 
   const validJSON = {
-    Teams: {
+    Departments: {
       FirstTeam: {
         FirstSubTeam: {
           Slack_Group: {
@@ -31,14 +31,27 @@ describe("getSlackGroup", () => {
     const githubUser = "ethan";
     const result = getSlackGroup(githubUser, validJSON);
 
-    const expected = validJSON.Teams.FirstTeam.FirstSubTeam.Slack_Group;
+    const expected = validJSON.Departments.FirstTeam.FirstSubTeam.Slack_Group;
 
     expect(result).to.be.deep.equal(expected);
   });
 
   it("should throw an error -- No teams available", () => {
     const invalidJSON = {
-      Teams: {},
+      Departments: {},
+    };
+    const githubUser = "ethan";
+
+    const expected = new Error("No Department found in JSON file");
+    expect(() => getSlackGroup(githubUser, invalidJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- No Sub teams available", () => {
+    const invalidJSON = {
+      Departments: {
+        Dev: {},
+      },
     };
     const githubUser = "ethan";
 
@@ -47,23 +60,10 @@ describe("getSlackGroup", () => {
       .to.throw(expected.message);
   });
 
-  it("should throw an error -- No Sub teams available", () => {
-    const invalidJSON = {
-      Teams: {
-        DevTeam: {},
-      },
-    };
-    const githubUser = "ethan";
-
-    const expected = new Error("No Team Group found in JSON file");
-    expect(() => getSlackGroup(githubUser, invalidJSON))
-      .to.throw(expected.message);
-  });
-
   it("should throw an error -- No Users defined for the team", () => {
     const invalidJSON = {
-      Teams: {
-        DevTeam: {
+      Departments: {
+        Dev: {
           Dev_Team_1: {},
         },
       },
@@ -78,8 +78,8 @@ describe("getSlackGroup", () => {
 
   it("should throw an error -- No Leads defined for the team", () => {
     const invalidJSON = {
-      Teams: {
-        DevTeam: {
+      Departments: {
+        Dev: {
           Dev_Team_1: {
             Users: {},
           },
@@ -96,8 +96,8 @@ describe("getSlackGroup", () => {
 
   it("should throw an error -- No Members defined for the team", () => {
     const invalidJSON = {
-      Teams: {
-        DevTeam: {
+      Departments: {
+        Dev: {
           Dev_Team_1: {
             Users: {
               Leads: {

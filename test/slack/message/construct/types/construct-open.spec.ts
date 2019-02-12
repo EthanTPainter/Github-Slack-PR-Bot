@@ -23,7 +23,7 @@ describe("constructOpen", () => {
       Num_Required_Peer_Approvals: 1,
       Num_Required_Lead_Approvals: 1,
     },
-    Teams: {
+    Departments: {
       Team1: {
         TeamGroup1: {
           Slack_Group: "Group_Slack_Name",

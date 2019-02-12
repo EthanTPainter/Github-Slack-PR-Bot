@@ -19,9 +19,9 @@ describe("constructClose", () => {
     },
   };
   const validJSON = {
-    Teams: {
-      Team1: {
-        TeamGroup1: {
+    Departments: {
+      Dev: {
+        Team1: {
           Users: {
             Leads: {
               andrew: {

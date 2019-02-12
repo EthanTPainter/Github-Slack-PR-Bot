@@ -17,7 +17,7 @@ export function getSlackLeads(
 ): SlackUser[] {
 
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
-  const teams = json.Teams;
+  const teams = json.Departments;
   const allTeamKeys = Object.keys(teams);
   if (allTeamKeys.length === 0) {
     throw new Error("No Team found in JSON file");
@@ -93,38 +93,38 @@ export function getSlackLeadsAlt(
   json: any,
 ): SlackUser[] {
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
-  const teams = json.Teams;
-  const allTeamKeys = Object.keys(teams);
+  const departments = json.Departments;
+  const allDepartmentKeys = Object.keys(departments);
   // If no teams present, return error
-  if (allTeamKeys.length === 0) {
+  if (allDepartmentKeys.length === 0) {
     throw new Error("No Team found in JSON file");
   }
 
   // Otherwise loop through teams (DevTeam, QaTeam, ProdTeam)
-  let teamCounter = 0;
-  while (teamCounter < allTeamKeys.length) {
+  let departmentCounter = 0;
+  while (departmentCounter < allDepartmentKeys.length) {
     // Get selectedTeam (DevTeam), and get selectedTeamGroup (DevTeam1)
-    const selectedTeam = allTeamKeys[teamCounter];
-    const selectedTeamGroup = teams[selectedTeam];
-    const teamGroupKeys = Object.keys(selectedTeamGroup);
-    let selectedTeamTypeCounter = 0;
-    if (teamGroupKeys.length === 0) {
+    const selectedDepartmentName = allDepartmentKeys[departmentCounter];
+    const selectedDepartment = departments[selectedDepartmentName];
+    const teamKeys = Object.keys(selectedDepartment);
+    let selectedTeamCounter = 0;
+    if (teamKeys.length === 0) {
       // Dev_Team_1, SomethingCool1, etc.
       throw new Error("No Team Group found in JSON file");
     }
     // Loop through team groups (DevTeam1, DevTeam2, etc.)
-    while (selectedTeamTypeCounter < teamGroupKeys.length) {
-      const selectedGroupSubTeam = selectedTeamGroup[teamGroupKeys[selectedTeamTypeCounter]];
-      if (selectedGroupSubTeam.Users === undefined) {
-        throw new Error(`No Users defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+    while (selectedTeamCounter < teamKeys.length) {
+      const selectedTeam = selectedDepartment[teamKeys[selectedTeamCounter]];
+      if (selectedTeam.Users === undefined) {
+        throw new Error(`No Users defined for team: ${teamKeys[selectedTeamCounter]}`);
       }
-      const users = selectedGroupSubTeam.Users;
+      const users = selectedTeam.Users;
 
       if (users.Leads === undefined) {
-        throw new Error(`Leads not defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+        throw new Error(`Leads not defined for team: ${teamKeys[selectedTeamCounter]}`);
       }
       if (users.Members === undefined) {
-        throw new Error(`Members not defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+        throw new Error(`Members not defined for team: ${teamKeys[selectedTeamCounter]}`);
       }
 
       const leadUsers = users.Leads;
@@ -149,9 +149,9 @@ export function getSlackLeadsAlt(
         }
         memberCounter++;
       }
-      selectedTeamTypeCounter++;
+      selectedTeamCounter++;
     }
-    teamCounter++;
+    departmentCounter++;
   }
   return [];
 }

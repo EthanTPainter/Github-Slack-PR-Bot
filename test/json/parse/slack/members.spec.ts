@@ -4,7 +4,7 @@ import { getSlackMembers } from "../../../../src/json/parse";
 describe("getSlackMembers", () => {
 
   const validJSON = {
-    Teams: {
+    Departments: {
       Developers: {
         PhillyDevTeam: {
           Users: {
@@ -34,9 +34,9 @@ describe("getSlackMembers", () => {
 
     const result = getSlackMembers(githubUser, validJSON);
     const expected = [
-      validJSON.Teams.Developers.PhillyDevTeam.Users.Members.ethan,
-      validJSON.Teams.Developers.PhillyDevTeam.Users.Members.dillon,
-      validJSON.Teams.Developers.PhillyDevTeam.Users.Members.daniel,
+      validJSON.Departments.Developers.PhillyDevTeam.Users.Members.ethan,
+      validJSON.Departments.Developers.PhillyDevTeam.Users.Members.dillon,
+      validJSON.Departments.Developers.PhillyDevTeam.Users.Members.daniel,
     ];
 
     expect(result).to.be.deep.equal(expected);
@@ -53,7 +53,7 @@ describe("getSlackMembers", () => {
 
   it("should throw an error -- No Team found", () => {
     const invalidJSON = {
-      Teams: {},
+      Departments: {},
     };
     const githubUser = "ethan";
 
@@ -64,7 +64,7 @@ describe("getSlackMembers", () => {
 
   it("should throw an error -- No Team Group", () => {
     const invalidJSON = {
-      Teams: {
+      Departments: {
         NewYork: {},
       },
     };
@@ -77,7 +77,7 @@ describe("getSlackMembers", () => {
 
   it("should throw an error -- No Users", () => {
     const invalidJSON = {
-      Teams: {
+      Departments: {
         NewYork: {
           TeamOne: {},
         },
@@ -93,7 +93,7 @@ describe("getSlackMembers", () => {
 
   it("should throw an error -- No Leads", () => {
     const invalidJSON = {
-      Teams: {
+      Departments: {
         NewYork: {
           TeamOne: {
             Users: {},
@@ -111,7 +111,7 @@ describe("getSlackMembers", () => {
 
   it("should throw an error -- No Members", () => {
     const invalidJSON = {
-      Teams: {
+      Departments: {
         NewYork: {
           TeamOne: {
             Users: {

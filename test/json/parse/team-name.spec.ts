@@ -4,7 +4,7 @@ import { getTeamName } from "../../../src/json/parse/team-name";
 describe("getTeamName", () => {
 
   const validJSON = {
-    Teams: {
+    Departments: {
       Developers: {
         PhillyDevTeam: {
           Users: {
@@ -102,7 +102,7 @@ describe("getTeamName", () => {
   it("should not get team name -- No Team found in JSON file", () => {
     const githubUser = "ethan";
     const invalidJSON = {
-      Teams: {},
+      Departments: {},
     };
 
     const expected = new Error("No Team found in JSON file");
@@ -114,7 +114,7 @@ describe("getTeamName", () => {
   it("should not get team name -- No Team Group in JSON file", () => {
     const githubUser = "ethan";
     const invalidJSON = {
-      Teams: {
+      Departments: {
         Developers: {},
       },
     };
@@ -128,7 +128,7 @@ describe("getTeamName", () => {
   it("should not get team name -- No Users defined", () => {
     const githubUser = "ethan";
     const invalidJSON = {
-      Teams: {
+      Departments: {
         Developers: {
           RichmondVirginiaDevs: {},
         },
@@ -144,7 +144,7 @@ describe("getTeamName", () => {
   it("should not get team name -- No Leads defined", () => {
     const githubUser = "ethan";
     const invalidJSON = {
-      Teams: {
+      Departments: {
         Developers: {
           RichmondVirginiaDevs: {
             Users: {},
@@ -162,7 +162,7 @@ describe("getTeamName", () => {
   it("should not get team name -- No Members defined", () => {
     const githubUser = "ethan";
     const invalidJSON = {
-      Teams: {
+      Departments: {
         Developers: {
           RichmondVirginiaDevs: {
             Users: {

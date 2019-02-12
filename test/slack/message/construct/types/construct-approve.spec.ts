@@ -30,9 +30,9 @@ describe("constructApprove", () => {
       Check_Mark_Style: "green",
       X_Mark_Style: "base",
     },
-    Teams: {
-      Team1: {
-        TeamGroup1: {
+    Departments: {
+      Dev: {
+        Team1: {
           Users: {
             Leads: {
               gwely: {
@@ -92,10 +92,10 @@ describe("constructApprove", () => {
 
     // Expect SlackUser slack names to be in ApprovePR description
     expect((result.description)
-      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Leads.gwely.Slack_Name))
+      .includes(validJSON.Departments.Dev.Team1.Users.Leads.gwely.Slack_Name))
       .to.be.equal(true);
     expect((result.description)
-      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Members.EthanTPainter.Slack_Id))
+      .includes(validJSON.Departments.Dev.Team1.Users.Members.EthanTPainter.Slack_Id))
       .to.be.equal(true);
 
     // Expect title, url, owner, and sender in ApprovePR
@@ -109,13 +109,13 @@ describe("constructApprove", () => {
       .includes(validJSON.Options.Num_Required_Peer_Approvals
         + " Required Peer")).to.be.equal(true);
     expect((result.approvals)
-      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Members.DillonSykes.Slack_Name
+      .includes(validJSON.Departments.Dev.Team1.Users.Members.DillonSykes.Slack_Name
         + " :heavy_check_mark:")).to.be.equal(true);
     expect((result.approvals)
       .includes(validJSON.Options.Num_Required_Lead_Approvals
         + " Required Lead")).to.be.equal(true);
     expect((result.approvals)
-      .includes(validJSON.Teams.Team1.TeamGroup1.Users.Leads.gwely.Slack_Name
+      .includes(validJSON.Departments.Dev.Team1.Users.Leads.gwely.Slack_Name
         + " :heavy_check_mark:")).to.be.equal(true);
   });
 });

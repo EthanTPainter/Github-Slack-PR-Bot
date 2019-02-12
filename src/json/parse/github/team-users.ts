@@ -12,42 +12,41 @@ export function getGitHubTeamUsers(
 ): string[] {
 
   let githubUsers: string[];
-  const jsonFile = json;
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
-  const teams = jsonFile.Teams;
-  const allTeamKeys = Object.keys(teams);
-  // If no teams present, return error
-  if (allTeamKeys.length === 0) {
-    throw new Error("No Team (DevTeam, ThisCoolTeam, etc.) found in JSON file");
+  const departments = json.Departments;
+  const allDepartmentKeys = Object.keys(departments);
+  // If no departments present, return error
+  if (allDepartmentKeys.length === 0) {
+    throw new Error("No Department found in JSON file");
   }
 
-  // Otherwise loop through teams (DevTeam, QaTeam, ProdTeam)
-  let teamCounter = 0;
-  while (teamCounter < allTeamKeys.length) {
+  // Otherwise loop through departments (DevTeam, QaTeam, ProdTeam)
+  let departmentCounter = 0;
+  while (departmentCounter < allDepartmentKeys.length) {
     // Get selectedTeam (DevTeam), and get selectedTeamGroup (DevTeam1)
-    const selectedTeam = allTeamKeys[teamCounter];
-    const selectedTeamGroup = teams[selectedTeam];
-    const teamGroupKeys = Object.keys(selectedTeamGroup);
-    if (teamGroupKeys.length === 0) {
-      throw new Error("No Team Group (Dev_Team_1, SomethingCool1, etc.) found in JSON file");
+    const selectedDepartmentName = allDepartmentKeys[departmentCounter];
+    const selectedDepartment = departments[selectedDepartmentName];
+    const teamKeys = Object.keys(selectedDepartment);
+    if (teamKeys.length === 0) {
+      throw new Error("No Team found in JSON file");
     }
-    let selectedTeamTypeCounter = 0;
+    let selectedTeamCounter = 0;
     // Loop through team groups (DevTeam1, DevTeam2, etc.)
-    while (selectedTeamTypeCounter < teamGroupKeys.length) {
+    while (selectedTeamCounter < teamKeys.length) {
       // Retrieve users from JSON
-      const selectedGroupSubTeam = selectedTeamGroup[teamGroupKeys[selectedTeamTypeCounter]];
-      if (selectedGroupSubTeam.Users === undefined) {
-        throw new Error(`No Users defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+      const selectedTeam = selectedDepartment[teamKeys[selectedTeamCounter]];
+      if (selectedTeam.Users === undefined) {
+        throw new Error(`No Users defined for team: ${teamKeys[selectedTeamCounter]}`);
       }
-      const users = selectedGroupSubTeam.Users;
+      const users = selectedTeam.Users;
 
       if (users.Leads === undefined) {
-        throw new Error(`Leads not defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+        throw new Error(`Leads not defined for team: ${teamKeys[selectedTeamCounter]}`);
       }
       const leadUsers = users.Leads;
 
       if (users.Members === undefined) {
-        throw new Error(`Members not defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+        throw new Error(`Members not defined for team: ${teamKeys[selectedTeamCounter]}`);
       }
       const memberUsers = users.Members;
       // Check if githubUser is a Lead for the group
@@ -81,12 +80,12 @@ export function getGitHubTeamUsers(
 
       // If GitHub user not found in lead or member groups
       // The user must be in a different group
-      selectedTeamTypeCounter++;
+      selectedTeamCounter++;
     }
     // User not found in General Team (DevTeam), look at antoher team
-    teamCounter++;
+    departmentCounter++;
   }
-  // Looped through all teams and couldn't find github user
+  // Looped through all departments and couldn't find github user
   // Throw error because of user not found
   throw new Error(`GitHub user: ${githubUser} could not be found in JSON file`);
 }

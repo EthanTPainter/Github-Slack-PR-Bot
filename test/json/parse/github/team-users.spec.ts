@@ -4,8 +4,8 @@ import { getGitHubTeamUsers } from "../../../../src/json/parse";
 describe("getGitHubTeamUsers", () => {
 
   const validJSON = {
-    Teams: {
-      Dev_Team: {
+    Departments: {
+      Devs: {
         Dev_Team_1: {
           Users: {
             Leads: {
@@ -94,11 +94,11 @@ describe("getGitHubTeamUsers", () => {
 
   it("should throw an error -- No Teams property in JSON", () => {
     const invalidJSON = {
-      Teams: {},
+      Departments: {},
     };
     const githubUser = "harrison";
 
-    const expected = new Error("No Team (DevTeam, ThisCoolTeam, etc.) found in JSON file");
+    const expected = new Error("No Department found in JSON file");
 
     expect(() => getGitHubTeamUsers(githubUser, invalidJSON))
       .to.throw(expected.message);
@@ -106,13 +106,13 @@ describe("getGitHubTeamUsers", () => {
 
   it("should throw an error -- No Team Group in JSON", () => {
     const invalidJSON = {
-      Teams: {
+      Departments: {
         DevTeam: {},
       },
     };
     const githubUser = "harrison";
 
-    const expected = new Error("No Team Group (Dev_Team_1, SomethingCool1, etc.) found in JSON file");
+    const expected = new Error("No Team found in JSON file");
 
     expect(() => getGitHubTeamUsers(githubUser, invalidJSON))
       .to.throw(expected.message);
@@ -120,7 +120,7 @@ describe("getGitHubTeamUsers", () => {
 
   it("should throw an error -- No Users in a Team Group in JSON", () => {
     const invalidJSON = {
-      Teams: {
+      Departments: {
         CoolTeam: {
           CoolTeam1: {},
         },
@@ -137,7 +137,7 @@ describe("getGitHubTeamUsers", () => {
 
   it("should throw an error -- No Leads in a Team Group in JSON", () => {
     const invalidJSON = {
-      Teams: {
+      Departments: {
         NeAt: {
           Neato: {
             Users: {},
@@ -156,7 +156,7 @@ describe("getGitHubTeamUsers", () => {
 
   it("should throw an error -- No Members in a Team Group in JSON", () => {
     const invalidJSON = {
-      Teams: {
+      Departments: {
         NeAt: {
           Neato: {
             Users: {
@@ -179,7 +179,7 @@ describe("getGitHubTeamUsers", () => {
 
   it("should throw an error -- GitHub user not found", () => {
     const validJSON_1 = {
-      Teams: {
+      Departments: {
         TeamUno: {
           SubUno: {
             Users: {

@@ -9,8 +9,8 @@ import { SlackUser } from "src/models";
 describe("getUsersApproving", () => {
 
   const json = {
-    Teams: {
-      DevTeam: {
+    Departments: {
+      Dev: {
         DevTeam1: {
           Users: {
             Leads: {
@@ -57,7 +57,7 @@ describe("getUsersApproving", () => {
   it("should retrieve all users who approved even if they're in different sub teams", () => {
     const usersApproving = ["harrison", "EthanTPainter"];
     const json2 = {
-      Teams: {
+      Departments: {
         DevTeam: {
           DevTeam1: {
             Users: {
@@ -105,7 +105,7 @@ describe("getUsersApproving", () => {
 describe("getUsersReqChanges", () => {
 
   const json = {
-    Teams: {
+    Departments: {
       DevTeam: {
         DevTeam1: {
           Users: {

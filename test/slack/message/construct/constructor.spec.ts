@@ -42,9 +42,9 @@ describe("constructSlackMessage", () => {
       Check_Mark_Style: "green",
       X_Mark_Style: "base",
     },
-    Teams: {
-      Team1: {
-        TeamGroup1: {
+    Departments: {
+      Dev: {
+        Team1: {
           Slack_Group: "Slack_Group_Name",
           Users: {
             Leads: {

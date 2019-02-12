@@ -4,9 +4,9 @@ import { getSlackLeads } from "../../../../src/json/parse";
 describe("getSlackLeads", () => {
 
   const validJSON = {
-    Teams: {
-      Team1: {
-        TeamGroup1: {
+    Departments: {
+      Dep1: {
+        Team1: {
           Users: {
             Members: {},
             Leads: {
@@ -34,9 +34,9 @@ describe("getSlackLeads", () => {
 
     const result = getSlackLeads(githubUser, validJSON);
     const expected = [
-      validJSON.Teams.Team1.TeamGroup1.Users.Leads.Leader1,
-      validJSON.Teams.Team1.TeamGroup1.Users.Leads.Leader2,
-      validJSON.Teams.Team1.TeamGroup1.Users.Leads.Leader3,
+      validJSON.Departments.Dep1.Team1.Users.Leads.Leader1,
+      validJSON.Departments.Dep1.Team1.Users.Leads.Leader2,
+      validJSON.Departments.Dep1.Team1.Users.Leads.Leader3,
     ];
 
     expect(result).to.be.deep.equal(expected);
@@ -44,9 +44,9 @@ describe("getSlackLeads", () => {
 
   it("should get only slack lead name", () => {
     const validJSON_1 = {
-      Teams: {
-        Team1: {
-          TeamGroup1: {
+      Departments: {
+        Dep1: {
+          Team1: {
             Users: {
               Leads: {
                 Ethan: {
@@ -69,7 +69,7 @@ describe("getSlackLeads", () => {
 
     const result = getSlackLeads(githubUser, validJSON_1);
     const expected = [
-      validJSON_1.Teams.Team1.TeamGroup1.Users.Leads.Ethan,
+      validJSON_1.Departments.Dep1.Team1.Users.Leads.Ethan,
     ];
 
     expect(result).to.be.deep.equal(expected);
@@ -77,9 +77,9 @@ describe("getSlackLeads", () => {
 
   it("should not get any slack leads -- No existing slack leads", ()  => {
     const validJSON_1 = {
-      Teams: {
-        Team1: {
-          TeamGroup1: {
+      Departments: {
+        Dep1: {
+          Team1: {
             Users: {
               Leads: {},
               Members: {
@@ -103,7 +103,7 @@ describe("getSlackLeads", () => {
 
   it("should throw an error -- No Team found", () => {
     const invalidJSON = {
-      Teams: {},
+      Departments: {},
     };
     const githubUser = "ethan";
 
@@ -114,8 +114,8 @@ describe("getSlackLeads", () => {
 
   it("should throw an error -- No Team group found", () => {
     const invalidJSON = {
-      Teams: {
-        Team1: {},
+      Departments: {
+        Dep1: {},
       },
     };
     const githubUser = "ethan";
@@ -127,14 +127,14 @@ describe("getSlackLeads", () => {
 
   it("should throw an error -- No Users defined in JSON", () => {
     const invalidJSON = {
-      Teams: {
-        Team1: {
-          TeamGroup: {},
+      Departments: {
+        Dep1: {
+          Team1: {},
         },
       },
     };
     const githubUser = "ethan";
-    const subTeam = "TeamGroup";
+    const subTeam = "Team1";
 
     const expected = new Error(`No Users defined for team: ${subTeam}`);
     expect(() => getSlackLeads(githubUser, invalidJSON))
@@ -143,16 +143,16 @@ describe("getSlackLeads", () => {
 
   it("should throw an error -- No Leads defined in JSON", () => {
     const invalidJSON = {
-      Teams: {
-        Team1: {
-          TeamGroup: {
+      Departments: {
+        Dep1: {
+          Team1: {
             Users: {},
           },
         },
       },
     };
     const githubUser = "ethan";
-    const subTeam = "TeamGroup";
+    const subTeam = "Team1";
 
     const expected = new Error(`Leads not defined for team: ${subTeam}`);
     expect(() => getSlackLeads(githubUser, invalidJSON))
@@ -161,9 +161,9 @@ describe("getSlackLeads", () => {
 
   it("should throw an error -- No Members defined in JSON", () => {
     const invalidJSON = {
-      Teams: {
+      Departments: {
         Team1: {
-          TeamGroup: {
+          Team: {
             Users: {
               Leads: {},
             },
@@ -172,7 +172,7 @@ describe("getSlackLeads", () => {
       },
     };
     const githubUser = "ethan";
-    const subTeam = "TeamGroup";
+    const subTeam = "Team";
 
     const expected = new Error(`Members not defined for team: ${subTeam}`);
     expect(() => getSlackLeads(githubUser, invalidJSON))

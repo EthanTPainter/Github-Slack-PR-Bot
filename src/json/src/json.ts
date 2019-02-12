@@ -6,8 +6,8 @@ export const json = {
     Num_Required_Peer_Approvals: 1,
     Dynamo_Peer_Before_Lead: true,
   },
-  Teams: {
-    Dev_Team: {
+  Department: {
+    Dev: {
       Dev_Team_1: {
         Slack_Group: {
           Slack_Name: "Group_Slack_Name",

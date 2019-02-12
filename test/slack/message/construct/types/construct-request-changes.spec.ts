@@ -18,8 +18,8 @@ describe("constructReqChanges", () => {
     },
   };
   const validJSON = {
-    Teams: {
-      Team1: {
+    Departments: {
+      Dev: {
         TeamGroup1: {
           Users: {
             Leads: {

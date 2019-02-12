@@ -6,8 +6,8 @@ import { CommentPR } from "../../../../../src/models";
 describe("constructComment", () => {
 
   const validJSON = {
-    Teams: {
-      Team1: {
+    Departments: {
+      Dev: {
         TeamGroup1: {
           Users: {
             Leads: {
