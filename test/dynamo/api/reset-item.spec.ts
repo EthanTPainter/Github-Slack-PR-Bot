@@ -7,7 +7,7 @@ describe("putItem", () => {
 
   it("should put an item into the dynamoDB table", async () => {
     const dynamo = new DynamoReset();
-    const slackUser = "testUser";
+    const slackUser = { Slack_Name: "testUser", Slack_Id: "<@12345>" };
 
     const dynamoDB = new AWS.DynamoDB.DocumentClient({
       apiVersion: "2012-08-10",

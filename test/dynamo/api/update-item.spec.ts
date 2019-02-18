@@ -7,7 +7,7 @@ describe("putItem", () => {
 
   it("should put an item into the dynamoDB table", async () => {
     const dynamo = new DynamoAppend();
-    const githubUser = "testUser";
+    const slackUser = { Slack_Name: "testUser", Slack_Id: "<@12345>" };
     const data: Item = {
       owner: { Slack_Name: "ethan", Slack_Id: "<@1111>" },
       title: "New title",
@@ -23,7 +23,7 @@ describe("putItem", () => {
       region: "us-east-1",
     });
 
-    // const result = await dynamo.updateItem(githubUser, data);
+    // const result = await dynamo.appendItem(slackUser, [], data);
     // console.log(result);
   });
 

@@ -3,14 +3,14 @@ import { newLogger } from "../../logger";
 import { requiredEnvs } from "../../../src/required-envs";
 import { SlackUser } from "../../models";
 
-const logger = newLogger("GetItem");
+const logger = newLogger("DynamoGetItem");
 
 export class DynamoGet {
 
   /**
    * @author Ethan T Painter
    * @description get Item from DyanmoDB table
-   * @param {string} slackUser Slack username
+   * @param {string} slackUser Slack user
    * @returns Result of dynamoDB Get request
    */
   async getItem(
@@ -29,7 +29,7 @@ export class DynamoGet {
       // Provide base params as input
       const params = {
         TableName: requiredEnvs.DYNAMO_TABLE,
-        Key: { githubUser: slackUser },
+        Key: { slackUserId: slackUser.Slack_Id },
         AttributesToGet: [
           "contents",
           "last_updated",

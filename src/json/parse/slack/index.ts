@@ -15,6 +15,7 @@ export {
 
 export {
   getSlackUser,
+  getSlackUserAlt,
 } from "./user";
 
 export {

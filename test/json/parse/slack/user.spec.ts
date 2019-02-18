@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { getSlackUser } from "../../../../src/json/parse";
+import { getSlackUser, getSlackUserAlt } from "../../../../src/json/parse";
 
 describe("getSlackUser", () => {
 
@@ -67,7 +67,7 @@ describe("getSlackUser", () => {
     };
     const githubUser = "dinkel";
 
-    const expected = new Error("No Team found in JSON file");
+    const expected = new Error("No Department found in JSON file");
     expect(() => getSlackUser(githubUser, invalidJSON))
       .to.throw(expected.message);
   });
@@ -80,7 +80,7 @@ describe("getSlackUser", () => {
     };
     const githubUser = "dinkel";
 
-    const expected = new Error("No Team Group found in JSON file");
+    const expected = new Error("No Team found in JSON file");
     expect(() => getSlackUser(githubUser, invalidJSON))
       .to.throw(expected.message);
   });
@@ -142,6 +142,155 @@ describe("getSlackUser", () => {
     const expected = new Error(`Members not defined for team: ${subTeam}`);
 
     expect(() => getSlackUser(githubUser, invalidJSON))
+      .to.throw(expected.message);
+  });
+});
+
+describe("getSlackUserAlt", () => {
+
+  const validJSON = {
+    Departments: {
+      Developers: {
+        PhillyDevTeam: {
+          Users: {
+            Leads: {
+              andrew: {
+                Slack_Name: "andrew.curcie",
+                Slack_Id: "<@UUID1111>",
+              },
+            },
+            Members: {
+              ethan: {
+                Slack_Name: "ethan.painter",
+                Slack_Id: "<@UUID1112>",
+              },
+              dillon: {
+                Slack_Name: "dillon.sykes",
+                Slack_Id: "<@UUID1113>",
+              },
+              daniel: {
+                Slack_Name: "daniel.larner",
+                Slack_Id: "<@UUID1114>",
+              },
+            },
+          },
+        },
+      },
+    },
+  };
+
+  it("should get slack user given lead slack user id", () => {
+    const slackUserId = "<@UUID1111>";
+
+    const result = getSlackUserAlt(slackUserId, validJSON);
+    const expected = validJSON.Departments.Developers.PhillyDevTeam.Users.Leads.andrew;
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should get slack user given member slack user id", () => {
+    const slackUserId = "<@UUID1113>";
+
+    const result = getSlackUserAlt(slackUserId, validJSON);
+    const expected = validJSON.Departments.Developers.PhillyDevTeam.Users.Members.dillon;
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should throw an error -- Slack user id not found", () => {
+    const slackUserId = "<@UUID2222>";
+
+    const expected = new Error(`Slack user id: ${slackUserId} not found in JSON file`);
+
+    expect(() => getSlackUserAlt(slackUserId, validJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- No Departments", () => {
+    const invalidJSON = {
+      Departments: {},
+    };
+    const slackUserId = "<@UUID1111>";
+
+    const expected = new Error(`No Department found in JSON file`);
+
+    expect(() => getSlackUserAlt(slackUserId, invalidJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- No Teams", () => {
+    const invalidJSON = {
+      Departments: {
+        Teams: {},
+      },
+    };
+    const slackUserId = "<@UUID1111>";
+
+    const expected = new Error(`No Team found in JSON file`);
+
+    expect(() => getSlackUserAlt(slackUserId, invalidJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- No Users found", () => {
+    const invalidJSON = {
+      Departments: {
+        Teams: {
+          newTeam: {},
+        },
+      },
+    };
+    const slackUserId = "<@UUID1111>";
+    const teamName = "newTeam";
+
+    const expected = new Error(`Users not defined for team: ${teamName}`);
+
+    expect(() => getSlackUserAlt(slackUserId, invalidJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- No Leads found", () => {
+    const invalidJSON = {
+      Departments: {
+        Teams: {
+          newTeam: {
+            Users: {},
+          },
+        },
+      },
+    };
+    const slackUserId = "<@UUID1111>";
+    const teamName = "newTeam";
+
+    const expected = new Error(`Leads not defined for team: ${teamName}`);
+
+    expect(() => getSlackUserAlt(slackUserId, invalidJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- No Members found", () => {
+    const invalidJSON = {
+      Departments: {
+        Teams: {
+          newTeam: {
+            Users: {
+              Leads: {
+                andrew: {
+                  Slack_Name: "ac",
+                  Slack_Id: "<@123>",
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+    const slackUserId = "<@UUID1111>";
+    const teamName = "newTeam";
+
+    const expected = new Error(`Members not defined for team: ${teamName}`);
+
+    expect(() => getSlackUserAlt(slackUserId, invalidJSON))
       .to.throw(expected.message);
   });
 });

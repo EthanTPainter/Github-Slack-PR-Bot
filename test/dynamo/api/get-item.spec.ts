@@ -13,7 +13,7 @@ describe("getItem", () => {
 
   it("successful get an item from DynamoDB table", async () => {
     const dynamo = new DynamoGet();
-    const githubUser = "testUser";
+    const slackUser = { Slack_Name: "testUser", Slack_Id: "testUser" };
 
     const expected = {
       Item: {
@@ -27,7 +27,7 @@ describe("getItem", () => {
       region: "us-east-1",
     });
 
-    // const result = await dynamo.getItem(githubUser);
+    // const result = await dynamo.getItem(slackUser);
     // console.log(result);
   });
 

@@ -2,8 +2,9 @@ import { DynamoDB } from "aws-sdk";
 import { DateTime } from "luxon";
 import { newLogger } from "../../logger";
 import { requiredEnvs } from "../../required-envs";
+import { SlackUser } from "../../models";
 
-const logger = newLogger("GetItem");
+const logger = newLogger("DynamoResetItem");
 
 export class DynamoReset {
 
@@ -14,7 +15,7 @@ export class DynamoReset {
    * @returns Result of dynamoDB Get request
    */
   async resetItems(
-    slackUser: string,
+    slackUser: SlackUser,
   ): Promise<DynamoDB.DocumentClient.AttributeMap | undefined> {
 
     try {
@@ -35,7 +36,7 @@ export class DynamoReset {
       // Provide base params as input
       const params = {
         TableName: requiredEnvs.DYNAMO_TABLE,
-        Key: { githubUser: slackUser },
+        Key: { slackUserId: slackUser.Slack_Id },
         UpdateExpression: `set contents = :d, last_updated = :t`,
         ExpressionAttributeValues: {
           ":d": emptyItem,

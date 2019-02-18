@@ -3,13 +3,14 @@ import * as querystring from "querystring";
 import { requiredEnvs } from "../required-envs";
 import { Annotations } from "../models";
 import { newLogger } from "../logger";
-import { getSlackGroupAlt } from "../json/parse";
+import { getSlackUserAlt } from "../json/parse";
 import { json } from "../json/src/json";
+import { DynamoGet } from "../dynamo/api";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
 
-const logger = newLogger("SlackMyStatus");
+const logger = newLogger("SlackMyQueue");
 
 /**
  * This handler:
@@ -22,11 +23,11 @@ const logger = newLogger("SlackMyStatus");
  *                 successfull or failed
  * @returns Current queue for requested user
  */
-export function handler(
+export async function processMyQueue(
   event: any,
   context: any,
   callback: any,
-): void {
+): Promise<void> {
 
   logger.info(`event: ${JSON.stringify(event)}`);
 
@@ -37,7 +38,7 @@ export function handler(
     logger.info("Running with X-Ray enabled");
     const ann = new Annotations(
       "GitHub-Slack-PR-Bot",
-      "SlackMyStatus",
+      "SlackMyQueue",
     );
     AWSXRay.captureFunc(ann.application, (subsegment: any) => {
       subsegment.addAnnotation("application", ann.application);
@@ -57,11 +58,23 @@ export function handler(
   if (typeof body.user_id === "object") {
     throw new Error("body.user_id sent as an object rather than a string");
   }
-  const slackUserID = body.user_id;
 
-  const success: object = {
-    body: "MY SUCCESS",
-    statusCode: "200",
-  };
-  callback(null, success);
+  // Format Slack User ID & retrieve queue
+  const dynamoGet = new DynamoGet();
+  // const slackUserID = `<@${body.user_id}>`;
+  // const slackUser = getSlackUserAlt(slackUserID, json);
+  const slackUser = { Slack_Name: "testUser", Slack_Id: "<@12345>" };
+  try {
+    const userQueue = await dynamoGet.getItem(slackUser);
+    logger.info(userQueue!);
+
+    const success: object = {
+      body: "MY SUCCESS \n" + JSON.stringify(userQueue),
+      statusCode: "200",
+    };
+    callback(null, success);
+  }
+  catch (error) {
+    logger.error("Uh oh. Error occurred: " + error.message);
+  }
 }

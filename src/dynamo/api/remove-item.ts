@@ -1,14 +1,14 @@
 import { newLogger } from "../../logger";
 import { DynamoDB } from "aws-sdk";
 import { requiredEnvs } from "../../required-envs";
-import { Item } from "src/models";
+import { Item, SlackUser } from "../../models";
 
 const logger = newLogger("DynamoRemove");
 
 export class DynamoRemove {
 
   async removeItem(
-    slackUser: string,
+    slackUser: SlackUser,
     currentContents: Item[],
     removeItem: Item,
   ): Promise<DynamoDB.DocumentClient.DeleteItemOutput> {
@@ -25,7 +25,7 @@ export class DynamoRemove {
       // Provide base params as input
       const params = {
         TableName: requiredEnvs.DYNAMO_TABLE,
-        Key: { githubUser: slackUser },
+        Key: { slackUserId: slackUser.Slack_Id },
         AttributesToGet: [
           "contents",
           "last_updated",

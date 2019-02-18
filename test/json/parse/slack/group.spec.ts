@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { getSlackGroup } from "../../../../src/json/parse";
+import { getSlackGroup, getSlackGroupAlt } from "../../../../src/json/parse";
 
 describe("getSlackGroup", () => {
 
@@ -13,13 +13,28 @@ describe("getSlackGroup", () => {
           },
           Users: {
             Leads: {
-              andrew: "AndrewCurcie",
+              andrew: {
+                Slack_Name: "AndrewCurcie",
+                Slack_Id: "<@1110>",
+              },
             },
             Members: {
-              ethan: "EthanPainter",
-              dillon: "DillonSykes",
-              daniel: "DanielLarner",
-              joshua: "JoshuaHarris",
+              ethan: {
+                Slack_Name: "EthanPainter",
+                Slack_Id: "<@1111>",
+              },
+              dillon: {
+                Slack_Name: "DillonSykes",
+                Slack_Id: "<@1112>",
+              },
+              daniel: {
+                Slack_Name: "DanielLarner",
+                Slack_Id: "<@1113>",
+              },
+              joshua: {
+                Slack_Name: "JoshuaHarris",
+                Slack_Id: "<@1114>",
+              },
             },
           },
         },
@@ -36,7 +51,7 @@ describe("getSlackGroup", () => {
     expect(result).to.be.deep.equal(expected);
   });
 
-  it("should throw an error -- No teams available", () => {
+  it("should throw an error -- No departments available", () => {
     const invalidJSON = {
       Departments: {},
     };
@@ -47,7 +62,7 @@ describe("getSlackGroup", () => {
       .to.throw(expected.message);
   });
 
-  it("should throw an error -- No Sub teams available", () => {
+  it("should throw an error -- No teams available", () => {
     const invalidJSON = {
       Departments: {
         Dev: {},
@@ -125,4 +140,153 @@ describe("getSlackGroup", () => {
       .to.throw(expected.message);
   });
 
+});
+
+describe("GetSlackGroupAlt", () => {
+
+  const validJSON = {
+    Departments: {
+      Devs: {
+        DevTeam1: {
+          Slack_Group: {
+            Slack_Name: "SlackGroup",
+            Slack_Id: "<@1000>",
+          },
+          Users: {
+            Leads: {
+              andrew: {
+                Slack_Name: "andrew.curcie",
+                Slack_Id: "<@1110>",
+              },
+            },
+            Members: {
+              ethan: {
+                Slack_Name: "ethan.painter",
+                Slack_Id: "<@1111>",
+              },
+              daniel: {
+                Slack_Name: "daniel.larner",
+                Slack_Id: "<@1112>",
+              },
+            },
+          },
+        },
+      },
+    },
+  };
+
+  it("should get slack group given a lead slack user ID", () => {
+    const slackUserID = "<@1110>";
+
+    const result = getSlackGroupAlt(slackUserID, validJSON);
+    const expected = validJSON.Departments.Devs.DevTeam1.Slack_Group;
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should get slack group given a member slack user ID", () => {
+    const slackUserId = "<@1112>";
+
+    const result = getSlackGroupAlt(slackUserId, validJSON);
+    const expected = validJSON.Departments.Devs.DevTeam1.Slack_Group;
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should throw an error -- no departments available", () => {
+    const slackUserId = "<@1111>";
+    const invalidJSON = {
+      Departments: {},
+    };
+
+    const expected = new Error("No Department found in JSON file");
+
+    expect(() => getSlackGroupAlt(slackUserId, invalidJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- No teams available", () => {
+    const slackUserId = "<@1111>";
+    const invalidJSON = {
+      Departments: {
+        Devs: {},
+      },
+    };
+
+    const expected = new Error("No Team found in JSON file");
+
+    expect(() => getSlackGroupAlt(slackUserId, invalidJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- No users defined for the team", () => {
+    const slackUserId = "<@1111>";
+    const invalidJSON = {
+      Departments: {
+        Devs: {
+          DevTeam1: {},
+        },
+      },
+    };
+
+    const team = "DevTeam1";
+    const expected = new Error("No Users defined for team: " + team);
+
+    expect(() => getSlackGroupAlt(slackUserId, invalidJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- No leads defined for the team", () => {
+    const slackUserId = "<@1111>";
+    const invalidJSON = {
+      Departments: {
+        Devs: {
+          DevTeam1: {
+            Users: {},
+          },
+        },
+      },
+    };
+
+    const team = "DevTeam1";
+    const expected = new Error("Leads not defined for team: " + team);
+
+    expect(() => getSlackGroupAlt(slackUserId, invalidJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- No members defined for the team", () => {
+    const slackUserId = "<@1111>";
+    const invalidJSON = {
+      Departments: {
+        Devs: {
+          DevTeam1: {
+            Users: {
+              Leads: {
+                matt: {
+                  Slack_Name: "Name",
+                  Slack_Id: "<@123>",
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+
+    const team = "DevTeam1";
+    const expected = new Error("Members not defined for team: " + team);
+
+    expect(() => getSlackGroupAlt(slackUserId, invalidJSON))
+      .to.throw(expected.message);
+  });
+
+  it("should throw an error -- No Slakc Group", () => {
+    const slackUserId = "<@1116>";
+
+    const expected = new Error("No Slack Group found in JSON file");
+
+    expect(() => getSlackGroupAlt(slackUserId, validJSON))
+      .to.throw(expected.message);
+  });
 });

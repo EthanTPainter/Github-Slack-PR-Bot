@@ -32,22 +32,28 @@ package:
 
 functions:
   GitHubSlackCommManager:
-    handler: dist/src/handlers/GitHubManager.handler
+    handler: dist/src/handlers/GitHubManager.processGitHubEvent
     events:
       - http:
           path: github
           method: post
-  SlackTeamStatusManager:
-    handler: dist/src/handlers/SlackTeamStatus.handler
+  SlackTeamQueueManager:
+    handler: dist/src/handlers/SlackTeamQueue.processTeamQueue
     events:
       - http:
           path: team-status
           method: post
-  SlackMyStatusManager:
-    handler: dist/src/handlers/SlackMyStatus.handler
+  SlackMyQueueManager:
+    handler: dist/src/handlers/SlackMyQueue.processMyQueue
     events:
       - http:
           path: my-status
+          method: post
+  SlackGetQueueManager:
+    handler: dist/src/handlers/SlackGetQueue.processGetQueue
+    events:
+      - http:
+          path: get-status
           method: post
 
 resources:
@@ -57,12 +63,17 @@ resources:
       Properties:
         TracingConfig:
           Mode: Active
-    SlackTeamStatusManagerLambdaFunction:
+    SlackTeamQueueManagerLambdaFunction:
       Type: AWS::Lambda::Function
       Properties:
         TracingConfig:
           Mode: Active
-    SlackMyStatusManagerLambdaFunction:
+    SlackMyQueueManagerLambdaFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        TracingConfig:
+          Mode: Active
+    SlackGetQueueManagerLambdaFunction:
       Type: AWS::Lambda::Function
       Properties:
         TracingConfig:

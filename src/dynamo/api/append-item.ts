@@ -5,7 +5,7 @@ import { DateTime } from "luxon";
 import { newLogger } from "../../logger";
 import { requiredEnvs } from "../../required-envs";
 
-const logger = newLogger("UpdateItem");
+const logger = newLogger("DynamoAppendItem");
 
 export class DynamoAppend {
 
@@ -41,7 +41,7 @@ export class DynamoAppend {
       // Provide base params as input
       const params = {
         TableName: requiredEnvs.DYNAMO_TABLE,
-        Key: { githubUser: slackUser },
+        Key: { slackUserId: slackUser.Slack_Id },
         UpdateExpression: `set contents = :d, last_updated = :t`,
         ExpressionAttributeValues: {
           ":d": currentContents,

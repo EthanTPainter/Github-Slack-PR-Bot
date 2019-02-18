@@ -23,7 +23,7 @@ const logger = newLogger("GitHubManager");
  * @param callback Callback function for using if successfull or failed
  * @returns Slack message to team slack channel about the event that occurred
  */
-export async function handler(
+export async function processGitHubEvent(
   event: any,
   context: any,
   callback: any,

@@ -10,7 +10,7 @@ import { formatQueue } from "../dynamo/formatting/queue";
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
 
-const logger = newLogger("SlackTeamStatus");
+const logger = newLogger("SlackTeamQueue");
 
 /**
  * This handler:
@@ -23,7 +23,7 @@ const logger = newLogger("SlackTeamStatus");
  * @returns Current team queue
  */
 
-export function handler(
+export function processTeamQueue(
   event: any,
   context: any,
   callback: any,
@@ -38,7 +38,7 @@ export function handler(
     logger.info("Running with X-Ray enabled");
     const ann = new Annotations(
       "GitHub-Slack-PR-Bot",
-      "SlackTeamStatus",
+      "SlackTeamQueue",
     );
     AWSXRay.captureFunc(ann.application, (subsegment: any) => {
       subsegment.addAnnotation("application", ann.application);
