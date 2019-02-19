@@ -1,6 +1,5 @@
 /**
  * Not enough information about which team the user is in, so search all (for now)
- * @author Ethan T Painter
  * @description Given a GitHub user, find the corresponding Slack user in the JSON file
  * @param event Event received from the GitHub webhook
  * @returns String of the slack user corresponding to the Github user provided

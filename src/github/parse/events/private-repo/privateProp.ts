@@ -1,5 +1,4 @@
 /**
- * @author EThan T Painter
  * @description From the event, retrieve the private property (boolean)
  *              This will tell us if the repository is private or public
  * @param event Event sent from the GitHub webhook

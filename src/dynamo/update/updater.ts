@@ -5,7 +5,6 @@ import { getSlackUser, getSlackGroup } from "src/json/parse";
 const logger = newLogger("UpdateDynamo");
 
 /**
- * @author Ethan T Painter
  * @description Update DynamoDB table
  * @param slackUser Slack User ID
  * @param json JSON for GitHub/Slack config

@@ -2,7 +2,6 @@ import { getSlackUser } from "../../../json/parse";
 import { SlackUser } from "../../../models";
 
 /**
- * @author Ethan T Painter
  * @description Retrieve slack users approving the
  *              PR listed in reviews
  * @param reviews Array of GitHub users who approved the PR
@@ -24,7 +23,6 @@ export function getUsersApproving(
 }
 
 /**
- * @author Ethan T Painter
  * @description Retrieve users who requested changes
  *              in the PR reviews list
  * @param reviews Array of GitHub users who requested
@@ -48,7 +46,6 @@ export function getUsersReqChanges(
 }
 
 /**
- * @author Ethan T Painter
  * @description Generate a list of slack users not approving
  *              so we can select these people later on.
  * @param slackOwner SlackUser who owns the PR

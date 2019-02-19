@@ -26,7 +26,6 @@ import { newLogger } from "../../../../logger";
 const logger = newLogger("ConstructApprove");
 
 /**
- * @author Ethan T Painter
  * @description Construction of approval list for PR
  * @param event Event from the GitHub webhook
  * @returns ApprovePR object with all important characteristics

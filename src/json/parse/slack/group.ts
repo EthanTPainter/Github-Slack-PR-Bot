@@ -4,7 +4,6 @@ import { SlackUser } from "./../../../models";
 const logger = newLogger("SlackGroup");
 
 /**
- * @author Ethan T Painter
  * @description Retrieve the slack group from the GitHub user
  * @param {string} githubUser String of the GitHub user name
  * @returns String of the Slack group corresponding to the
@@ -97,7 +96,6 @@ export function getSlackGroup(
 }
 
 /**
- * @author Ethan T Painter
  * @description Retrieve the slack group from the GitHub user
  * @param {string} slackUserId String of the Slack user name
  * @param json JSON configuration file

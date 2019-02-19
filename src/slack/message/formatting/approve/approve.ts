@@ -1,7 +1,6 @@
 import { SlackUser } from "../../../../models";
 
 /**
- * @author Ethan T Painter
  * @description Function used to construct the description
  * @param slackUser Slack user who owns the PR
  * @param slackUserApproving Slack user who is approving the PR
@@ -26,7 +25,6 @@ export function constructApproveDesc(
 }
 
 /**
- * @author Ethan T Painter
  * @description Generate a list of members to @ in Slack.
  *              Will be none, [], if the only member has
  *              already approve it.
@@ -70,7 +68,6 @@ export function getMemberList(
 }
 
 /**
- * @author Ethan T Painter
  * @description Get list of leads to @ in Slack.
  *        Will be none, [], if the only lead has
  *         already approved it.

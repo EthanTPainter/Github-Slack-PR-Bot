@@ -3,7 +3,6 @@ import { getXMark } from "../../../icons/x-mark";
 import { SlackUser } from "src/models";
 
 /**
- * @author Ethan T Painter
  * @description Construct string for Peer Approval statement
  * @param json JSON file for GitHub/Slack configuration settings
  *             and team groups

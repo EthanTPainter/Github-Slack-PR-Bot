@@ -1,11 +1,11 @@
 import * as querystring from "querystring";
 
 import { requiredEnvs } from "../required-envs";
-import { Annotations } from "../models";
+import { Annotations, Item} from "../models";
 import { newLogger } from "../logger";
-import { getSlackUserAlt } from "../json/parse";
 import { json } from "../json/src/json";
 import { DynamoGet } from "../dynamo/api";
+import { formatMyQueue } from "src/dynamo/formatting/format-my-queue";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -64,12 +64,22 @@ export async function processMyQueue(
   // const slackUserID = `<@${body.user_id}>`;
   // const slackUser = getSlackUserAlt(slackUserID, json);
   const slackUser = { Slack_Name: "testUser", Slack_Id: "<@12345>" };
+
   try {
-    const userQueue = await dynamoGet.getItem(slackUser);
-    logger.info(userQueue!);
+    // Get Queue
+    const userContents = await dynamoGet.getItem(slackUser);
+    if (userContents === undefined) {
+      logger.error("Couldn't find user in Dynamo table");
+      throw new Error("Unable to find user in DynamoDB table");
+    }
+    const userQueue: Item[] = userContents.contents;
+    logger.info(`User Queue: ${userQueue}`);
+
+    // Format queue from array to string
+    const formattedQueue = formatMyQueue(userQueue);
 
     const success: object = {
-      body: "MY SUCCESS \n" + JSON.stringify(userQueue),
+      body: formattedQueue,
       statusCode: "200",
     };
     callback(null, success);

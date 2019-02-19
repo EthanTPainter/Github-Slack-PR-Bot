@@ -4,7 +4,6 @@ import { SlackUser } from "../../../models";
 const logger = newLogger("Lead");
 
 /**
- * @author Ethan T Painter
  * @description Using the GitHub username, find the
  *       group and retrieve the leads for that group
  * @param githubUser GitHub username in JSON file
@@ -81,7 +80,6 @@ export function getSlackLeads(
 }
 
 /**
- * @author Ethan T Painter
  * @description Alternative Get Slack Leads funtion.
  *              Instead of GitHub user, provided slack user
  * @param slackUser Slack user

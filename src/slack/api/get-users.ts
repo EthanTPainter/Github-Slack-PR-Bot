@@ -4,7 +4,6 @@ import { newLogger } from "../../logger";
 const logger = newLogger("GetUsers");
 
 /**
- * @author Ethan T Painter
  * @description Get list of users in an org
  * @param slackApiUri Base Slack API Uri
  * @param token Slack Token

@@ -9,7 +9,7 @@ const logger = newLogger("DynamoResetItem");
 export class DynamoReset {
 
   /**
-   * @author Ethan T Painter
+   * 
    * @description get Item from DyanmoDB table
    * @param {string} slackUser Slack username
    * @returns Result of dynamoDB Get request

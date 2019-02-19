@@ -1,6 +1,5 @@
 
 /**
- * @author Ethan T Painter
  * @description Retrieve a list of github users in a team
  * @param {string} githubUser GitHub username registered to a team
  * @param json JSON file for the GitHub/Slack configuration

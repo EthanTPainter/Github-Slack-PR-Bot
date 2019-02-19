@@ -3,7 +3,6 @@ import { SlackUser } from "../../../models";
 
 const logger = newLogger("Member");
 /**
- * @author Ethan T Painter
  * @description Using the GitHub username, find the
  *       group and retrieve the members for that group
  * @param githubUser GitHub username in JSON file
@@ -85,7 +84,6 @@ export function getSlackMembers(
 }
 
 /**
- * @author Ethan T Painter
  * @description Alternative Get Slack Member function.
  *              Instead of GitHub user, uses slack user
  * @param slackUser Slack user

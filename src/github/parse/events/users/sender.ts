@@ -1,5 +1,4 @@
 /**
- * @author Ethan T Painter
  * @description Retrieve the user who is sending an
  *              event to the PR (approving, commenting, etc.)
  * @param event Event received from the GitHub webhook

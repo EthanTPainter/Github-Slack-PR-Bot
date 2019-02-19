@@ -10,7 +10,7 @@ const logger = newLogger("DynamoAppendItem");
 export class DynamoAppend {
 
   /**
-   * @author Ethan T Painter
+   * 
    * @description get Item from DyanmoDB table
    * @param {string} slackUser Slack username
    * @param {Item[]} currentContents Current contents in

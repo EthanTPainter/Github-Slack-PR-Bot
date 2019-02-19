@@ -1,7 +1,6 @@
 import { SlackUser } from "src/models";
 
 /**
- * @author Ethan T Painter
  * @description Construct description when a user requests changes
  * @param slackUser Slack user who owns the PR
  * @param SlackUserRequesting Slack user who is requesting PR changes

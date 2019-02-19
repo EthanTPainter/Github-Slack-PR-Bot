@@ -17,7 +17,6 @@ import {
 import { SlackUser } from "../../../../models";
 
 /**
- * @author Ethan T Painter
  * @description Using all reviews for a PR, construct
  *              peer and lead review string statements
  * @param json JSON config file

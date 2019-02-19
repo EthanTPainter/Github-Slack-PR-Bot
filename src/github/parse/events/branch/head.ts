@@ -1,5 +1,4 @@
 /**
- * @author Ethan T Painter
  * @description Get the Branch the PR is located on
  * @param event Event recived by the GitHub webhook
  * @returns string of the branch used for the PR

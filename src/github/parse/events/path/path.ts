@@ -3,7 +3,6 @@ import { newLogger } from "../../../../logger";
 const logger = newLogger("path");
 
 /**
- * @author Ethan T Painter
  * @description Retrieve core path and modify for API request
  * @param event Event recevied from the GitHub webhook
  * @returns string of the path for GET requests using GitHub API

@@ -1,7 +1,6 @@
 import { SlackUser } from "../../../models";
 
 /**
- * @author Ethan T Painter
  * @description get all leads approving the PR
  * @param slackUsersApproving All slack users approving this PR
  * @param allSlackLeadUsers All slack lead users in the team
@@ -25,7 +24,6 @@ export function getLeadsApproving(
 }
 
 /**
- * @author Ethan T Painter
  * @description get all leads requesting changes to PR
  * @param slackUsersReqChanges All slack leads requesting changes
  *                             to the PR
@@ -50,7 +48,6 @@ export function getLeadsReqChanges(
 }
 
 /**
- * @author Ethan T Painter
  * @description From all slack users not approving
  *              the PR, select the lead slack users
  *              not approving the PR.

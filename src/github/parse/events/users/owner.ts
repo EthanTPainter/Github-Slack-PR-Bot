@@ -1,5 +1,4 @@
 /**
- * @author Ethan T Painter
  * @description Retrieve the Owner of the PR
  * @param event Event received from the GitHub webhook
  * @returns String of the user who opened the PR

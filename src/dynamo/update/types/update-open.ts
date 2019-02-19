@@ -8,7 +8,6 @@ import { SlackUser } from "../../../models";
 const logger = newLogger("UpdateOpen");
 
 /**
- * @author Ethan T Painter
  * @description Update DynamoDB table and add to
  *              all queues necessary.
  * @param slackUser Slack User ID

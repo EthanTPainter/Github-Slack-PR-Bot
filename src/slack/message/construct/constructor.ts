@@ -13,7 +13,6 @@ import { newLogger } from "../../../logger";
 const logger = newLogger("Constructor");
 
 /**
- * @author Ethan T Painter
  * @description Main function for constructing the slack message
  * @param action Action from the event
  * @param event Event including pull_request, sender, etc.

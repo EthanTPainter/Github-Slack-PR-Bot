@@ -2,7 +2,6 @@ import { newLogger } from "../../../logger";
 
 const logger = newLogger("GetReviews");
 /**
- * @author Ethan T Painter
  * @description From latest reviews (key/value pairs of github
  *        users, ), retrieve approvals
  * @param latestReviews Object with keys of Github usernames,
@@ -35,7 +34,6 @@ export function getApprovingReviews(latestReviews: any): string[] {
 }
 
 /**
- * @author Ethan T Painter
  * @description From latest reviews (key/value pairs of github
  *        users), retrieve approvals
  * @param latestReviews Object with keys of Github usernames,

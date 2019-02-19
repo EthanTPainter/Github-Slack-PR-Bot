@@ -4,7 +4,6 @@ import { newLogger } from "../../logger";
 const logger = newLogger("PostMessage");
 
 /**
- * @author Ethan T Painter
  * @description post message to Slack Channel
  * @param {string} slackApiUri The URL for Slack API
  * @param {string} channel Slack Channel

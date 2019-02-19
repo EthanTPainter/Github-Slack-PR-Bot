@@ -4,7 +4,6 @@ import { newLogger } from "../../../logger";
 const logger = newLogger("ReviewParsing");
 
 /**
- * @author Ethan T Painter
  * @description Processes reviews to determine latest review statuses and users
  * @param reviewList A list of reviews provided through a GET request to api.github.com
  * @returns An object with keys set to GitHub usernames and values as submission status

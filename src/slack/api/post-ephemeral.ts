@@ -4,7 +4,6 @@ import { newLogger } from "../../logger";
 const logger = newLogger("PostEphemeral");
 
 /**
- * @author Ethan T Painter
  * @description Post an ephemeral message
  * @param slackApiUri Base Slack API Uri
  * @param channel Slack channel

@@ -1,5 +1,4 @@
 /**
- * @author Ethan T Painter
  * @description Retrieve the stable branch used for the merge
  * @param event Event recieved by the GitHub webhook
  * @returns String of the stable branch used as the base

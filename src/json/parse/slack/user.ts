@@ -4,7 +4,6 @@ import { SlackUser } from "../../../models";
 const logger = newLogger("User");
 /**
  * Not enough information about which team the user is in, so search all (for now)
- * @author Ethan T Painter
  * @description Given a GitHub user, find the corresponding Slack user in the JSON file
  * @param githubUser Github username
  * @param json JSON configuration file
@@ -90,7 +89,6 @@ export function getSlackUser(
 
 /**
  * Not enough information about which team the user is in, so search all (for now)
- * @author Ethan T Painter
  * @description Given a GitHub user, find the corresponding Slack user in the JSON file
  * @param slackUserId Slack User Id (<@12345>)
  * @param json JSON configuration file

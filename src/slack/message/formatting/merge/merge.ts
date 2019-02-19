@@ -1,7 +1,6 @@
 import { SlackUser } from "../../../../models";
 
 /**
- * @author Ethan T Painter
  * @description Constructs description of a Merged PR
  * @param slackUser The slack user who opened the PR
  * @param slackUserMerging The slack user merging the PR

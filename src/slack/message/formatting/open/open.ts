@@ -1,7 +1,6 @@
 import { SlackUser } from "../../../../models";
 
 /**
- * @author Ethan T Painter
  * @description Construct the description of the slack message
  * @param slackUser Slack user to include in the description
  * @param slackGroup Slack group to include in the description

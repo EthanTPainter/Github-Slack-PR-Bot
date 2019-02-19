@@ -1,5 +1,4 @@
 /**
- * @author EThan T Painter
  * @description Constructs url from GitHub event
  * @param event Event from GitHub webhook
  * @returns String of the url stored in the event

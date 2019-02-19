@@ -1,7 +1,6 @@
 import { SlackUser } from "../../../models";
 
 /**
- * @author Ethan T Painter
  * @description Retrieve a list of slack users in a team
  * @param {string} githubUser GitHub username registered to a team
  * @param json JSON file for the GitHub/Slack configuration
@@ -85,7 +84,6 @@ export function getSlackUsers(
 }
 
 /**
- * @author Ethan T Painter
  * @description Retrieve a list of slack users in a team
  * @param {string} slackUser Slack username registered to a team
  * @param json JSON file for the GitHub/Slack configuration

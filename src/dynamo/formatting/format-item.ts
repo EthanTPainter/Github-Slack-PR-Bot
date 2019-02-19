@@ -2,7 +2,6 @@ import { getTitle, getPRLink } from "../../github/parse";
 import { Item, SlackUser } from "../../models";
 
 /**
- * @author Ethan T Painter
  * @description Given inputs, format an
  *              Item able to insert into
  *              a DynamoDB table.

@@ -1,7 +1,6 @@
 import { SlackUser } from "../../../models";
 
 /**
- * @author Ethan T Painter
  * @description Get all SlackUser members approving the PR
  * @param slackUsersApproving all SlackUsers approving the PR
  * @param slackMemberUsers All SlackUser members on the team
@@ -25,7 +24,6 @@ export function getMembersApproving(
 }
 
 /**
- * @author Ethan T Painter
  * @description Get all slack members requesting changes
  * @param slackUsersReqChanges SlackUsers requesting changes
  * @param slackMemberUsers slack member users on the team
@@ -48,7 +46,6 @@ export function getMembersReqChanges(
 }
 
 /**
- * @author Ethan T Painter
  * @description Retrieve members not approving the PR
  * @param slackUsersNotApproving All Slack users not approving
  *                               the PR from the sub team (DevTeam1)

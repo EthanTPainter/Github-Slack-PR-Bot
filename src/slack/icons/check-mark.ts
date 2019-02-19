@@ -1,6 +1,5 @@
 
 /**
- * @author Ethan T Painter
  * @description Get check for slack message
  * @param json Config json file
  * @param custom Custom input for slack message check mark

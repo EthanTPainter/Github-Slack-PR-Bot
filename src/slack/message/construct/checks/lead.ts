@@ -3,7 +3,6 @@ import { getXMark } from "../../../../../src/slack/icons/x-mark";
 import { SlackUser } from "src/models";
 
 /**
- * @author Ethan T Painter
  * @description Construct string for Lead Approval statement
  * @param leadsApproving Slack leads approving the PR
  * @param leadsNotApproving Slack leads not approving the PR

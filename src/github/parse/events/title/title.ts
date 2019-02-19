@@ -1,5 +1,4 @@
 /**
- * @author Ethan T Painter
  * @description Constructs title from GitHub event
  * @param event Event from GitHub webhook
  * @returns String of the title stored in the event

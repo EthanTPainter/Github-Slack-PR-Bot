@@ -5,12 +5,10 @@ import { newLogger } from "../../logger";
 const logger = newLogger("reviews");
 
 /**
- * @author Ethan T Painter
  * @description Review class for making GitHub review requests
  */
 export class Review {
   /**
-   * @author Ethan T Painter
    * @description Retrieve all reviews for a specific PR
    * @param {string} path The path to add to the BASE_URL to specify the chosen PR
    *         Example: "repos/EthanTPainter/Comparative-Programming/pulls/1/reviews"

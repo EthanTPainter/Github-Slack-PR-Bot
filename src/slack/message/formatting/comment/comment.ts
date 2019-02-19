@@ -1,7 +1,6 @@
 import { SlackUser } from "../../../../models";
 
 /**
- * @author Ethan T Painter
  * @description Construct the description when a user comments
  * @param slackUser The slack user who opened the PR
  * @param commentingUser The slack user who commented on the PR
