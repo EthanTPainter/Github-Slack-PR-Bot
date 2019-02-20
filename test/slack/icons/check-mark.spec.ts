@@ -1,117 +1,203 @@
 import { expect } from "chai";
-import { getCheckMark } from "../../../src/slack/icons/check-mark";
+import { getCheckMark, getCheckMarkAlt } from "../../../src/slack/icons/check-mark";
 
 describe("getCheckMark", () => {
 
-  const validJSON = {
-    Options: {
-      Check_Mark_Style: "value",
-    },
-  };
+  let json: any;
 
-  it("should construct a green check mark", () => {
-    validJSON.Options.Check_Mark_Style = "green";
-
-    const result = getCheckMark(validJSON);
-    const expected = ":heavy_check_mark:";
-
-    expect(result).to.be.equal(expected);
-  });
-
-  it("should construct a white check mark", () => {
-    validJSON.Options.Check_Mark_Style = "white";
-
-    const result = getCheckMark(validJSON);
-    const expected = ":white_check_mark:";
-
-    expect(result).to.be.equal(expected);
-  });
-
-  it("should construct a ballot box check mark", () => {
-    validJSON.Options.Check_Mark_Style = "ballot";
-
-    const result = getCheckMark(validJSON);
-    const expected = ":ballot_box_with_check:";
-
-    expect(result).to.be.equal(expected);
-  });
-
-  it("should construct a custom check mark", () => {
-    validJSON.Options.Check_Mark_Style = "custom";
-    const customCheckMark = ":something_neat:";
-
-    const result = getCheckMark(validJSON, customCheckMark);
-    const expected = ":something_neat:";
-
-    expect(result).to.be.equal(expected);
-  });
-
-  it("should throw error -- json undefined", () => {
-    const json = undefined;
-
-    const expected = new Error("JSON is undefined");
-
-    expect(() => getCheckMark(json))
-      .to.throw(expected.message);
-  });
-
-  it("should throw error -- json.Options undefined", () => {
-    const json = {};
-
-    const expected = new Error("json.Options is undefined");
-
-    expect(() => getCheckMark(json))
-      .to.throw(expected.message);
-  });
-
-  it("should throw error -- Checkmark_Style is undefined", () => {
-    const json = {
-      Options: {},
-    };
-
-    const expected = new Error("json.Options.Check_Mark_Style is undefined");
-
-    expect(() => getCheckMark(json))
-      .to.throw(expected.message);
-  });
-
-  it("should throw error -- No custom input provided", () => {
-    const json = {
-      Options: {
-        Check_Mark_Style: "custom",
+  beforeEach(() => {
+    json = {
+      Departments: {
+        Devs: {
+          DevTeam1: {
+            Options: {
+              Check_Mark_Text: ":heavy_check_mark:",
+            },
+            Users: {
+              Leads: {
+                Matt: {
+                  Slack_Name: "Matt",
+                  Slack_Id: "<@333>",
+                },
+              },
+              Members: {
+                Ethan: {
+                  Slack_Name: "Ethan",
+                  Slack_Id: "<@123>",
+                },
+              },
+            },
+          },
+        },
+        QA: {
+          qaTeam2: {
+            Options: {
+              Check_Mark_Text: ":white_check_mark:",
+            },
+            Users: {
+              Leads: {
+                Andrew: {
+                  Slack_Name: "Andrew",
+                  Slack_Id: "<@345>",
+                },
+              },
+              Members: {
+                Daniel: {
+                  Slack_Name: "Daniel",
+                  Slack_Id: "<@321>",
+                },
+              },
+            },
+          },
+        },
       },
     };
+  });
 
-    const expected = new Error("Check_Mark_Style is custom, but no custom input provided");
+  it("should get check mark text from DevTeam1 options given lead github user", () => {
+    const githubUser = "Matt";
 
-    expect(() => getCheckMark(json))
+    const result = getCheckMark(githubUser, json);
+    const expected = json.Departments.Devs.DevTeam1.Options.Check_Mark_Text;
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("should get check mark text from DevTeam1 options given member github user", () => {
+    const githubUser = "Ethan";
+
+    const result = getCheckMark(githubUser, json);
+    const expected = json.Departments.Devs.DevTeam1.Options.Check_Mark_Text;
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("should get check mark text from qaTeam2 options given lead github user", () => {
+    const githubUser = "Andrew";
+
+    const result = getCheckMark(githubUser, json);
+    const expected = json.Departments.QA.qaTeam2.Options.Check_Mark_Text;
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("should get check mark text from qaTeam2 options given member github user", () => {
+    const githubUser = "Daniel";
+
+    const result = getCheckMark(githubUser, json);
+    const expected = json.Departments.QA.qaTeam2.Options.Check_Mark_Text;
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("should throw an error -- Check_Mark_Text not defined", () => {
+    json.Departments.Devs.DevTeam1.Options.Check_Mark_Text = undefined;
+    const githubUser = "Ethan";
+
+    const expected = new Error("Options.Check_Mark_Text is undefined");
+
+    expect(() => getCheckMark(githubUser, json))
       .to.throw(expected.message);
   });
 
-  it("should throw error -- Empty custom input provided", () => {
-    const json = {
-      Options: {
-        Check_Mark_Style: "custom",
+});
+
+describe("getCheckMarkAlt", () => {
+
+  let json: any;
+
+  beforeEach(() => {
+    json = {
+      Departments: {
+        Devs: {
+          DevTeam1: {
+            Options: {
+              Check_Mark_Text: ":heavy_check_mark:",
+            },
+            Users: {
+              Leads: {
+                Matt: {
+                  Slack_Name: "Matt",
+                  Slack_Id: "<@333>",
+                },
+              },
+              Members: {
+                Ethan: {
+                  Slack_Name: "Ethan",
+                  Slack_Id: "<@123>",
+                },
+              },
+            },
+          },
+        },
+        QA: {
+          qaTeam2: {
+            Options: {
+              Check_Mark_Text: ":white_check_mark:",
+            },
+            Users: {
+              Leads: {
+                Andrew: {
+                  Slack_Name: "Andrew",
+                  Slack_Id: "<@345>",
+                },
+              },
+              Members: {
+                Daniel: {
+                  Slack_Name: "Daniel",
+                  Slack_Id: "<@321>",
+                },
+              },
+            },
+          },
+        },
       },
     };
-    const custom = "";
-
-    const expected = new Error("Check_Mark_Style is custom, but no custom input provided");
-
-    expect(() => getCheckMark(json, custom))
-      .to.throw(expected.message);
   });
 
-  it("should throw error -- Unsupported checkmark style", () => {
-    const json = {
-      Options: {
-        Check_Mark_Style: "surprise",
-      },
-    };
+  it("should get check mark text from DevTeam1 options given lead slack user", () => {
+    const slackUser = json.Departments.Devs.DevTeam1.Users.Leads.Matt;
 
-    const expected = new Error("Unsupported Check_Mark_Style provided");
+    const result = getCheckMarkAlt(slackUser, json);
+    const expected = json.Departments.Devs.DevTeam1.Options.Check_Mark_Text;
 
-    expect(() => getCheckMark(json))
+    expect(result).to.be.equal(expected);
+  });
+
+  it("should get check mark text from DevTeam1 options given member slack user", () => {
+    const slackUser = json.Departments.Devs.DevTeam1.Users.Members.Ethan;
+
+    const result = getCheckMarkAlt(slackUser, json);
+    const expected = json.Departments.Devs.DevTeam1.Options.Check_Mark_Text;
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("should get check mark text from qaTeam2 options given lead slack user", () => {
+    const slackUser = json.Departments.QA.qaTeam2.Users.Leads.Andrew;
+
+    const result = getCheckMarkAlt(slackUser, json);
+    const expected = json.Departments.QA.qaTeam2.Options.Check_Mark_Text;
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("should get check mark text from qaTeam2 options given member slack user", () => {
+    const slackUser = json.Departments.QA.qaTeam2.Users.Members.Daniel;
+
+    const result = getCheckMarkAlt(slackUser, json);
+    const expected = json.Departments.QA.qaTeam2.Options.Check_Mark_Text;
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("should throw an error -- Check Mark Text undefined", () => {
+    json.Departments.Devs.DevTeam1.Options.Check_Mark_Text = undefined;
+    const slackUser = json.Departments.Devs.DevTeam1.Users.Leads.Matt;
+
+    const expected = new Error("Options.Check_Mark_Text is undefined");
+
+    expect(() => getCheckMarkAlt(slackUser, json))
       .to.throw(expected.message);
   });
 });

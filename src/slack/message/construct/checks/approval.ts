@@ -1,4 +1,4 @@
-import { constructPeerCheck } from "./peer";
+import { constructMemberCheck } from "./member";
 import { constructLeadCheck } from "./lead";
 import { getApprovingReviews } from "../../../../../src/github/parse/reviews/get-reviews";
 
@@ -15,17 +15,18 @@ import {
   getUsersReqChanges,
 } from "../../../../github/parse";
 import { SlackUser } from "../../../../models";
+import { getTeamOptionsAlt } from "../../../../json/parse";
 
 /**
  * @description Using all reviews for a PR, construct
- *              peer and lead review string statements
+ *              Member and lead review string statements
  * @param json JSON config file
  * @param slackOwner SlackUser who owns the PR
  * @param allReviews All reviews connected to the PR
  * @param slackMemberUsers All SlackUser members on the team
  * @param slackLeadUsers All SlackUser leads on the team
  * @example Example:
- * "2 Peer Approvals: Dillon :CHECK: @Peer2 @Peer3 @Peer4"
+ * "2 Member Approvals: Dillon :CHECK: @Member2 @Member3 @Member4"
  * "1 Lead Approvals: @Lead1 @Lead2 @Lead3"
  */
 export function getApprovalChecks(
@@ -35,6 +36,9 @@ export function getApprovalChecks(
   slackMemberUsers: SlackUser[],
   slackLeadUsers: SlackUser[],
 ): string {
+
+  // Get team Options from slackUser
+  const options = getTeamOptionsAlt(slackOwner, json);
 
   // Record only approving reviews of the PR
   const approvingReviews = getApprovingReviews(allReviews);
@@ -56,8 +60,8 @@ export function getApprovalChecks(
   const leadsReqChanges = getLeadsReqChanges(usersRequestingChanges, slackLeadUsers);
   const leadsNotApproving = getLeadsNotApproving(usersNotApproving, slackLeadUsers);
 
-  // Get Peer and Lead Approvals
-  const peerApprovals = constructPeerCheck(json, membersApproving, membersReqChanges, membersNotApproving);
-  const leadApprovals = constructLeadCheck(json, leadsApproving, leadsReqChanges, leadsNotApproving);
-  return peerApprovals + "\n" + leadApprovals;
+  // Get Member and Lead Approvals
+  const MemberApprovals = constructMemberCheck(json, membersApproving, membersReqChanges, membersNotApproving, options);
+  const leadApprovals = constructLeadCheck(json, leadsApproving, leadsReqChanges, leadsNotApproving, options);
+  return MemberApprovals + "\n" + leadApprovals;
 }

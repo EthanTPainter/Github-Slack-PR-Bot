@@ -1,78 +1,58 @@
 # GitHub-Slack-PR-Bot
 
-- [Problem to Solve](#problem-to-solve)
 - [Purpose](#purpose)
-  - [Why not use the GitHub Slack Integration App](#why-not-use-the-commmon-github-slack-integration-app?)
-- [Adding or Modifying User Groups](#adding-or-modifying-user-groups)
+- [Basic Structure](#basic-structure)
+  - [Options](#options)
 - [Functionality](#functionality)
   - [Core](#core)
-    - [Open a PR](#open-a-pr)
-    - [Close a PR](#close-a-pr)
-    - [Comment on a PR](#comment-on-a-pr)
-    - [Request Changes on a PR](#request-changes-on-a-pr)
-    - [Approve a PR](#approve-a-pr)
+    - [Sending Alerts to Slack](#sending-alerts-to-slack)
+  - [Current Goals](#current-goals)
   - [Long Term](#long-term)
-
-## Problem to solve
-
-Consider the situation: a tech company, with more than one small development
-team is working on features for a major feature/update. Each team is 
-operating with different sprint goals, stories or tasks to complete, and 
-needs to communicate within their respective teams in a timely manner.
-
-For small teams, using Jira, Slack, and GitHub for managing epics, stories, 
-and sub tasks can make tracking current sprint progress challenging. 
-
-Keeping everyone in the loop about what stories or sub tasks need review, 
-when comments or requested changes, or when a pull request has been 
-approved are all significant actions that require attention.
 
 ## Purpose
 
-This appliction was designed for two small development teams, operating
-in different private slack channels. These two small development teams
+This appliction was designed for small development teams, operating
+in different slack channels. These small development teams
 are working on tasks specific to their sprint, but both teams are 
-working on the same three of four repositories.
+working within the same three of four repositories.
 
 Having a simple, yet effective method of alerting team members about the
-status of PR's made in these repositories, PR's specific to each team,
-is of utmost importance. We only want to alert team members of PR's 
+status of PR's made in these repositories (PR's specific to each team)
+is of the utmost importance. We only want to alert team members of PR's 
 specific to the tasks belonging to that team.
-
-### Why not use the commmon GitHub Slack integration App?
-
-The current [GitHub Slack integration app](https://github.com/integrations/slack) provides many avenues of 
-customizing what you see from GitHub to Slack. However, customization 
-for alerting specific team members or specific slack channels is lacking.
-
-Monitoring branch specific activity on a selected repository was 
-a provided feature on the legacy integration app. However, it 
-is not currently present on the new application.
-
-Customizing the integration app to only provide updates around PR's 
-for one selected repository can still disrupt team communication.
-
-Other dev, qa, or prod teams should be able to create or update PR's to
-the same repository without sending these updates to the teams that don't 
-require them. In other words, we only want to alert a team about their team's 
-activities. If a dev team makes a PR, that team should be the only team 
-notified. This confines information specific to teams and allows them to 
-operate without flooding 
 
 ## Basic Structure
 
-This application is built on a core concept: teams are small enough to have 
-two designated roles: *leads* and *members*.
+Configuration variables are separated into 2 categories: 
+1) Environment Variables
+2) JSON Config Variable
 
-### Leads
+The environment variables listed either contain confidential data, infrastructure setup, or data to be preserved outside of comitting to a GitHub repository. These include GitHub OAuth tokens, Slack Channel tokens, and Dynamo table information.
 
-### Members
+The JSON config variable(s) contain information that can be committed 
+and pushed to a GitHub repository. This information is public or 
+generic enough to not expose tokens or infrastructure for your setup.
+JSON config files are located located at `/src/json/src/`. 
 
-Also referred to as *peers*.
+### Environment Variables
 
-## Adding or Modifying User Groups
+Environment variables are provided.
 
-See config file(json/src/json.ts)
+### Options
+
+Options are provided to allow customization of the application.
+
+All of the described options are expected to be supplied with values, 
+or errors will be thrown. The `example.json` file in the same
+directory provides dummy values to use if you're not sure what value to use.
+
+Option  |   Description   |   Values
+------- | --------------- | ---------
+**Avoid_Slack_Channel_Comment_Alerts_Window**: *number* | When a user comments on a PR, an alert is sent to that user's team slack channel. When a user leaves multiple comments in a short period of time, on one PR, a slack channel could a message about each comment. <br><br> Viewing 5 slack messages each telling the team:<br> `user X has commented on pull request Y` <br> provides as much benefit as one slack message with the same message. <br><br> As a result, a window is provided to limit how often a slack channel can be alerted when a PR is commented on by the same user on the same PR multiple instances in a short period of time | If set to `0`: <br><br> when a user **X** comments on pull request **Y** always send an alert to the team channel anytime a user comments on a PR (**no delays or restrictions**). <br><br> If set to `10`: <br><br> **1**) When a user **X** comments on pull request **Y** send an alert to the team channel from user **X** on pull request **Y** <br>**2**) Any comments from user **X** at this time until `10` minutes after will not be sent to the team's slack channel <br>**3**) After `10` minutes have passed, if user **X** comments on pull request **Y** 
+**Check_Mark_Text**: *string* | Slack text for representing a check mark icon in slack | Use `:heavy_check_mark:` for a green check mark Slack icon <br><br> Use `:white_check_mark:` for a white check mark Slack icon <br><br> Or use your own text value to represent a check mark in your slack team channel!
+**X_Mark_Text**: *string* | Slack text for representing an X mark icon in slack | Use `:X:` for a bright red x mark  Slack icon <br><br> Use `:heavy_multiplication_x:` for an orange x mark Slack icon <br><br> Or use your own text value to represent an X mark icon in slack!
+**Num_Required_Member_Approvals**: *number* | Number of required member approvals for a pull request | Set to `0`: no members of the team required to approve the pull request. <br><br> Set to `2`: only two members of a team are required to approve the pull request from the available members in the team
+**Num_Required_Lead_Approvals**: *number* | Number of required lead approvals for a pull request | Set to `0`: no leads of the team are required to approve the pull request <br><br> Set to `2`: only two leads of a team are required to approve the pull request from the available leads in the team
 
 ## Functionality
 
@@ -82,24 +62,8 @@ See config file(json/src/json.ts)
 
 The primary goal of this application is to provide messages in each 
 development team's private slack channel about the status of any PR's 
-opened or updated by the team members or team leads. 
-
-#### Open a PR
-
-
-#### Close a PR
-
-
-#### Comment on a PR
-
-
-#### Request Changes on a PR
-
-
-#### Approve a PR
-
-
-#### Merge a PR
+opened or updated by the team members or team leads. These messages
+should be customized to alert only members necessary
 
 ### Current Goals
 
@@ -110,7 +74,8 @@ changed there should also be queues maintained in DynamoDB tables.
 
 The goal is that DynamoDB can maintain statues for the team and each 
 individual on a team. This should allow each member from slack to use 
-a slash command with the bot to know what is in their queue.
+a slash command with the bot to know what is in their queue, the team's
+queue, or select users and see their queue's for comparison.
 
 ### Long Term
 
@@ -119,7 +84,7 @@ Listed below are all optional features that are interesting to include:
 * Jira Integration
 
 For our team's goals, we like to apply labels to our JIRA 
-sub tasks (`NeedsLeadReview`, `NeedsPeerReview`, 
+sub tasks (`NeedsLeadReview`, `NeedsMemberReview`, 
 `LeadReviewWithComments`, `LeadApproved`, etc.). If we could incorporate 
 some slack integration to automatically mark specific sub tasks for us 
 with updated actions, this might help eliminate some disconnect 

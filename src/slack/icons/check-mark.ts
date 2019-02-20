@@ -1,49 +1,44 @@
+import { SlackUser } from "../../models";
+import { getTeamOptions, getTeamOptionsAlt } from "../../json/parse";
 
 /**
- * @description Get check for slack message
- * @param json Config json file
- * @param custom Custom input for slack message check mark
- *               (i.e. Provide slack text for my own slack icon)
- * @options Parameter options are:
- *          1) green
- *          2) white
- *          3) ballot
- *          4) custom
+ * @description From github user, get check mark
+ *        text for slack message check mark icon
+ * @param githubUser string of the github username
+ * @param json JSON config file
+ * @returns check mark associated with the github
+ *          user's team
  */
 export function getCheckMark(
+  githubUser: string,
   json: any,
-  custom?: string,
 ): string {
 
-  // Error Handling
-  if (json === undefined) {
-    throw new Error("JSON is undefined");
+  const options = getTeamOptions(githubUser, json);
+  if (options.Check_Mark_Text === undefined) {
+    throw new Error("Options.Check_Mark_Text is undefined");
   }
-  if (json.Options === undefined) {
-    throw new Error("json.Options is undefined");
+
+  return options.Check_Mark_Text;
+}
+
+/**
+ * @description From slack user, get check mark
+ *        text for slack message check mark icon
+ * @param slackUser Slack user with name and id
+ * @param json JSON config file
+ * @returns Check mark associated with the slack
+ *          user's team
+ */
+export function getCheckMarkAlt(
+  slackUser: SlackUser,
+  json: any,
+): string {
+
+  const options = getTeamOptionsAlt(slackUser, json);
+  if (options.Check_Mark_Text === undefined) {
+    throw new Error("Options.Check_Mark_Text is undefined");
   }
-  if (json.Options.Check_Mark_Style === undefined) {
-    throw new Error("json.Options.Check_Mark_Style is undefined");
-  }
-  if (json.Options.Check_Mark_Style === "custom" && custom === undefined || custom === "") {
-    throw new Error("Check_Mark_Style is custom, but no custom input provided");
-  }
-  // Checkmark logic
-  switch (json.Options.Check_Mark_Style) {
-    case "green": {
-      return ":heavy_check_mark:";
-    }
-    case "white": {
-      return ":white_check_mark:";
-    }
-    case "ballot": {
-      return ":ballot_box_with_check:";
-    }
-    case "custom": {
-      return custom!;
-    }
-    default: {
-      throw new Error("Unsupported Check_Mark_Style provided");
-    }
-  }
+
+  return options.Check_Mark_Text;
 }

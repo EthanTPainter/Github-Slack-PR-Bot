@@ -20,14 +20,14 @@ export function formatItem(
   const htmlUrl = getPRLink(event);
 
   // Get Required Approvals Numbers
-  const numReqPeer = json.Options.Num_Required_Peer_Approvals;
+  const numReqMember = json.Options.Num_Required_Member_Approvals;
   const numReqLead = json.Options.Num_Required_Lead_Approvals;
 
-  let peerComplete = false;
+  let MemberComplete = false;
   let leadComplete = false;
 
-  if (numReqPeer === 0) {
-    peerComplete = true;
+  if (numReqMember === 0) {
+    MemberComplete = true;
   }
   if (numReqLead === 0) {
     leadComplete = true;
@@ -39,10 +39,13 @@ export function formatItem(
     owner: slackUser,
     title: title,
     url: htmlUrl,
-    peerComplete: peerComplete,
-    peersApproving: [],
+    MemberComplete: MemberComplete,
+    MembersApproving: [],
     leadComplete: leadComplete,
     leadsApproving: [],
+    records: {
+      times: [],
+    },
   };
 
   return item;

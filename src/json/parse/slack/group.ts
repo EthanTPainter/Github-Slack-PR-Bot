@@ -104,7 +104,7 @@ export function getSlackGroup(
  * @note Group must exist, so return error if not
  */
 export function getSlackGroupAlt(
-  slackUserId: string,
+  slackUser: SlackUser,
   json: any,
 ): SlackUser {
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
@@ -159,8 +159,8 @@ export function getSlackGroupAlt(
         while (leadCounter < leadKeys.length) {
           const lead = leadKeys[leadCounter];
           const selectedLead = leadUsers[lead];
-          if (selectedLead.Slack_Id === slackUserId) {
-            logger.debug(`Found Slack user id ${slackUserId}. Slack group: ${group}`);
+          if (selectedLead.Slack_Id === slackUser.Slack_Id) {
+            logger.debug(`Found Slack user id ${slackUser.Slack_Id}. Slack group: ${group}`);
             return group;
           }
           leadCounter++;
@@ -173,8 +173,8 @@ export function getSlackGroupAlt(
         while (memberCounter < memberKeys.length) {
           const member = memberKeys[memberCounter];
           const selectedMember = memberUsers[member];
-          if (selectedMember.Slack_Id === slackUserId) {
-            logger.debug(`Found Slack user id ${slackUserId}. Slack group: ${group}`);
+          if (selectedMember.Slack_Id === slackUser.Slack_Id) {
+            logger.debug(`Found Slack user id ${slackUser.Slack_Id}. Slack group: ${group}`);
             return group;
           }
           memberCounter++;

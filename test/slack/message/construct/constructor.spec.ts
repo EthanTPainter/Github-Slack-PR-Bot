@@ -36,16 +36,19 @@ describe("constructSlackMessage", () => {
   };
 
   const json = {
-    Options: {
-      Num_Required_Peer_Approvals: 2,
-      Num_Required_Lead_Approvals: 2,
-      Check_Mark_Style: "green",
-      X_Mark_Style: "base",
-    },
     Departments: {
       Dev: {
         Team1: {
-          Slack_Group: "Slack_Group_Name",
+          Options: {
+            Num_Required_Member_Approvals: 2,
+            Num_Required_Lead_Approvals: 2,
+            Check_Mark_Text: "green",
+            X_Mark_Text: "base",
+          },
+          Slack_Group: {
+            Slack_Name: "Slack_Group_Name",
+            Slack_Id: "<@0000>",
+          },
           Users: {
             Leads: {
               gwely: {
@@ -163,15 +166,15 @@ describe("constructSlackMessage", () => {
     const realAction = "approved";
     const expTitle = event.pull_request.title;
     const expUrl = event.pull_request.html_url;
-    const expNumPeer = json.Options.Num_Required_Peer_Approvals;
-    const expNumLead = json.Options.Num_Required_Lead_Approvals;
+    const expNumMember = json.Departments.Dev.Team1.Options.Num_Required_Member_Approvals;
+    const expNumLead = json.Departments.Dev.Team1.Options.Num_Required_Lead_Approvals;
 
     console.log("Result: ", result);
 
     expect(result.includes(realAction)).to.be.equal(true);
     expect(result.includes(expTitle)).to.be.equal(true);
     expect(result.includes(expUrl)).to.be.equal(true);
-    expect(result.includes(expNumPeer + " Required Peer")).to.be.equal(true);
+    expect(result.includes(expNumMember + " Required Member")).to.be.equal(true);
     expect(result.includes(expNumLead + " Required Lead")).to.be.equal(true);
   });
 

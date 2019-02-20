@@ -2,14 +2,13 @@ import { DynamoDB } from "aws-sdk";
 import { DateTime } from "luxon";
 import { newLogger } from "../../logger";
 import { requiredEnvs } from "../../required-envs";
-import { SlackUser } from "../../models";
+import { SlackUser, Item } from "../../models";
 
 const logger = newLogger("DynamoResetItem");
 
 export class DynamoReset {
 
   /**
-   * 
    * @description get Item from DyanmoDB table
    * @param {string} slackUser Slack username
    * @returns Result of dynamoDB Get request
@@ -22,7 +21,7 @@ export class DynamoReset {
       logger.info(`Reseting Contents for User: ${slackUser}`);
 
       // Construct empty Item
-      const emptyItem: any = [];
+      const emptyItem: Item[] = [];
 
       // Setup/Init DocumentClient for DynamoDB
       const dynamoDB = new DynamoDB.DocumentClient({

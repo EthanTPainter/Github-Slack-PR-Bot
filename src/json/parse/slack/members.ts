@@ -84,7 +84,7 @@ export function getSlackMembers(
 }
 
 /**
- * @description Alternative Get Slack Member function.
+ * @description Alternative Get Slack member function.
  *              Instead of GitHub user, uses slack user
  * @param slackUser Slack user
  * @param json JSON config file
@@ -137,19 +137,17 @@ export function getSlackMembersAlt(
 
       let leadCounter = 0;
       while (leadCounter < leadValues.length) {
-        if (leadValues[leadCounter] === slackUser) {
-          logger.debug(`Found Slack user ${slackUser}. Members: ${Object.values(memberUsers)}`);
+        if (leadValues[leadCounter] === slackUser.Slack_Id) {
+          logger.debug(`Found Slack user ${slackUser.Slack_Id}. Members: ${Object.values(memberUsers)}`);
           return Object.values(memberUsers);
         }
         leadCounter++;
       }
 
       let memberCounter = 0;
-      // Loop through member keys for matching GitHub User
       while (memberCounter < memberValues.length) {
-        // Check if key matches GitHub user
-        if (memberValues[memberCounter] === slackUser) {
-          logger.debug(`Found Slack user ${slackUser}. Members: ${Object.values(memberUsers)}`);
+        if (memberValues[memberCounter] === slackUser.Slack_Id) {
+          logger.debug(`Found Slack user ${slackUser.Slack_Id}. Members: ${Object.values(memberUsers)}`);
           return Object.values(memberUsers);
         }
         memberCounter++;

@@ -13,7 +13,7 @@ export function getTeamName(
   const allDepartmentKeys = Object.keys(departments);
   // If no teams present, return error
   if (allDepartmentKeys.length === 0) {
-    throw new Error("No Team found in JSON file");
+    throw new Error("No Department found in JSON file");
   }
 
   // Otherwise loop through teams (DevTeam, QaTeam, ProdTeam)
@@ -26,7 +26,7 @@ export function getTeamName(
     let selectedTeamCounter = 0;
     if (teamKeys.length === 0) {
       // (Dev_Team_1, SomethingCool1, etc.)
-      throw new Error("No Team Group found in JSON file");
+      throw new Error("No Team found in JSON file");
     }
     // Loop through team groups (DevTeam1, DevTeam2, etc.)
     while (selectedTeamCounter < teamKeys.length) {

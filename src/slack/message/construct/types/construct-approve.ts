@@ -56,7 +56,7 @@ export async function constructApprove(
     const allSlackTeamMembers = getSlackMembers(owner, json);
     const allSlackTeamLeads = getSlackLeads(owner, json);
 
-    // Construct Peer and Lead Approvals strings
+    // Construct Member and Lead Approvals strings
     const approvals = getApprovalChecks(json, slackUser, reviews,
       allSlackTeamMembers, allSlackTeamLeads);
 

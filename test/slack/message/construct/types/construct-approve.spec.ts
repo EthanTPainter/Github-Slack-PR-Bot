@@ -24,15 +24,15 @@ describe("constructApprove", () => {
   };
 
   const validJSON = {
-    Options: {
-      Num_Required_Peer_Approvals: 2,
-      Num_Required_Lead_Approvals: 2,
-      Check_Mark_Style: "green",
-      X_Mark_Style: "base",
-    },
     Departments: {
       Dev: {
         Team1: {
+          Options: {
+            Num_Required_Member_Approvals: 2,
+            Num_Required_Lead_Approvals: 2,
+            Check_Mark_Text: ":heavy_check_mark:",
+            X_Mark_Text: ":X:",
+          },
           Users: {
             Leads: {
               gwely: {
@@ -106,13 +106,13 @@ describe("constructApprove", () => {
 
     // Expect approvals to be properly formatted
     expect((result.approvals)
-      .includes(validJSON.Options.Num_Required_Peer_Approvals
-        + " Required Peer")).to.be.equal(true);
+      .includes(validJSON.Departments.Dev.Team1.Options.Num_Required_Member_Approvals
+        + " Required Member")).to.be.equal(true);
     expect((result.approvals)
       .includes(validJSON.Departments.Dev.Team1.Users.Members.DillonSykes.Slack_Name
         + " :heavy_check_mark:")).to.be.equal(true);
     expect((result.approvals)
-      .includes(validJSON.Options.Num_Required_Lead_Approvals
+      .includes(validJSON.Departments.Dev.Team1.Options.Num_Required_Lead_Approvals
         + " Required Lead")).to.be.equal(true);
     expect((result.approvals)
       .includes(validJSON.Departments.Dev.Team1.Users.Leads.gwely.Slack_Name

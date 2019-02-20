@@ -19,13 +19,13 @@ describe("constructOpen", () => {
     },
   };
   const validJSON = {
-    Options: {
-      Num_Required_Peer_Approvals: 1,
-      Num_Required_Lead_Approvals: 1,
-    },
     Departments: {
       Team1: {
         TeamGroup1: {
+          Options: {
+            Num_Required_Member_Approvals: 1,
+            Num_Required_Lead_Approvals: 1,
+          },
           Slack_Group: "Group_Slack_Name",
           Users: {
             Leads: {

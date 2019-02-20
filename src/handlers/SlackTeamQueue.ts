@@ -5,7 +5,7 @@ import { requiredEnvs } from "../required-envs";
 import { Annotations } from "../models";
 import { newLogger } from "../logger";
 import { json } from "../json/src/json";
-import { formatQueue } from "../dynamo/formatting/queue";
+import { formatTeamQueue } from "../dynamo/formatting/format-team-queue";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));

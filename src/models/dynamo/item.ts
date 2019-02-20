@@ -4,8 +4,15 @@ export class Item {
   owner: SlackUser;
   title: string;
   url: string;
-  peerComplete: boolean;
-  peersApproving: string[];
+  MemberComplete: boolean;
+  MembersApproving: string[];
   leadComplete: boolean;
   leadsApproving: string[];
+  records: {
+    actions?: [{
+      user: SlackUser,
+      action: string;
+    }],
+    times: string[],
+  };
 }

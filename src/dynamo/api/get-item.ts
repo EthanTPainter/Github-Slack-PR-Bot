@@ -8,7 +8,6 @@ const logger = newLogger("DynamoGetItem");
 export class DynamoGet {
 
   /**
-   * 
    * @description get Item from DyanmoDB table
    * @param {string} slackUser Slack user
    * @returns Result of dynamoDB Get request

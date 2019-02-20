@@ -1,4 +1,5 @@
 import { SlackUser } from "../../../../models";
+import { getTeamOptionsAlt } from "../../../../json/parse";
 
 /**
  * @description Construct the description of the slack message
@@ -16,36 +17,23 @@ export function constructOpenDesc(
   json: any,
 ): string {
 
-  // Error checking
-  if (json === undefined) {
-    throw new Error("JSON file is undefined");
+  if (!json || json.Departments === undefined) {
+    throw new Error("JSON is undefined");
   }
-  if (json.Options === undefined) {
-    throw new Error("json.Options is undefined");
-  }
-  if (json.Options.Num_Required_Lead_Approvals === undefined) {
-    throw new Error("json.Options.Num_Required_Lead_Approvals is undefined");
-  }
-  if (json.Options.Num_Required_Peer_Approvals === undefined) {
-    throw new Error("json.Options.Num_Required_Peer_Approvals is undefined");
-  }
+  const options = getTeamOptionsAlt(slackUser, json);
 
-  // Get required peer and lead reviews required
-  const numRequiredPeerReviews = json.Options.Num_Required_Peer_Approvals;
-  const numRequiredLeadReviews = json.Options.Num_Required_Lead_Approvals;
-
-  if (slackUser.Slack_Name === undefined) {
-    throw new Error("Slack_Name property not defined");
-  }
+  // Get required Member and lead reviews required
+  const numRequiredMemberReviews = options.Num_Required_Member_Approvals;
+  const numRequiredLeadReviews = options.Num_Required_Lead_Approvals;
   let desc: string = "";
 
   // new PR check
   // The *...* style means the ... is BOLD in Slack
   if (newPR) {
-    desc = `${slackUser.Slack_Name} opened this PR. Needs *${numRequiredPeerReviews} peer*`
+    desc = `${slackUser.Slack_Name} opened this PR. Needs *${numRequiredMemberReviews} Member*`
       + ` and *${numRequiredLeadReviews} lead* reviews`;
   } else {
-    desc = `${slackUser.Slack_Name} reopened this PR. Needs *${numRequiredPeerReviews} peer*`
+    desc = `${slackUser.Slack_Name} reopened this PR. Needs *${numRequiredMemberReviews} Member*`
       + ` and *${numRequiredLeadReviews} lead* reviews`;
   }
 

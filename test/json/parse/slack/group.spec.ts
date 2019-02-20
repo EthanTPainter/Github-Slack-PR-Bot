@@ -144,39 +144,43 @@ describe("getSlackGroup", () => {
 
 describe("GetSlackGroupAlt", () => {
 
-  const validJSON = {
-    Departments: {
-      Devs: {
-        DevTeam1: {
-          Slack_Group: {
-            Slack_Name: "SlackGroup",
-            Slack_Id: "<@1000>",
-          },
-          Users: {
-            Leads: {
-              andrew: {
-                Slack_Name: "andrew.curcie",
-                Slack_Id: "<@1110>",
-              },
+  let validJSON: any;
+
+  beforeEach(() => {
+    validJSON = {
+      Departments: {
+        Devs: {
+          DevTeam1: {
+            Slack_Group: {
+              Slack_Name: "SlackGroup",
+              Slack_Id: "<@1000>",
             },
-            Members: {
-              ethan: {
-                Slack_Name: "ethan.painter",
-                Slack_Id: "<@1111>",
+            Users: {
+              Leads: {
+                andrew: {
+                  Slack_Name: "andrew.curcie",
+                  Slack_Id: "<@1110>",
+                },
               },
-              daniel: {
-                Slack_Name: "daniel.larner",
-                Slack_Id: "<@1112>",
+              Members: {
+                ethan: {
+                  Slack_Name: "ethan.painter",
+                  Slack_Id: "<@1111>",
+                },
+                daniel: {
+                  Slack_Name: "daniel.larner",
+                  Slack_Id: "<@1112>",
+                },
               },
             },
           },
         },
       },
-    },
-  };
+    };
+  });
 
   it("should get slack group given a lead slack user ID", () => {
-    const slackUserID = "<@1110>";
+    const slackUserID = validJSON.Departments.Devs.DevTeam1.Users.Leads.andrew;
 
     const result = getSlackGroupAlt(slackUserID, validJSON);
     const expected = validJSON.Departments.Devs.DevTeam1.Slack_Group;
@@ -185,7 +189,7 @@ describe("GetSlackGroupAlt", () => {
   });
 
   it("should get slack group given a member slack user ID", () => {
-    const slackUserId = "<@1112>";
+    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.daniel;
 
     const result = getSlackGroupAlt(slackUserId, validJSON);
     const expected = validJSON.Departments.Devs.DevTeam1.Slack_Group;
@@ -194,7 +198,7 @@ describe("GetSlackGroupAlt", () => {
   });
 
   it("should throw an error -- no departments available", () => {
-    const slackUserId = "<@1111>";
+    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan;
     const invalidJSON = {
       Departments: {},
     };
@@ -206,7 +210,7 @@ describe("GetSlackGroupAlt", () => {
   });
 
   it("should throw an error -- No teams available", () => {
-    const slackUserId = "<@1111>";
+    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan;
     const invalidJSON = {
       Departments: {
         Devs: {},
@@ -220,7 +224,7 @@ describe("GetSlackGroupAlt", () => {
   });
 
   it("should throw an error -- No users defined for the team", () => {
-    const slackUserId = "<@1111>";
+    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan;
     const invalidJSON = {
       Departments: {
         Devs: {
@@ -237,7 +241,7 @@ describe("GetSlackGroupAlt", () => {
   });
 
   it("should throw an error -- No leads defined for the team", () => {
-    const slackUserId = "<@1111>";
+    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan;
     const invalidJSON = {
       Departments: {
         Devs: {
@@ -256,7 +260,7 @@ describe("GetSlackGroupAlt", () => {
   });
 
   it("should throw an error -- No members defined for the team", () => {
-    const slackUserId = "<@1111>";
+    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan;
     const invalidJSON = {
       Departments: {
         Devs: {
@@ -281,8 +285,9 @@ describe("GetSlackGroupAlt", () => {
       .to.throw(expected.message);
   });
 
-  it("should throw an error -- No Slakc Group", () => {
-    const slackUserId = "<@1116>";
+  it("should throw an error -- No Slack Group", () => {
+    validJSON.Departments.Devs.DevTeam1.Slack_Group = undefined;
+    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan;
 
     const expected = new Error("No Slack Group found in JSON file");
 

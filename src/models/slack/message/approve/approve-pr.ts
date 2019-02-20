@@ -6,7 +6,7 @@ import { Base } from "../base";
  *
  * owner            - User who created the PR
  * user_approving   - User who approved the PR
- * approvals        - Peer and Lead approvals
+ * approvals        - Member and Lead approvals
  */
 export class ApprovePR extends Base {
   owner: string;

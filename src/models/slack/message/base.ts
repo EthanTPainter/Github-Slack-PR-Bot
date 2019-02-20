@@ -3,7 +3,7 @@
  * Provides a base model/properties for slack messages to be sent
  *
  * Description - Description of the Pull Request. Keep Simple
- *         Example: "Ethan has opened this PR. Needs Peer and Lead Reviews"
+ *         Example: "Ethan has opened this PR. Needs Member and Lead Reviews"
 
  * Title - Title of the PR
  *         Example: feat(Jira-###): Add some feature to the app

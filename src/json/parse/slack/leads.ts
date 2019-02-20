@@ -87,7 +87,7 @@ export function getSlackLeads(
  * @returns Array of slack leads
  */
 export function getSlackLeadsAlt(
-  slackUser: string,
+  slackUser: SlackUser,
   json: any,
 ): SlackUser[] {
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
@@ -134,7 +134,7 @@ export function getSlackLeadsAlt(
       while (leadCounter < leadValues.length) {
         if (leadValues[leadCounter] === slackUser) {
           logger.debug(`Found Slack user ${slackUser}. Leads: ${Object.values(users.Leads)}`);
-          return Object.values(users.Leads);
+          return Object.values(leadUsers);
         }
         leadCounter++;
       }
@@ -143,7 +143,7 @@ export function getSlackLeadsAlt(
       while (memberCounter < memberValues.length) {
         if (memberValues[memberCounter] === slackUser) {
           logger.debug(`Found Slack user ${slackUser}. Leads: ${Object.values(users.Leads)}`);
-          return Object.values(users.Leads);
+          return Object.values(leadUsers);
         }
         memberCounter++;
       }

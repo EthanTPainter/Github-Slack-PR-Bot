@@ -99,19 +99,19 @@ describe("getTeamName", () => {
       .to.throw(expected.message);
   });
 
-  it("should not get team name -- No Team found in JSON file", () => {
+  it("should not get team name -- No Department found in JSON file", () => {
     const githubUser = "ethan";
     const invalidJSON = {
       Departments: {},
     };
 
-    const expected = new Error("No Team found in JSON file");
+    const expected = new Error("No Department found in JSON file");
 
     expect(() => getTeamName(githubUser, invalidJSON))
       .to.throw(expected.message);
   });
 
-  it("should not get team name -- No Team Group in JSON file", () => {
+  it("should not get team name -- No Team in JSON file", () => {
     const githubUser = "ethan";
     const invalidJSON = {
       Departments: {
@@ -119,7 +119,7 @@ describe("getTeamName", () => {
       },
     };
 
-    const expected = new Error("No Team Group found in JSON file");
+    const expected = new Error("No Team found in JSON file");
 
     expect(() => getTeamName(githubUser, invalidJSON))
       .to.throw(expected.message);

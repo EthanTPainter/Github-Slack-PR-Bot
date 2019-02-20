@@ -1,11 +1,15 @@
-import { getCheckMark } from "../../../../../src/slack/icons/check-mark";
-import { getXMark } from "../../../../../src/slack/icons/x-mark";
-import { SlackUser } from "src/models";
+import { getCheckMarkAlt } from "../../../../../src/slack/icons/check-mark";
+import { getXMarkAlt } from "../../../../../src/slack/icons/x-mark";
+import { SlackUser, TeamOptions } from "../../../../models";
 
 /**
  * @description Construct string for Lead Approval statement
+ * @param json JSON config file
  * @param leadsApproving Slack leads approving the PR
- * @param leadsNotApproving Slack leads not approving the PR
+ * @param leadsReqChanges Slack leads requesting changes to the PR
+ * @param leadsNotApproving Slack leads neither approving or requesting
+ *                          changes to the PR
+ * @param options TeamOptions model
  * @returns String of the Lead Approval for Slack message
  * @example Example:
  * 1 "1 Required Lead Approval: Dillon :CHECK:"
@@ -17,42 +21,38 @@ export function constructLeadCheck(
   leadsApproving: SlackUser[],
   leadsReqChanges: SlackUser[],
   leadsNotApproving: SlackUser[],
+  options: TeamOptions,
 ): string {
 
-  if (json.Options.Num_Required_Lead_Approvals === undefined) {
-    throw new Error("json.Option.Num_Required_Lead_Approvals is undefined");
-  }
   let leadCheck: string;
-  if (json.Options.Num_Required_Lead_Approvals === 0) {
+  if (options.Num_Required_Lead_Approvals === 0) {
     leadCheck = "0 Required Lead Approvals: ";
   }
-  else if (json.Options.Num_Required_Lead_Approvals === 1) {
+  else if (options.Num_Required_Lead_Approvals === 1) {
     leadCheck = "1 Required Lead Approval: ";
   } else {
-    leadCheck = `${json.Options.Num_Required_Lead_Approvals} Required Lead Approvals: `;
+    leadCheck = `${options.Num_Required_Lead_Approvals} Required Lead Approvals: `;
   }
 
-  // Get Checkmark and Xmark slack text
-  const checkMark = getCheckMark(json);
-  const xMark = getXMark(json);
-
   // Format who has approved the PR thus far
-  leadsApproving.forEach((slackLead: SlackUser) => {
+  leadsApproving.map((slackLead: SlackUser) => {
+    const checkMark = getCheckMarkAlt(slackLead, json);
     leadCheck += `${slackLead.Slack_Name} ${checkMark} `;
   });
   // Format who has requested changes to the PR thus far
-  leadsReqChanges.forEach((slackLead: SlackUser) => {
+  leadsReqChanges.map((slackLead: SlackUser) => {
+    const xMark = getXMarkAlt(slackLead, json);
     leadCheck += `${slackLead.Slack_Name} ${xMark} `;
   });
 
   // Determine if current number of approving users
   // matches or exceeds the expected required Number
   if (leadsApproving.length + leadsReqChanges.length >=
-    json.Options.Num_Required_Lead_Approvals) {
+    options.Num_Required_Lead_Approvals) {
     return leadCheck;
   }
   else {
-    leadsNotApproving.forEach((slackLead: SlackUser) => {
+    leadsNotApproving.map((slackLead: SlackUser) => {
       leadCheck += `${slackLead.Slack_Id} `;
     });
     return leadCheck;

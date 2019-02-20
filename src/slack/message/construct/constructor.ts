@@ -126,7 +126,7 @@ export async function constructSlackMessage(
          * -------------- DESCRIPTION --------------
          * ---------------- TITLE ------------------
          * ----------------- URL -------------------
-         * --------------- PEER CHECK --------------
+         * --------------- Member CHECK --------------
          * --------------- LEAD CHECK --------------
          */
         slackMessage = approve.description + "\n"

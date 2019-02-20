@@ -1,14 +1,15 @@
 export const json = {
-  Options: {
-    Check_Mark_Style: "green",
-    X_Mark_Style: "base",
-    Num_Required_Lead_Approvals: 1,
-    Num_Required_Peer_Approvals: 1,
-    Dynamo_Peer_Before_Lead: true,
-  },
   Department: {
     Dev: {
       Dev_Team_1: {
+        Options: {
+          Avoid_Slack_Channel_Comment_Alerts_Window: 5,
+          Check_Mark_Text: "green",
+          X_Mark_Text: "base",
+          Num_Required_Lead_Approvals: 1,
+          Num_Required_Member_Approvals: 1,
+          Dynamo_Member_Before_Lead: true,
+        },
         Slack_Group: {
           Slack_Name: "Group_Slack_Name",
           Slack_Id: "<@SLACK_ID>",
@@ -41,6 +42,14 @@ export const json = {
         },
       },
       Dev_Team_2: {
+        Options: {
+          Avoid_Slack_Channel_Comment_Alerts_Window: 5,
+          Check_Mark_Text: "green",
+          X_Mark_Text: "base",
+          Num_Required_Lead_Approvals: 1,
+          Num_Required_Member_Approvals: 1,
+          Dynamo_Member_Before_Lead: true,
+        },
         Slack_Group: "Group Slack Name",
         Users: {
           Leads: {

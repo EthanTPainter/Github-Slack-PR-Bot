@@ -1,49 +1,42 @@
+import { SlackUser } from "../../models";
+import { getTeamOptions, getTeamOptionsAlt } from "../../json/parse";
 
 /**
- * @description Get X for slack message
+ * @description From github username, get check mark
+ *        text for slack message check mark icon
+ * @param githubUser string of the github username
  * @param json Config json file
- * @param custom Custom input for slack message X mark
- *               (i.e. Provide slack text for own slack icon)
- * @options Parameter options are:
- *          1) base
- *          2) multiply
- *          3) box
- *          4) custom
+ * @returns string of the Check mark text
  */
 export function getXMark(
+  githubUser: string,
   json: any,
-  custom?: string,
 ): string {
 
-  // Error Handling
-  if (json === undefined) {
-    throw new Error("JSON is undefined");
+  const options = getTeamOptions(githubUser, json);
+  if (options.X_Mark_Text === undefined) {
+    throw new Error("Options.X_Mark_Text is undefined");
   }
-  if (json.Options === undefined) {
-    throw new Error("json.Options is undefined");
+
+  return options.X_Mark_Text;
+}
+
+/**
+ * @description From slack user, get x mark
+ *        text for slack message x mark icon
+ * @param slackUser Slack user of the
+ * @param json JSON config file
+ * @retuns string of the check mark text
+ */
+export function getXMarkAlt(
+  slackUser: SlackUser,
+  json: any,
+): string {
+
+  const options = getTeamOptionsAlt(slackUser, json);
+  if (options.X_Mark_Text === undefined) {
+    throw new Error("Options.X_Mark_Text is undefined");
   }
-  if (json.Options.X_Mark_Style === undefined) {
-    throw new Error("json.Options.X_Mark_Style is undefined");
-  }
-  if (json.Options.X_Mark_Style === "custom" && custom === undefined || custom === "") {
-    throw new Error("X_Mark_Style is custom, but no custom input provided");
-  }
-  // Negative Mark (X) logic
-  switch (json.Options.X_Mark_Style) {
-    case "base": {
-      return ":X:";
-    }
-    case "multiply": {
-      return ":heavy_multiplication_x:";
-    }
-    case "box": {
-      return ":negative_squared_cross_mark:";
-    }
-    case "custom": {
-      return custom!;
-    }
-    default: {
-      throw new Error("Unsupported X_Mark_Style provided");
-    }
-  }
+
+  return options.X_Mark_Text;
 }

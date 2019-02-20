@@ -1,103 +1,203 @@
 import { expect } from "chai";
-import { getXMark } from "../../../src/slack/icons/x-mark";
+import { getXMark, getXMarkAlt } from "../../../src/slack/icons/x-mark";
 
 describe("getXMark", () => {
 
-  const validJSON = {
-    Options: {
-      X_Mark_Style: "value",
-    },
-  };
+  let json: any;
 
-  it("should construct a basic X mark", () => {
-    validJSON.Options.X_Mark_Style = "base";
-
-    const result = getXMark(validJSON);
-    const expected = ":X:";
-
-    expect(result).to.be.equal(expected);
-  });
-
-  it("should construct a heavy multiplication X mark", () => {
-    validJSON.Options.X_Mark_Style = "multiply";
-
-    const result = getXMark(validJSON);
-    const expected = ":heavy_multiplication_x:";
-
-    expect(result).to.be.equal(expected);
-  });
-
-  it("should construct a boxed X mark", () => {
-    validJSON.Options.X_Mark_Style = "box";
-
-    const result = getXMark(validJSON);
-    const expected = ":negative_squared_cross_mark:";
-
-    expect(result).to.be.equal(expected);
-  });
-
-  it("should construct a custom X mark", () => {
-    validJSON.Options.X_Mark_Style = "custom";
-    const custom = ":my_custom_x_mark:";
-
-    const result = getXMark(validJSON, custom);
-    const expected = custom;
-
-    expect(result).to.be.equal(expected);
-  });
-
-  it("should throw error -- json undefined", () => {
-    const invalidJSON = undefined;
-
-    const expected = new Error("JSON is undefined");
-
-    expect(() => getXMark(invalidJSON))
-      .to.throw(expected.message);
-  });
-
-  it("should throw error -- json.Options is undefined", () => {
-    const invalidJSON = {};
-
-    const expected = new Error("json.Options is undefined");
-
-    expect(() => getXMark(invalidJSON))
-      .to.throw(expected.message);
-  });
-
-  it("should throw error -- json.Options.X_Mark_Style", () => {
-    const invalidJSON = {
-      Options: {},
-    };
-
-    const expected = new Error("json.Options.X_Mark_Style is undefined");
-
-    expect(() => getXMark(invalidJSON))
-      .to.throw(expected.message);
-  });
-
-  it("should throw error -- no custom input param", () => {
-    const invalidJSON = {
-      Options: {
-        X_Mark_Style: "custom",
+  beforeEach(() => {
+    json = {
+      Departments: {
+        Devs: {
+          DevTeam1: {
+            Options: {
+              X_Mark_Text: ":X:",
+            },
+            Users: {
+              Leads: {
+                Matt: {
+                  Slack_Name: "Matt",
+                  Slack_Id: "<@333>",
+                },
+              },
+              Members: {
+                Ethan: {
+                  Slack_Name: "Ethan",
+                  Slack_Id: "<@123>",
+                },
+              },
+            },
+          },
+        },
+        QA: {
+          qaTeam2: {
+            Options: {
+              X_Mark_Text: ":heavy_multiplication_x:",
+            },
+            Users: {
+              Leads: {
+                Andrew: {
+                  Slack_Name: "Andrew",
+                  Slack_Id: "<@345>",
+                },
+              },
+              Members: {
+                Daniel: {
+                  Slack_Name: "Daniel",
+                  Slack_Id: "<@321>",
+                },
+              },
+            },
+          },
+        },
       },
     };
-
-    const expected = new Error("X_Mark_Style is custom, but no custom input provided");
-
-    expect(() => getXMark(invalidJSON))
-      .to.throw(expected.message);
   });
 
-  it("should throw error -- Unsupported X_Mark_Style", () => {
-    const invalidJSON = {
-      Options: {
-        X_Mark_Style: "something neat",
+  it("should retrieve X mark text from DevTeam1 options with lead github user", () => {
+    const githubUser = "Matt";
+
+    const result = getXMark(githubUser, json);
+    const expected = json.Departments.Devs.DevTeam1.Options.X_Mark_Text;
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("should retrieve X mark text from DevTeam1 options with member github user", () => {
+    const githubUser = "Ethan";
+
+    const result = getXMark(githubUser, json);
+    const expected = json.Departments.Devs.DevTeam1.Options.X_Mark_Text;
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("should retrieve X mark text from qaTeam2 options with lead github user", () => {
+    const githubUser = "Andrew";
+
+    const result = getXMark(githubUser, json);
+    const expected = json.Departments.QA.qaTeam2.Options.X_Mark_Text;
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("should retrieve X mark text from qaTeam2 options with member github user", () => {
+    const githubUser = "Daniel";
+
+    const result = getXMark(githubUser, json);
+    const expected = json.Departments.QA.qaTeam2.Options.X_Mark_Text;
+
+    expect(result).to.be.equal(expected);
+  });
+
+  it("should throw an error -- X mark text is undefined", () => {
+    json.Departments.Devs.DevTeam1.Options.X_Mark_Text = undefined;
+    const githubUser = "Matt";
+
+    const expected = new Error("Options.X_Mark_Text is undefined");
+
+    expect(() => getXMark(githubUser, json))
+      .to.throw(expected.message);
+  });
+});
+
+describe("getXMarkAlt", () => {
+
+  let json: any;
+
+  beforeEach(() => {
+    json = {
+      Departments: {
+        Devs: {
+          DevTeam1: {
+            Options: {
+              X_Mark_Text: ":X:",
+            },
+            Users: {
+              Leads: {
+                Matt: {
+                  Slack_Name: "Matt",
+                  Slack_Id: "<@333>",
+                },
+              },
+              Members: {
+                Ethan: {
+                  Slack_Name: "Ethan",
+                  Slack_Id: "<@123>",
+                },
+              },
+            },
+          },
+        },
+        QA: {
+          qaTeam2: {
+            Options: {
+              X_Mark_Text: ":heavy_multiplication_x:",
+            },
+            Users: {
+              Leads: {
+                Andrew: {
+                  Slack_Name: "Andrew",
+                  Slack_Id: "<@345>",
+                },
+              },
+              Members: {
+                Daniel: {
+                  Slack_Name: "Daniel",
+                  Slack_Id: "<@321>",
+                },
+              },
+            },
+          },
+        },
       },
     };
+  });
 
-    const expected = new Error("Unsupported X_Mark_Style provided");
+  it("should retrieve X mark text from DevTeam1 options with lead slack user", () => {
+    const slackUser = json.Departments.Devs.DevTeam1.Users.Leads.Matt;
 
-    expect(() => getXMark(invalidJSON))
+    const result = getXMarkAlt(slackUser, json);
+    const expected = json.Departments.Devs.DevTeam1.Options.X_Mark_Text;
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should retrieve X mark text from DevTeam1 options with member slack user", () => {
+    const slackUser = json.Departments.Devs.DevTeam1.Users.Members.Ethan;
+
+    const result = getXMarkAlt(slackUser, json);
+    const expected = json.Departments.Devs.DevTeam1.Options.X_Mark_Text;
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should retrieve X mark text from qaTeam2 options with lead slack user", () => {
+    const slackUser = json.Departments.QA.qaTeam2.Users.Leads.Andrew;
+
+    const result = getXMarkAlt(slackUser, json);
+    const expected = json.Departments.QA.qaTeam2.Options.X_Mark_Text;
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should retrieve X mark text from qaTeam2 options with member slack user", () => {
+    const slackUser = json.Departments.QA.qaTeam2.Users.Members.Daniel;
+
+    const result = getXMarkAlt(slackUser, json);
+    const expected = json.Departments.QA.qaTeam2.Options.X_Mark_Text;
+
+    expect(result).to.be.deep.equal(expected);
+  });
+
+  it("should throw an error -- x mark text is undefined", () => {
+    json.Departments.QA.qaTeam2.Options.X_Mark_Text = undefined;
+    const slackUser = json.Departments.QA.qaTeam2.Users.Members.Daniel;
+
+    const expected = new Error("Options.X_Mark_Text is undefined");
+
+    expect(() => getXMarkAlt(slackUser, json))
       .to.throw(expected.message);
   });
+
 });
