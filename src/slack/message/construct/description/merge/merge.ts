@@ -1,4 +1,4 @@
-import { SlackUser } from "../../../../models";
+import { SlackUser } from "../../../../../models";
 
 /**
  * @description Constructs description of a Merged PR

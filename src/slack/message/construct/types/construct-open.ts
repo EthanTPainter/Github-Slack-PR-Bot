@@ -1,7 +1,7 @@
 import { OpenedPR } from "../../../../models";
 import { getOwner, getTitle, getPRLink } from "../../../../github/parse";
 import { getSlackUser, getSlackGroup } from "../../../../json/parse";
-import { constructOpenDesc } from "../../formatting";
+import { constructOpenDesc } from "../description";
 import { newLogger } from "../../../../logger";
 
 const logger = newLogger("ConstructOpen");

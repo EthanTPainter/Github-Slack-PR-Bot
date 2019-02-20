@@ -9,7 +9,7 @@ import {
 
 import { MergePR } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";
-import { constructMergeDesc } from "../../formatting";
+import { constructMergeDesc } from "../description";
 import { newLogger } from "../../../../logger";
 
 const logger = newLogger("ConstructMerge");

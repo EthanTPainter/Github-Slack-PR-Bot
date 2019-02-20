@@ -2,7 +2,7 @@ import {
   constructApproveDesc,
   getMemberList,
   getLeadList,
-} from "../../../../../src/slack/message/construct/description";
+} from "../../../../../../src/slack/message/construct/description";
 
 import { expect } from "chai";
 

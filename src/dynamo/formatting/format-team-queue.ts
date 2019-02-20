@@ -35,6 +35,10 @@ export function formatTeamQueue(
   const needsBothApprovals = filterNoFullyApprovedPRs(queue);
 
   // Format the PRs into a stringified format
+  // Don't format mergable PRs. They're already mergable
+  mergablePRs.map((mergablePR: Item) => {
+    formattedQueue += mergablePR;
+  });
 
   logger.info(`formattedQueue: ${formattedQueue}`);
 

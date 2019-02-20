@@ -1,4 +1,4 @@
-import { SlackUser } from "../../../../models";
+import { SlackUser } from "../../../../../models";
 
 /**
  * @description Construct the description of the slack message

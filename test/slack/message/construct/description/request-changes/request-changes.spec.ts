@@ -1,7 +1,4 @@
-import {
-  constructReqChangesDesc,
-} from "../../../../../src/slack/message/construct/description";
-
+import { constructReqChangesDesc } from "../../../../../../src/slack/message/construct/description";
 import { expect } from "chai";
 
 describe("constructReqChangesDesc", () => {

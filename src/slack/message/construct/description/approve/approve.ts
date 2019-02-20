@@ -1,4 +1,4 @@
-import { SlackUser } from "../../../../models";
+import { SlackUser } from "../../../../../models";
 
 /**
  * @description Function used to construct the description

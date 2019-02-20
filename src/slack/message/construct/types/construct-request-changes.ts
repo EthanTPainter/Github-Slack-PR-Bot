@@ -7,7 +7,7 @@ import {
 
 import { RequestChangesPR } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";
-import { constructReqChangesDesc } from "../../formatting";
+import { constructReqChangesDesc } from "../description";
 import { newLogger } from "../../../../logger";
 
 const logger = newLogger("ConstructReqChanges");

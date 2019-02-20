@@ -7,7 +7,7 @@ import {
 
 import { CommentPR } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";
-import { constructCommentDesc } from "../../formatting";
+import { constructCommentDesc } from "../description";
 import { newLogger } from "../../../../logger";
 
 const logger = newLogger("ConstructClose");

@@ -1,7 +1,4 @@
-import {
-  constructCommentDesc,
-} from "../../../../../src/slack/message/construct/description";
-
+import { constructCommentDesc } from "../../../../../../src/slack/message/construct/description";
 import { expect } from "chai";
 
 describe("constructCommentDesc", () => {

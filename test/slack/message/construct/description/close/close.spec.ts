@@ -1,7 +1,4 @@
-import {
-  constructCloseDesc,
-} from "../../../../../src/slack/message/construct/description";
-
+import { constructCloseDesc } from "../../../../../../src/slack/message/construct/description";
 import { expect } from "chai";
 
 describe("constructCloseDesc", () => {

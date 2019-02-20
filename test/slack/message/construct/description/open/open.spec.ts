@@ -1,6 +1,4 @@
-import {
-  constructOpenDesc,
-} from "../../../../../src/slack/message/construct/description";
+import { constructOpenDesc } from "../../../../../../src/slack/message/construct/description";
 import { expect } from "chai";
 
 describe("constructOpenDesc", () => {

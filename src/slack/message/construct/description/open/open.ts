@@ -1,5 +1,5 @@
-import { SlackUser } from "../../../../models";
-import { getTeamOptionsAlt } from "../../../../json/parse";
+import { SlackUser } from "../../../../../models";
+import { getTeamOptionsAlt } from "../../../../../json/parse";
 
 /**
  * @description Construct the description of the slack message

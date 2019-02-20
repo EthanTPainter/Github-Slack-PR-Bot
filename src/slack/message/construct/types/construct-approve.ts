@@ -17,7 +17,7 @@ import { Review } from "../../../../github/api";
 
 import {
   constructApproveDesc,
-} from "../../formatting";
+} from "../description";
 
 import { ApprovePR } from "../../../../models";
 import { getApprovalChecks } from "../checks/approval";

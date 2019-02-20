@@ -1,9 +1,6 @@
-import {
-  constructMergeDesc,
-} from "../../../../../src/slack/message/construct/description";
-
+import { constructMergeDesc } from "../../../../../../src/slack/message/construct/description";
 import { expect } from "chai";
-import { SlackUser } from "../../../../../src/models";
+import { SlackUser } from "../../../../../../src/models";
 
 describe("constructMergeDesc", () => {
 
