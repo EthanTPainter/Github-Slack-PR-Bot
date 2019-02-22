@@ -1,18 +1,16 @@
 import { SlackUser } from "../slack";
+import { Event } from "./event";
 
 export class Item {
   owner: SlackUser;
   title: string;
   url: string;
-  MemberComplete: boolean;
-  MembersApproving: string[];
-  leadComplete: boolean;
-  leadsApproving: string[];
+  member_complete: boolean;
+  members_approving: string[];
+  lead_complete: boolean;
+  leads_approving: string[];
   records: {
-    actions?: [{
-      user: SlackUser,
-      action: string;
-    }],
+    events: Event[],
     times: string[],
   };
 }

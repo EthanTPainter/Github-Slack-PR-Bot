@@ -7,8 +7,8 @@ import { Item } from "../../models";
  */
 export function filterMemberApprovedPRs(queue: Item[]): Item[] {
   const memberApprovedPRs = queue.filter((memberApprovedPR: Item) => {
-    return memberApprovedPR.MemberComplete === true
-      && memberApprovedPR.leadComplete === false;
+    return memberApprovedPR.member_complete === true
+      && memberApprovedPR.lead_complete === false;
   });
   return memberApprovedPRs;
 }

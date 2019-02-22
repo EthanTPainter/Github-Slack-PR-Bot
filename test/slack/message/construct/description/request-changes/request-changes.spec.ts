@@ -32,6 +32,7 @@ describe("constructReqChangesDesc", () => {
     expect(() => constructReqChangesDesc(slackUser, slackUserRequesting))
       .to.throw(expected.message);
   });
+
   it("should throw an error -- No Slack User Requesting changes provided", () => {
     const slackUser = {
       Slack_Name: "EthanPainter",
@@ -44,4 +45,5 @@ describe("constructReqChangesDesc", () => {
     expect(() => constructReqChangesDesc(slackUser, slackUserRequesting))
       .to.throw(expected.message);
   });
+
 });

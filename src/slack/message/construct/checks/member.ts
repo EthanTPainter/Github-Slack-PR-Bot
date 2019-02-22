@@ -39,7 +39,6 @@ export function constructMemberCheck(
 
   // Format who has approved the PR thus far
   membersApproving.map((slackMember: SlackUser) => {
-    console.log("slackMember: ", JSON.stringify(slackMember));
     const checkMark = getCheckMarkAlt(slackMember, json);
     memberCheck += `${slackMember.Slack_Name} ${checkMark} `;
   });

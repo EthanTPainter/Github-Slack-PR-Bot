@@ -7,8 +7,8 @@ import { Item } from "../../models";
  */
 export function filterMergablePRs(queue: Item[]): Item[] {
   const mergablePRs = queue.filter((mergablePR: Item) => {
-    return mergablePR.MemberComplete === true
-      && mergablePR.leadComplete === true;
+    return mergablePR.member_complete === true
+      && mergablePR.lead_complete === true;
   });
   return mergablePRs;
 }

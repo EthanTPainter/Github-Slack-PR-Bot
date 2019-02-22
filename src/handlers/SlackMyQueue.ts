@@ -76,7 +76,7 @@ export async function processMyQueue(
     logger.info(`User Queue: ${userQueue}`);
 
     // Format queue from array to string
-    const formattedQueue = formatMyQueue(userQueue);
+    const formattedQueue = formatMyQueue(userQueue, json);
 
     const success: object = {
       body: formattedQueue,

@@ -1,5 +1,7 @@
 import { Item } from "../../models";
 import { newLogger } from "../../logger";
+import { getTeamOptionsAlt } from "../../json/parse";
+import { constructQueueString } from "../../slack/message/construct/description";
 
 const logger = newLogger("FormatMyQueue");
 
@@ -11,6 +13,7 @@ const logger = newLogger("FormatMyQueue");
  */
 export function formatMyQueue(
   queue: Item[],
+  json: any,
   ): string {
   let formattedQueue: string = "";
 
@@ -22,7 +25,8 @@ export function formatMyQueue(
 
   // If the queue has contents, display them sorted:
   queue.map((pr: Item) => {
-    formattedQueue += `${pr.title} [${pr.url}]\n`;
+    const options = getTeamOptionsAlt(pr.owner, json);
+    formattedQueue += constructQueueString(pr, options);
   });
   logger.info(`formattedQueue: ${formattedQueue}`);
 

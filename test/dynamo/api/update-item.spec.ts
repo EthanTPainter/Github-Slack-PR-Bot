@@ -12,12 +12,19 @@ describe("putItem", () => {
       owner: { Slack_Name: "ethan", Slack_Id: "<@1111>" },
       title: "New title",
       url: "my url",
-      MemberComplete: false,
-      MembersApproving: [],
-      leadComplete: false,
-      leadsApproving: [],
+      member_complete: false,
+      members_approving: [],
+      lead_complete: false,
+      leads_approving: [],
       records: {
-        times: [],
+        events: [{
+          user: {
+            Slack_Name: "Ethan",
+            Slack_Id: "<@1234>",
+          },
+          action: "APPROVED",
+        }],
+        times: ["NOW"],
       },
     };
 

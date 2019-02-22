@@ -27,7 +27,7 @@ export async function updateOpen(
 
   let slackUserList;
   if (json.Options.Dynamo_Member_Before_Lead
-    && newItem.MemberComplete === false) {
+    && newItem.member_complete === false) {
     // SlackUserList is only members
     // Remove slackUser from this list (This shouldn't be on the updater's queue)
     slackUserList = getSlackMembersAlt(slackUser, json);

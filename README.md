@@ -67,7 +67,7 @@ directory provides dummy values to use if you're not sure what value to use.
 
 Option  |   Description   |   Values
 ------- | --------------- | ---------
-**Avoid_Slack_Channel_Comment_Alerts_Window**: *number* | When a user comments on a PR, an alert is sent to that user's team slack channel. When a user leaves multiple comments in a short period of time, on one PR, a slack channel could a message about each comment. <br><br> Viewing 5 slack messages each telling the team:<br> `user X has commented on pull request Y` <br> provides as much benefit as one slack message with the same message. <br><br> As a result, a window is provided to limit how often a slack channel can be alerted when a PR is commented on by the same user on the same PR multiple instances in a short period of time | If set to `0`: <br><br> when a user **X** comments on pull request **Y** always send an alert to the team channel anytime a user comments on a PR (**no delays or restrictions**). <br><br> If set to `10`: <br><br> **1**) When a user **X** comments on pull request **Y** send an alert to the team channel from user **X** on pull request **Y** <br>**2**) Any comments from user **X** at this time until `10` minutes after will not be sent to the team's slack channel <br>**3**) After `10` minutes have passed, if user **X** comments on pull request **Y** 
+**Avoid_Slack_Channel_Comment_Alerts_Time_Window**: *number* | When a user comments on a PR, an alert is sent to that user's team slack channel. When a user leaves multiple comments in a short period of time, on one PR, a slack channel could a message about each comment. <br><br> Viewing 5 slack messages each telling the team:<br> `user X has commented on pull request Y` <br> provides as much benefit as one slack message with the same message. <br><br> As a result, a window is provided to limit how often a slack channel can be alerted when a PR is commented on by the same user on the same PR multiple instances in a short period of time | If set to `0`: <br><br> when a user **X** comments on pull request **Y** always send an alert to the team channel anytime a user comments on a PR (**no delays or restrictions**). <br><br> If set to `10`: <br><br> **1**) When a user **X** comments on pull request **Y** send an alert to the team channel from user **X** on pull request **Y** <br>**2**) Any comments from user **X** at this time until `10` minutes after will not be sent to the team's slack channel <br>**3**) After `10` minutes have passed, if user **X** comments on pull request **Y** 
 **Check_Mark_Text**: *string* | Slack text for representing a check mark icon in slack | Use `:heavy_check_mark:` for a green check mark Slack icon <br><br> Use `:white_check_mark:` for a white check mark Slack icon <br><br> Or use your own text value to represent a check mark in your slack team channel!
 **X_Mark_Text**: *string* | Slack text for representing an X mark icon in slack | Use `:X:` for a bright red x mark  Slack icon <br><br> Use `:heavy_multiplication_x:` for an orange x mark Slack icon <br><br> Or use your own text value to represent an X mark icon in slack!
 **Num_Required_Member_Approvals**: *number* | Number of required member approvals for a pull request | Set to `0`: no members of the team required to approve the pull request. <br><br> Set to `2`: only two members of a team are required to approve the pull request from the available members in the team
@@ -89,12 +89,11 @@ export const json = {
     Dev: {
       Dev_Team_1: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Window: 5,
+          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":heavy_check_mark:",
           Num_Required_Lead_Approvals: 1,
           Num_Required_Member_Approvals: 1,
-          Dynamo_Member_Before_Lead: true,
         },
         Slack_Group: {
           Slack_Name: "Group_Slack_Name",

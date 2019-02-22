@@ -11,8 +11,8 @@ import { Item } from "../../models";
  */
 export function filterNoFullyApprovedPRs(queue: Item[]): Item[] {
   const noFullyApprovedPRs = queue.filter((notFullyApprovedPR: Item) => {
-    return notFullyApprovedPR.MemberComplete === false
-      && notFullyApprovedPR.leadComplete === false;
+    return notFullyApprovedPR.member_complete === false
+      && notFullyApprovedPR.lead_complete === false;
   });
   return noFullyApprovedPRs;
 }

@@ -39,12 +39,19 @@ export function formatItem(
     owner: slackUser,
     title: title,
     url: htmlUrl,
-    MemberComplete: MemberComplete,
-    MembersApproving: [],
-    leadComplete: leadComplete,
-    leadsApproving: [],
+    member_complete: MemberComplete,
+    members_approving: [],
+    lead_complete: leadComplete,
+    leads_approving: [],
     records: {
-      times: [],
+      events: [{
+        user: {
+          Slack_Name: "EthanP",
+          Slack_Id: "<@4321>",
+        },
+        action: "APPROVED",
+      }],
+      times: ["NOW"],
     },
   };
 
