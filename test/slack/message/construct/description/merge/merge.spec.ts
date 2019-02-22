@@ -30,7 +30,7 @@ describe("constructMergeDesc", () => {
     const expected = `${slackUserMerging.Slack_Name} merged this PR ` +
       `from ${branchWithPR} to ${branchMergedTo}. Owner: ${slackUser.Slack_Id}`;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- SlackUser undefined", () => {

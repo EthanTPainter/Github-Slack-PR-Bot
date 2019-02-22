@@ -15,7 +15,7 @@ describe("getPRBranch", () => {
     const result = getPRBranch(event);
     const expected = event.pull_request.head.ref;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- No event.pull_request.head.ref", () => {

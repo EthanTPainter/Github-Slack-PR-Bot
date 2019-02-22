@@ -60,7 +60,7 @@ describe("getCheckMark", () => {
     const result = getCheckMark(githubUser, json);
     const expected = json.Departments.Devs.DevTeam1.Options.Check_Mark_Text;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should get check mark text from DevTeam1 options given member github user", () => {
@@ -69,7 +69,7 @@ describe("getCheckMark", () => {
     const result = getCheckMark(githubUser, json);
     const expected = json.Departments.Devs.DevTeam1.Options.Check_Mark_Text;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should get check mark text from qaTeam2 options given lead github user", () => {
@@ -78,7 +78,7 @@ describe("getCheckMark", () => {
     const result = getCheckMark(githubUser, json);
     const expected = json.Departments.QA.qaTeam2.Options.Check_Mark_Text;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should get check mark text from qaTeam2 options given member github user", () => {
@@ -87,7 +87,7 @@ describe("getCheckMark", () => {
     const result = getCheckMark(githubUser, json);
     const expected = json.Departments.QA.qaTeam2.Options.Check_Mark_Text;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- Check_Mark_Text not defined", () => {
@@ -161,7 +161,7 @@ describe("getCheckMarkAlt", () => {
     const result = getCheckMarkAlt(slackUser, json);
     const expected = json.Departments.Devs.DevTeam1.Options.Check_Mark_Text;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should get check mark text from DevTeam1 options given member slack user", () => {
@@ -170,7 +170,7 @@ describe("getCheckMarkAlt", () => {
     const result = getCheckMarkAlt(slackUser, json);
     const expected = json.Departments.Devs.DevTeam1.Options.Check_Mark_Text;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should get check mark text from qaTeam2 options given lead slack user", () => {
@@ -179,7 +179,7 @@ describe("getCheckMarkAlt", () => {
     const result = getCheckMarkAlt(slackUser, json);
     const expected = json.Departments.QA.qaTeam2.Options.Check_Mark_Text;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should get check mark text from qaTeam2 options given member slack user", () => {
@@ -188,7 +188,7 @@ describe("getCheckMarkAlt", () => {
     const result = getCheckMarkAlt(slackUser, json);
     const expected = json.Departments.QA.qaTeam2.Options.Check_Mark_Text;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- Check Mark Text undefined", () => {

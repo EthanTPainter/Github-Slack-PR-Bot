@@ -19,7 +19,7 @@ describe("getMembersApproving", () => {
                                     allSlackLeadUsers);
     const expected = [{ Slack_Name: "ethan", Slack_Id: "<@1111>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get many members approving", () => {
@@ -35,7 +35,7 @@ describe("getMembersApproving", () => {
     const expected = [{ Slack_Name: "ethan", Slack_Id: "<@1111>" },
                       { Slack_Name: "daniel", Slack_Id: "<@1112>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get a member with other users approving", () => {
@@ -51,7 +51,7 @@ describe("getMembersApproving", () => {
                                     allSlackLeadUsers);
     const expected = [{ Slack_Name: "ethan", Slack_Id: "<@1111>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should not get any members approving", () => {
@@ -65,7 +65,7 @@ describe("getMembersApproving", () => {
                                     allSlackLeadUsers);
     const expected: SlackUser[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should not get any members approving with leads approving", () => {
@@ -79,7 +79,7 @@ describe("getMembersApproving", () => {
                                     allSlackLeadUsers);
     const expected: SlackUser[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
 });
@@ -97,7 +97,7 @@ describe("getMembersReqChanges", () => {
                                     allSlackLeadUsers);
     const expected = [{ Slack_Name: "ethan", Slack_Id: "<@1111>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get many members requesting changes", () => {
@@ -113,7 +113,7 @@ describe("getMembersReqChanges", () => {
     const expected = [{ Slack_Name: "ethan", Slack_Id: "<@1111>" },
                       { Slack_Name: "harrison", Slack_Id: "<@1112>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get a member requesting changes with other users", () => {
@@ -128,7 +128,7 @@ describe("getMembersReqChanges", () => {
                                     allSlackLeadUsers);
     const expected = [{ Slack_Name: "ethan", Slack_Id: "<@1111>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get many members requesting changes with other users", () => {
@@ -146,7 +146,7 @@ describe("getMembersReqChanges", () => {
     const expected = [{ Slack_Name: "ethan", Slack_Id: "<@1111>" },
                       { Slack_Name: "harrison", Slack_Id: "<@1112>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should not get any members requesting changes", () => {
@@ -160,7 +160,7 @@ describe("getMembersReqChanges", () => {
                                     allSlackLeadUsers);
     const expected: SlackUser[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should not get any members requesting changes with other users", () => {
@@ -175,7 +175,7 @@ describe("getMembersReqChanges", () => {
                                     allSlackLeadUsers);
     const expected: SlackUser[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
 });
@@ -188,7 +188,7 @@ describe("getMembersNotApproving", () => {
     const result = getMembersNotApproving(slackUsersNotApproving, slackMemberUsers);
     const expected = slackMemberUsers;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve multiple members not approving", () => {
@@ -202,7 +202,7 @@ describe("getMembersNotApproving", () => {
     const result = getMembersNotApproving(slackUsersNotApproving, slackMemberUsers);
     const expected = slackMemberUsers;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve member only specific users", () => {
@@ -219,7 +219,7 @@ describe("getMembersNotApproving", () => {
     const expected = [{ Slack_Name: "daniel", Slack_Id: "<@1111>" },
                       { Slack_Name: "dillon", Slack_Id: "<@1114>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve no members (All sub team members already approving PR)", () => {
@@ -231,6 +231,6 @@ describe("getMembersNotApproving", () => {
     const result = getMembersNotApproving(slackUsersNotApproving, slackMemberUsers);
     const expected: SlackUser[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 });

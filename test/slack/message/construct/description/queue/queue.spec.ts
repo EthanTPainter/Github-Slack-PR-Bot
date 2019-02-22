@@ -40,11 +40,11 @@ describe("constructQueueString", () => {
 
     const result = constructQueueString(pullRequest, options);
 
-    expect(result.includes(pullRequest.title)).to.be.equal(true);
-    expect(result.includes(pullRequest.url)).to.be.equal(true);
-    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).to.be.equal(true);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).to.be.equal(true);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).to.be.equal(true);
+    expect(result.includes(pullRequest.title)).equal(true);
+    expect(result.includes(pullRequest.url)).equal(true);
+    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(true);
+    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(true);
+    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(true);
   });
 
   it("should construct a queue string with owner and created date time", () => {
@@ -56,11 +56,11 @@ describe("constructQueueString", () => {
 
     const result = constructQueueString(pullRequest, options);
 
-    expect(result.includes(pullRequest.title)).to.be.equal(true);
-    expect(result.includes(pullRequest.url)).to.be.equal(true);
-    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).to.be.equal(true);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).to.be.equal(true);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).to.be.equal(false);
+    expect(result.includes(pullRequest.title)).equal(true);
+    expect(result.includes(pullRequest.url)).equal(true);
+    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(true);
+    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(true);
+    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(false);
   });
 
   it("should construct a queue string with owner and updated date time", () => {
@@ -72,11 +72,11 @@ describe("constructQueueString", () => {
 
     const result = constructQueueString(pullRequest, options);
 
-    expect(result.includes(pullRequest.title)).to.be.equal(true);
-    expect(result.includes(pullRequest.url)).to.be.equal(true);
-    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).to.be.equal(true);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).to.be.equal(false);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).to.be.equal(true);
+    expect(result.includes(pullRequest.title)).equal(true);
+    expect(result.includes(pullRequest.url)).equal(true);
+    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(true);
+    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(false);
+    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(true);
   });
 
   it("should construct a queue string with same created and updated time", () => {
@@ -87,11 +87,11 @@ describe("constructQueueString", () => {
 
     const result = constructQueueString(pullRequest, options);
 
-    expect(result.includes(pullRequest.title)).to.be.equal(true);
-    expect(result.includes(pullRequest.url)).to.be.equal(true);
-    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).to.be.equal(false);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).to.be.equal(true);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).to.be.equal(true);
+    expect(result.includes(pullRequest.title)).equal(true);
+    expect(result.includes(pullRequest.url)).equal(true);
+    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(false);
+    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(true);
+    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(true);
   });
 
   it("should construct a queue string with different created and updated times", () => {
@@ -103,11 +103,11 @@ describe("constructQueueString", () => {
 
     const result = constructQueueString(pullRequest, options);
 
-    expect(result.includes(pullRequest.title)).to.be.equal(true);
-    expect(result.includes(pullRequest.url)).to.be.equal(true);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).to.be.equal(true);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).to.be.equal(false);
-    expect(result.includes("Updated: " + pullRequest.records.times[1])).to.be.equal(true);
+    expect(result.includes(pullRequest.title)).equal(true);
+    expect(result.includes(pullRequest.url)).equal(true);
+    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(true);
+    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(false);
+    expect(result.includes("Updated: " + pullRequest.records.times[1])).equal(true);
   });
 
   it("should construct a queue string with only created time", () => {
@@ -118,11 +118,11 @@ describe("constructQueueString", () => {
 
     const result = constructQueueString(pullRequest, options);
 
-    expect(result.includes(pullRequest.title)).to.be.equal(true);
-    expect(result.includes(pullRequest.url)).to.be.equal(true);
-    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).to.be.equal(false);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).to.be.equal(true);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).to.be.equal(false);
+    expect(result.includes(pullRequest.title)).equal(true);
+    expect(result.includes(pullRequest.url)).equal(true);
+    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(false);
+    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(true);
+    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(false);
   });
 
   it("should construct a queue string with only updated time", () => {
@@ -133,11 +133,11 @@ describe("constructQueueString", () => {
 
     const result = constructQueueString(pullRequest, options);
 
-    expect(result.includes(pullRequest.title)).to.be.equal(true);
-    expect(result.includes(pullRequest.url)).to.be.equal(true);
-    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).to.be.equal(false);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).to.be.equal(false);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).to.be.equal(true);
+    expect(result.includes(pullRequest.title)).equal(true);
+    expect(result.includes(pullRequest.url)).equal(true);
+    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(false);
+    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(false);
+    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(true);
   });
 
   it("should construct a queue string with only an owner", () => {
@@ -149,11 +149,11 @@ describe("constructQueueString", () => {
 
     const result = constructQueueString(pullRequest, options);
 
-    expect(result.includes(pullRequest.title)).to.be.equal(true);
-    expect(result.includes(pullRequest.url)).to.be.equal(true);
-    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).to.be.equal(true);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).to.be.equal(false);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).to.be.equal(false);
+    expect(result.includes(pullRequest.title)).equal(true);
+    expect(result.includes(pullRequest.url)).equal(true);
+    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(true);
+    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(false);
+    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(false);
   });
 
   it("should construct a queue string with no datetime stamps", () => {
@@ -164,11 +164,11 @@ describe("constructQueueString", () => {
 
     const result = constructQueueString(pullRequest, options);
 
-    expect(result.includes(pullRequest.title)).to.be.equal(true);
-    expect(result.includes(pullRequest.url)).to.be.equal(true);
-    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).to.be.equal(false);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).to.be.equal(false);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).to.be.equal(false);
+    expect(result.includes(pullRequest.title)).equal(true);
+    expect(result.includes(pullRequest.url)).equal(true);
+    expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(false);
+    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(false);
+    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(false);
   });
 
 });

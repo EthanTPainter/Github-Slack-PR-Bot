@@ -85,9 +85,9 @@ describe("constructSlackMessage", () => {
 
     console.log("Opened PR Slack Message: \n", result);
 
-    expect(result.includes(action)).to.be.equal(true);
-    expect(result.includes(expTitle)).to.be.equal(true);
-    expect(result.includes(expUrl)).to.be.equal(true);
+    expect(result.includes(action)).equal(true);
+    expect(result.includes(expTitle)).equal(true);
+    expect(result.includes(expUrl)).equal(true);
   });
 
   it("should construct a reopened PR slack message", async () => {
@@ -99,9 +99,9 @@ describe("constructSlackMessage", () => {
 
     console.log("Reopened PR Slack Message: \n", result);
 
-    expect(result.includes(action)).to.be.equal(true);
-    expect(result.includes(expTitle)).to.be.equal(true);
-    expect(result.includes(expUrl)).to.be.equal(true);
+    expect(result.includes(action)).equal(true);
+    expect(result.includes(expTitle)).equal(true);
+    expect(result.includes(expUrl)).equal(true);
   });
 
   it("should construct a closed PR slack message", async () => {
@@ -114,9 +114,9 @@ describe("constructSlackMessage", () => {
 
     console.log("Closed PR Slack Message: \n", result);
 
-    expect(result.includes(action)).to.be.equal(true);
-    expect(result.includes(expTitle)).to.be.equal(true);
-    expect(result.includes(expUrl)).to.be.equal(true);
+    expect(result.includes(action)).equal(true);
+    expect(result.includes(expTitle)).equal(true);
+    expect(result.includes(expUrl)).equal(true);
   });
 
   it("should construct a merged PR slack message", async () => {
@@ -132,11 +132,11 @@ describe("constructSlackMessage", () => {
 
     console.log("Merged PR Slack Message: \n", result);
 
-    expect(result.includes(expBase)).to.be.equal(true);
-    expect(result.includes(expHead)).to.be.equal(true);
-    expect(result.includes(realAction)).to.be.equal(true);
-    expect(result.includes(expTitle)).to.be.equal(true);
-    expect(result.includes(expUrl)).to.be.equal(true);
+    expect(result.includes(expBase)).equal(true);
+    expect(result.includes(expHead)).equal(true);
+    expect(result.includes(realAction)).equal(true);
+    expect(result.includes(expTitle)).equal(true);
+    expect(result.includes(expUrl)).equal(true);
   });
 
   it("should construct an approved PR slack message", async () => {
@@ -171,11 +171,11 @@ describe("constructSlackMessage", () => {
 
     console.log("Result: ", result);
 
-    expect(result.includes(realAction)).to.be.equal(true);
-    expect(result.includes(expTitle)).to.be.equal(true);
-    expect(result.includes(expUrl)).to.be.equal(true);
-    expect(result.includes(expNumMember + " Required Member")).to.be.equal(true);
-    expect(result.includes(expNumLead + " Required Lead")).to.be.equal(true);
+    expect(result.includes(realAction)).equal(true);
+    expect(result.includes(expTitle)).equal(true);
+    expect(result.includes(expUrl)).equal(true);
+    expect(result.includes(expNumMember + " Required Member")).equal(true);
+    expect(result.includes(expNumLead + " Required Lead")).equal(true);
   });
 
   it("should construct a request changes PR slack message", async () => {
@@ -189,9 +189,9 @@ describe("constructSlackMessage", () => {
 
     console.log("ReqChanges PR Slack Message: \n", result);
 
-    expect(result.includes(realAction)).to.be.equal(true);
-    expect(result.includes(expTitle)).to.be.equal(true);
-    expect(result.includes(expUrl)).to.be.equal(true);
+    expect(result.includes(realAction)).equal(true);
+    expect(result.includes(expTitle)).equal(true);
+    expect(result.includes(expUrl)).equal(true);
   });
 
   it("should construct a commented PR slack message", async () => {
@@ -205,9 +205,9 @@ describe("constructSlackMessage", () => {
 
     console.log("Commented PR Slack Message: \n", result);
 
-    expect(result.includes(realAction)).to.be.equal(true);
-    expect(result.includes(expTitle)).to.be.equal(true);
-    expect(result.includes(expUrl)).to.be.equal(true);
+    expect(result.includes(realAction)).equal(true);
+    expect(result.includes(expTitle)).equal(true);
+    expect(result.includes(expUrl)).equal(true);
   });
 
   it("should throw error -- unsupported review state", async () => {

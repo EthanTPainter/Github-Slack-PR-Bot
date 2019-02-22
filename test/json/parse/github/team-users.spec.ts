@@ -62,7 +62,7 @@ describe("getGitHubTeamUsers", () => {
     const result = getGitHubTeamUsers(githubUser, validJSON);
     const expected = ["andrew", "ethan", "dillon", "daniel", "joshua"];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get Dev_Team_1 users given a Dev_Team_1 GitHub member", () => {
@@ -71,7 +71,7 @@ describe("getGitHubTeamUsers", () => {
     const result = getGitHubTeamUsers(githubUser, validJSON);
     const expected = ["andrew", "ethan", "dillon", "daniel", "joshua"];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get Dev_Team_2 users given a Dev_Team_2 GitHub lead", () => {
@@ -80,7 +80,7 @@ describe("getGitHubTeamUsers", () => {
     const result = getGitHubTeamUsers(githubUser, validJSON);
     const expected = ["mattyIce", "sanket", "harrison", "nick", "shaun"];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get Dev_Team_2 users given a Dev_Team_2 GitHub member", () => {
@@ -89,7 +89,7 @@ describe("getGitHubTeamUsers", () => {
     const result = getGitHubTeamUsers(githubUser, validJSON);
     const expected = ["mattyIce", "sanket", "harrison", "nick", "shaun"];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should throw an error -- No Teams property in JSON", () => {

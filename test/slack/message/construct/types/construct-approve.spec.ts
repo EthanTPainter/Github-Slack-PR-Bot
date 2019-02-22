@@ -93,29 +93,29 @@ describe("constructApprove", () => {
     // Expect SlackUser slack names to be in ApprovePR description
     expect((result.description)
       .includes(validJSON.Departments.Dev.Team1.Users.Leads.gwely.Slack_Name))
-      .to.be.equal(true);
+      .equal(true);
     expect((result.description)
       .includes(validJSON.Departments.Dev.Team1.Users.Members.EthanTPainter.Slack_Id))
-      .to.be.equal(true);
+      .equal(true);
 
     // Expect title, url, owner, and sender in ApprovePR
-    expect(result.title).to.be.equal(validEvent.pull_request.title);
-    expect(result.url).to.be.equal(validEvent.pull_request.html_url);
-    expect(result.owner).to.be.equal(validEvent.pull_request.user.login);
-    expect(result.user_approving).to.be.equal(validEvent.sender.login);
+    expect(result.title).equal(validEvent.pull_request.title);
+    expect(result.url).equal(validEvent.pull_request.html_url);
+    expect(result.owner).equal(validEvent.pull_request.user.login);
+    expect(result.user_approving).equal(validEvent.sender.login);
 
     // Expect approvals to be properly formatted
     expect((result.approvals)
       .includes(validJSON.Departments.Dev.Team1.Options.Num_Required_Member_Approvals
-        + " Required Member")).to.be.equal(true);
+        + " Required Member")).equal(true);
     expect((result.approvals)
       .includes(validJSON.Departments.Dev.Team1.Users.Members.DillonSykes.Slack_Name
-        + " :heavy_check_mark:")).to.be.equal(true);
+        + " :heavy_check_mark:")).equal(true);
     expect((result.approvals)
       .includes(validJSON.Departments.Dev.Team1.Options.Num_Required_Lead_Approvals
-        + " Required Lead")).to.be.equal(true);
+        + " Required Lead")).equal(true);
     expect((result.approvals)
       .includes(validJSON.Departments.Dev.Team1.Users.Leads.gwely.Slack_Name
-        + " :heavy_check_mark:")).to.be.equal(true);
+        + " :heavy_check_mark:")).equal(true);
   });
 });

@@ -13,7 +13,7 @@ describe("filterLeadApprovedPRs", () => {
     const result = filterLeadApprovedPRs(queue);
     const expected = queue;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter only PR in queue -- not lead approved PR", () => {
@@ -25,7 +25,7 @@ describe("filterLeadApprovedPRs", () => {
     const result = filterLeadApprovedPRs(queue);
     const expected: Item[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter one lead approved PR from queue", () => {
@@ -40,7 +40,7 @@ describe("filterLeadApprovedPRs", () => {
     const result = filterLeadApprovedPRs(queue);
     const expected = [ queue[0] ];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter two lead approved PRs from queue", () => {
@@ -58,7 +58,7 @@ describe("filterLeadApprovedPRs", () => {
     const result = filterLeadApprovedPRs(queue);
     const expected = [ queue[0], queue[2] ];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter none lead approved PRs from queue", () => {
@@ -76,7 +76,7 @@ describe("filterLeadApprovedPRs", () => {
     const result = filterLeadApprovedPRs(queue);
     const expected: Item[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter none from empty queue", () => {
@@ -85,7 +85,7 @@ describe("filterLeadApprovedPRs", () => {
     const result = filterLeadApprovedPRs(queue);
     const expected: Item[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
 });

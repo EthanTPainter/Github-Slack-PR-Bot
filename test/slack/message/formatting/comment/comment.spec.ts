@@ -20,7 +20,7 @@ describe("constructCommentDesc", () => {
     const expected = `${commentingUser.Slack_Name} has commented on this PR. ` +
       `Owner: ${slackUser.Slack_Id}`;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should construct a valid description with same owner & sender", () => {
@@ -33,7 +33,7 @@ describe("constructCommentDesc", () => {
     const result = constructCommentDesc(slackUser, commentingUser);
     const expected = `${slackUser.Slack_Name} has commented on this PR`;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- No slackUser provided", () => {

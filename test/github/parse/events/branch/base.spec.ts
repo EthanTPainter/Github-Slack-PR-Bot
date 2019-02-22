@@ -15,7 +15,7 @@ describe("getBaseBranch", () => {
     const result = getBaseBranch(event);
     const expected = event.pull_request.base.ref;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- No event.pull_request.base.ref", () => {

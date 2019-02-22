@@ -55,10 +55,10 @@ describe("constructOpen", () => {
 
     const result: OpenedPR = constructOpen(validEvent, validJSON, newPR);
 
-    expect((result.description).includes(slackOwner.Slack_Name)).to.be.equal(true);
-    expect((result.description).includes("opened this PR")).to.be.equal(true);
-    expect(result.title).to.be.equal(validEvent.pull_request.title);
-    expect(result.url).to.be.equal(validEvent.pull_request.html_url);
-    expect(result.owner).to.be.equal(validEvent.pull_request.user.login);
+    expect((result.description).includes(slackOwner.Slack_Name)).equal(true);
+    expect((result.description).includes("opened this PR")).equal(true);
+    expect(result.title).equal(validEvent.pull_request.title);
+    expect(result.url).equal(validEvent.pull_request.html_url);
+    expect(result.owner).equal(validEvent.pull_request.user.login);
   });
 });

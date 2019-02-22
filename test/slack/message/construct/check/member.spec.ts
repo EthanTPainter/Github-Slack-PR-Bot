@@ -61,7 +61,7 @@ describe("constructMemberCheck", () => {
     const expected = `0 Required Member Approvals: ${membersApproving[0].Slack_Name} `
       + `${validJSON.Departments.De.D.Options.Check_Mark_Text} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a Member check with 0 required reviews and 0 approving", () => {
@@ -78,7 +78,7 @@ describe("constructMemberCheck", () => {
 
     const expected = "0 Required Member Approvals: ";
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a Member check with 1 required review and 0 approving", () => {
@@ -95,7 +95,7 @@ describe("constructMemberCheck", () => {
     const expected = `1 Required Member Approval: ${membersNotApproving[0].Slack_Id} `
       + `${membersNotApproving[1].Slack_Id} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a Member check with 1 required review and 1 approving", () => {
@@ -112,7 +112,7 @@ describe("constructMemberCheck", () => {
     const expected = `1 Required Member Approval: ${membersApproving[0].Slack_Name} `
       + `${validJSON.Departments.De.D.Options.Check_Mark_Text} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a Member check with 1 required review and 2 approving", () => {
@@ -130,7 +130,7 @@ describe("constructMemberCheck", () => {
       + `${validJSON.Departments.De.D.Options.Check_Mark_Text} `
       + `${membersApproving[1].Slack_Name} ${validJSON.Departments.De.D.Options.Check_Mark_Text} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a Member check with 2 required reviews and 1 approving", () => {
@@ -148,7 +148,7 @@ describe("constructMemberCheck", () => {
       + `${validJSON.Departments.De.D.Options.Check_Mark_Text} `
       + `${membersNotApproving[0].Slack_Id} ${membersNotApproving[1].Slack_Id} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a Member check with 2 required reviews and 2 approving", () => {
@@ -166,7 +166,7 @@ describe("constructMemberCheck", () => {
       + `${validJSON.Departments.De.D.Options.Check_Mark_Text} `
       + `${membersApproving[1].Slack_Name} ${validJSON.Departments.De.D.Options.Check_Mark_Text} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a Member check with 1 required review, 0 approving, 1 requested changes", () => {
@@ -182,7 +182,7 @@ describe("constructMemberCheck", () => {
     const expected = `1 Required Member Approval: ${membersReqChanges[0].Slack_Name} `
       + `${validJSON.Departments.De.D.Options.X_Mark_Text} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a Member check with 2 required reviews, 0 approving, 1 requesting chagnes", () => {
@@ -199,7 +199,7 @@ describe("constructMemberCheck", () => {
       + `${validJSON.Departments.De.D.Options.X_Mark_Text} `
       + `${membersNotApproving[0].Slack_Id} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a Member check with 2 required reviews, 0 approving, 2 requesting changes", () => {
@@ -218,7 +218,7 @@ describe("constructMemberCheck", () => {
       + `${validJSON.Departments.De.D.Options.X_Mark_Text} `
       + `${membersReqChanges[1].Slack_Name} ${validJSON.Departments.De.D.Options.X_Mark_Text} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a Member check with 2 required reviews, 1 approving, 1 requesting changes", () => {
@@ -236,7 +236,7 @@ describe("constructMemberCheck", () => {
       + `${validJSON.Departments.De.D.Options.Check_Mark_Text} `
       + `${membersReqChanges[0].Slack_Name} ${validJSON.Departments.De.D.Options.X_Mark_Text} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a Member check with 3 required reviews, 1 approving, 1 requesting changes", () => {
@@ -257,7 +257,7 @@ describe("constructMemberCheck", () => {
       + `${membersNotApproving[0].Slack_Id} ${membersNotApproving[1].Slack_Id} `
       + `${membersNotApproving[2].Slack_Id} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
 });

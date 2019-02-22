@@ -62,7 +62,7 @@ describe("constructLeadCheck", () => {
 
     const expected = "0 Required Lead Approvals: Andrew :heavy_check_mark: ";
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a lead check with 0 required reviews and 0 approving", () => {
@@ -77,7 +77,7 @@ describe("constructLeadCheck", () => {
     // This seems a bit odd. Maybe if 0 just exclude from message?
     const expected = "0 Required Lead Approvals: ";
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a lead check with 1 required review and 0 approving", () => {
@@ -92,7 +92,7 @@ describe("constructLeadCheck", () => {
 
     const expected = `1 Required Lead Approval: ${leadsNotApproving[0].Slack_Id} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a lead check with 1 required review and 1 approving", () => {
@@ -107,7 +107,7 @@ describe("constructLeadCheck", () => {
 
     const expected = "1 Required Lead Approval: Andrew :heavy_check_mark: ";
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a lead check with 2 required reviews and 0 approving", () => {
@@ -123,7 +123,7 @@ describe("constructLeadCheck", () => {
 
     const expected = `2 Required Lead Approvals: ${leadsNotApproving[0].Slack_Id} ${leadsNotApproving[1].Slack_Id} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a lead check with 2 required reviews and 1 approving", () => {
@@ -139,7 +139,7 @@ describe("constructLeadCheck", () => {
     const expected = `2 Required Lead Approvals: ${leadsApproving[0].Slack_Name} :heavy_check_mark:`
       + ` ${leadsNotApproving[0].Slack_Id} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a lead check with 2 required reviews and 2 approving", () => {
@@ -156,7 +156,7 @@ describe("constructLeadCheck", () => {
     const expected = `2 Required Lead Approvals: ${leadsApproving[0].Slack_Name} :heavy_check_mark: `
       + `${leadsApproving[1].Slack_Name} :heavy_check_mark: `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a lead check with 1 required review, 0 approving, 1 requested changes", () => {
@@ -171,7 +171,7 @@ describe("constructLeadCheck", () => {
 
     const expected = "1 Required Lead Approval: Ethan :X: ";
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a lead check with 2 required reviews, 0 approving, 1 requesting changes", () => {
@@ -188,7 +188,7 @@ describe("constructLeadCheck", () => {
     const expected = `2 Required Lead Approvals: ${leadsReqChanges[0].Slack_Name} :X: `
       + `${leadsNotApproving[0].Slack_Id} ${leadsNotApproving[1].Slack_Id} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a lead check with 2 required reviews, 0 approving, 2 requesting chnages", () => {
@@ -205,7 +205,7 @@ describe("constructLeadCheck", () => {
     const expected = `2 Required Lead Approvals: ${leadsReqChanges[0].Slack_Name} :X: `
       + `${leadsReqChanges[1].Slack_Name} :X: `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("construct a lead check with 3 required reviews, 1 approving, 1 requested changes", () => {
@@ -222,6 +222,6 @@ describe("constructLeadCheck", () => {
     const expected = `3 Required Lead Approvals: ${leadsApproving[0].Slack_Name} :heavy_check_mark: `
       + `${leadsReqChanges[0].Slack_Name} :X: ${leadsNotApproving[0].Slack_Id} ${leadsNotApproving[1].Slack_Id} `;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 });

@@ -39,7 +39,7 @@ describe("getSlackLeads", () => {
       validJSON.Departments.Dep1.Team1.Users.Leads.Leader3,
     ];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get only slack lead name", () => {
@@ -72,7 +72,7 @@ describe("getSlackLeads", () => {
       validJSON_1.Departments.Dep1.Team1.Users.Leads.Ethan,
     ];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should not get any slack leads -- No existing slack leads", ()  => {
@@ -98,7 +98,7 @@ describe("getSlackLeads", () => {
     const result = getSlackLeads(githubUser, validJSON_1);
     const expected: string[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should throw an error -- No Team found", () => {

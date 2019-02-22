@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { formatTeamQueue } from "../../../src/dynamo/formatting";
 import { Item } from "../../../src/models";
 
-describe.only("formatTeamQueue", () => {
+describe("formatTeamQueue", () => {
 
   let json: any;
   let queue: any;
@@ -65,7 +65,7 @@ describe.only("formatTeamQueue", () => {
     const result = formatTeamQueue(queue, json);
     const expected = "Nothing found in the team queue";
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should format only one mergable PR", () => {
@@ -101,13 +101,13 @@ describe.only("formatTeamQueue", () => {
 
     const result = formatTeamQueue(queue, json);
 
-    expect(result.includes("Mergable PR")).to.be.equal(true);
-    expect(result.includes(queue[0].title)).to.be.equal(true);
-    expect(result.includes(queue[0].url)).to.be.equal(true);
+    expect(result.includes("Mergable PR")).equal(true);
+    expect(result.includes(queue[0].title)).equal(true);
+    expect(result.includes(queue[0].url)).equal(true);
     expect(result.includes("Created: " + queue[0].records.times[0]))
-      .to.be.equal(true);
+      .equal(true);
     expect(result.includes("Updated: " + queue[0].records.times[1]))
-      .to.be.equal(true);
+      .equal(true);
   });
 
   it("should format two mergable PRs", () => {
@@ -170,20 +170,20 @@ describe.only("formatTeamQueue", () => {
 
     const result = formatTeamQueue(queue, json);
 
-    expect(result.includes("Mergable PR")).to.be.equal(true);
-    expect(result.includes(queue[0].title)).to.be.equal(true);
-    expect(result.includes(queue[0].url)).to.be.equal(true);
+    expect(result.includes("Mergable PR")).equal(true);
+    expect(result.includes(queue[0].title)).equal(true);
+    expect(result.includes(queue[0].url)).equal(true);
     expect(result.includes("Created: " + queue[0].records.times[0]))
-      .to.be.equal(true);
+      .equal(true);
     expect(result.includes("Updated: " + queue[0].records.times[1]))
-      .to.be.equal(true);
+      .equal(true);
 
-    expect(result.includes(queue[1].title)).to.be.equal(true);
-    expect(result.includes(queue[1].url)).to.be.equal(true);
+    expect(result.includes(queue[1].title)).equal(true);
+    expect(result.includes(queue[1].url)).equal(true);
     expect(result.includes("Created: " + queue[1].records.times[0]))
-      .to.be.equal(true);
+      .equal(true);
     expect(result.includes("Updated: " + queue[1].records.times[1]))
-      .to.be.equal(true);
+      .equal(true);
   });
 
   it("should format one lead approved PR", () => {
@@ -213,11 +213,11 @@ describe.only("formatTeamQueue", () => {
 
     const result = formatTeamQueue(queue, json);
 
-    expect(result.includes("Needs Peer Approvals")).to.be.equal(true);
-    expect(result.includes(queue[0].title)).to.be.equal(true);
-    expect(result.includes(queue[0].url)).to.be.equal(true);
-    expect(result.includes("Created: " + queue[0].records.times[0])).to.be.equal(true);
-    expect(result.includes("Updated: " + queue[0].records.times[1])).to.be.equal(true);
+    expect(result.includes("Needs Peer Approvals")).equal(true);
+    expect(result.includes(queue[0].title)).equal(true);
+    expect(result.includes(queue[0].url)).equal(true);
+    expect(result.includes("Created: " + queue[0].records.times[0])).equal(true);
+    expect(result.includes("Updated: " + queue[0].records.times[1])).equal(true);
   });
 
   it("should format two lead approved PRs", () => {
@@ -268,16 +268,16 @@ describe.only("formatTeamQueue", () => {
 
     const result = formatTeamQueue(queue, json);
 
-    expect(result.includes("Needs Peer Approvals")).to.be.equal(true);
-    expect(result.includes(queue[0].title)).to.be.equal(true);
-    expect(result.includes(queue[0].url)).to.be.equal(true);
-    expect(result.includes("Created: " + queue[0].records.times[0])).to.be.equal(true);
-    expect(result.includes("Updated: " + queue[0].records.times[1])).to.be.equal(true);
+    expect(result.includes("Needs Peer Approvals")).equal(true);
+    expect(result.includes(queue[0].title)).equal(true);
+    expect(result.includes(queue[0].url)).equal(true);
+    expect(result.includes("Created: " + queue[0].records.times[0])).equal(true);
+    expect(result.includes("Updated: " + queue[0].records.times[1])).equal(true);
 
-    expect(result.includes(queue[1].title)).to.be.equal(true);
-    expect(result.includes(queue[1].url)).to.be.equal(true);
-    expect(result.includes("Created: " + queue[1].records.times[0])).to.be.equal(true);
-    expect(result.includes("Updated: " + queue[1].records.times[1])).to.be.equal(true);
+    expect(result.includes(queue[1].title)).equal(true);
+    expect(result.includes(queue[1].url)).equal(true);
+    expect(result.includes("Created: " + queue[1].records.times[0])).equal(true);
+    expect(result.includes("Updated: " + queue[1].records.times[1])).equal(true);
   });
 
   it("should format one member approved PR", () => {

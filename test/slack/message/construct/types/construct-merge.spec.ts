@@ -56,16 +56,16 @@ describe("constructMerge", () => {
 
     const result: MergePR = constructMerge(validEvent, validJSON);
 
-    expect((result.description).includes(slackMerger.Slack_Name)).to.be.equal(true);
-    expect((result.description).includes("merged this PR")).to.be.equal(true);
-    expect((result.description).includes(validEvent.pull_request.head.ref)).to.be.equal(true);
-    expect((result.description).includes(validEvent.pull_request.base.ref)).to.be.equal(true);
-    expect((result.description).includes(slackOwner.Slack_Id)).to.be.equal(true);
-    expect(result.title).to.be.equal(validEvent.pull_request.title);
-    expect(result.url).to.be.equal(validEvent.pull_request.html_url);
-    expect(result.owner).to.be.equal(validEvent.pull_request.user.login);
-    expect(result.user_merging).to.be.equal(validEvent.sender.login);
-    expect(result.remote_branch).to.be.equal(validEvent.pull_request.head.ref);
-    expect(result.base_branch).to.be.equal(validEvent.pull_request.base.ref);
+    expect((result.description).includes(slackMerger.Slack_Name)).equal(true);
+    expect((result.description).includes("merged this PR")).equal(true);
+    expect((result.description).includes(validEvent.pull_request.head.ref)).equal(true);
+    expect((result.description).includes(validEvent.pull_request.base.ref)).equal(true);
+    expect((result.description).includes(slackOwner.Slack_Id)).equal(true);
+    expect(result.title).equal(validEvent.pull_request.title);
+    expect(result.url).equal(validEvent.pull_request.html_url);
+    expect(result.owner).equal(validEvent.pull_request.user.login);
+    expect(result.user_merging).equal(validEvent.sender.login);
+    expect(result.remote_branch).equal(validEvent.pull_request.head.ref);
+    expect(result.base_branch).equal(validEvent.pull_request.base.ref);
   });
 });

@@ -39,7 +39,7 @@ describe("getSlackMembers", () => {
       validJSON.Departments.Developers.PhillyDevTeam.Users.Members.daniel,
     ];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should not retrieve any slack members given a github user", () => {
@@ -48,7 +48,7 @@ describe("getSlackMembers", () => {
     const result = getSlackMembers(githubUser, validJSON);
     const expected: string[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should throw an error -- No Team found", () => {

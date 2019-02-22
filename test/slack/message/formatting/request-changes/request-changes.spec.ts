@@ -20,7 +20,7 @@ describe("constructReqChangesDesc", () => {
     const expected = `${slackUserRequesting.Slack_Name} requested changes to ` +
       `this PR. Owner: ${slackUser.Slack_Id}`;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- No Slack User provided", () => {

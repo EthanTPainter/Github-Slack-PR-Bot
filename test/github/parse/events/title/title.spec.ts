@@ -13,7 +13,7 @@ describe("getTitle", () => {
     const result = getTitle(event);
     const expected = event.pull_request.title;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- No event.pull_request.title", () => {

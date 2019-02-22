@@ -13,7 +13,7 @@ describe("filterMergablePRs", () => {
     const result = filterMergablePRs(queue);
     const expected = queue;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter only PR in queue -- not mergable", () => {
@@ -25,7 +25,7 @@ describe("filterMergablePRs", () => {
     const result = filterMergablePRs(queue);
     const expected: Item[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter one mergable PR", () => {
@@ -40,7 +40,7 @@ describe("filterMergablePRs", () => {
     const result = filterMergablePRs(queue);
     const expected = [ queue[0] ];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter two mergable PRs", () => {
@@ -58,7 +58,7 @@ describe("filterMergablePRs", () => {
     const result = filterMergablePRs(queue);
     const expected = [ queue[0], queue[1] ];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter none mergable PRs", () => {
@@ -70,7 +70,7 @@ describe("filterMergablePRs", () => {
     const result = filterMergablePRs(queue);
     const expected: Item[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter none from empty queue ", () => {
@@ -79,6 +79,6 @@ describe("filterMergablePRs", () => {
     const result = filterMergablePRs(queue);
     const expected: Item[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 });

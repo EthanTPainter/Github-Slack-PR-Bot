@@ -60,7 +60,7 @@ describe("getXMark", () => {
     const result = getXMark(githubUser, json);
     const expected = json.Departments.Devs.DevTeam1.Options.X_Mark_Text;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should retrieve X mark text from DevTeam1 options with member github user", () => {
@@ -69,7 +69,7 @@ describe("getXMark", () => {
     const result = getXMark(githubUser, json);
     const expected = json.Departments.Devs.DevTeam1.Options.X_Mark_Text;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should retrieve X mark text from qaTeam2 options with lead github user", () => {
@@ -78,7 +78,7 @@ describe("getXMark", () => {
     const result = getXMark(githubUser, json);
     const expected = json.Departments.QA.qaTeam2.Options.X_Mark_Text;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should retrieve X mark text from qaTeam2 options with member github user", () => {
@@ -87,7 +87,7 @@ describe("getXMark", () => {
     const result = getXMark(githubUser, json);
     const expected = json.Departments.QA.qaTeam2.Options.X_Mark_Text;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- X mark text is undefined", () => {
@@ -160,7 +160,7 @@ describe("getXMarkAlt", () => {
     const result = getXMarkAlt(slackUser, json);
     const expected = json.Departments.Devs.DevTeam1.Options.X_Mark_Text;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve X mark text from DevTeam1 options with member slack user", () => {
@@ -169,7 +169,7 @@ describe("getXMarkAlt", () => {
     const result = getXMarkAlt(slackUser, json);
     const expected = json.Departments.Devs.DevTeam1.Options.X_Mark_Text;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve X mark text from qaTeam2 options with lead slack user", () => {
@@ -178,7 +178,7 @@ describe("getXMarkAlt", () => {
     const result = getXMarkAlt(slackUser, json);
     const expected = json.Departments.QA.qaTeam2.Options.X_Mark_Text;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve X mark text from qaTeam2 options with member slack user", () => {
@@ -187,7 +187,7 @@ describe("getXMarkAlt", () => {
     const result = getXMarkAlt(slackUser, json);
     const expected = json.Departments.QA.qaTeam2.Options.X_Mark_Text;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should throw an error -- x mark text is undefined", () => {

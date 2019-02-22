@@ -50,13 +50,13 @@ describe("constructClose", () => {
 
     const result: ClosePR = constructClose(validEvent, validJSON);
 
-    expect((result.description).includes(slackOwner.Slack_Id)).to.be.equal(true);
-    expect((result.description).includes(slackCloser.Slack_Name)).to.be.equal(true);
-    expect((result.description).includes("closed this PR")).to.be.equal(true);
-    expect(result.title).to.be.equal(validEvent.pull_request.title);
-    expect(result.url).to.be.equal(validEvent.pull_request.html_url);
-    expect(result.owner).to.be.equal(validEvent.pull_request.user.login);
-    expect(result.user_closing).to.be.equal(validEvent.sender.login);
+    expect((result.description).includes(slackOwner.Slack_Id)).equal(true);
+    expect((result.description).includes(slackCloser.Slack_Name)).equal(true);
+    expect((result.description).includes("closed this PR")).equal(true);
+    expect(result.title).equal(validEvent.pull_request.title);
+    expect(result.url).equal(validEvent.pull_request.html_url);
+    expect(result.owner).equal(validEvent.pull_request.user.login);
+    expect(result.user_closing).equal(validEvent.sender.login);
   });
 
   it("should construct a ClosePR object with the same sender & owner", () => {
@@ -80,11 +80,11 @@ describe("constructClose", () => {
 
     const result: ClosePR = constructClose(newEvent, validJSON);
 
-    expect(slackOwner).to.be.equal(slackCloser);
-    expect((result.description).includes(slackOwner.Slack_Name)).to.be.equal(true);
-    expect((result.description).includes("closed this PR")).to.be.equal(true);
-    expect(result.title).to.be.equal(newEvent.pull_request.title);
-    expect(result.url).to.be.equal(newEvent.pull_request.html_url);
-    expect(result.user_closing).to.be.equal(newEvent.sender.login);
+    expect(slackOwner).equal(slackCloser);
+    expect((result.description).includes(slackOwner.Slack_Name)).equal(true);
+    expect((result.description).includes("closed this PR")).equal(true);
+    expect(result.title).equal(newEvent.pull_request.title);
+    expect(result.url).equal(newEvent.pull_request.html_url);
+    expect(result.user_closing).equal(newEvent.sender.login);
   });
 });

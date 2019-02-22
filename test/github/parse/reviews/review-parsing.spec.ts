@@ -35,7 +35,7 @@ describe("getLatestReviews", () => {
       EthanTPainter: "COMMENTED",
     };
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve only latest review from one reviewer", () => {
@@ -66,7 +66,7 @@ describe("getLatestReviews", () => {
     const result = getLatestReviews(reviewList);
     const expected = { EthanTPainter: "APPROVED" };
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should not retrieve any reviews", () => {
@@ -75,6 +75,6 @@ describe("getLatestReviews", () => {
     const result = getLatestReviews(reviewList);
     const expected = { None: "No Reviews" };
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 });

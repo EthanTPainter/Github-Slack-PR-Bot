@@ -33,7 +33,7 @@ describe("getUsersApproving", () => {
     const result = getUsersApproving(usersApproving, json);
     const expected = ["ethan2"];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve all users who approved the PR", () => {
@@ -42,7 +42,7 @@ describe("getUsersApproving", () => {
     const result = getUsersApproving(usersApproving, json);
     const expected = ["ethan2", "GeorgeMaurk", "Andrew1"];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should return an empty array when no users are approving", () => {
@@ -51,7 +51,7 @@ describe("getUsersApproving", () => {
     const result = getUsersApproving(usersApproving, json);
     const expected: string[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve all users who approved even if they're in different sub teams", () => {
@@ -89,7 +89,7 @@ describe("getUsersApproving", () => {
     const result = getUsersApproving(usersApproving, json2);
     const expected = ["Crews", "ethan2"];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should throw an error when an approving user cannot be found", () => {
@@ -129,7 +129,7 @@ describe("getUsersReqChanges", () => {
     const result = getUsersReqChanges(reviews, json);
     const expected = ["ethan2"];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get multiple users requesting changes", () => {
@@ -138,7 +138,7 @@ describe("getUsersReqChanges", () => {
     const result = getUsersReqChanges(reviews, json);
     const expected = ["ethan2", "GeorgeMaurk"];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get all users requesting changes", () => {
@@ -147,7 +147,7 @@ describe("getUsersReqChanges", () => {
     const result = getUsersReqChanges(reviews, json);
     const expected = ["ethan2", "GeorgeMaurk", "DillPickle", "Andrew1"];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should not get any users requesting changes", () => {
@@ -156,7 +156,7 @@ describe("getUsersReqChanges", () => {
     const result = getUsersReqChanges(reviews, json);
     const expected: string[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
 });
@@ -176,7 +176,7 @@ describe("getUsersNotApproving", () => {
 
     const expected = [{ Slack_Name: "andrew", Slack_Id: "<@1110>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve no users when all possible users approve the PR", () => {
@@ -195,7 +195,7 @@ describe("getUsersNotApproving", () => {
 
     const expected: SlackUser[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve all slack users except the owner", () => {
@@ -214,7 +214,7 @@ describe("getUsersNotApproving", () => {
                       { Slack_Name: "daniel", Slack_Id: "<@1113>" },
                       { Slack_Name: "dillon", Slack_Id: "<@1114>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve no users when all possible users request changes to the PR", () => {
@@ -233,7 +233,7 @@ describe("getUsersNotApproving", () => {
 
     const expected: SlackUser[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve remaining users when some approve and request changes to the PR", () => {
@@ -250,6 +250,6 @@ describe("getUsersNotApproving", () => {
 
     const expected = [{ Slack_Name: "dillon", Slack_Id: "<@1114>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 });

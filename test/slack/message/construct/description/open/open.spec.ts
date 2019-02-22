@@ -45,7 +45,7 @@ describe("constructOpenDesc", () => {
       + `and *${validJSON.Departments.Devs.Des.Options.Num_Required_Lead_Approvals} lead* `
       + `reviews ${slackGroup.Slack_Id}`;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should contruct a valid description with a reopened PR", () => {
@@ -62,7 +62,7 @@ describe("constructOpenDesc", () => {
       + `and *${validJSON.Departments.Devs.Des.Options.Num_Required_Lead_Approvals} lead* `
       + `reviews ${slackGroup.Slack_Id}`;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- JSON undefined", () => {

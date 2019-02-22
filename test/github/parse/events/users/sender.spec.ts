@@ -13,7 +13,7 @@ describe("getSender", () => {
     const result = getSender(event);
     const expected = event.sender.login;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- No event.sender.login", () => {

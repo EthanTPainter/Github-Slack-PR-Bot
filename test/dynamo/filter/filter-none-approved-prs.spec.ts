@@ -13,7 +13,7 @@ describe("filterNoFullyApprovedPRs", () => {
     const result = filterNoFullyApprovedPRs(queue);
     const expected = queue;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter only PR in queue -- approved", () => {
@@ -25,7 +25,7 @@ describe("filterNoFullyApprovedPRs", () => {
     const result = filterNoFullyApprovedPRs(queue);
     const expected: Item[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter one not flly approved PR", () => {
@@ -40,7 +40,7 @@ describe("filterNoFullyApprovedPRs", () => {
     const result = filterNoFullyApprovedPRs(queue);
     const expected = [ queue[1] ];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter two not fully approved PRs", () => {
@@ -58,7 +58,7 @@ describe("filterNoFullyApprovedPRs", () => {
     const result = filterNoFullyApprovedPRs(queue);
     const expected = [ queue[0], queue[2] ];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter none notFullyApproved PRs", () => {
@@ -70,7 +70,7 @@ describe("filterNoFullyApprovedPRs", () => {
     const result = filterNoFullyApprovedPRs(queue);
     const expected: Item[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter none from empty queue ", () => {
@@ -79,6 +79,6 @@ describe("filterNoFullyApprovedPRs", () => {
     const result = filterNoFullyApprovedPRs(queue);
     const expected: Item[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 });

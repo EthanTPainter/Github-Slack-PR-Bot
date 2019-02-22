@@ -60,13 +60,13 @@ describe("constructComment", () => {
 
     const result: CommentPR = constructComment(validEvent, validJSON);
 
-    expect((result.description).includes(slackOwner.Slack_Id)).to.be.equal(true);
-    expect((result.description).includes(slackCommenter.Slack_Name)).to.be.equal(true);
-    expect((result.description).includes("commented on this PR")).to.be.equal(true);
-    expect(result.title).to.be.equal(validEvent.pull_request.title);
-    expect(result.url).to.be.equal(validEvent.pull_request.html_url);
-    expect(result.owner).to.be.equal(validEvent.pull_request.user.login);
-    expect(result.user_commenting).to.be.equal(validEvent.sender.login);
+    expect((result.description).includes(slackOwner.Slack_Id)).equal(true);
+    expect((result.description).includes(slackCommenter.Slack_Name)).equal(true);
+    expect((result.description).includes("commented on this PR")).equal(true);
+    expect(result.title).equal(validEvent.pull_request.title);
+    expect(result.url).equal(validEvent.pull_request.html_url);
+    expect(result.owner).equal(validEvent.pull_request.user.login);
+    expect(result.user_commenting).equal(validEvent.sender.login);
   });
 
   it("should construct a CommentPR object with same sender & owner", () => {
@@ -96,15 +96,15 @@ describe("constructComment", () => {
 
     const result: CommentPR = constructComment(validEvent, validJSON);
 
-    expect(slackOwner.Slack_Name).to.be.equal(slackCommenter.Slack_Name);
-    expect(slackOwner.Slack_Id).to.be.equal(slackCommenter.Slack_Id);
+    expect(slackOwner.Slack_Name).equal(slackCommenter.Slack_Name);
+    expect(slackOwner.Slack_Id).equal(slackCommenter.Slack_Id);
 
-    expect((result.description).includes(slackOwner.Slack_Name)).to.be.equal(true);
-    expect((result.description).includes("commented on this PR")).to.be.equal(true);
-    expect(result.title).to.be.equal(validEvent.pull_request.title);
-    expect(result.url).to.be.equal(validEvent.pull_request.html_url);
-    expect(result.owner).to.be.equal(validEvent.pull_request.user.login);
-    expect(result.user_commenting).to.be.equal(validEvent.sender.login);
+    expect((result.description).includes(slackOwner.Slack_Name)).equal(true);
+    expect((result.description).includes("commented on this PR")).equal(true);
+    expect(result.title).equal(validEvent.pull_request.title);
+    expect(result.url).equal(validEvent.pull_request.html_url);
+    expect(result.owner).equal(validEvent.pull_request.user.login);
+    expect(result.user_commenting).equal(validEvent.sender.login);
   });
 
 });

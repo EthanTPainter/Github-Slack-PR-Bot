@@ -16,8 +16,8 @@ describe("getReviews", () => {
 
     const actual = await ReviewClass.getReviews(path);
 
-    expect(actual.length).to.be.deep.equal(expected.length);
-    expect(actual[0]).to.be.deep.equal(expected[0]);
+    expect(actual.length).deep.equal(expected.length);
+    expect(actual[0]).deep.equal(expected[0]);
   });
 
   it("should construct a list of reviews for a PR from a public repo", async () => {
@@ -31,11 +31,11 @@ describe("getReviews", () => {
 
     const actual = await ReviewClass.getReviews(path);
 
-    expect(actual.length).to.be.deep.equal(expected.length);
-    expect(actual[0]).to.be.deep.equal(expected[0]);
-    expect(actual[1]).to.be.deep.equal(expected[1]);
-    expect(actual[2]).to.be.deep.equal(expected[2]);
-    expect(actual[3]).to.be.deep.equal(expected[3]);
+    expect(actual.length).deep.equal(expected.length);
+    expect(actual[0]).deep.equal(expected[0]);
+    expect(actual[1]).deep.equal(expected[1]);
+    expect(actual[2]).deep.equal(expected[2]);
+    expect(actual[3]).deep.equal(expected[3]);
   });
 
 });

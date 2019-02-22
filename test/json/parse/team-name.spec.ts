@@ -60,7 +60,7 @@ describe("getTeamName", () => {
     const result = getTeamName(githubUser, validJSON);
     const expected = "PhillyDevTeam";
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should get first team name -- given a lead github user", () => {
@@ -69,7 +69,7 @@ describe("getTeamName", () => {
     const result = getTeamName(githubUser, validJSON);
     const expected = "PhillyDevTeam";
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should get second team name -- given a member github user", () => {
@@ -78,7 +78,7 @@ describe("getTeamName", () => {
     const result = getTeamName(githubUser, validJSON);
     const expected = "FloridaTeam";
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should get second team name -- given a lead github user", () => {
@@ -87,7 +87,7 @@ describe("getTeamName", () => {
     const result = getTeamName(githubUser, validJSON);
     const expected = "FloridaTeam";
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should not get team name -- github user not found", () => {

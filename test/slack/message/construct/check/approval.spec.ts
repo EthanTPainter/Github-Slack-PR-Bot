@@ -56,16 +56,16 @@ describe("getApprovalChecks", () => {
 
     // Member Check
     expect(result.includes(validJSON.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals.toString()))
-      .to.be.equal(true);
+      .equal(true);
     expect(result.includes(validJSON.Departments.Devs.DevTeam1.Users.Members.GitHub_User_3.Slack_Id))
-      .to.be.equal(true);
+      .equal(true);
     expect(result.includes(validJSON.Departments.Devs.DevTeam1.Users.Members.GitHub_User_4.Slack_Id))
-      .to.be.equal(true);
+      .equal(true);
     // LEAD Check
     expect(result.includes(validJSON.Departments.Devs.DevTeam1.Options.Num_Required_Lead_Approvals.toString()))
-      .to.be.equal(true);
+      .equal(true);
     expect(result.includes(validJSON.Departments.Devs.DevTeam1.Users.Leads.GitHub_User_1.Slack_Id))
-      .to.be.equal(true);
+      .equal(true);
   });
 
   it("Should get approval status with one approving Member user", () => {
@@ -80,14 +80,14 @@ describe("getApprovalChecks", () => {
 
     // Member Check
     expect(result.includes(validJSON.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals.toString()))
-      .to.be.equal(true);
+      .equal(true);
     expect(result.includes(validJSON.Departments.Devs.DevTeam1.Users.Members.GitHub_User_3.Slack_Name))
-      .to.be.equal(true);
+      .equal(true);
     // LEAD Check
     expect(result.includes(validJSON.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals.toString()))
-      .to.be.equal(true);
+      .equal(true);
     expect(result.includes(validJSON.Departments.Devs.DevTeam1.Users.Leads.GitHub_User_1.Slack_Id))
-      .to.be.equal(true);
+      .equal(true);
   });
 
   it("Should get approval status with one approving Member and one approving lead", () => {
@@ -103,13 +103,13 @@ describe("getApprovalChecks", () => {
 
     // Member Check
     expect(result.includes(validJSON.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals.toString()))
-      .to.be.equal(true);
+      .equal(true);
     expect(result.includes(validJSON.Departments.Devs.DevTeam1.Users.Members.GitHub_User_4.Slack_Name))
-      .to.be.equal(true);
+      .equal(true);
     // LEAD Check
     expect(result.includes(validJSON.Departments.Devs.DevTeam1.Options.Num_Required_Lead_Approvals.toString()))
-      .to.be.equal(true);
+      .equal(true);
     expect(result.includes(validJSON.Departments.Devs.DevTeam1.Users.Leads.GitHub_User_1.Slack_Name))
-      .to.be.equal(true);
+      .equal(true);
   });
 });

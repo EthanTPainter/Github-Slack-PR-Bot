@@ -13,7 +13,7 @@ describe("getPrivateProp", () => {
     const result = getPrivateProp(event);
     const expected = event.repository.private;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- No event.repository.private", () => {

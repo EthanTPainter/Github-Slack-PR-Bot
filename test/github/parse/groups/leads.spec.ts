@@ -17,7 +17,7 @@ describe("getLeadsApproving", () => {
     const result = getLeadsApproving(slackUsersApproving, allSlackLeadUsers);
     const expected = [{ Slack_Name: "andrew", Slack_Id: "<@1111>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve many slack leads approving", () => {
@@ -31,7 +31,7 @@ describe("getLeadsApproving", () => {
     const expected = [{ Slack_Name: "andrew", Slack_Id: "<@1111>" },
                       { Slack_Name: "dinkel", Slack_Id: "<@1112>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should not retrieve any slack leads with no approvals", () => {
@@ -43,7 +43,7 @@ describe("getLeadsApproving", () => {
     const result = getLeadsApproving(slackUsersApproving, allSlackLeadUsers);
     const expected: SlackUser[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should not retrieve any slack leads with member approvals", () => {
@@ -55,7 +55,7 @@ describe("getLeadsApproving", () => {
     const result = getLeadsApproving(slackUsersApproving, allSlackLeadUsers);
     const expected: SlackUser[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve slack lead with member approvals", () => {
@@ -69,7 +69,7 @@ describe("getLeadsApproving", () => {
     const result = getLeadsApproving(slackUsersApproving, allSlackLeadUsers);
     const expected = [{ Slack_Name: "andrew", Slack_Id: "<@1111>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 });
 
@@ -85,7 +85,7 @@ describe("getLeadsReqChanges", () => {
                                     allSlackLeadUsers);
     const expected = [{ Slack_Name: "andrew", Slack_Id: "<@1111>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get two lead requesting changes", () => {
@@ -100,7 +100,7 @@ describe("getLeadsReqChanges", () => {
     const expected = [{ Slack_Name: "andrew", Slack_Id: "<@1111>" },
                       { Slack_Name: "dinkel", Slack_Id: "<@1112>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should not get any lead requesting changes", () => {
@@ -113,7 +113,7 @@ describe("getLeadsReqChanges", () => {
                                     allSlackLeadUsers);
     const expected: SlackUser[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get lead requesting changes with other slack users", () => {
@@ -128,7 +128,7 @@ describe("getLeadsReqChanges", () => {
                                     allSlackLeadUsers);
     const expected = [{ Slack_Name: "andrew", Slack_Id: "<@1112>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get leads requesting changes with other slack users", () => {
@@ -144,7 +144,7 @@ describe("getLeadsReqChanges", () => {
     const expected = [{ Slack_Name: "mike", Slack_Id: "<@1112>" },
                       { Slack_Name: "dinkel", Slack_Id: "<@1113>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
 });
@@ -159,7 +159,7 @@ describe("getLeadsNotApproving", () => {
     const result = getLeadsNotApproving(slackUsersNotApproving, allSlackLeadUsers);
     const expected = [{ Slack_Name: "andrew", Slack_Id: "<@1111>" }];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should not retrieve any slack leads", () => {
@@ -171,7 +171,7 @@ describe("getLeadsNotApproving", () => {
     const result = getLeadsNotApproving(slackUsersNotApproving, allSlackLeadUsers);
     const expected: SlackUser[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should not retrieve all slack users not approving", () => {
@@ -185,6 +185,6 @@ describe("getLeadsNotApproving", () => {
     const result = getLeadsNotApproving(slackUsersNotApproving, allSlackLeadUsers);
     const expected = allSlackLeadUsers;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 });

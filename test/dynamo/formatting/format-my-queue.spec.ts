@@ -61,10 +61,10 @@ describe("formatMyQueue", () => {
 
     const result = formatMyQueue(queue, json);
 
-    expect(result.includes(queue[0].title)).to.be.equal(true);
-    expect(result.includes(queue[0].url)).to.be.equal(true);
-    expect(result.includes("Created: " + queue[0].records.times[0])).to.be.equal(true);
-    expect(result.includes("Updated: " + queue[0].records.times[0])).to.be.equal(true);
+    expect(result.includes(queue[0].title)).equal(true);
+    expect(result.includes(queue[0].url)).equal(true);
+    expect(result.includes("Created: " + queue[0].records.times[0])).equal(true);
+    expect(result.includes("Updated: " + queue[0].records.times[0])).equal(true);
   });
 
   it("should format a queue with two PRs", () => {
@@ -114,15 +114,15 @@ describe("formatMyQueue", () => {
 
     const result = formatMyQueue(queue, json);
 
-    expect(result.includes(queue[0].title)).to.be.equal(true);
-    expect(result.includes(queue[0].url)).to.be.equal(true);
-    expect(result.includes("Created: " + queue[0].records.times[0])).to.be.equal(true);
-    expect(result.includes("Updated: " + queue[1].records.times[0])).to.be.equal(true);
+    expect(result.includes(queue[0].title)).equal(true);
+    expect(result.includes(queue[0].url)).equal(true);
+    expect(result.includes("Created: " + queue[0].records.times[0])).equal(true);
+    expect(result.includes("Updated: " + queue[1].records.times[0])).equal(true);
 
-    expect(result.includes(queue[1].title)).to.be.equal(true);
-    expect(result.includes(queue[1].url)).to.be.equal(true);
-    expect(result.includes("Created: " + queue[1].records.times[0])).to.be.equal(true);
-    expect(result.includes("Updated: " + queue[1].records.times[0])).to.be.equal(true);
+    expect(result.includes(queue[1].title)).equal(true);
+    expect(result.includes(queue[1].url)).equal(true);
+    expect(result.includes("Created: " + queue[1].records.times[0])).equal(true);
+    expect(result.includes("Updated: " + queue[1].records.times[0])).equal(true);
   });
 
   it("should format an empty queue", () => {
@@ -130,7 +130,7 @@ describe("formatMyQueue", () => {
 
     const result = formatMyQueue(queue, json);
 
-    expect(result.includes("Nothing found in your queue")).to.be.equal(true);
+    expect(result.includes("Nothing found in your queue")).equal(true);
   });
 
 });

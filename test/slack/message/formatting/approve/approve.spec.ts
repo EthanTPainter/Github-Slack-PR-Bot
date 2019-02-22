@@ -22,7 +22,7 @@ describe("constructApproveDesc", () => {
     const expected = `${slackUserApproving.Slack_Name} has approved this PR.`
       + ` Owner: ${slackUser.Slack_Id}`;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- No Slack User provided", () => {
@@ -60,7 +60,7 @@ describe("getMemberList", () => {
     const result = getMemberList(members, membersExempt);
     const expected = ["Dillon", "Joshua", "Daniel"];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should return an empty list", () => {
@@ -70,7 +70,7 @@ describe("getMemberList", () => {
     const result = getMemberList(members, membersExempt);
     const expected: string[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should return all members", () => {
@@ -80,7 +80,7 @@ describe("getMemberList", () => {
     const result = getMemberList(members, membersExempt);
     const expected = members;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should throw an error -- No members in array", () => {
@@ -103,7 +103,7 @@ describe("getLeadList", () => {
     const result = getLeadList(leads, leadsExempt);
     const expected = ["dinkel"];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should return an empty list", () => {
@@ -113,7 +113,7 @@ describe("getLeadList", () => {
     const result = getLeadList(leads, leadsExempt);
     const expected: string[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should return all leads", () => {
@@ -123,7 +123,7 @@ describe("getLeadList", () => {
     const result = getLeadList(leads, leadsExempt);
     const expected = leads;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should throw an error -- No leads in array", () => {

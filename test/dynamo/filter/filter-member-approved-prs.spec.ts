@@ -13,7 +13,7 @@ describe("filterMemberApprovedPRs", () => {
     const result = filterMemberApprovedPRs(queue);
     const expected = queue;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter only PR in queue -- not member approved", () => {
@@ -25,7 +25,7 @@ describe("filterMemberApprovedPRs", () => {
     const result = filterMemberApprovedPRs(queue);
     const expected: Item[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter one member approved PR", () => {
@@ -40,7 +40,7 @@ describe("filterMemberApprovedPRs", () => {
     const result = filterMemberApprovedPRs(queue);
     const expected = [ queue[0] ];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter two member approved PRs", () => {
@@ -58,7 +58,7 @@ describe("filterMemberApprovedPRs", () => {
     const result = filterMemberApprovedPRs(queue);
     const expected = [ queue[0], queue[2] ];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter none member approved PRs", () => {
@@ -70,7 +70,7 @@ describe("filterMemberApprovedPRs", () => {
     const result = filterMemberApprovedPRs(queue);
     const expected: Item[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should filter none from empty queue ", () => {
@@ -79,6 +79,6 @@ describe("filterMemberApprovedPRs", () => {
     const result = filterMemberApprovedPRs(queue);
     const expected: Item[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 });

@@ -17,7 +17,7 @@ describe("constructCloseDesc", () => {
     const expected = `${slackUserClosing.Slack_Name} closed this PR. `
       + `Owner: ${slackUser.Slack_Id}`;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should construct a valid description with same owner & sender", () => {
@@ -30,7 +30,7 @@ describe("constructCloseDesc", () => {
     const result = constructCloseDesc(slackUser, slackUserClosing);
     const expected = `${slackUser.Slack_Name} closed this PR.`;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- slackUser.Slack_Name undefined", () => {

@@ -48,7 +48,7 @@ describe("getSlackGroup", () => {
 
     const expected = validJSON.Departments.FirstTeam.FirstSubTeam.Slack_Group;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should throw an error -- No departments available", () => {
@@ -185,7 +185,7 @@ describe("GetSlackGroupAlt", () => {
     const result = getSlackGroupAlt(slackUserID, validJSON);
     const expected = validJSON.Departments.Devs.DevTeam1.Slack_Group;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get slack group given a member slack user ID", () => {
@@ -194,7 +194,7 @@ describe("GetSlackGroupAlt", () => {
     const result = getSlackGroupAlt(slackUserId, validJSON);
     const expected = validJSON.Departments.Devs.DevTeam1.Slack_Group;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should throw an error -- no departments available", () => {

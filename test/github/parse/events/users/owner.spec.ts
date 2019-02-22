@@ -15,7 +15,7 @@ describe("getOwner", () => {
     const result = getOwner(event);
     const expected = event.pull_request.user.login;
 
-    expect(result).to.be.equal(expected);
+    expect(result).equal(expected);
   });
 
   it("should throw an error -- no event.pull_request.user.login", () => {

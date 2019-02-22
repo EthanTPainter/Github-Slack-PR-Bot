@@ -40,7 +40,7 @@ describe("getSlackUser", () => {
     const result = getSlackUser(githubUser, validJSON);
     const expected = validJSON.Departments.Developers.PhillyDevTeam.Users.Members.ethan;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should retrieve the slack username given a lead github user", () => {
@@ -49,7 +49,7 @@ describe("getSlackUser", () => {
     const result = getSlackUser(githubUser, validJSON);
     const expected = validJSON.Departments.Developers.PhillyDevTeam.Users.Leads.andrew;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should throw an error -- github user not found", () => {
@@ -185,7 +185,7 @@ describe("getSlackUserAlt", () => {
     const result = getSlackUserAlt(slackUserId, validJSON);
     const expected = validJSON.Departments.Developers.PhillyDevTeam.Users.Leads.andrew;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get slack user given member slack user id", () => {
@@ -194,7 +194,7 @@ describe("getSlackUserAlt", () => {
     const result = getSlackUserAlt(slackUserId, validJSON);
     const expected = validJSON.Departments.Developers.PhillyDevTeam.Users.Members.dillon;
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should throw an error -- Slack user id not found", () => {

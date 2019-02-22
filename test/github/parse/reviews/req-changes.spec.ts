@@ -14,7 +14,7 @@ describe("getReqChangesReviews", () => {
     const result = getReqChangesReviews(reviews);
     const expected = ["Greek8eos"];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get all users", () => {
@@ -27,7 +27,7 @@ describe("getReqChangesReviews", () => {
     const result = getReqChangesReviews(reviews);
     const expected = ["DillonSykes", "EthanTPainter", "Greek8eos"];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get an empty array when no \"changes requested\" reviews are provided", () => {
@@ -36,7 +36,7 @@ describe("getReqChangesReviews", () => {
     const result = getReqChangesReviews(reviews);
     const expected: string[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
   it("should get empty array with no approving reviews", () => {
@@ -49,7 +49,7 @@ describe("getReqChangesReviews", () => {
     const result = getReqChangesReviews(reviews);
     const expected: string[] = [];
 
-    expect(result).to.be.deep.equal(expected);
+    expect(result).deep.equal(expected);
   });
 
 });
