@@ -58,7 +58,7 @@ export function formatTeamQueue(
   });
 
   if (onlyHasLeadApprovals.length > 0) {
-    formattedQueue += "*Needs Peer Approvals*\n";
+    formattedQueue += "*Needs Member Approvals*\n";
   }
   // Sort onlyNeedsMemberApprovals by number of peers_approving
   const sortedLeadApprovals = onlyHasLeadApprovals.sort((a, b) => {
@@ -70,7 +70,7 @@ export function formatTeamQueue(
   });
 
   if (needsBothApprovals.length > 0) {
-    formattedQueue += "*Needs Peer and Lead Approvals*\n";
+    formattedQueue += "*Needs Member and Lead Approvals*\n";
   }
   // Sort approvals by lead approvals (primary)
   // and sort this by peer approvals (secondary)

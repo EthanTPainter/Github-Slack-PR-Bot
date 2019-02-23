@@ -12,8 +12,8 @@ describe("formatMyQueue", () => {
         Devs: {
           DTeam: {
             Options: {
-              Include_Created_Time: true,
-              Include_Updated_Time: true,
+              Queue_Include_Created_Time: true,
+              Queue_Include_Updated_Time: true,
             },
             Users: {
               Leads: {

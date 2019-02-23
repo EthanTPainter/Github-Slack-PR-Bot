@@ -12,47 +12,62 @@ export function constructQueueString(
 ): string {
 
   let prString = "";
-  const includeCreatedTime = options.Include_Created_Time;
-  const includeUpdatedTime = options.Include_Updated_Time;
-  const includeOwner = options.Include_Owner;
+  const includeCreatedTime = options.Queue_Include_Created_Time;
+  const includeUpdatedTime = options.Queue_Include_Updated_Time;
+  const includeApprovalNames = options.Queue_Include_Approval_Names;
+  const includeOwner = options.Queue_Include_Owner;
+  const includeNewLine = options.Queue_Include_New_Line;
 
   const createdDateTime = pullRequest.records.times[0];
   const updatedDateTime = pullRequest.records.times[pullRequest.records.times.length - 1];
+  const leadsApproving = pullRequest.leads_approving;
+  const membersApproving = pullRequest.members_approving;
   const owner = pullRequest.owner;
+  const newLine = "\n\t";
 
   // PR String base
   prString = `${pullRequest.title} [${pullRequest.url}] `;
 
-  // Include PR Owner, Created & Updated times
-  if (includeOwner && includeCreatedTime && includeUpdatedTime){
-    prString += `(Owner: ${owner.Slack_Name}, Created: ${createdDateTime}, `
-      + `Updated: ${updatedDateTime})\n`;
+  // Add new line & indent
+  if (includeNewLine) {
+    prString += newLine;
   }
 
-  // Include both created and updated times
-  else if (includeCreatedTime && includeUpdatedTime) {
-    prString += `(Created: ${createdDateTime}, Updated: ${updatedDateTime})\n`;
-  }
-  // Include Owner and created date time
-  else if (includeOwner && includeCreatedTime) {
-    prString += `(Owner: ${owner.Slack_Name}, Created: ${createdDateTime})`;
-  }
-  // Include Owner and Updated date time
-  else if (includeOwner && includeUpdatedTime) {
-    prString += `(Owner: ${owner.Slack_Name}, Updated: ${updatedDateTime})`;
+  // Add Lead & Member Approving
+  if (includeApprovalNames) {
+    // If there are leads approving, add to string
+    if (leadsApproving.length > 0) {
+      prString += `| Leads Approving: `;
+      leadsApproving.map((leadApproving: string) => {
+        prString += `[${leadApproving}] `;
+      });
+    }
+    // If there are members approving, add to string
+    if (membersApproving.length > 0) {
+      prString += `| Members Approving: `;
+      membersApproving.map((memberApproving: string) => {
+        prString += `[${memberApproving}] `;
+      });
+    }
   }
 
-  // Include only created time
-  else if (includeCreatedTime) {
-    prString += `(Created: ${createdDateTime})\n`;
+  // Include Owner of the PR
+  if (includeOwner) {
+    prString += `| Owner: ${owner.Slack_Name} `;
   }
-  // Include only updated time
-  else if (includeUpdatedTime) {
-    prString += `(Updated: ${updatedDateTime})\n`;
+
+  // Include Created DateTime
+  if (includeCreatedTime) {
+    prString += `| Created: ${createdDateTime} `;
   }
-  else if (includeOwner) {
-    prString += `(Owner: ${owner.Slack_Name})\n`;
+
+  // Include Updated DateTime
+  if (includeUpdatedTime) {
+    prString += `| Updated: ${updatedDateTime} `;
   }
+
+  // Append new line to prString after every option
+  prString += "\n";
 
   return prString;
 }
