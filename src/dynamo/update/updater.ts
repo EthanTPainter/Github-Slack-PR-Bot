@@ -1,6 +1,6 @@
 import { newLogger } from "../../logger";
 import { updateOpen } from "./types/update-open";
-import { getSlackUser, getSlackGroup } from "src/json/parse";
+import { getSlackUser, getSlackGroup } from "../../json/parse";
 
 const logger = newLogger("UpdateDynamo");
 

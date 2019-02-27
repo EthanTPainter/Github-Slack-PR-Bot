@@ -1,8 +1,9 @@
+import { DynamoDB } from "aws-sdk";
+
 import { DynamoGet, DynamoAppend } from "../../api";
 import { formatItem } from "../../formatting/format-item";
 import { getSlackMembersAlt } from "../../../json/parse";
 import { newLogger } from "../../../logger";
-import { DynamoDB } from "aws-sdk";
 import { SlackUser } from "../../../models";
 
 const logger = newLogger("UpdateOpen");
@@ -46,9 +47,9 @@ export async function updateOpen(
   const dynamoUpdate = new DynamoAppend();
 
   const updateUserQueues = slackUserList.map(async (user) => {
-    const currentItem = await dynamoGet.getItem(user);
-    const currentContents = currentItem!.contents;
-    const updateItems = await dynamoUpdate.appendItem(user, currentContents, newItem);
+    const currentItem = (await dynamoGet.getItem(user))!;
+    const currentContents = currentItem.contents;
+    await dynamoUpdate.appendItem(user, currentContents, newItem);
   });
   await Promise.all(updateUserQueues);
 

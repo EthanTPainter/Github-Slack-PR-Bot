@@ -1,7 +1,7 @@
 import * as querystring from "querystring";
 import { newLogger } from "../logger";
 import { requiredEnvs } from "../required-envs";
-import { Annotations } from "../models";
+import { XRayInitializer } from "../xray";
 
 const AWSXray = require("aws-xray-sdk");
 AWSXray.captureHTTPsGlobal(require("http"));
@@ -17,16 +17,12 @@ export function processGetQueue(
   logger.info(`event: ${JSON.stringify(event)}`);
 
   // X-Ray
-  if (requiredEnvs.DISABLE_XRAY) {
-    logger.info("Running with X-Ray disabled");
-  }
-  else {
-    logger.info("Running with X-Ray enabled");
-    const ann = new Annotations(
-      "GitHub-Slack-PR-Bot",
-      "SlackGetQueue",
-    );
-  }
+  XRayInitializer.init({
+    logger: logger,
+    disable: requiredEnvs.DISABLE_XRAY,
+    context: "GitHub-Slack-PR-Bot",
+    service: "SlackGetQueue",
+  });
 
   const body = querystring.parse(event.body);
   logger.info(`event.body: ${JSON.stringify(body)}`);

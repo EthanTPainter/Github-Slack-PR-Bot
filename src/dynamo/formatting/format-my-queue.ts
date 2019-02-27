@@ -23,6 +23,8 @@ export function formatMyQueue(
     return formattedQueue;
   }
 
+  formattedQueue = "*My Queue*\n";
+
   // If the queue has contents, display them sorted:
   queue.map((pr: Item) => {
     const options = getTeamOptionsAlt(pr.owner, json);

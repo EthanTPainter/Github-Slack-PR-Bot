@@ -11,9 +11,10 @@ export class DynamoAppend {
 
   /**
    * @description get Item from DyanmoDB table
-   * @param {string} slackUser Slack username
-   * @param {Item[]} currentContents Current contents in
+   * @param slackUser Slack username
+   * @param currentContents Current contents in
    *                 the DynamoDB user contents
+   * @param newItem New item to append onto the queue
    * @param values Contents to put in contents
    */
   async appendItem(

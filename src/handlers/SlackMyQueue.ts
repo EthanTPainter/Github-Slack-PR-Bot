@@ -1,11 +1,12 @@
 import * as querystring from "querystring";
 
 import { requiredEnvs } from "../required-envs";
-import { Annotations, Item} from "../models";
+import { Item} from "../models";
 import { newLogger } from "../logger";
 import { json } from "../json/src/json";
 import { DynamoGet } from "../dynamo/api";
-import { formatMyQueue } from "src/dynamo/formatting/format-my-queue";
+import { formatMyQueue } from "../dynamo/formatting";
+import { XRayInitializer } from "../xray";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -29,22 +30,14 @@ export async function processMyQueue(
   callback: any,
 ): Promise<void> {
 
-  logger.info(`event: ${JSON.stringify(event)}`);
+  XRayInitializer.init({
+    logger: logger,
+    disable: requiredEnvs.DISABLE_XRAY,
+    context: "GitHub-Slack-PR-Bot",
+    service: "SlackMyQueue",
+  });
 
-  // X-Ray
-  if (requiredEnvs.DISABLE_XRAY) {
-    logger.info("Running with X-Ray disabled");
-  } else {
-    logger.info("Running with X-Ray enabled");
-    const ann = new Annotations(
-      "GitHub-Slack-PR-Bot",
-      "SlackMyQueue",
-    );
-    AWSXRay.captureFunc(ann.application, (subsegment: any) => {
-      subsegment.addAnnotation("application", ann.application);
-      subsegment.addAnnotation("service", ann.service);
-    });
-  }
+  logger.info(`event: ${JSON.stringify(event)}`);
 
   // Convert x-www-urlencoded string to JSON notation
   // body using RequestBody notation
@@ -61,8 +54,6 @@ export async function processMyQueue(
 
   // Format Slack User ID & retrieve queue
   const dynamoGet = new DynamoGet();
-  // const slackUserID = `<@${body.user_id}>`;
-  // const slackUser = getSlackUserAlt(slackUserID, json);
   const slackUser = { Slack_Name: "testUser", Slack_Id: "<@12345>" };
 
   try {
@@ -78,7 +69,7 @@ export async function processMyQueue(
     // Format queue from array to string
     const formattedQueue = formatMyQueue(userQueue, json);
 
-    const success: object = {
+    const success = {
       body: formattedQueue,
       statusCode: "200",
     };
@@ -86,5 +77,6 @@ export async function processMyQueue(
   }
   catch (error) {
     logger.error("Uh oh. Error occurred: " + error.message);
+    throw new Error(error.message);
   }
 }

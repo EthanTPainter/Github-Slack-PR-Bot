@@ -1,11 +1,9 @@
 import * as querystring from "querystring";
-
-import { getSlackGroupAlt } from "../json/parse";
 import { requiredEnvs } from "../required-envs";
-import { Annotations } from "../models";
 import { newLogger } from "../logger";
+import { XRayInitializer } from "../xray";
+import { getSlackUserAlt } from "../json/parse";
 import { json } from "../json/src/json";
-import { formatTeamQueue } from "../dynamo/formatting/format-team-queue";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -29,22 +27,14 @@ export function processTeamQueue(
   callback: any,
 ): void {
 
-  logger.info(`event: ${JSON.stringify(event)}`);
+  XRayInitializer.init({
+    logger: logger,
+    disable: requiredEnvs.DISABLE_XRAY,
+    context: "GitHub-Slack-PR-Bot",
+    service: "SlackTeamQueue",
+  });
 
-  // X-Ray
-  if (requiredEnvs.DISABLE_XRAY) {
-    logger.info("Running with X-Ray disabled");
-  } else {
-    logger.info("Running with X-Ray enabled");
-    const ann = new Annotations(
-      "GitHub-Slack-PR-Bot",
-      "SlackTeamQueue",
-    );
-    AWSXRay.captureFunc(ann.application, (subsegment: any) => {
-      subsegment.addAnnotation("application", ann.application);
-      subsegment.addAnnotation("service", ann.service);
-    });
-  }
+  logger.info(`event: ${JSON.stringify(event)}`);
 
   const body = querystring.parse(event.body);
   logger.info(`event.body: ${JSON.stringify(body)}`);
@@ -56,11 +46,10 @@ export function processTeamQueue(
   if (typeof body.user_id === "object") {
     throw new Error("body.user_id sent as an object rather than a string");
   }
-  const slackUserID = body.user_id;
-  // const slackGroupName = getSlackGroupAlt(slackUserID, json);
-  // const formattedMessage = formatQueue();
+  const slackUserID = `<@${body.user_id}>`;
+  const slackUser = getSlackUserAlt(slackUserID, json);
 
-  const success: object = {
+  const success  = {
     body: "TEAM SUCCESS FOR <@UB5EWEB3M>",
     statusCode: "200",
   };

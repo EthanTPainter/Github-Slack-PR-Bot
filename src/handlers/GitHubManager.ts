@@ -1,12 +1,12 @@
 import { constructSlackMessage } from "../slack/message/construct/constructor";
 import { json } from "../json/src/json";
 import { requiredEnvs } from "../required-envs";
-import { Annotations } from "../models";
 import { postMessage } from "../slack/api";
 import { newLogger } from "../logger";
 import { getTeamName} from "../json/parse";
 import { getOwner } from "../github/parse";
 import { updateDynamo } from "../dynamo/update";
+import { XRayInitializer } from "../xray";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -29,20 +29,12 @@ export async function processGitHubEvent(
   callback: any,
 ): Promise<any> {
 
-  // X-Ray
-  if (requiredEnvs.DISABLE_XRAY) {
-    logger.info("Running with X-Ray disabled");
-  } else {
-    logger.info("Running with X-Ray enabled");
-    const ann = new Annotations(
-      "GitHub-Slack-PR-Bot",
-      "GitHubManager",
-    );
-    AWSXRay.captureFunc(ann.application, (subsegment: any) => {
-      subsegment.addAnnotation("application", ann.application);
-      subsegment.addAnnotation("service", ann.service);
-    });
-  }
+  XRayInitializer.init({
+    logger: logger,
+    disable: requiredEnvs.DISABLE_XRAY,
+    context: "GitHub-Slack-PR-Bot",
+    service: "GitHubManager",
+  });
 
   logger.info(`Event: ${JSON.stringify(event)}`);
 
@@ -74,7 +66,7 @@ export async function processGitHubEvent(
                     slackMessage);
 
   // Provide success statusCode/Message
-  const success: object = {
+  const success = {
     body: "Successfully retrieved event",
     statusCode: "200",
   };

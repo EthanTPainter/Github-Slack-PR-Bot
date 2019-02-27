@@ -90,7 +90,7 @@ export function getSlackUsers(
  * @returns Array of slack usernames (strings)
  */
 export function getSlackUsersAlt(
-  slackUser: string,
+  slackUserId: string,
   json: any,
 ): SlackUser[] {
   let slackUsers: SlackUser[];
@@ -133,7 +133,7 @@ export function getSlackUsersAlt(
       const leadValues = Object.values(leadUsers);
       let leadCounter = 0;
       while (leadCounter < leadValues.length) {
-        if (leadValues[leadCounter] === slackUser) {
+        if (leadValues[leadCounter] === slackUserId) {
           slackUsers = Object.values(leadUsers);
           slackUsers = slackUsers.concat(Object.values(memberUsers));
           return slackUsers;
@@ -144,7 +144,7 @@ export function getSlackUsersAlt(
       const memberValues = Object.values(memberUsers);
       let memberCounter = 0;
       while (memberCounter < memberValues.length) {
-        if (memberValues[memberCounter] === slackUser) {
+        if (memberValues[memberCounter] === slackUserId) {
           slackUsers = Object.values(leadUsers);
           slackUsers = slackUsers.concat(Object.values(memberUsers));
           return slackUsers;
@@ -155,5 +155,5 @@ export function getSlackUsersAlt(
     }
     teamCounter++;
   }
-  throw new Error(`Slack user: ${slackUser} could not be found in JSON file`);
+  throw new Error(`Slack user: ${slackUserId} could not be found in JSON file`);
 }

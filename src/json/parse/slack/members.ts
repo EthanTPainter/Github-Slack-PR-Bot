@@ -137,7 +137,8 @@ export function getSlackMembersAlt(
 
       let leadCounter = 0;
       while (leadCounter < leadValues.length) {
-        if (leadValues[leadCounter] === slackUser.Slack_Id) {
+        const selectedLead: any = leadValues[leadCounter];
+        if (selectedLead.Slack_Id === slackUser.Slack_Id) {
           logger.debug(`Found Slack user ${slackUser.Slack_Id}. Members: ${Object.values(memberUsers)}`);
           return Object.values(memberUsers);
         }
@@ -146,7 +147,8 @@ export function getSlackMembersAlt(
 
       let memberCounter = 0;
       while (memberCounter < memberValues.length) {
-        if (memberValues[memberCounter] === slackUser.Slack_Id) {
+        const selectedMember: any = memberValues[memberCounter];
+        if (selectedMember.Slack_Id === slackUser.Slack_Id) {
           logger.debug(`Found Slack user ${slackUser.Slack_Id}. Members: ${Object.values(memberUsers)}`);
           return Object.values(memberUsers);
         }
