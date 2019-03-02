@@ -1,7 +1,7 @@
 import { SlackUser } from "../slack";
 import { Event } from "./event";
 
-export class Item {
+export class PullRequest {
   owner: SlackUser;
   title: string;
   url: string;
@@ -11,8 +11,5 @@ export class Item {
   members_approving: string[];
   lead_complete: boolean;
   leads_approving: string[];
-  records: {
-    events: Event[],
-    times: string[],
-  };
+  events: Event[];
 }

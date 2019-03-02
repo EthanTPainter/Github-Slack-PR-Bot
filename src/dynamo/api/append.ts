@@ -1,26 +1,23 @@
-import { Item, SlackUser } from "../../models";
-import { DynamoGet } from "./get-item";
+import { PullRequest, SlackUser } from "../../models";
 import { DynamoDB } from "aws-sdk";
-import { DateTime } from "luxon";
 import { newLogger } from "../../logger";
 import { requiredEnvs } from "../../required-envs";
 
-const logger = newLogger("DynamoAppendItem");
+const logger = newLogger("DynamoAppend");
 
 export class DynamoAppend {
 
   /**
-   * @description get Item from DyanmoDB table
-   * @param slackUser Slack username
-   * @param currentContents Current contents in
-   *                 the DynamoDB user contents
-   * @param newItem New item to append onto the queue
+   * @description get PullRequest from DyanmoDB table
+   * @param slackUserId Slack username id
+   * @param currentQueue Current queue for a Slack user
+   * @param newPullRequest New PullRequest to append onto the queue
    * @param values Contents to put in contents
    */
-  async appendItem(
-    slackUser: SlackUser,
-    currentContents: Item[],
-    newItem: Item,
+  async appendPullRequest(
+    slackUserId: string,
+    currentQueue: PullRequest[],
+    newPullRequest: PullRequest,
   ): Promise<DynamoDB.DocumentClient.UpdateItemOutput> {
 
     try {
@@ -32,20 +29,16 @@ export class DynamoAppend {
         region: requiredEnvs.DYNAMO_REGION,
       });
 
-      // Append new Item with any existing items
-      currentContents.push(newItem);
-
-      // Make timestamp for last updated time
-      const currentTime = DateTime.local().toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS);
+      // Append new PullRequest with any existing PullRequests
+      currentQueue.push(newPullRequest);
 
       // Provide base params as input
       const params = {
         TableName: requiredEnvs.DYNAMO_TABLE,
-        Key: { slackUserId: slackUser.Slack_Id },
-        UpdateExpression: `set contents = :d, last_updated = :t`,
+        Key: { slackUserId: slackUserId },
+        UpdateExpression: `set queue = :d`,
         ExpressionAttributeValues: {
-          ":d": currentContents,
-          ":t": currentTime,
+          ":d": currentQueue,
         },
       };
 

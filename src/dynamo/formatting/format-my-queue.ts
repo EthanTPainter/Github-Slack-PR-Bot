@@ -1,4 +1,4 @@
-import { Item } from "../../models";
+import { PullRequest } from "../../models";
 import { newLogger } from "../../logger";
 import { getTeamOptionsAlt } from "../../json/parse";
 import { constructQueueString } from "../../slack/message/construct/description";
@@ -12,10 +12,10 @@ const logger = newLogger("FormatMyQueue");
  * @returns String of the DynamoDB queue contents
  */
 export function formatMyQueue(
-  queue: Item[],
+  queue: PullRequest[],
   json: any,
   ): string {
-  let formattedQueue: string = "";
+  let formattedQueue = "";
 
   // If the queue is empty
   if (queue.length === 0) {
@@ -26,7 +26,7 @@ export function formatMyQueue(
   formattedQueue = "*My Queue*\n";
 
   // If the queue has contents, display them sorted:
-  queue.map((pr: Item) => {
+  queue.map((pr: PullRequest) => {
     const options = getTeamOptionsAlt(pr.owner, json);
     formattedQueue += constructQueueString(pr, options);
   });

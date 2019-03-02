@@ -97,14 +97,12 @@ export function getSlackGroup(
 
 /**
  * @description Retrieve the slack group from the GitHub user
- * @param {string} slackUserId String of the Slack user name
+ * @param slackUserId Slack user id
  * @param json JSON configuration file
- * @returns String of the Slack group corresponding to the
- *          Slack user provided
- * @note Group must exist, so return error if not
+ * @returns Slack_Id and Slack_Name of the group
  */
 export function getSlackGroupAlt(
-  slackUser: SlackUser,
+  slackUserId: string,
   json: any,
 ): SlackUser {
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
@@ -159,8 +157,8 @@ export function getSlackGroupAlt(
         while (leadCounter < leadKeys.length) {
           const lead = leadKeys[leadCounter];
           const selectedLead = leadUsers[lead];
-          if (selectedLead.Slack_Id === slackUser.Slack_Id) {
-            logger.debug(`Found Slack user id ${slackUser.Slack_Id}. Slack group: ${group}`);
+          if (selectedLead.Slack_Id === slackUserId) {
+            logger.debug(`Found Slack user id ${slackUserId}. Slack group: ${group}`);
             return group;
           }
           leadCounter++;
@@ -173,8 +171,8 @@ export function getSlackGroupAlt(
         while (memberCounter < memberKeys.length) {
           const member = memberKeys[memberCounter];
           const selectedMember = memberUsers[member];
-          if (selectedMember.Slack_Id === slackUser.Slack_Id) {
-            logger.debug(`Found Slack user id ${slackUser.Slack_Id}. Slack group: ${group}`);
+          if (selectedMember.Slack_Id === slackUserId) {
+            logger.debug(`Found Slack user id ${slackUserId}. Slack group: ${group}`);
             return group;
           }
           memberCounter++;

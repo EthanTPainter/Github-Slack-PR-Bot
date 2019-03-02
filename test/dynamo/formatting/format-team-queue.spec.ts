@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { formatTeamQueue } from "../../../src/dynamo/formatting";
-import { Item } from "../../../src/models";
+import { PullRequest } from "../../../src/models";
 
 describe("formatTeamQueue", () => {
 
@@ -81,22 +81,21 @@ describe("formatTeamQueue", () => {
       members_approving: [json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id],
       lead_complete: true,
       leads_approving: [json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
-          },
-          action: "APPROVED",
-        }, {
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id,
-          },
-          action: "APPROVED",
-        }],
-        times: ["FIRST", "SECOND"],
-      },
+      events: [{
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "FIRST",
+      }, {
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "SECOND",
+      }],
     }];
 
     const result = formatTeamQueue(queue, json);
@@ -104,9 +103,9 @@ describe("formatTeamQueue", () => {
     expect(result.includes("Mergable PR")).equal(true);
     expect(result.includes(queue[0].title)).equal(true);
     expect(result.includes(queue[0].url)).equal(true);
-    expect(result.includes("Created: " + queue[0].records.times[0]))
+    expect(result.includes("Created: " + queue[0].events[0].time))
       .equal(true);
-    expect(result.includes("Updated: " + queue[0].records.times[1]))
+    expect(result.includes("Updated: " + queue[0].events[1].time))
       .equal(true);
   });
 
@@ -123,22 +122,21 @@ describe("formatTeamQueue", () => {
       members_approving: [json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id],
       lead_complete: true,
       leads_approving: [json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
-          },
-          action: "APPROVED",
-        }, {
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id,
-          },
-          action: "APPROVED",
-        }],
-        times: ["FIRST", "SECOND"],
-      },
+      events: [{
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "FIRST",
+      }, {
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "SECOND",
+      }],
     }, {
       owner: {
         Slack_Name: json.Departments.Test.TestTeam.Users.Members.Dillon.Slack_Name,
@@ -150,22 +148,21 @@ describe("formatTeamQueue", () => {
       members_approving: [json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id],
       lead_complete: true,
       leads_approving: [json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
-          },
-          action: "APPROVED",
-        }, {
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id,
-          },
-          action: "APPROVED",
-        }],
-        times: ["FIRST_1", "SECOND_1"],
-      },
+      events: [{
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "FIRST_1",
+      }, {
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "SECOND_1",
+      }],
     }];
 
     const result = formatTeamQueue(queue, json);
@@ -173,16 +170,16 @@ describe("formatTeamQueue", () => {
     expect(result.includes("Mergable PR")).equal(true);
     expect(result.includes(queue[0].title)).equal(true);
     expect(result.includes(queue[0].url)).equal(true);
-    expect(result.includes("Created: " + queue[0].records.times[0]))
+    expect(result.includes("Created: " + queue[0].events[0].time))
       .equal(true);
-    expect(result.includes("Updated: " + queue[0].records.times[1]))
+    expect(result.includes("Updated: " + queue[0].events[1].time))
       .equal(true);
 
     expect(result.includes(queue[1].title)).equal(true);
     expect(result.includes(queue[1].url)).equal(true);
-    expect(result.includes("Created: " + queue[1].records.times[0]))
+    expect(result.includes("Created: " + queue[1].events[0].time))
       .equal(true);
-    expect(result.includes("Updated: " + queue[1].records.times[1]))
+    expect(result.includes("Updated: " + queue[1].events[1].time))
       .equal(true);
   });
 
@@ -199,16 +196,14 @@ describe("formatTeamQueue", () => {
       members_approving: [],
       lead_complete: true,
       leads_approving: [json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id,
-          },
-          action: "APPROVED",
-        }],
-        times: ["FIRST", "SECOND"],
-      },
+      events: [{
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "FIRST",
+      }],
     }];
 
     const result = formatTeamQueue(queue, json);
@@ -216,8 +211,8 @@ describe("formatTeamQueue", () => {
     expect(result.includes("Needs Member Approvals")).equal(true);
     expect(result.includes(queue[0].title)).equal(true);
     expect(result.includes(queue[0].url)).equal(true);
-    expect(result.includes("Created: " + queue[0].records.times[0])).equal(true);
-    expect(result.includes("Updated: " + queue[0].records.times[1])).equal(true);
+    expect(result.includes("Created: " + queue[0].events[0].time)).equal(true);
+    expect(result.includes("Updated: " + queue[0].events[0].time)).equal(true);
   });
 
   it("should format two lead approved PRs", () => {
@@ -233,16 +228,14 @@ describe("formatTeamQueue", () => {
       members_approving: [],
       lead_complete: true,
       leads_approving: [json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id,
-          },
-          action: "APPROVED",
-        }],
-        times: ["FIRST", "SECOND"],
-      },
+      events: [{
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "FIRST",
+      }],
     }, {
       owner: {
         Slack_Name: json.Departments.Test.TestTeam.Users.Members.Dillon.Slack_Name,
@@ -254,16 +247,14 @@ describe("formatTeamQueue", () => {
       members_approving: [],
       lead_complete: true,
       leads_approving: [json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id,
-          },
-          action: "APPROVED",
-        }],
-        times: ["FIRST_1", "SECOND_1"],
-      },
+      events: [{
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Leads.Ethan.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "FIRST_1",
+      }],
     }];
 
     const result = formatTeamQueue(queue, json);
@@ -271,13 +262,13 @@ describe("formatTeamQueue", () => {
     expect(result.includes("Needs Member Approvals")).equal(true);
     expect(result.includes(queue[0].title)).equal(true);
     expect(result.includes(queue[0].url)).equal(true);
-    expect(result.includes("Created: " + queue[0].records.times[0])).equal(true);
-    expect(result.includes("Updated: " + queue[0].records.times[1])).equal(true);
+    expect(result.includes("Created: " + queue[0].events[0].time)).equal(true);
+    expect(result.includes("Updated: " + queue[0].events[0].time)).equal(true);
 
     expect(result.includes(queue[1].title)).equal(true);
     expect(result.includes(queue[1].url)).equal(true);
-    expect(result.includes("Created: " + queue[1].records.times[0])).equal(true);
-    expect(result.includes("Updated: " + queue[1].records.times[1])).equal(true);
+    expect(result.includes("Created: " + queue[1].events[0].time)).equal(true);
+    expect(result.includes("Updated: " + queue[1].events[0].time)).equal(true);
   });
 
   it("should format one member approved PR", () => {
@@ -293,16 +284,14 @@ describe("formatTeamQueue", () => {
       members_approving: [json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id],
       lead_complete: false,
       leads_approving: [],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
-          },
-          action: "APPROVED",
-        }],
-        times: ["FIRST", "SECOND"],
-      },
+      events: [{
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "FIRST",
+      }],
     }];
 
     const result = formatTeamQueue(queue, json);
@@ -310,8 +299,8 @@ describe("formatTeamQueue", () => {
     expect(result.includes("Needs Lead Approvals")).equal(true);
     expect(result.includes(queue[0].title)).equal(true);
     expect(result.includes(queue[0].url)).equal(true);
-    expect(result.includes("Created: " + queue[0].records.times[0])).equal(true);
-    expect(result.includes("Updated: " + queue[0].records.times[1])).equal(true);
+    expect(result.includes("Created: " + queue[0].events[0].time)).equal(true);
+    expect(result.includes("Updated: " + queue[0].events[0].time)).equal(true);
   });
 
   it("should format two member approved PRs", () => {
@@ -327,16 +316,14 @@ describe("formatTeamQueue", () => {
       members_approving: [json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id],
       lead_complete: false,
       leads_approving: [],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
-          },
-          action: "APPROVED",
-        }],
-        times: ["FIRST", "SECOND"],
-      },
+      events: [{
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "FIRST",
+      }],
     }, {
       owner: {
         Slack_Name: json.Departments.Test.TestTeam.Users.Members.Dillon.Slack_Name,
@@ -348,16 +335,14 @@ describe("formatTeamQueue", () => {
       members_approving: [json.Departments.Test.TestTeam.Users.Members.Sanket.Slack_Id],
       lead_complete: false,
       leads_approving: [],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Members.Sanket.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Members.Sanket.Slack_Id,
-          },
-          action: "APPROVED",
-        }],
-        times: ["FIRST", "SECOND"],
-      },
+      events: [{
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Members.Sanket.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Members.Sanket.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "SECOND",
+      }],
     }];
 
     const result = formatTeamQueue(queue, json);
@@ -365,13 +350,13 @@ describe("formatTeamQueue", () => {
     expect(result.includes("Needs Lead Approvals")).equal(true);
     expect(result.includes(queue[0].title)).equal(true);
     expect(result.includes(queue[0].url)).equal(true);
-    expect(result.includes("Created: " + queue[0].records.times[0])).equal(true);
-    expect(result.includes("Updated: " + queue[0].records.times[1])).equal(true);
+    expect(result.includes("Created: " + queue[0].events[0].time)).equal(true);
+    expect(result.includes("Updated: " + queue[0].events[0].time)).equal(true);
 
     expect(result.includes(queue[1].title)).equal(true);
     expect(result.includes(queue[1].url)).equal(true);
-    expect(result.includes("Created: " + queue[1].records.times[0])).equal(true);
-    expect(result.includes("Updated: " + queue[1].records.times[1])).equal(true);
+    expect(result.includes("Created: " + queue[1].events[0].time)).equal(true);
+    expect(result.includes("Updated: " + queue[1].events[0].time)).equal(true);
   });
 
   it("should format one not fully approved PR", () => {
@@ -390,16 +375,14 @@ describe("formatTeamQueue", () => {
       members_approving: [json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id],
       lead_complete: false,
       leads_approving: [],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
-          },
-          action: "APPROVED",
-        }],
-        times: ["FIRST", "SECOND"],
-      },
+      events: [{
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "FIRST",
+      }],
     }];
 
     const result = formatTeamQueue(queue, json);
@@ -407,8 +390,8 @@ describe("formatTeamQueue", () => {
     expect(result.includes("Needs Member and Lead Approvals")).equal(true);
     expect(result.includes(queue[0].title)).equal(true);
     expect(result.includes(queue[0].url)).equal(true);
-    expect(result.includes("Created: " + queue[0].records.times[0])).equal(true);
-    expect(result.includes("Updated: " + queue[0].records.times[1])).equal(true);
+    expect(result.includes("Created: " + queue[0].events[0].time)).equal(true);
+    expect(result.includes("Updated: " + queue[0].events[0].time)).equal(true);
   });
 
   it("should format two not fully approved PRs", () => {
@@ -427,16 +410,14 @@ describe("formatTeamQueue", () => {
       members_approving: [json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id],
       lead_complete: false,
       leads_approving: [],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
-          },
-          action: "APPROVED",
-        }],
-        times: ["FIRST", "SECOND"],
-      },
+      events: [{
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "FIRST",
+      }],
     }, {
       owner: {
         Slack_Name: json.Departments.Test.TestTeam.Users.Members.Dillon.Slack_Name,
@@ -448,16 +429,14 @@ describe("formatTeamQueue", () => {
       members_approving: [json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id],
       lead_complete: false,
       leads_approving: [],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
-            Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
-          },
-          action: "APPROVED",
-        }],
-        times: ["FIRST", "SECOND"],
-      },
+      events: [{
+        user: {
+          Slack_Name: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Name,
+          Slack_Id: json.Departments.Test.TestTeam.Users.Members.Daniel.Slack_Id,
+        },
+        action: "APPROVED",
+        time: "SECOND",
+      }],
     }];
 
     const result = formatTeamQueue(queue, json);
@@ -465,12 +444,12 @@ describe("formatTeamQueue", () => {
     expect(result.includes("Needs Member and Lead Approvals")).equal(true);
     expect(result.includes(queue[0].title)).equal(true);
     expect(result.includes(queue[0].url)).equal(true);
-    expect(result.includes("Created: " + queue[0].records.times[0])).equal(true);
-    expect(result.includes("Updated: " + queue[0].records.times[1])).equal(true);
+    expect(result.includes("Created: " + queue[0].events[0].time)).equal(true);
+    expect(result.includes("Updated: " + queue[0].events[0].time)).equal(true);
 
     expect(result.includes(queue[1].title)).equal(true);
     expect(result.includes(queue[1].url)).equal(true);
-    expect(result.includes("Created: " + queue[1].records.times[0])).equal(true);
-    expect(result.includes("Updated: " + queue[1].records.times[1])).equal(true);
+    expect(result.includes("Created: " + queue[1].events[0].time)).equal(true);
+    expect(result.includes("Updated: " + queue[1].events[0].time)).equal(true);
   });
 });

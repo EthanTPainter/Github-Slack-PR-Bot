@@ -1,11 +1,11 @@
 import * as AWS from "aws-sdk";
-import { Item } from "../../../src/models";
+import { PullRequest } from "../../../src/models";
 import { expect } from "chai";
 import { DynamoReset } from "../../../src/dynamo/api";
 
-describe("putItem", () => {
+describe("putPullRequest", () => {
 
-  it("should put an item into the dynamoDB table", async () => {
+  it("should put an PullRequest into the dynamoDB table", async () => {
     const dynamo = new DynamoReset();
     const slackUser = { Slack_Name: "testUser", Slack_Id: "<@12345>" };
 
@@ -14,7 +14,7 @@ describe("putItem", () => {
       region: "us-east-1",
     });
 
-    // const result = await dynamo.resetItems(slackUser);
+    // const result = await dynamo.resetPullRequests(slackUser);
     // console.log(result);
   });
 

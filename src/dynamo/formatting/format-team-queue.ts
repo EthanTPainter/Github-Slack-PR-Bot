@@ -1,4 +1,4 @@
-import { Item } from "../../models";
+import { PullRequest } from "../../models";
 import { newLogger } from "../../logger";
 import { filterMergablePRs } from "../filter/filter-mergable-prs";
 import { filterLeadApprovedPRs } from "../filter/filter-lead-approved-prs";
@@ -18,10 +18,10 @@ const logger = newLogger("FormatTeamQueue");
  * @returns String of the DynamoDB queue contents
  */
 export function formatTeamQueue(
-  queue: Item[],
+  queue: PullRequest[],
   json: any,
   ): string {
-  let formattedQueue: string = "";
+  let formattedQueue = "";
 
   // If the queue is empty
   if (queue.length === 0) {
@@ -40,7 +40,7 @@ export function formatTeamQueue(
   if (mergablePRs.length > 0) {
     formattedQueue += "*Mergable PRs*\n";
   }
-  mergablePRs.map((mergablePR: Item) => {
+  mergablePRs.map((mergablePR: PullRequest) => {
     const teamOptions = getTeamOptionsAlt(mergablePR.owner, json);
     formattedQueue += constructQueueString(mergablePR, teamOptions);
   });
@@ -52,7 +52,7 @@ export function formatTeamQueue(
   const sortedMemberApprovals = onlyHasMemberApprovals.sort((a, b) => {
     return b.members_approving.length - a.members_approving.length;
   });
-  sortedMemberApprovals.map((sortedMemberApproval: Item) => {
+  sortedMemberApprovals.map((sortedMemberApproval: PullRequest) => {
     const teamOptions = getTeamOptionsAlt(sortedMemberApproval.owner, json);
     formattedQueue += constructQueueString(sortedMemberApproval, teamOptions);
   });
@@ -64,7 +64,7 @@ export function formatTeamQueue(
   const sortedLeadApprovals = onlyHasLeadApprovals.sort((a, b) => {
     return b.members_approving.length - a.members_approving.length;
   });
-  sortedLeadApprovals.map((needLeadApprovalPR: Item) => {
+  sortedLeadApprovals.map((needLeadApprovalPR: PullRequest) => {
     const teamOptions = getTeamOptionsAlt(needLeadApprovalPR.owner, json);
     formattedQueue += constructQueueString(needLeadApprovalPR, teamOptions);
   });
@@ -80,7 +80,7 @@ export function formatTeamQueue(
     }
     return b.leads_approving.length - a.leads_approving.length;
   });
-  sortedNeedsBothApprovals.map((needBothApprovalPR: Item) => {
+  sortedNeedsBothApprovals.map((needBothApprovalPR: PullRequest) => {
     const teamOptions = getTeamOptionsAlt(needBothApprovalPR.owner, json);
     formattedQueue += constructQueueString(needBothApprovalPR, teamOptions);
   });

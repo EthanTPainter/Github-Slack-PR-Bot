@@ -1,20 +1,20 @@
 import { DynamoDB } from "aws-sdk";
 import { newLogger } from "../../logger";
-import { requiredEnvs } from "../../../src/required-envs";
-import { SlackUser } from "../../models";
+import { requiredEnvs } from "../../required-envs";
+import { PullRequest } from "../../models";
 
-const logger = newLogger("DynamoGetItem");
+const logger = newLogger("DynamoGetPullRequest");
 
 export class DynamoGet {
 
   /**
-   * @description get Item from DyanmoDB table
-   * @param {string} slackUser Slack user
+   * @description get PullRequest from DyanmoDB table
+   * @param slackUser Slack user
    * @returns Result of dynamoDB Get request
    */
-  async getItem(
-    slackUser: SlackUser,
-  ): Promise<DynamoDB.DocumentClient.AttributeMap | undefined> {
+  async getQueue(
+    slackUserId: string,
+  ): Promise<PullRequest[]> {
 
     try {
       logger.info("Connecting to DynamoDB...");
@@ -28,19 +28,22 @@ export class DynamoGet {
       // Provide base params as input
       const params = {
         TableName: requiredEnvs.DYNAMO_TABLE,
-        Key: { slackUserId: slackUser.Slack_Id },
+        Key: { slackUserId: slackUserId },
         AttributesToGet: [
           "contents",
-          "last_updated",
         ],
         ReturnValues: "ALL_NEW",
       };
 
-      // DynamoDB getItem request
+      // DynamoDB getPullRequest request
       const result = await dynamoDB.get(params).promise();
       const item = result.Item;
+      if (item === undefined) {
+        throw new Error(`User ID ${slackUserId} contents not found`);
+      }
 
-      return item;
+      // Retrun queue for user
+      return item.queue;
     }
     catch (error) {
       throw new Error(error.message);

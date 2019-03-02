@@ -1,8 +1,9 @@
 /**
- * Not enough information about which team the user is in, so search all (for now)
- * @description Given a GitHub user, find the corresponding Slack user in the JSON file
- * @param event Event received from the GitHub webhook
- * @returns String of the slack user corresponding to the Github user provided
+ * @description Given a GitHub user, find the team containing
+ *              the github user and return that team's name
+ * @param githubUser github username
+ * @param json JSON config file
+ * @returns String of the team name
  */
 export function getTeamName(
   githubUser: string,

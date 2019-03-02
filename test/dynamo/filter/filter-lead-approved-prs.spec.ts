@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { filterLeadApprovedPRs } from "../../../src/dynamo/filter";
-import { Item } from "../../../src/models";
+import { PullRequest } from "../../../src/models";
 
 describe("filterLeadApprovedPRs", () => {
 
@@ -23,7 +23,7 @@ describe("filterLeadApprovedPRs", () => {
     }];
 
     const result = filterLeadApprovedPRs(queue);
-    const expected: Item[] = [];
+    const expected: PullRequest[] = [];
 
     expect(result).deep.equal(expected);
   });
@@ -74,7 +74,7 @@ describe("filterLeadApprovedPRs", () => {
     }];
 
     const result = filterLeadApprovedPRs(queue);
-    const expected: Item[] = [];
+    const expected: PullRequest[] = [];
 
     expect(result).deep.equal(expected);
   });
@@ -83,7 +83,7 @@ describe("filterLeadApprovedPRs", () => {
     const queue: any = [];
 
     const result = filterLeadApprovedPRs(queue);
-    const expected: Item[] = [];
+    const expected: PullRequest[] = [];
 
     expect(result).deep.equal(expected);
   });

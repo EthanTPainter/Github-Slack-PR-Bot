@@ -180,7 +180,7 @@ describe("GetSlackGroupAlt", () => {
   });
 
   it("should get slack group given a lead slack user ID", () => {
-    const slackUserID = validJSON.Departments.Devs.DevTeam1.Users.Leads.andrew;
+    const slackUserID = validJSON.Departments.Devs.DevTeam1.Users.Leads.andrew.Slack_Id;
 
     const result = getSlackGroupAlt(slackUserID, validJSON);
     const expected = validJSON.Departments.Devs.DevTeam1.Slack_Group;
@@ -189,7 +189,7 @@ describe("GetSlackGroupAlt", () => {
   });
 
   it("should get slack group given a member slack user ID", () => {
-    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.daniel;
+    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.daniel.Slack_Id;
 
     const result = getSlackGroupAlt(slackUserId, validJSON);
     const expected = validJSON.Departments.Devs.DevTeam1.Slack_Group;
@@ -198,7 +198,7 @@ describe("GetSlackGroupAlt", () => {
   });
 
   it("should throw an error -- no departments available", () => {
-    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan;
+    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan.Slack_Id;
     const invalidJSON = {
       Departments: {},
     };
@@ -210,7 +210,7 @@ describe("GetSlackGroupAlt", () => {
   });
 
   it("should throw an error -- No teams available", () => {
-    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan;
+    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan.Slack_Id;
     const invalidJSON = {
       Departments: {
         Devs: {},
@@ -224,7 +224,7 @@ describe("GetSlackGroupAlt", () => {
   });
 
   it("should throw an error -- No users defined for the team", () => {
-    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan;
+    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan.Slack_Id;
     const invalidJSON = {
       Departments: {
         Devs: {
@@ -241,7 +241,7 @@ describe("GetSlackGroupAlt", () => {
   });
 
   it("should throw an error -- No leads defined for the team", () => {
-    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan;
+    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan.Slack_Id;
     const invalidJSON = {
       Departments: {
         Devs: {
@@ -260,7 +260,7 @@ describe("GetSlackGroupAlt", () => {
   });
 
   it("should throw an error -- No members defined for the team", () => {
-    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan;
+    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan.Slack_Id;
     const invalidJSON = {
       Departments: {
         Devs: {
@@ -287,7 +287,7 @@ describe("GetSlackGroupAlt", () => {
 
   it("should throw an error -- No Slack Group", () => {
     validJSON.Departments.Devs.DevTeam1.Slack_Group = undefined;
-    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan;
+    const slackUserId = validJSON.Departments.Devs.DevTeam1.Users.Members.ethan.Slack_Id;
 
     const expected = new Error("No Slack Group found in JSON file");
 

@@ -169,8 +169,6 @@ describe("constructSlackMessage", () => {
     const expNumMember = json.Departments.Dev.Team1.Options.Num_Required_Member_Approvals;
     const expNumLead = json.Departments.Dev.Team1.Options.Num_Required_Lead_Approvals;
 
-    console.log("Result: ", result);
-
     expect(result.includes(realAction)).equal(true);
     expect(result.includes(expTitle)).equal(true);
     expect(result.includes(expUrl)).equal(true);

@@ -1,11 +1,11 @@
 import { DynamoAppend } from "../../../src/dynamo/api";
-import { Item } from "../../../src/models";
+import { PullRequest } from "../../../src/models";
 import { expect } from "chai";
 import * as sinon from "sinon";
 
-describe("putItem", () => {
+describe("putPullRequest", () => {
 
-  it("should append an item onto an empty queue in the dynamoDB table", async () => {
+  it("should append an PullRequest onto an empty queue in the dynamoDB table", async () => {
     const dynamo = new DynamoAppend();
     const slackUser = { Slack_Name: "testUser", Slack_Id: "<@12345>" };
 
@@ -24,21 +24,21 @@ describe("putItem", () => {
             Slack_Id: "<@1111>",
           },
           action: "APPROVED",
+          time: "NOW",
         }],
-        times: ["NOW"],
       },
     }];
 
-    sinon.stub(dynamo, "appendItem")
+    sinon.stub(dynamo, "appendPullRequest")
       .resolves(data);
 
     // Given empty current contents, append new data to array
-    const result = await dynamo.appendItem(slackUser, [], data[0]);
+    const result = await dynamo.appendPullRequest(slackUser.Slack_Id, [], data[0]);
 
     expect(result).to.be.equal(data);
   });
 
-  it("should append an item on a queue with one existing item in the dynamoDB table", () => {
+  it("should append an PullRequest on a queue with one existing PullRequest in the dynamoDB table", () => {
     const dynamo = new DynamoAppend();
     const slackUser = { Slack_Name: "SlackUser", Slack_Id: "<@3333>" };
 
@@ -50,16 +50,14 @@ describe("putItem", () => {
       members_approving: [],
       lead_complete: false,
       leads_approving: [],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: "Ethan",
-            Slack_Id: "<@1111>",
-          },
-          action: "APPROVED",
-        }],
-        times: ["NOW"],
-      },
+      events: [{
+        user: {
+          Slack_Name: "Ethan",
+          Slack_Id: "<@1111>",
+        },
+        action: "APPROVED",
+        time: "NEW TIME",
+      }],
     }];
 
     const newData: any = {
@@ -70,16 +68,14 @@ describe("putItem", () => {
       members_approving: [],
       lead_complete: false,
       leads_approving: [],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: "Ethan",
-            Slack_Id: "<@1111>",
-          },
-          action: "APPROVED",
-        }],
-        times: ["NOW"],
-      },
+      events: [{
+        user: {
+          Slack_Name: "Ethan",
+          Slack_Id: "<@1111>",
+        },
+        action: "APPROVED",
+        time: "NEW TIME",
+      }],
     };
   });
 

@@ -2,8 +2,11 @@ import * as querystring from "querystring";
 import { requiredEnvs } from "../required-envs";
 import { newLogger } from "../logger";
 import { XRayInitializer } from "../xray";
-import { getSlackUserAlt } from "../json/parse";
 import { json } from "../json/src/json";
+import { DynamoGet } from "../dynamo/api";
+import { PullRequest } from "../models";
+import { formatTeamQueue } from "src/dynamo/formatting";
+import { getSlackGroupAlt } from "src/json/parse";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -21,11 +24,11 @@ const logger = newLogger("SlackTeamQueue");
  * @returns Current team queue
  */
 
-export function processTeamQueue(
+export async function processTeamQueue(
   event: any,
   context: any,
   callback: any,
-): void {
+): Promise<void> {
 
   XRayInitializer.init({
     logger: logger,
@@ -36,22 +39,38 @@ export function processTeamQueue(
 
   logger.info(`event: ${JSON.stringify(event)}`);
 
+  // Convert x-www-urlencoded string to JSON notation
   const body = querystring.parse(event.body);
   logger.info(`event.body: ${JSON.stringify(body)}`);
 
   // Verify user_id property is not malformed
   if (body.user_id === undefined) {
-    throw new Error("body.user_id not attched to request");
+    throw new Error("body.user_id not attached to request");
   }
   if (typeof body.user_id === "object") {
     throw new Error("body.user_id sent as an object rather than a string");
   }
-  const slackUserID = `<@${body.user_id}>`;
-  const slackUser = getSlackUserAlt(slackUserID, json);
 
-  const success  = {
-    body: "TEAM SUCCESS FOR <@UB5EWEB3M>",
-    statusCode: "200",
-  };
-  callback(null, success);
+  // Format Slack User Id & get Slack User
+  const dynamoGet = new DynamoGet();
+  const slackUserID = `<@${body.user_id}>`;
+  const teamName = getSlackGroupAlt(slackUserID, json);
+
+  try {
+    // Get Team Queue
+    const teamQueue = await dynamoGet.getQueue(teamName.Slack_Id);
+    logger.info(`Team Queue: ${teamQueue}`);
+
+    // Format queue from array to string
+    const formattedQueue = formatTeamQueue(teamQueue, json);
+
+    const success = {
+      body: formattedQueue,
+      statusCode: "200",
+    };
+    callback(null, success);
+  }
+  catch (error) {
+    throw new Error("Uh oh. Error occurred: " + error.message);
+  }
 }

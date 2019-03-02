@@ -2,6 +2,8 @@ import * as querystring from "querystring";
 import { newLogger } from "../logger";
 import { requiredEnvs } from "../required-envs";
 import { XRayInitializer } from "../xray";
+import { getSlackUserAlt } from "src/json/parse";
+import { json } from "../json/src/json";
 
 const AWSXray = require("aws-xray-sdk");
 AWSXray.captureHTTPsGlobal(require("http"));
@@ -26,4 +28,10 @@ export function processGetQueue(
 
   const body = querystring.parse(event.body);
   logger.info(`event.body: ${JSON.stringify(body)}`);
+
+  const success = {
+    body: "GET QUEUE",
+    statusCode: "200",
+  };
+  callback(null, success);
 }

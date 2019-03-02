@@ -1,7 +1,6 @@
 import * as querystring from "querystring";
-
 import { requiredEnvs } from "../required-envs";
-import { Item} from "../models";
+import { PullRequest} from "../models";
 import { newLogger } from "../logger";
 import { json } from "../json/src/json";
 import { DynamoGet } from "../dynamo/api";
@@ -40,7 +39,6 @@ export async function processMyQueue(
   logger.info(`event: ${JSON.stringify(event)}`);
 
   // Convert x-www-urlencoded string to JSON notation
-  // body using RequestBody notation
   const body = querystring.parse(event.body);
   logger.info(`event.body: ${JSON.stringify(body)}`);
 
@@ -52,18 +50,13 @@ export async function processMyQueue(
     throw new Error("body.user_id sent as an object rather than a string");
   }
 
-  // Format Slack User ID & retrieve queue
+  // Format Slack User ID & get Slack User
   const dynamoGet = new DynamoGet();
-  const slackUser = { Slack_Name: "testUser", Slack_Id: "<@12345>" };
+  const slackUserId = `<@${body.user_id}>`;
 
   try {
-    // Get Queue
-    const userContents = await dynamoGet.getItem(slackUser);
-    if (userContents === undefined) {
-      logger.error("Couldn't find user in Dynamo table");
-      throw new Error("Unable to find user in DynamoDB table");
-    }
-    const userQueue: Item[] = userContents.contents;
+    // Get User Queue
+    const userQueue = await dynamoGet.getQueue(slackUserId);
     logger.info(`User Queue: ${userQueue}`);
 
     // Format queue from array to string

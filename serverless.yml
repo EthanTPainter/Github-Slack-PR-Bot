@@ -33,24 +33,28 @@ package:
 functions:
   GitHubSlackCommManager:
     handler: dist/src/handlers/GitHubManager.processGitHubEvent
+    memorySize: 256
     events:
       - http:
           path: github
           method: post
   SlackTeamQueueManager:
     handler: dist/src/handlers/SlackTeamQueue.processTeamQueue
+    memorySize: 256
     events:
       - http:
           path: team-status
           method: post
   SlackMyQueueManager:
     handler: dist/src/handlers/SlackMyQueue.processMyQueue
+    memorySize: 256
     events:
       - http:
           path: my-status
           method: post
   SlackGetQueueManager:
     handler: dist/src/handlers/SlackGetQueue.processGetQueue
+    memorySize: 256
     events:
       - http:
           path: get-status

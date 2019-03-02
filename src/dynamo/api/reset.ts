@@ -1,27 +1,26 @@
 import { DynamoDB } from "aws-sdk";
-import { DateTime } from "luxon";
 import { newLogger } from "../../logger";
 import { requiredEnvs } from "../../required-envs";
-import { SlackUser, Item } from "../../models";
+import { SlackUser, PullRequest } from "../../models";
 
-const logger = newLogger("DynamoResetItem");
+const logger = newLogger("DynamoResetPullRequest");
 
 export class DynamoReset {
 
   /**
-   * @description get Item from DyanmoDB table
+   * @description get PullRequest from DyanmoDB table
    * @param {string} slackUser Slack username
    * @returns Result of dynamoDB Get request
    */
-  async resetItems(
+  async resetPullRequests(
     slackUser: SlackUser,
-  ): Promise<DynamoDB.DocumentClient.AttributeMap | undefined> {
+  ): Promise<DynamoDB.DocumentClient.UpdateItemOutput> {
 
     try {
       logger.info(`Reseting Contents for User: ${slackUser}`);
 
-      // Construct empty Item
-      const emptyItem: Item[] = [];
+      // Construct empty PullRequest
+      const emptyPullRequest: PullRequest[] = [];
 
       // Setup/Init DocumentClient for DynamoDB
       const dynamoDB = new DynamoDB.DocumentClient({
@@ -29,22 +28,21 @@ export class DynamoReset {
         region: requiredEnvs.DYNAMO_REGION,
       });
 
-      // Make timestamp for last updated time
-      const currentTime = DateTime.local().toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS);
-
       // Provide base params as input
       const params = {
         TableName: requiredEnvs.DYNAMO_TABLE,
         Key: { slackUserId: slackUser.Slack_Id },
-        UpdateExpression: `set contents = :d, last_updated = :t`,
+        UpdateExpression: `set queue = :d`,
         ExpressionAttributeValues: {
-          ":d": emptyItem,
-          ":t": currentTime,
+          ":d": emptyPullRequest,
         },
       };
 
-      // DynamoDB getItem request
+      // DynamoDB getPullRequest request
       const result = await dynamoDB.update(params).promise();
+      if ( result === undefined){
+        throw new Error(`User ID ${slackUser.Slack_Id} queue not found`);
+      }
 
       return result;
     }

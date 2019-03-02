@@ -85,7 +85,7 @@ export function getSlackUsers(
 
 /**
  * @description Retrieve a list of slack users in a team
- * @param {string} slackUser Slack username registered to a team
+ * @param slackUser Slack username registered to a team
  * @param json JSON file for the GitHub/Slack configuration
  * @returns Array of slack usernames (strings)
  */
@@ -95,45 +95,49 @@ export function getSlackUsersAlt(
 ): SlackUser[] {
   let slackUsers: SlackUser[];
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
-  const teams = json.Departments;
-  const allTeamKeys = Object.keys(teams);
+  const departments = json.Departments;
+  const allDepartmentKeys = Object.keys(departments);
   // If no teams present, return error
-  if (allTeamKeys.length === 0) {
-    throw new Error("No Team (DevTeam, ThisCoolTeam, etc.) found in JSON file");
+  if (allDepartmentKeys.length === 0) {
+    throw new Error("No Department found in JSON file");
   }
 
   // Otherwise loop through teams (DevTeam, QaTeam, ProdTeam)
-  let teamCounter = 0;
-  while (teamCounter < allTeamKeys.length) {
+  let departmentCounter = 0;
+  while (departmentCounter < allDepartmentKeys.length) {
     // Get selectedTeam (DevTeam), and get selectedTeamGroup (DevTeam1)
-    const selectedTeam = allTeamKeys[teamCounter];
-    const selectedTeamGroup = teams[selectedTeam];
-    const teamGroupKeys = Object.keys(selectedTeamGroup);
-    if (teamGroupKeys.length === 0) {
-      throw new Error("No Team Group (Dev_Team_1, SomethingCool1, etc.) found in JSON file");
+    const selectedDepartmentName = allDepartmentKeys[departmentCounter];
+    const selectedDepartment = departments[selectedDepartmentName];
+    const teamKeys = Object.keys(selectedDepartment);
+    if (teamKeys.length === 0) {
+      throw new Error("No Team found in JSON file");
     }
-    let selectedTeamTypeCounter = 0;
+    let selectedTeamCounter = 0;
     // Loop through team groups (DevTeam1, DevTeam2, etc.)
-    while (selectedTeamTypeCounter < teamGroupKeys.length) {
-      const selectedGroupSubTeam = selectedTeamGroup[teamGroupKeys[selectedTeamTypeCounter]];
-      if (selectedGroupSubTeam.Users === undefined) {
-        throw new Error(`No Users defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+    while (selectedTeamCounter < teamKeys.length) {
+      const selectedTeam = selectedDepartment[teamKeys[selectedTeamCounter]];
+      if (selectedTeam.Users === undefined) {
+        throw new Error(`No Users defined for team: ${teamKeys[selectedTeamCounter]}`);
       }
-      const users = selectedGroupSubTeam.Users;
+      const users = selectedTeam.Users;
 
       if (users.Leads === undefined) {
-        throw new Error(`Leads not defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+        throw new Error(`Leads not defined for team: ${teamKeys[selectedTeamCounter]}`);
       }
-      const leadUsers = users.Leads;
 
       if (users.Members === undefined) {
-        throw new Error(`Members not defined for team: ${teamGroupKeys[selectedTeamTypeCounter]}`);
+        throw new Error(`Members not defined for team: ${teamKeys[selectedTeamCounter]}`);
       }
+
+      const leadUsers = users.Leads;
       const memberUsers = users.Members;
       const leadValues = Object.values(leadUsers);
+      const memberValues = Object.values(memberUsers);
+
       let leadCounter = 0;
       while (leadCounter < leadValues.length) {
-        if (leadValues[leadCounter] === slackUserId) {
+        const selectedLead: any = leadValues[leadCounter];
+        if (selectedLead.Slack_Id === slackUserId) {
           slackUsers = Object.values(leadUsers);
           slackUsers = slackUsers.concat(Object.values(memberUsers));
           return slackUsers;
@@ -141,19 +145,19 @@ export function getSlackUsersAlt(
         leadCounter++;
       }
 
-      const memberValues = Object.values(memberUsers);
       let memberCounter = 0;
       while (memberCounter < memberValues.length) {
-        if (memberValues[memberCounter] === slackUserId) {
+        const selectedMember: any = memberValues[memberCounter];
+        if (selectedMember.Slack_Id === slackUserId) {
           slackUsers = Object.values(leadUsers);
           slackUsers = slackUsers.concat(Object.values(memberUsers));
           return slackUsers;
         }
         memberCounter++;
       }
-      selectedTeamTypeCounter++;
+      selectedTeamCounter++;
     }
-    teamCounter++;
+    departmentCounter++;
   }
-  throw new Error(`Slack user: ${slackUserId} could not be found in JSON file`);
+  throw new Error(`Slack user Id: ${slackUserId} could not be found in JSON file`);
 }

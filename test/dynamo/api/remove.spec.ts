@@ -2,9 +2,9 @@ import { expect } from "chai";
 import * as sinon from "sinon";
 import { DynamoRemove } from "../../../src/dynamo/api";
 
-describe("removeItem", () => {
+describe("removePullRequest", () => {
 
-  it("should remove item from the queue in the DynamoDB table", () => {
+  it("should remove PullRequest from the queue in the DynamoDB table", () => {
     const dynamo = new DynamoRemove();
     const slackUser = {};
     const currentContents = [{
@@ -26,7 +26,7 @@ describe("removeItem", () => {
         times: ["NOW"],
       },
     }];
-    const removingItem = {
+    const removingPullRequest = {
       owner: { Slack_Name: "ethan", Slack_Id: "<@1111>" },
       title: "New title",
       url: "my url",

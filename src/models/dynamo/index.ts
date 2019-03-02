@@ -1,3 +1,2 @@
-export { ItemOutput } from "./item-output";
-export { Item } from "./item";
+export { PullRequest } from "./pull-request";
 export { Event } from "./event";

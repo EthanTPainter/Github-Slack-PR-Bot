@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import { constructQueueString } from "../../../../../../src/slack/message/construct/description";
-import { Item } from "../../../../../../src/models";
+import { PullRequest } from "../../../../../../src/models";
 
 describe("constructQueueString", () => {
 
-  let pullRequest: Item;
+  let pullRequest: PullRequest;
 
   beforeEach(() => {
     pullRequest = {
@@ -14,27 +14,27 @@ describe("constructQueueString", () => {
       },
       title: "Feature(123): Add new service",
       url: "www.github.com",
-      associated_user_ids: ["<@id123>"],
+      members_alert: ["<@id123>"],
+      leads_alert: [],
       member_complete: false,
       members_approving: ["EthanP"],
       lead_complete: false,
       leads_approving: ["AndrewC"],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: "EthanP",
-            Slack_Id: "<@54321>",
-          },
-          action: "APPROVED",
-        }, {
-          user: {
-            Slack_Name: "AndrewC",
-            Slack_Id: "<@444>",
-          },
-          action: "APPROVED",
-        }],
-        times: ["NOW"],
-      },
+      events: [{
+        user: {
+          Slack_Name: "EthanP",
+          Slack_Id: "<@54321>",
+        },
+        action: "APPROVED",
+        time: "FIRST",
+      }, {
+        user: {
+          Slack_Name: "AndrewC",
+          Slack_Id: "<@444>",
+        },
+        action: "APPROVED",
+        time: "NOW",
+      }],
     };
   });
 
@@ -55,8 +55,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(true);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(true);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(true);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(true);
   });
 
   it("should construct a queue string with new line, owner, approval names, & created time", () => {
@@ -76,8 +76,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(true);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(true);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(false);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(true);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(false);
   });
 
   it("should construct a queue string with new line, owner, approval names, & updated time", () => {
@@ -97,8 +97,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(true);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(false);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(true);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(false);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(true);
   });
 
   it("should construct a queue string with new line, owner, & approval names", () => {
@@ -118,8 +118,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(true);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(false);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(false);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(false);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(false);
   });
 
   it("should construct a queue string with new line, owner, created, & updated time", () => {
@@ -139,8 +139,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(true);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(false);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(false);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(true);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(true);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(true);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(true);
   });
 
   it("should construct a queue string with new line, owner, & created time", () => {
@@ -160,8 +160,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(true);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(false);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(false);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(true);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(false);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(true);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(false);
   });
 
   it("should construct a queue string with new line, owner, & updated time", () => {
@@ -181,8 +181,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(true);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(false);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(false);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(false);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(true);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(false);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(true);
   });
 
   it("should construct a queue string with new line, & owner", () => {
@@ -202,8 +202,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(true);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(false);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(false);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(false);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(false);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(false);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(false);
   });
 
   it("should construct a queue string with new line, approval names, created, & updated times", () => {
@@ -223,8 +223,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(false);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(true);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(true);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(true);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(true);
   });
 
   it("should construct a queue string with new line, approval names, & created time", () => {
@@ -244,8 +244,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(false);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(true);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(false);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(true);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(false);
   });
 
   it("should construct a queue string with new line, approval names, & updated time", () => {
@@ -265,8 +265,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(false);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(false);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(true);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(false);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(true);
   });
 
   it("should construct a queue string with new line, & approval names", () => {
@@ -286,8 +286,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(false);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(false);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(false);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(false);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(false);
   });
 
   it("should construct a queue string with new line, created, & updated time", () => {
@@ -307,8 +307,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(false);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(false);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(false);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(true);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(true);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(true);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(true);
   });
 
   it("should construct a queue string with new line, & created time", () => {
@@ -328,8 +328,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(false);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(false);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(false);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(true);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(false);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(true);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(false);
   });
 
   it("should construct a queue string with new line, & updated time", () => {
@@ -349,8 +349,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(false);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(false);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(false);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(false);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(true);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(false);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(true);
   });
 
   it("should construct a queue string with new line", () => {
@@ -370,8 +370,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(false);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(false);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(false);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(false);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(false);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(false);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(false);
   });
 
   it("should construct a queue string with owner, approval names, created, and updated times", () => {
@@ -391,8 +391,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(true);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(true);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(true);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(true);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(true);
   });
 
   it("should construct a queue string with owner, approval names, & created time", () => {
@@ -412,8 +412,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(true);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(true);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(false);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(true);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(false);
   });
 
   it("should construct a queue string with owner, approval names, & updated time", () => {
@@ -433,8 +433,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(true);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(false);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(true);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(false);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(true);
   });
 
   it("should construct a queue string with owner, & approval names", () => {
@@ -454,8 +454,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(true);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(false);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(false);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(false);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(false);
   });
 
   it("should construct a queue string with owner, created time, & updated time", () => {
@@ -472,8 +472,8 @@ describe("constructQueueString", () => {
     expect(result.includes(pullRequest.title)).equal(true);
     expect(result.includes(pullRequest.url)).equal(true);
     expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(true);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(true);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(true);
+    expect(result.includes("Created: " + pullRequest.events[0].time)).equal(true);
+    expect(result.includes("Updated: " + pullRequest.events[1].time)).equal(true);
   });
 
   it("should construct a queue string with owner and created time", () => {
@@ -490,8 +490,8 @@ describe("constructQueueString", () => {
     expect(result.includes(pullRequest.title)).equal(true);
     expect(result.includes(pullRequest.url)).equal(true);
     expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(true);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(true);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(false);
+    expect(result.includes("Created: " + pullRequest.events[0].time)).equal(true);
+    expect(result.includes("Updated: " + pullRequest.events[1].time)).equal(false);
   });
 
   it("should construct a queue string with owner and updated time", () => {
@@ -508,8 +508,8 @@ describe("constructQueueString", () => {
     expect(result.includes(pullRequest.title)).equal(true);
     expect(result.includes(pullRequest.url)).equal(true);
     expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(true);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(false);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(true);
+    expect(result.includes("Created: " + pullRequest.events[0].time)).equal(false);
+    expect(result.includes("Updated: " + pullRequest.events[1].time)).equal(true);
   });
 
   it("should construct a queue string with same created and updated time", () => {
@@ -526,24 +526,8 @@ describe("constructQueueString", () => {
     expect(result.includes(pullRequest.title)).equal(true);
     expect(result.includes(pullRequest.url)).equal(true);
     expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(false);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(true);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(true);
-  });
-
-  it("should construct a queue string with different created and updated times", () => {
-    pullRequest.records.times.push("UPDATED");
-    const options: any = {
-      Queue_Include_Created_Time: true,
-      Queue_Include_Updated_Time: true,
-    };
-
-    const result = constructQueueString(pullRequest, options);
-
-    expect(result.includes(pullRequest.title)).equal(true);
-    expect(result.includes(pullRequest.url)).equal(true);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(true);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(false);
-    expect(result.includes("Updated: " + pullRequest.records.times[1])).equal(true);
+    expect(result.includes("Created: " + pullRequest.events[0].time)).equal(true);
+    expect(result.includes("Updated: " + pullRequest.events[1].time)).equal(true);
   });
 
   it("should construct a queue string with only created time", () => {
@@ -560,8 +544,8 @@ describe("constructQueueString", () => {
     expect(result.includes(pullRequest.title)).equal(true);
     expect(result.includes(pullRequest.url)).equal(true);
     expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(false);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(true);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(false);
+    expect(result.includes("Created: " + pullRequest.events[0].time)).equal(true);
+    expect(result.includes("Updated: " + pullRequest.events[1].time)).equal(false);
   });
 
   it("should construct a queue string with only updated time", () => {
@@ -578,8 +562,8 @@ describe("constructQueueString", () => {
     expect(result.includes(pullRequest.title)).equal(true);
     expect(result.includes(pullRequest.url)).equal(true);
     expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(false);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(false);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(true);
+    expect(result.includes("Created: " + pullRequest.events[0].time)).equal(false);
+    expect(result.includes("Updated: " + pullRequest.events[1].time)).equal(true);
   });
 
   it("should construct a queue string with only an owner", () => {
@@ -596,8 +580,8 @@ describe("constructQueueString", () => {
     expect(result.includes(pullRequest.title)).equal(true);
     expect(result.includes(pullRequest.url)).equal(true);
     expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(true);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(false);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(false);
+    expect(result.includes("Created: " + pullRequest.events[0].time)).equal(false);
+    expect(result.includes("Updated: " + pullRequest.events[1].time)).equal(false);
   });
 
   it("should construct a queue string with no options", () => {
@@ -614,8 +598,8 @@ describe("constructQueueString", () => {
     expect(result.includes(pullRequest.title)).equal(true);
     expect(result.includes(pullRequest.url)).equal(true);
     expect(result.includes("Owner: " + pullRequest.owner.Slack_Name)).equal(false);
-    expect(result.includes("Created: " + pullRequest.records.times[0])).equal(false);
-    expect(result.includes("Updated: " + pullRequest.records.times[0])).equal(false);
+    expect(result.includes("Created: " + pullRequest.events[0].time)).equal(false);
+    expect(result.includes("Updated: " + pullRequest.events[1].time)).equal(false);
   });
 
   it("should construct a queue string with approval names, created, and updated times", () => {
@@ -635,8 +619,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(false);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(true);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(true);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(true);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(true);
   });
 
   it("should construct a queue string with approval names, & created time", () => {
@@ -656,8 +640,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(false);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(true);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(false);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(true);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(false);
   });
 
   it("should construct a queue string with approval names, & updated time", () => {
@@ -677,8 +661,8 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(false);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(false);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(true);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(false);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(true);
   });
 
   it("should construct a queue string with only approval names", () => {
@@ -698,7 +682,7 @@ describe("constructQueueString", () => {
     expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(false);
     expect(result.includes(`Leads Approving: [${pullRequest.leads_approving[0]}]`)).equal(true);
     expect(result.includes(`Members Approving: [${pullRequest.members_approving[0]}]`)).equal(true);
-    expect(result.includes(`Created: ${pullRequest.records.times[0]}`)).equal(false);
-    expect(result.includes(`Updated: ${pullRequest.records.times[0]}`)).equal(false);
+    expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(false);
+    expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(false);
   });
 });

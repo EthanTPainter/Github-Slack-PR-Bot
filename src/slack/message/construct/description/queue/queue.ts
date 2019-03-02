@@ -1,13 +1,13 @@
-import { Item, TeamOptions } from "../../../../../models";
+import { PullRequest, TeamOptions } from "../../../../../models";
 
 /**
  * @description Construct a pr string given a pullRequest
- * @param pullRequest Item model
+ * @param pullRequest PullRequest model
  * @param options TeamOptions model
  * @returns string of the queue PR
  */
 export function constructQueueString(
-  pullRequest: Item,
+  pullRequest: PullRequest,
   options: TeamOptions,
 ): string {
 
@@ -18,8 +18,8 @@ export function constructQueueString(
   const includeOwner = options.Queue_Include_Owner;
   const includeNewLine = options.Queue_Include_New_Line;
 
-  const createdDateTime = pullRequest.records.times[0];
-  const updatedDateTime = pullRequest.records.times[pullRequest.records.times.length - 1];
+  const createdDateTime = pullRequest.events[0].time;
+  const updatedDateTime = pullRequest.events[pullRequest.events.length - 1].time;
   const leadsApproving = pullRequest.leads_approving;
   const membersApproving = pullRequest.members_approving;
   const owner = pullRequest.owner;

@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { filterMergablePRs } from "../../../src/dynamo/filter";
-import { Item } from "../../../src/models";
+import { PullRequest } from "../../../src/models";
 
 describe("filterMergablePRs", () => {
 
@@ -23,7 +23,7 @@ describe("filterMergablePRs", () => {
     }];
 
     const result = filterMergablePRs(queue);
-    const expected: Item[] = [];
+    const expected: PullRequest[] = [];
 
     expect(result).deep.equal(expected);
   });
@@ -68,7 +68,7 @@ describe("filterMergablePRs", () => {
     }];
 
     const result = filterMergablePRs(queue);
-    const expected: Item[] = [];
+    const expected: PullRequest[] = [];
 
     expect(result).deep.equal(expected);
   });
@@ -77,7 +77,7 @@ describe("filterMergablePRs", () => {
     const queue: any = [];
 
     const result = filterMergablePRs(queue);
-    const expected: Item[] = [];
+    const expected: PullRequest[] = [];
 
     expect(result).deep.equal(expected);
   });

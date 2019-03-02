@@ -2,42 +2,41 @@ import { expect } from "chai";
 import * as sinon from "sinon";
 
 import { DynamoGet } from "../../../src/dynamo/api";
-import { Item } from "../../../src/models";
+import { PullRequest } from "../../../src/models";
 
-describe("getItem", () => {
+describe("getPullRequest", () => {
 
-  it("should successfully get an item from a DynamoDB table", async () => {
+  it("should successfully get an PullRequest from a DynamoDB table", async () => {
     const dynamo = new DynamoGet();
     const slackUser = { Slack_Name: "testUser", Slack_Id: "testUser" };
 
-    const expected: Item[] = [{
+    const expected: PullRequest[] = [{
       owner: {
         Slack_Name: "ethan.painter",
         Slack_Id: "<@12345>",
       },
       title: "feat(1234): New feature",
       url: "www.github.com/ethantpainter",
-      associated_user_ids: ["<@UUID123>", "<UUID567>"],
+      members_alert: ["<@UUID123>", "<UUID567>"],
+      leads_alert: [],
       member_complete: false,
       members_approving: [],
       lead_complete: false,
       leads_approving: [],
-      records: {
-        events: [{
-          user: {
-            Slack_Name: "DillonX",
-            Slack_Id: "<@54321>",
-          },
-          action: "APPROVED",
-        }],
-        times: ["NOW"],
-      },
+      events: [{
+        user: {
+          Slack_Name: "DillonX",
+          Slack_Id: "<@54321>",
+        },
+        action: "APPROVED",
+        time: "NOW",
+      }],
     }];
 
-    sinon.stub(dynamo, "getItem")
+    sinon.stub(dynamo, "getQueue")
       .resolves(expected);
 
-    const result = await dynamo.getItem(slackUser);
+    const result = await dynamo.getQueue(slackUser.Slack_Id);
 
     expect(result).deep.equal(expected);
   });
