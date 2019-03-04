@@ -1,6 +1,6 @@
-import { DynamoGet, DynamoAppend } from "src/dynamo/api";
-import { getPRLink } from "src/github/parse";
-import { SlackUser, PullRequest } from "src/models";
+import { DynamoGet, DynamoAppend } from "../../api";
+import { getPRLink } from "../../../github/parse";
+import { SlackUser, PullRequest } from "../../../models";
 import { DateTime } from "luxon";
 
 export async function updateReqChanges(

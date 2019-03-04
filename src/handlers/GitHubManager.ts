@@ -3,7 +3,7 @@ import { json } from "../json/src/json";
 import { requiredEnvs } from "../required-envs";
 import { postMessage } from "../slack/api";
 import { newLogger } from "../logger";
-import { getTeamName} from "../json/parse";
+import { getTeamName, getTeamOptions } from "../json/parse";
 import { getOwner } from "../github/parse";
 import { updateDynamo } from "../dynamo/update";
 import { XRayInitializer } from "../xray";
@@ -54,20 +54,23 @@ export async function processGitHubEvent(
   const githubUser = getOwner(event);
   const teamName = getTeamName(githubUser, json);
 
-  // Update DynamoDB with new request
-  logger.info("Updating DynamoDB table");
-  await updateDynamo(githubUser, event, json, pullRequestAction);
+  // Check whether to disable dynamo
+  const teamOptions = getTeamOptions(githubUser, json);
+  if (teamOptions.Disable_Dynamo === false) {
+    // Update DynamoDB with new request
+    logger.info("Updating DynamoDB table");
+    await updateDynamo(githubUser, event, json, pullRequestAction);
+  }
 
   // Use team name to get channel name and slack token from required Envs
   logger.info("Posting slack message to " + requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]);
   await postMessage(requiredEnvs.SLACK_API_URI,
-                    requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
-                    requiredEnvs[teamName + "_SLACK_TOKEN"],
-                    slackMessage);
+    requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
+    requiredEnvs[teamName + "_SLACK_TOKEN"],
+    slackMessage);
 
   // Provide success statusCode/Message
   const success = {
-    body: "Successfully retrieved event",
     statusCode: "200",
   };
   callback(null, success);

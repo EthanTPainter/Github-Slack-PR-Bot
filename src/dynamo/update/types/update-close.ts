@@ -1,8 +1,8 @@
 import { DateTime } from "luxon";
 import { SlackUser, PullRequest } from "../../../models";
 import { DynamoGet, DynamoRemove } from "../../../dynamo/api";
-import { getSlackUsersAlt, getSlackUserAlt, getSlackGroupAlt } from "src/json/parse";
-import { getPRLink } from "src/github/parse";
+import { getSlackUserAlt, getSlackGroupAlt } from "../../../json/parse";
+import { getPRLink } from "../../../github/parse";
 
 /**
  * @description Update DynamoDB table to remove

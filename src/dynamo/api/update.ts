@@ -1,7 +1,7 @@
-import { PullRequest } from "src/models";
+import { PullRequest } from "../../models";
 import { DynamoDB } from "aws-sdk";
-import { newLogger } from "src/logger";
-import { requiredEnvs } from "src/required-envs";
+import { newLogger } from "../../../src/logger";
+import { requiredEnvs } from "../../../src/required-envs";
 
 const logger = newLogger("DynamoUpdate");
 

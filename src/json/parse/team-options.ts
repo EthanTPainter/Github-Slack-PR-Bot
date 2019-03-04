@@ -1,5 +1,5 @@
 import { TeamOptions } from "../../models/json/team-options";
-import { SlackUser } from "src/models";
+import { SlackUser } from "../../models";
 
 /**
  * @description Get Team options from JSON config file

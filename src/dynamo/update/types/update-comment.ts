@@ -1,8 +1,8 @@
 import { DateTime } from "luxon";
 import { SlackUser, PullRequest } from "../../../models";
-import { DynamoGet, DynamoAppend, DynamoUpdate } from "../../../dynamo/api";
+import { DynamoGet, DynamoUpdate } from "../../../dynamo/api";
 import { getPRLink } from "../../../github/parse";
-import { getSlackGroupAlt } from "src/json/parse";
+import { getSlackGroupAlt } from "../../../json/parse";
 
 /**
  * @description Update DynamoDB table to add a comment

@@ -2,7 +2,7 @@ import { newLogger } from "../../logger";
 import { updateOpen } from "./types/update-open";
 import { getSlackUser, getSlackGroup } from "../../json/parse";
 import { updateClose, updateMerge, updateApprove, updateReqChanges } from "./types";
-import { getSender } from "src/github/parse";
+import { getSender } from "../../github/parse";
 import { updateComment } from "./types/update-comment";
 
 const logger = newLogger("UpdateDynamo");

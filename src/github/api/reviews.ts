@@ -29,7 +29,7 @@ export class Review {
     * Make request with request-promise to retrieve GitHub reviews for a PR
     * Always add token to retrieve Reviews because of GitHub API rate limtiing
     * Without token: 60 requests per hour
-    * With token: 5000 requests per hour
+    * With token: 5000 requests per hour + 50 per org member
     * So may as well always include the token to maximize requests
     * https://developer.github.com/v3/rate_limit/
     */

@@ -2,7 +2,7 @@ const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
 
 import { XRayOptions } from "../models";
-import { newLogger } from "src/logger";
+import { newLogger } from "../logger";
 
 const logger = newLogger("XRayInitializer");
 

@@ -1,4 +1,4 @@
-import { SlackUser } from "src/models";
+import { SlackUser } from "../../../../../models";
 
 /**
  * @description Construct description when a user requests changes

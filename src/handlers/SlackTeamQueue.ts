@@ -5,8 +5,8 @@ import { XRayInitializer } from "../xray";
 import { json } from "../json/src/json";
 import { DynamoGet } from "../dynamo/api";
 import { PullRequest } from "../models";
-import { formatTeamQueue } from "src/dynamo/formatting";
-import { getSlackGroupAlt } from "src/json/parse";
+import { formatTeamQueue } from "../dynamo/formatting";
+import { getSlackGroupAlt } from "../json/parse";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
