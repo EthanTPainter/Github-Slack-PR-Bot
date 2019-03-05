@@ -9,7 +9,7 @@ const logger = newLogger("FormatMyQueue");
  * @description Format a queue from a raw DynamoDB stored
  * array into a stringified version to present on Slack
  * @param queue DynamoDB stored queue for a user
- * @returns String of the DynamoDB queue contents
+ * @returns String of the DynamoDB queue
  */
 export function formatMyQueue(
   queue: PullRequest[],

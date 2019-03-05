@@ -12,12 +12,12 @@ export class DynamoReset {
    * @param {string} slackUser Slack username
    * @returns Result of dynamoDB Get request
    */
-  async resetPullRequests(
-    slackUser: SlackUser,
+  async resetQueue(
+    slackUserId: string,
   ): Promise<DynamoDB.DocumentClient.UpdateItemOutput> {
 
     try {
-      logger.info(`Reseting Contents for User: ${slackUser}`);
+      logger.info(`Reseting queue for User: ${slackUserId}`);
 
       // Construct empty PullRequest
       const emptyPullRequest: PullRequest[] = [];
@@ -31,7 +31,7 @@ export class DynamoReset {
       // Provide base params as input
       const params = {
         TableName: requiredEnvs.DYNAMO_TABLE,
-        Key: { slackUserId: slackUser.Slack_Id },
+        Key: { slackUserId: slackUserId },
         UpdateExpression: `set queue = :d`,
         ExpressionAttributeValues: {
           ":d": emptyPullRequest,
@@ -41,7 +41,7 @@ export class DynamoReset {
       // DynamoDB getPullRequest request
       const result = await dynamoDB.update(params).promise();
       if ( result === undefined){
-        throw new Error(`User ID ${slackUser.Slack_Id} queue not found`);
+        throw new Error(`User ID ${slackUserId} queue not found`);
       }
 
       return result;

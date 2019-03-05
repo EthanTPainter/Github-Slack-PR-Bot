@@ -9,10 +9,10 @@ describe("putPullRequest", () => {
     const slackUser = { Slack_Name: "testUser", Slack_Id: "<@12345>" };
 
     const expected: any = [];
-    sinon.stub(dynamo, "resetPullRequests")
+    sinon.stub(dynamo, "resetQueue")
       .resolves(expected);
 
-    const result = await dynamo.resetPullRequests(slackUser);
+    const result = await dynamo.resetQueue(slackUser.Slack_Id);
 
     expect(result).equal(expected);
   });

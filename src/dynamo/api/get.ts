@@ -17,7 +17,7 @@ export class DynamoGet {
   ): Promise<PullRequest[]> {
 
     try {
-      logger.info("Connecting to DynamoDB...");
+      logger.info(`Getting Queue for User: ${slackUserId}`);
 
       // Setup/Init DocumentClient for DynamoDB
       const dynamoDB = new DynamoDB.DocumentClient({
@@ -30,7 +30,7 @@ export class DynamoGet {
         TableName: requiredEnvs.DYNAMO_TABLE,
         Key: { slackUserId: slackUserId },
         AttributesToGet: [
-          "contents",
+          "queue",
         ],
         ReturnValues: "ALL_NEW",
       };
@@ -39,7 +39,7 @@ export class DynamoGet {
       const result = await dynamoDB.get(params).promise();
       const item = result.Item;
       if (item === undefined) {
-        throw new Error(`User ID ${slackUserId} contents not found`);
+        throw new Error(`User ID ${slackUserId} queue not found`);
       }
 
       // Retrun queue for user

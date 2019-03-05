@@ -19,7 +19,7 @@ export class DynamoUpdate {
     newQueue.push(updatedPR);
 
     try {
-      logger.info("Connecting to DynamoDB...");
+      logger.info(`Updating PR with url: ${updatedPR.url} for user: ${slackUserId}`);
 
       // Setup
       const dynamoDB = new DynamoDB.DocumentClient({
@@ -32,7 +32,7 @@ export class DynamoUpdate {
         Key: { slackUserId: slackUserId },
         UpdateExpression: `set queue = :d`,
         ExpressionAttributeValues: {
-          ":d": currentQueue,
+          ":d": newQueue,
         },
       };
 

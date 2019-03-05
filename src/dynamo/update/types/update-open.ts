@@ -48,8 +48,8 @@ export async function updateOpen(
   }
 
   // For each user in the slackUserList,
-  // 1) Get Most recent contents for the user
-  // 2) Append newPullRequest to the existing contents array
+  // 1) Get Most recent queue for the user
+  // 2) Append newPullRequest to the existing queue
 
   const dynamoGet = new DynamoGet();
   const dynamoUpdate = new DynamoAppend();

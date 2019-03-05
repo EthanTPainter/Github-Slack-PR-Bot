@@ -12,7 +12,6 @@ export class DynamoAppend {
    * @param slackUserId Slack username id
    * @param currentQueue Current queue for a Slack user
    * @param newPullRequest New PullRequest to append onto the queue
-   * @param values Contents to put in contents
    */
   async appendPullRequest(
     slackUserId: string,
@@ -21,7 +20,7 @@ export class DynamoAppend {
   ): Promise<DynamoDB.DocumentClient.UpdateItemOutput> {
 
     try {
-      logger.info("Connecting to DynamoDB...");
+      logger.info(`Appending new PR to User: ${slackUserId}'s queue`);
 
       // Setup/Init DocumentClient for DynamoDB
       const dynamoDB = new DynamoDB.DocumentClient({
