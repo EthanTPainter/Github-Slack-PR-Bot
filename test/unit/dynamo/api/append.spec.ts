@@ -2,6 +2,7 @@ import { DynamoAppend } from "../../../../src/dynamo/api";
 import { PullRequest } from "../../../../src/models";
 import { expect } from "chai";
 import * as sinon from "sinon";
+import { requiredEnvs } from "src/required-envs";
 
 describe("appendPullRequest", () => {
 
@@ -36,7 +37,9 @@ describe("appendPullRequest", () => {
       .resolves(data);
 
     // Given empty current contents, append new data to array
-    const result = await dynamo.appendPullRequest(slackUser.Slack_Id, [], data);
+    const result = await dynamo.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id, [], data);
 
     expect(result).equal(data);
   });
@@ -91,9 +94,11 @@ describe("appendPullRequest", () => {
     sinon.stub(dynamo, "appendPullRequest")
       .resolves(expected);
 
-    const result = await dynamo.appendPullRequest(slackUser.Slack_Id,
-                                                  existingData,
-                                                  newData);
+    const result = await dynamo.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id,
+      existingData,
+      newData);
 
     expect(result).equal(expected);
   });

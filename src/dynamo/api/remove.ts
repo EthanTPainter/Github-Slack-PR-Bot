@@ -7,7 +7,15 @@ const logger = newLogger("DynamoRemove");
 
 export class DynamoRemove {
 
+  /**
+   * @description Remove PR from slack user's queue
+   * @param dynamoTableName Name of the dynamo table
+   * @param slackUserId Slack user Id
+   * @param currentQueue Current queue for slack user
+   * @param removePullRequest PR to remove from queue
+   */
   async removePullRequest(
+    dynamoTableName: string,
     slackUserId: string,
     currentQueue: PullRequest[],
     removePullRequest: PullRequest,
@@ -29,7 +37,7 @@ export class DynamoRemove {
 
       // Provide base params as input
       const params = {
-        TableName: requiredEnvs.DYNAMO_TABLE,
+        TableName: dynamoTableName,
         Key: { slackUserId: slackUserId },
         UpdateExpression: `set queue = :d`,
         ExpressionAttributeValues: {

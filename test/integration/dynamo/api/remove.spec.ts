@@ -7,8 +7,9 @@ import {
   DynamoReset,
   DynamoUpdate,
 } from "../../../../src/dynamo/api";
+import { requiredEnvs } from "../../../../src/required-envs";
 
-describe("DynamoRemove", () => {
+describe("Dynamo.Remove", () => {
 
   const dynamoGet = new DynamoGet();
   const dynamoRemove = new DynamoRemove();
@@ -18,12 +19,16 @@ describe("DynamoRemove", () => {
 
   // Reset slackUser's queue before each test
   beforeEach(async () => {
-    await dynamoReset.resetQueue(slackUser.Slack_Id);
+    await dynamoReset.resetQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
   });
 
   // Reset slackUser's queue after all tests complete
   after(async () => {
-    await dynamoReset.resetQueue(slackUser.Slack_Id);
+    await dynamoReset.resetQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
   });
 
   it("should remove one PR from a slack user's queue (empty queue)", async () => {
@@ -47,15 +52,21 @@ describe("DynamoRemove", () => {
         time: currentTime,
       }],
     };
-    await dynamoUpdate.updatePullRequest(slackUser.Slack_Id,
+    await dynamoUpdate.updatePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id,
       [],
       newPR);
-    await dynamoRemove.removePullRequest(slackUser.Slack_Id,
+    await dynamoRemove.removePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id,
       [newPR],
       newPR);
 
     const expectedQueue: any = [];
-    const retrievedQueue = await dynamoGet.getQueue(slackUser.Slack_Id);
+    const retrievedQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
 
     expect(expectedQueue).deep.equal(retrievedQueue);
   });
@@ -99,15 +110,21 @@ describe("DynamoRemove", () => {
         time: currentTime,
       }],
     }];
-    await dynamoUpdate.updatePullRequest(slackUser.Slack_Id,
+    await dynamoUpdate.updatePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id,
       [currentQueue[0]],
       currentQueue[1]);
-    await dynamoRemove.removePullRequest(slackUser.Slack_Id,
+    await dynamoRemove.removePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id,
       currentQueue,
       currentQueue[1]);
 
     const expectedQueue = [currentQueue[0]];
-    const retrievedQueue = await dynamoGet.getQueue(slackUser.Slack_Id);
+    const retrievedQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
 
     expect(expectedQueue).deep.equal(retrievedQueue);
   });

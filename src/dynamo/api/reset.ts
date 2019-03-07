@@ -8,11 +8,13 @@ const logger = newLogger("DynamoResetPullRequest");
 export class DynamoReset {
 
   /**
-   * @description get PullRequest from DyanmoDB table
-   * @param {string} slackUser Slack username
+   * @description reset queue for slack user Id
+   * @param dynamoTableName Name of the dynamo table
+   * @param slackUserId Slack username Id
    * @returns Result of dynamoDB Get request
    */
   async resetQueue(
+    dynamoTableName: string,
     slackUserId: string,
   ): Promise<DynamoDB.DocumentClient.UpdateItemOutput> {
 
@@ -30,7 +32,7 @@ export class DynamoReset {
 
       // Provide base params as input
       const params = {
-        TableName: requiredEnvs.DYNAMO_TABLE,
+        TableName: dynamoTableName,
         Key: { slackUserId: slackUserId },
         UpdateExpression: `set queue = :d`,
         ExpressionAttributeValues: {

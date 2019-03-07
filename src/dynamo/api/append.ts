@@ -8,12 +8,14 @@ const logger = newLogger("DynamoAppend");
 export class DynamoAppend {
 
   /**
-   * @description get PullRequest from DyanmoDB table
-   * @param slackUserId Slack username id
+   * @description append PR to slack user's queue
+   * @param dynamoTableName Name of dynamo table
+   * @param slackUserId Slack user Id
    * @param currentQueue Current queue for a Slack user
-   * @param newPullRequest New PullRequest to append onto the queue
+   * @param newPullRequest New PR to add to the end of the queue
    */
   async appendPullRequest(
+    dynamoTableName: string,
     slackUserId: string,
     currentQueue: PullRequest[],
     newPullRequest: PullRequest,
@@ -33,7 +35,7 @@ export class DynamoAppend {
 
       // Provide base params as input
       const params = {
-        TableName: requiredEnvs.DYNAMO_TABLE,
+        TableName: dynamoTableName,
         Key: { slackUserId: slackUserId },
         UpdateExpression: `set queue = :d`,
         ExpressionAttributeValues: {

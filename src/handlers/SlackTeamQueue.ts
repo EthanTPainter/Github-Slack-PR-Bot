@@ -58,7 +58,10 @@ export async function processTeamQueue(
 
   try {
     // Get Team Queue
-    const teamQueue = await dynamoGet.getQueue(teamName.Slack_Id);
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.DYNAMO_TABLE_NAME,
+      teamName.Slack_Id);
+
     logger.info(`Team Queue: ${teamQueue}`);
 
     // Format queue from array to string

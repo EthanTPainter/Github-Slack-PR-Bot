@@ -1,6 +1,6 @@
 import * as querystring from "querystring";
 import { requiredEnvs } from "../required-envs";
-import { PullRequest} from "../models";
+import { PullRequest } from "../models";
 import { newLogger } from "../logger";
 import { json } from "../json/src/json";
 import { DynamoGet } from "../dynamo/api";
@@ -56,7 +56,9 @@ export async function processMyQueue(
 
   try {
     // Get User Queue
-    const userQueue = await dynamoGet.getQueue(slackUserId);
+    const userQueue = await dynamoGet.getQueue(
+      requiredEnvs.DYNAMO_TABLE_NAME,
+      slackUserId);
     logger.info(`User Queue: ${userQueue}`);
 
     // Format queue from array to string

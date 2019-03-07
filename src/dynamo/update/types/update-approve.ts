@@ -7,10 +7,20 @@ import {
   getSlackLeadsAlt,
   getSlackMembersAlt,
 } from "../../../json/parse";
+import { requiredEnvs } from "../../../required-envs";
 
+/**
+ * @description Update a PR to include an approved user
+ * @param slackUserOwner Slack user who owns the PR
+ * @param slackUserApproving Slack user who approved the PR
+ * @param dynamoTableName Name of the dynamo table
+ * @param event Event sent from the GitHub webhook
+ * @param json JSON config file
+ */
 export async function updateApprove(
   slackUserOwner: SlackUser,
   slackUserApproving: SlackUser,
+  dynamoTableName: string,
   event: any,
   json: any,
 ): Promise<void> {
@@ -24,7 +34,9 @@ export async function updateApprove(
   const htmlUrl = getPRLink(event);
 
   // Get queue from slackUserApproving
-  const dynamoQueue = await dynamoGet.getQueue(slackUserApproving.Slack_Id);
+  const dynamoQueue = await dynamoGet.getQueue(
+    dynamoTableName,
+    slackUserApproving.Slack_Id);
 
   // Get PR from queue by matching PR html url
   const foundPR = dynamoQueue.find((pr: PullRequest) => pr.url === htmlUrl);
@@ -102,13 +114,26 @@ export async function updateApprove(
   }
 
   // Remove this PR from slackUserApproving's queue
-  const dynamoApproverQueue = await dynamoGet.getQueue(slackUserApproving.Slack_Id);
-  await dynamoRemove.removePullRequest(slackUserApproving, dynamoApproverQueue, foundPR);
+  const dynamoApproverQueue = await dynamoGet.getQueue(
+    dynamoTableName,
+    slackUserApproving.Slack_Id);
+
+  await dynamoRemove.removePullRequest(
+    dynamoTableName,
+    slackUserApproving.Slack_Id,
+    dynamoApproverQueue,
+    foundPR);
 
   // Update all queues with members and leads to alert
   const allAlertingUserIds = foundPR.leads_alert.concat(foundPR.members_alert);
   allAlertingUserIds.map(async (alertUserId: string) => {
-    const currentQueue = await dynamoGet.getQueue(alertUserId);
-    await dynamoUpdate.updatePullRequest(alertUserId, currentQueue, foundPR);
+    const currentQueue = await dynamoGet.getQueue(
+      dynamoTableName,
+      alertUserId);
+
+    await dynamoUpdate.updatePullRequest(
+      dynamoTableName,
+      alertUserId, currentQueue,
+      foundPR);
   });
 }

@@ -7,7 +7,16 @@ const logger = newLogger("DynamoUpdate");
 
 export class DynamoUpdate {
 
+  /**
+   * @description Update Pull Request to include latest action.
+   *              i.e. Approved, Commented, Changes requested, etc.
+   * @param dynamoTableName Name of the dynamo table
+   * @param slackUserId Slack User Id
+   * @param currentQueue Slack User's current queue
+   * @param updatedPR Updated PR to add to queue
+   */
   async updatePullRequest(
+    dynamoTableName: string,
     slackUserId: string,
     currentQueue: PullRequest[],
     updatedPR: PullRequest,
@@ -28,7 +37,7 @@ export class DynamoUpdate {
       });
 
       const params = {
-        TableName: requiredEnvs.DYNAMO_TABLE,
+        TableName: dynamoTableName,
         Key: { slackUserId: slackUserId },
         UpdateExpression: `set queue = :d`,
         ExpressionAttributeValues: {

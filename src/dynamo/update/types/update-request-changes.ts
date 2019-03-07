@@ -3,9 +3,19 @@ import { getPRLink } from "../../../github/parse";
 import { SlackUser, PullRequest } from "../../../models";
 import { DateTime } from "luxon";
 
+/**
+ * @description Update PR to include changes requested
+ * @param slackUserOwner Slack user who owns the PR
+ * @param slackUserReqChanges Slack user who requested changes
+ *                            to the PR
+ * @param dynamoTableName Name of the dynamo table
+ * @param event Event from the GitHub webhook
+ * @param json JSON config file
+ */
 export async function updateReqChanges(
   slackUserOwner: SlackUser,
   slackUserReqChanges: SlackUser,
+  dynamoTableName: string,
   event: any,
   json: any,
 ): Promise<void> {
@@ -18,7 +28,10 @@ export async function updateReqChanges(
   const htmlUrl = getPRLink(event);
 
   // Get PR from slackUserReqChanges's queue (matching GitHub URL)
-  const dynamoQueue = await dynamoGet.getQueue(slackUserReqChanges.Slack_Id);
+  const dynamoQueue = await dynamoGet.getQueue(
+    dynamoTableName,
+    slackUserReqChanges.Slack_Id);
+
   const foundPR = dynamoQueue.find((pr: PullRequest) => {
     return pr.url === htmlUrl;
   });
@@ -36,4 +49,6 @@ export async function updateReqChanges(
     time: currentTime,
   };
   foundPR.events.push(newEvent);
+
+  // ADD MORE LOGIC HERE
 }

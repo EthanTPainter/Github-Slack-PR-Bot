@@ -5,8 +5,9 @@ import {
   DynamoReset,
   DynamoAppend,
 } from "../../../../src/dynamo/api";
+import { requiredEnvs } from "../../../../src/required-envs";
 
-describe("DynamoReset", () => {
+describe("Dynamo.Reset", () => {
 
   const dynamoGet = new DynamoGet();
   const dynamoReset = new DynamoReset();
@@ -15,12 +16,16 @@ describe("DynamoReset", () => {
 
   // Reset slackUser's queue before each test
   beforeEach(async () => {
-    await dynamoReset.resetQueue(slackUser.Slack_Id);
+    await dynamoReset.resetQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
   });
 
   // Reset slackUser's queue after all tests complete
   after(async () => {
-    await dynamoReset.resetQueue(slackUser.Slack_Id);
+    await dynamoReset.resetQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
   });
 
   it("Reset a slack user's queue with 1 PR previously", async () => {
@@ -43,13 +48,19 @@ describe("DynamoReset", () => {
         time: "NOW",
       }],
     };
-    await dynamoAppend.appendPullRequest(slackUser.Slack_Id,
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id,
       [],
       newPR);
-    await dynamoReset.resetQueue(slackUser.Slack_Id);
+    await dynamoReset.resetQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
 
     const expectedQueue: any = [];
-    const retrievedQueue = await dynamoGet.getQueue(slackUser.Slack_Id);
+    const retrievedQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
 
     expect(expectedQueue).deep.equal(retrievedQueue);
   });

@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
 import { DynamoRemove } from "../../../../src/dynamo/api";
-import { DocumentClient } from "aws-sdk/clients/dynamodb";
+import { requiredEnvs } from "src/required-envs";
 
 describe("removePullRequest", () => {
 
@@ -52,7 +52,11 @@ describe("removePullRequest", () => {
     sinon.stub(dynamo, "removePullRequest")
       .resolves(expected);
 
-    const result = await dynamo.removePullRequest(slackUser, currentQueue, removingPullRequest);
+    const result = await dynamo.removePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id,
+      currentQueue,
+      removingPullRequest);
 
     expect(result).deep.equal(expected);
   });

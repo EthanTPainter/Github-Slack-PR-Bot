@@ -1,6 +1,7 @@
 import * as sinon from "sinon";
 import { expect } from "chai";
 import { DynamoReset } from "../../../../src/dynamo/api";
+import { requiredEnvs } from "src/required-envs";
 
 describe("putPullRequest", () => {
 
@@ -12,7 +13,9 @@ describe("putPullRequest", () => {
     sinon.stub(dynamo, "resetQueue")
       .resolves(expected);
 
-    const result = await dynamo.resetQueue(slackUser.Slack_Id);
+    const result = await dynamo.resetQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
 
     expect(result).equal(expected);
   });

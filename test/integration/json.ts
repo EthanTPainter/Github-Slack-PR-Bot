@@ -45,10 +45,6 @@ export const json = {
               Slack_Name: "SlackMemberName3",
               Slack_Id: "<SlackMemberId3",
             },
-            GitHubMember4: {
-              Slack_Name: "SlackMemberName4",
-              Slack_Id: "<SlackMemberId4>",
-            },
           },
         },
       },

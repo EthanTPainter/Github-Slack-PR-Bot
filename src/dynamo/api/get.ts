@@ -8,11 +8,13 @@ const logger = newLogger("DynamoGetPullRequest");
 export class DynamoGet {
 
   /**
-   * @description get PullRequest from DyanmoDB table
-   * @param slackUser Slack user
+   * @description Get queue given slack user id
+   * @param dynamoTableName Name of the dynamo table
+   * @param slackUserId Slack user Id
    * @returns Result of dynamoDB Get request
    */
   async getQueue(
+    dynamoTableName: string,
     slackUserId: string,
   ): Promise<PullRequest[]> {
 
@@ -27,7 +29,7 @@ export class DynamoGet {
 
       // Provide base params as input
       const params = {
-        TableName: requiredEnvs.DYNAMO_TABLE,
+        TableName: dynamoTableName,
         Key: { slackUserId: slackUserId },
         AttributesToGet: [
           "queue",

@@ -2,6 +2,7 @@ import * as sinon from "sinon";
 import { expect } from "chai";
 import { DynamoUpdate } from "../../../../src/dynamo/api";
 import { SlackUser } from "../../../../src/models";
+import { requiredEnvs } from "src/required-envs";
 
 describe("updatePullRequest", () => {
 
@@ -44,7 +45,11 @@ describe("updatePullRequest", () => {
     sinon.stub(dynamo, "updatePullRequest")
       .resolves(updatedPR);
 
-    const result = await dynamo.updatePullRequest(slackUser.Slack_Id, currentQueue, updatedPR);
+    const result = await dynamo.updatePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id,
+      currentQueue,
+      updatedPR);
 
     expect(result).equal(updatedPR);
   });

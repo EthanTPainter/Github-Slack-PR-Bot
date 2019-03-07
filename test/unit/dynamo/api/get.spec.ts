@@ -3,6 +3,7 @@ import * as sinon from "sinon";
 
 import { DynamoGet } from "../../../../src/dynamo/api";
 import { PullRequest } from "../../../../src/models";
+import { requiredEnvs } from "../../../../src/required-envs";
 
 describe("getPullRequest", () => {
 
@@ -36,7 +37,9 @@ describe("getPullRequest", () => {
     sinon.stub(dynamo, "getQueue")
       .resolves(expected);
 
-    const result = await dynamo.getQueue(slackUser.Slack_Id);
+    const result = await dynamo.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
 
     expect(result).deep.equal(expected);
   });

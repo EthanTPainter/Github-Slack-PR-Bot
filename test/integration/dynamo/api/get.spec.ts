@@ -6,8 +6,9 @@ import {
   DynamoGet,
   DynamoAppend,
 } from "../../../../src/dynamo/api";
+import { requiredEnvs } from "../../../../src/required-envs";
 
-describe("DynamoGet", () => {
+describe("Dynamo.Get", () => {
 
   const dynamoReset = new DynamoReset();
   const dynamoGet = new DynamoGet();
@@ -16,18 +17,24 @@ describe("DynamoGet", () => {
 
   // Reset slackUser's queue before each test
   beforeEach(async () => {
-    await dynamoReset.resetQueue(slackUser.Slack_Id);
+    await dynamoReset.resetQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
   });
 
   // Reset slackUser's queue after all tests complete
   after(async () => {
-    await dynamoReset.resetQueue(slackUser.Slack_Id);
+    await dynamoReset.resetQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
   });
 
   it("should get an empty queue from slack user", async () => {
     const currentQueue: any = [];
 
-    const retrievedQueue = await dynamoGet.getQueue(slackUser.Slack_Id);
+    const retrievedQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
 
     expect(currentQueue).deep.equal(retrievedQueue);
   });
@@ -53,10 +60,14 @@ describe("DynamoGet", () => {
         time: currentTime,
       }],
     };
-    await dynamoAppend.appendPullRequest(slackUser.Slack_Id, [], newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id, [], newPR);
 
     const expectedQueue = [newPR];
-    const retrievedQueue = await dynamoGet.getQueue(slackUser.Slack_Id);
+    const retrievedQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
 
     expect(expectedQueue).deep.equal(retrievedQueue);
   });
@@ -100,12 +111,16 @@ describe("DynamoGet", () => {
         time: currentTime,
       }],
     }];
-    await dynamoAppend.appendPullRequest(slackUser.Slack_Id,
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id,
       [currentQueue[0]],
       currentQueue[1]);
 
     const expected = currentQueue;
-    const retrievedQueue = await dynamoGet.getQueue(slackUser.Slack_Id);
+    const retrievedQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackUser.Slack_Id);
 
     expect(expected).deep.equal(retrievedQueue);
   });

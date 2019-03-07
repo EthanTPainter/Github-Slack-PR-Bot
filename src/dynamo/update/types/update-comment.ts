@@ -9,12 +9,14 @@ import { getSlackGroupAlt } from "../../../json/parse";
  *              action to the PR
  * @param slackUserOwner Slack user who owns the queue
  * @param slackUserCommenting Slack user commenting
+ * @param dynamoTableName Name of the dynamo table
  * @param event full event from GitHub webhook
  * @param json JSON config file
  */
 export async function updateComment(
   slackUserOwner: SlackUser,
   slackUserCommenting: SlackUser,
+  dynamoTableName: string,
   event: any,
   json: any,
 ): Promise<void> {
@@ -27,7 +29,10 @@ export async function updateComment(
   const htmlUrl = getPRLink(event);
 
   // Get PR from slackUserOwner's queue (matching GitHub URL)
-  const dynamoQueue = await dynamoGet.getQueue(slackUserCommenting.Slack_Id);
+  const dynamoQueue = await dynamoGet.getQueue(
+    dynamoTableName,
+    slackUserCommenting.Slack_Id);
+
   const foundPR = dynamoQueue.find((pr: PullRequest) => {
     return pr.url === htmlUrl;
   });
@@ -49,12 +54,19 @@ export async function updateComment(
   // For all members and leads to alert, update each PR from each user queue
   const allAlertingUserIds = foundPR.leads_alert.concat(foundPR.members_alert);
   allAlertingUserIds.map(async (alertUserId: string) => {
-    const currentQueue = await dynamoGet.getQueue(alertUserId);
-    await dynamoUpdate.updatePullRequest(alertUserId, currentQueue, foundPR);
+    const currentQueue = await dynamoGet.getQueue(
+      dynamoTableName,
+      alertUserId);
+
+    await dynamoUpdate.updatePullRequest(
+      dynamoTableName,
+      alertUserId,
+      currentQueue,
+      foundPR);
   });
 
   // Update action on team queue
   const ownerTeam = getSlackGroupAlt(slackUserOwner.Slack_Id, json);
-  const teamQueue = await dynamoGet.getQueue(ownerTeam.Slack_Id);
-  await dynamoUpdate.updatePullRequest(ownerTeam.Slack_Id, teamQueue, foundPR);
+  const teamQueue = await dynamoGet.getQueue(dynamoTableName, ownerTeam.Slack_Id);
+  await dynamoUpdate.updatePullRequest(dynamoTableName, ownerTeam.Slack_Id, teamQueue, foundPR);
 }

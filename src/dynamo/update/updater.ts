@@ -4,6 +4,7 @@ import { getSlackUser, getSlackGroup } from "../../json/parse";
 import { updateClose, updateMerge, updateApprove, updateReqChanges } from "./types";
 import { getSender } from "../../github/parse";
 import { updateComment } from "./types/update-comment";
+import { requiredEnvs } from "src/required-envs";
 
 const logger = newLogger("UpdateDynamo");
 
@@ -30,13 +31,13 @@ export async function updateDynamo(
 
     case "opened": {
       logger.info("Update DynamoDB for an Opened PR");
-      await updateOpen(slackUserOwner, slackGroupOwner, event, json);
+      await updateOpen(slackUserOwner, slackGroupOwner, requiredEnvs.DYNAMO_TABLE_NAME, event, json);
       break;
     }
 
     case "reopened": {
       logger.info("Update DynamoDB for a Reopened PR");
-      await updateOpen(slackUserOwner, slackGroupOwner, event, json);
+      await updateOpen(slackUserOwner, slackGroupOwner, requiredEnvs.DYNAMO_TABLE_NAME, event, json);
       break;
     }
 
@@ -47,11 +48,11 @@ export async function updateDynamo(
 
       if (decider) {
         logger.info("Update DynamoDB for a Merged PR");
-        await updateMerge(slackUserOwner, slackUserSender, event, json);
+        await updateMerge(slackUserOwner, slackUserSender, requiredEnvs.DYNAMO_TABLE_NAME, event, json);
       }
       else {
         logger.info("Update DynamoDB for a Closed PR");
-        await updateClose(slackUserOwner, slackUserSender, event, json);
+        await updateClose(slackUserOwner, slackUserSender, requiredEnvs.DYNAMO_TABLE_NAME, event, json);
       }
       break;
     }
@@ -63,15 +64,15 @@ export async function updateDynamo(
 
       if (decider === "approved") {
         logger.info("Update DynamoDB for an Approved PR");
-        await updateApprove(slackUserOwner, slackUserSender, event, json);
+        await updateApprove(slackUserOwner, slackUserSender, requiredEnvs.DYNAMO_TABLE_NAME, event, json);
       }
       else if (decider === "changes_requested") {
         logger.info("Update DynamoDB for a changes requested PR");
-        await updateReqChanges(slackUserOwner, slackUserSender, event, json);
+        await updateReqChanges(slackUserOwner, slackUserSender, requiredEnvs.DYNAMO_TABLE_NAME, event, json);
       }
       else if (decider === "commented") {
         logger.info("Update DynamoDB for a Commented PR");
-        await updateComment(slackUserOwner, slackUserSender, event, json);
+        await updateComment(slackUserOwner, slackUserSender, requiredEnvs.DYNAMO_TABLE_NAME, event, json);
       }
       else {
         throw new Error(`Unsupported event.review.state: ${decider}`);

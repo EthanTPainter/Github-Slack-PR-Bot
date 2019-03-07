@@ -13,12 +13,14 @@ const logger = newLogger("Dynamo.UpdateOpen");
  *              and add to all queues necessary.
  * @param slackUser Slack User
  * @param slackTeam Slack Team
+ * @param dynamoTableName Name of the dynamo table
  * @param event Event from GitHub
  * @param json JSON config file
  */
 export async function updateOpen(
   slackUser: SlackUser,
   slackTeam: SlackUser,
+  dynamoTableName: string,
   event: any,
   json: any,
 ): Promise<DynamoDB.DocumentClient.UpdateItemOutput> {
@@ -55,14 +57,25 @@ export async function updateOpen(
   const dynamoUpdate = new DynamoAppend();
 
   const updateUserQueues = slackUserList.map(async (user) => {
-    const currentQueue = await dynamoGet.getQueue(user);
-    await dynamoUpdate.appendPullRequest(user, currentQueue, newPullRequest);
+    const currentQueue = await dynamoGet.getQueue(dynamoTableName, user);
+    await dynamoUpdate.appendPullRequest(
+      dynamoTableName,
+      user,
+      currentQueue,
+      newPullRequest);
   });
   await Promise.all(updateUserQueues);
 
   // Append new PR to team queue
-  const currentTeamQueue = await dynamoGet.getQueue(slackTeam.Slack_Id);
-  const teamUpdate = await dynamoUpdate.appendPullRequest(slackTeam.Slack_Id, currentTeamQueue, newPullRequest);
+  const currentTeamQueue = await dynamoGet.getQueue(
+    dynamoTableName,
+    slackTeam.Slack_Id);
+
+  const teamUpdate = await dynamoUpdate.appendPullRequest(
+    dynamoTableName,
+    slackTeam.Slack_Id,
+    currentTeamQueue,
+    newPullRequest);
 
   return teamUpdate;
 }
