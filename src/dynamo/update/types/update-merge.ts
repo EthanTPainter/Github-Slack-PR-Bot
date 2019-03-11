@@ -23,29 +23,43 @@ export async function updateMerge(
   // Setup
   const dynamoGet = new DynamoGet();
   const dynamoRemove = new DynamoRemove();
+  let foundPR: any;
 
   // Get GitHub PR Url
   const htmlUrl = getPRLink(event);
 
-  // Get PR from slackUserMerging's queue (matching GitHub URL)
-  const dynamoQueue = await dynamoGet.getQueue(dynamoTableName, slackUserMerging.Slack_Id);
-  const foundPR = dynamoQueue.find((pr: PullRequest) => {
-    return pr.url === htmlUrl;
-  });
-  if (foundPR === undefined) {
-    throw new Error(`GitHub PR Url: ${htmlUrl} not found in any PRs in ${slackUserMerging.Slack_Name}'s queue`);
+  // Team queue
+  const ownerTeam = getSlackGroupAlt(slackUserOwner.Slack_Id, json);
+  const teamQueue = await dynamoGet.getQueue(dynamoTableName, ownerTeam.Slack_Id);
+
+  // If SlackUserOwner is the SlackUserClosing, don't bother checking queue
+  if (slackUserOwner.Slack_Id !== slackUserMerging.Slack_Id) {
+    const dynamoUserQueue = await dynamoGet.getQueue(dynamoTableName, slackUserMerging.Slack_Id);
+    foundPR = dynamoUserQueue.find((pr: PullRequest) => pr.url === htmlUrl);
+    if (foundPR === undefined) {
+      foundPR = teamQueue.find((pr) => pr.url === htmlUrl);
+      if (foundPR === undefined) {
+        throw new Error(`GitHub PR Url: ${htmlUrl} not found in any PRs in ${slackUserMerging.Slack_Name}'s queue`);
+      }
+    }
   }
+  else {
+    // Not sure which queues have the PR? Use team queue as reference
+    foundPR = teamQueue.find((pr) => pr.url === htmlUrl);
+    if (foundPR === undefined) {
+      throw new Error(`GitHub PR Url: ${htmlUrl} not found in any PRs in ${ownerTeam.Slack_Name}'s queue`);
+    }
+  }
+
+  // Remove PR from owner's team queue
+  await dynamoRemove.removePullRequest(dynamoTableName, ownerTeam.Slack_Id, teamQueue, foundPR);
 
   // Remove PR from all members and leads to alert
   const allAlertingUserIds = foundPR.leads_alert.concat(foundPR.members_alert);
-  allAlertingUserIds.map(async (alertUserId: string) => {
+  await Promise.all(allAlertingUserIds.map(async (alertUserId: string) => {
     const currentQueue = await dynamoGet.getQueue(dynamoTableName, alertUserId);
     const alertSlackUser = getSlackUserAlt(alertUserId, json);
     await dynamoRemove.removePullRequest(dynamoTableName, alertSlackUser.Slack_Id, currentQueue, foundPR);
-  });
+  }));
 
-  // Remove PR from owner's team queue
-  const ownerTeam = getSlackGroupAlt(slackUserOwner.Slack_Id, json);
-  const teamQueue = await dynamoGet.getQueue(dynamoTableName, ownerTeam.Slack_Id);
-  await dynamoRemove.removePullRequest(dynamoTableName, ownerTeam.Slack_Id, teamQueue, foundPR);
 }

@@ -2,7 +2,7 @@ import * as sinon from "sinon";
 import { expect } from "chai";
 import { DynamoUpdate } from "../../../../src/dynamo/api";
 import { SlackUser } from "../../../../src/models";
-import { requiredEnvs } from "src/required-envs";
+import { requiredEnvs } from "../../../../src/required-envs";
 
 describe("updatePullRequest", () => {
 

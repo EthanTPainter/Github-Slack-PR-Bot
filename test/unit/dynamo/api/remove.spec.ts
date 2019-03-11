@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
 import { DynamoRemove } from "../../../../src/dynamo/api";
-import { requiredEnvs } from "src/required-envs";
+import { requiredEnvs } from "../../../../src/required-envs";
 
 describe("removePullRequest", () => {
 

@@ -21,6 +21,7 @@ describe("formatNewPullRequest", () => {
         D: {
           Ds: {
             Options: {
+              Member_Before_Lead: true,
               Num_Required_Member_Approvals: 1,
               Num_Required_Lead_Approvals: 1,
             },
@@ -56,7 +57,7 @@ describe("formatNewPullRequest", () => {
       owner: slackUser,
       title: event.pull_request.title,
       url: event.pull_request.html_url,
-      leads_alert: ["<@1111>"],
+      leads_alert: [],
       members_alert: ["<@2222>"],
       member_complete: false,
       members_approving: [],
@@ -85,7 +86,7 @@ describe("formatNewPullRequest", () => {
       owner: slackUser,
       title: event.pull_request.title,
       url: event.pull_request.html_url,
-      leads_alert: ["<@3018485>", "<@1111>"],
+      leads_alert: [],
       members_alert: [],
       member_complete: false,
       members_approving: [],

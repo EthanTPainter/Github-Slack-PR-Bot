@@ -27,7 +27,7 @@ export class DynamoRemove {
     });
 
     try {
-      logger.info(`Removing an PullRequest from ${slackUserId}'s queue`);
+      logger.info(`Removing a PR from User ID: ${slackUserId}'s queue`);
 
       // Setup/Init DocumentClient for Dynamo
       const dynamoDB = new DynamoDB.DocumentClient({

@@ -50,9 +50,15 @@ export function formatNewPullRequest(
   }
 
   // If required lead approvals is 0, avoid alerting leads
+  // If member before lead option is true && still need member approvals, leadIds is []
   // Otherwise make a list of all possible leads (exclude owner if also a lead)
   if (numReqLead === 0) {
     leadComplete = true;
+    leadIds = [];
+  }
+  else if (teamOptions.Member_Before_Lead === true
+    && memberComplete === false) {
+    leadComplete = false;
     leadIds = [];
   }
   else {

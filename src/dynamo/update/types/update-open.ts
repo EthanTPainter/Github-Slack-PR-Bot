@@ -14,7 +14,7 @@ const logger = newLogger("Dynamo.UpdateOpen");
  * @param slackUser Slack User
  * @param slackTeam Slack Team
  * @param dynamoTableName Name of the dynamo table
- * @param event Event from GitHub
+ * @param event Event from GitHub webhook
  * @param json JSON config file
  */
 export async function updateOpen(
@@ -33,7 +33,12 @@ export async function updateOpen(
 
   // Create list of slack users to update which user queues in Dynamo
   const slackUserList: string[] = [];
-  if (teamOptions.Member_Before_Lead === true) {
+  if (teamOptions.Num_Required_Lead_Approvals === 0
+    && teamOptions.Num_Required_Member_Approvals === 0) {
+    // Keep slackUserList empty -- Don't alert anyone
+  }
+  else if (teamOptions.Member_Before_Lead === true
+    && teamOptions.Num_Required_Member_Approvals > 0) {
     const memberIds = newPullRequest.members_alert;
     memberIds.map((memberId: string) => {
       slackUserList.push(memberId);

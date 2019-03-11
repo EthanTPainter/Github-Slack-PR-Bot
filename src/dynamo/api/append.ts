@@ -22,7 +22,7 @@ export class DynamoAppend {
   ): Promise<DynamoDB.DocumentClient.UpdateItemOutput> {
 
     try {
-      logger.info(`Appending new PR to User: ${slackUserId}'s queue`);
+      logger.info(`Appending new PR to User ID: ${slackUserId}'s queue`);
 
       // Setup/Init DocumentClient for DynamoDB
       const dynamoDB = new DynamoDB.DocumentClient({

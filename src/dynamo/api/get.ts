@@ -19,7 +19,7 @@ export class DynamoGet {
   ): Promise<PullRequest[]> {
 
     try {
-      logger.info(`Getting Queue for User: ${slackUserId}`);
+      logger.info(`Getting Queue for User ID: ${slackUserId}`);
 
       // Setup/Init DocumentClient for DynamoDB
       const dynamoDB = new DynamoDB.DocumentClient({

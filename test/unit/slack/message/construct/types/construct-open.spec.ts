@@ -26,7 +26,10 @@ describe("constructOpen", () => {
             Num_Required_Member_Approvals: 1,
             Num_Required_Lead_Approvals: 1,
           },
-          Slack_Group: "Group_Slack_Name",
+          Slack_Group: {
+            Slack_Name: "Group_Slack_Name",
+            Slack_Id: "<@44444>",
+          },
           Users: {
             Leads: {
               andrew: {

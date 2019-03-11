@@ -1,8 +1,7 @@
 import { DynamoAppend } from "../../../../src/dynamo/api";
-import { PullRequest } from "../../../../src/models";
 import { expect } from "chai";
 import * as sinon from "sinon";
-import { requiredEnvs } from "src/required-envs";
+import { requiredEnvs } from "../../../../src/required-envs";
 
 describe("appendPullRequest", () => {
 

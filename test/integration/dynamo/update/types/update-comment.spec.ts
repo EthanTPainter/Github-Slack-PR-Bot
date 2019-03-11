@@ -1,0 +1,245 @@
+import { expect } from "chai";
+
+import { json } from "../../../json";
+import { requiredEnvs } from "../../../../../src/required-envs";
+import {
+  DynamoGet,
+  DynamoReset,
+  DynamoUpdate,
+} from "../../../../../src/dynamo/api";
+import { updateComment } from "../../../../../src/dynamo/update";
+
+describe("Update.DynamoComment", () => {
+
+  const dynamoGet = new DynamoGet();
+  const dynamoReset = new DynamoReset();
+  const dynamoUpdate = new DynamoUpdate();
+
+  const slackTeam = json.Departments.Devs.DevTeam1.Slack_Team;
+  const slackLead1 = json.Departments.Devs.DevTeam1.Users.Leads.GitHubLead1;
+  const slackLead2 = json.Departments.Devs.DevTeam1.Users.Leads.GitHubLead2;
+  const slackLead3 = json.Departments.Devs.DevTeam1.Users.Leads.GitHubLead3;
+  const slackMember1 = json.Departments.Devs.DevTeam1.Users.Members.GitHubMember1;
+  const slackMember2 = json.Departments.Devs.DevTeam1.Users.Members.GitHubMember2;
+  const slackMember3 = json.Departments.Devs.DevTeam1.Users.Members.GitHubMember3;
+
+  // Reset queue for all slack users before each test
+  beforeEach(async () => {
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackTeam.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackLead1.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackLead2.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackLead3.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember1.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember2.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember3.Slack_Id);
+  });
+
+  // Reset each queue after all tests complete
+  after(async () => {
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackTeam.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackLead1.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackLead2.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackLead3.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember1.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember2.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember3.Slack_Id);
+  });
+
+  it("should update a PR with a commented action from owner -- alert members before leads", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
+    const openedPR = {
+      owner: slackMember1,
+      title: "ORIGINAL TITLE",
+      url: "www.github.com/coveros",
+      members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      leads_alert: [],
+      leads_approving: [],
+      lead_complete: false,
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        title: "NEW TITLE",
+        html_url: "www.github.com/coveros",
+      },
+    };
+
+    await dynamoUpdate.updatePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      openedPR);
+    await dynamoUpdate.updatePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      openedPR);
+    await dynamoUpdate.updatePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      openedPR);
+
+    await updateComment(
+      slackMember1,
+      slackMember1,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Expect team queue to have both events
+    expect(teamQueue[0].events[0].action).equal(openedPR.events[0].action);
+    expect(teamQueue[0].events[1].action).equal("COMMENTED");
+
+    // Expect lead queues to be empty (not alerted)
+    expect(lead1Queue).deep.equal([]);
+    expect(lead2Queue).deep.equal([]);
+    expect(lead3Queue).deep.equal([]);
+
+    // Expect member 1 queue to be empty (PR owner)
+    expect(member1Queue).deep.equal([]);
+
+    // Expect members 2 & 3 queues to have both events
+    expect(member2Queue[0].events[0].action).equal(openedPR.events[0].action);
+    expect(member2Queue[0].events[1].action).equal("COMMENTED");
+    expect(member3Queue[0].events[0].action).equal(openedPR.events[0].action);
+    expect(member3Queue[0].events[1].action).equal("COMMENTED");
+  });
+
+  it("should update a PR with a commented action from owner -- alert members & leads", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
+    const openedPR = {
+      owner: slackMember1,
+      title: "ORIGINAL TITLE",
+      url: "www.github.com/coveros",
+      members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      leads_alert: [slackLead1.Slack_Id,
+      slackLead2.Slack_Id,
+      slackLead3.Slack_Id],
+      leads_approving: [],
+      lead_complete: false,
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        title: "NEW TITLE",
+        html_url: "www.github.com/coveros",
+      },
+    };
+
+    await dynamoUpdate.updatePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      openedPR);
+    await dynamoUpdate.updatePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      openedPR);
+    await dynamoUpdate.updatePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      openedPR);
+    await dynamoUpdate.updatePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id,
+      [],
+      openedPR);
+    await dynamoUpdate.updatePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id,
+      [],
+      openedPR);
+    await dynamoUpdate.updatePullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id,
+      [],
+      openedPR);
+
+    await updateComment(
+      slackMember1,
+      slackMember1,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Expect team queue to have both events
+    expect(teamQueue[0].events[0].action).equal(openedPR.events[0].action);
+    expect(teamQueue[0].events[1].action).equal("COMMENTED");
+
+    // Expect lead queues to have both events
+    expect(lead1Queue[0].events[0].action).equal(openedPR.events[0].action);
+    expect(lead1Queue[0].events[1].action).equal("COMMENTED");
+    expect(lead2Queue[0].events[0].action).equal(openedPR.events[0].action);
+    expect(lead2Queue[0].events[1].action).equal("COMMENTED");
+    expect(lead3Queue[0].events[0].action).equal(openedPR.events[0].action);
+    expect(lead3Queue[0].events[1].action).equal("COMMENTED");
+
+    // Expect members 2 & 3 queues to have both events
+    expect(member2Queue[0].events[0].action).equal(openedPR.events[0].action);
+    expect(member2Queue[0].events[1].action).equal("COMMENTED");
+    expect(member3Queue[0].events[0].action).equal(openedPR.events[0].action);
+    expect(member3Queue[0].events[1].action).equal("COMMENTED");
+  });
+
+});

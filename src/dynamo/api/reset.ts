@@ -19,7 +19,7 @@ export class DynamoReset {
   ): Promise<DynamoDB.DocumentClient.UpdateItemOutput> {
 
     try {
-      logger.info(`Reseting queue for User: ${slackUserId}`);
+      logger.info(`Resetting queue for User ID: ${slackUserId}`);
 
       // Construct empty PullRequest
       const emptyPullRequest: PullRequest[] = [];

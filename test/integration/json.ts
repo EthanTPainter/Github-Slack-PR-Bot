@@ -11,9 +11,9 @@ export const json = {
           Num_Required_Lead_Approvals: 1,
           Num_Required_Member_Approvals: 1,
           Disable_Dynamo: false,
-          Dynamo_Member_Before_Lead: true,
+          Member_Before_Lead: true,
         },
-        Slack_Group: {
+        Slack_Team: {
           Slack_Name: "SlackGroupName",
           Slack_Id: "<SlackGroupId>",
         },
@@ -43,7 +43,7 @@ export const json = {
             },
             GitHubMember3: {
               Slack_Name: "SlackMemberName3",
-              Slack_Id: "<SlackMemberId3",
+              Slack_Id: "<SlackMemberId3>",
             },
           },
         },

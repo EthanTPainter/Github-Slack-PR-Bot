@@ -11,7 +11,7 @@ export const json = {
           Num_Required_Lead_Approvals: 1,
           Num_Required_Member_Approvals: 1,
           Disable_Dynamo: false,
-          Dynamo_Member_Before_Lead: true,
+          Member_Before_Lead: true,
         },
         Slack_Group: {
           Slack_Name: "Group_Slack_Name",
@@ -51,7 +51,7 @@ export const json = {
           X_Mark_Text: "base",
           Num_Required_Lead_Approvals: 1,
           Num_Required_Member_Approvals: 1,
-          Dynamo_Member_Before_Lead: true,
+          Member_Before_Lead: true,
         },
         Slack_Group: "Group Slack Name",
         Users: {

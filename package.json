@@ -22,7 +22,7 @@
     "lint": "npm run lint:src && npm run lint:test",
     "start": "sls offline start --stage dev --port 3000",
     "test:unit": "mocha -r ts-node/register test/unit/**/*.spec.ts",
-    "test:integration": "mocha -r ts-node/register test/integration/**/*.spec.ts",
+    "test:integration": "mocha -r ts-node/register test/integration/**/*.spec.ts --timeout 10000",
     "test:watch": "npm run test:unit -- --watch",
     "test": "npm run test:unit",
     "release": "standard-version"

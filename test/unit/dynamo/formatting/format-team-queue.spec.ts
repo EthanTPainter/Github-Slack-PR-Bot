@@ -21,7 +21,7 @@ describe("formatTeamQueue", () => {
               Num_Required_Member_Approvals: 1,
               Num_Required_Lead_Approvals: 1,
               Disable_Dynamo: true,
-              Dynamo_Member_Before_Lead: false,
+              Member_Before_Lead: false,
             },
             Users: {
               Leads: {

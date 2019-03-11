@@ -28,7 +28,7 @@ export class DynamoUpdate {
     newQueue.push(updatedPR);
 
     try {
-      logger.info(`Updating PR with url: ${updatedPR.url} for user: ${slackUserId}`);
+      logger.info(`Updating PR with url: ${updatedPR.url} for User ID: ${slackUserId}`);
 
       // Setup
       const dynamoDB = new DynamoDB.DocumentClient({

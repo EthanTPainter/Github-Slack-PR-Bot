@@ -4,7 +4,7 @@ import { getSlackUser, getSlackGroup } from "../../json/parse";
 import { updateClose, updateMerge, updateApprove, updateReqChanges } from "./types";
 import { getSender } from "../../github/parse";
 import { updateComment } from "./types/update-comment";
-import { requiredEnvs } from "src/required-envs";
+import { requiredEnvs } from "../../required-envs";
 
 const logger = newLogger("UpdateDynamo");
 
