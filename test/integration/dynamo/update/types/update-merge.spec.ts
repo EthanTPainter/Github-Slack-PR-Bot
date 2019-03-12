@@ -10,7 +10,7 @@ describe("Update.DynamoMerge", () => {
   const dynamoGet = new DynamoGet();
   const dynamoUpdate = new DynamoUpdate();
 
-  const slackTeam = json.Departments.Devs.DevTeam1.Slack_Team;
+  const slackTeam = json.Departments.Devs.DevTeam1.Slack_Group;
   const slackLead1 = json.Departments.Devs.DevTeam1.Users.Leads.GitHubLead1;
   const slackLead2 = json.Departments.Devs.DevTeam1.Users.Leads.GitHubLead2;
   const slackLead3 = json.Departments.Devs.DevTeam1.Users.Leads.GitHubLead3;

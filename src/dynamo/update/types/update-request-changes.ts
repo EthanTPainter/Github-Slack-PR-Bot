@@ -1,7 +1,8 @@
-import { DynamoGet, DynamoAppend } from "../../api";
+import { DynamoGet, DynamoAppend, DynamoUpdate } from "../../api";
 import { getPRLink } from "../../../github/parse";
 import { SlackUser, PullRequest } from "../../../models";
 import { DateTime } from "luxon";
+import { getSlackGroupAlt, getTeamOptionsAlt } from "../../../json/parse";
 
 /**
  * @description Update PR to include changes requested
@@ -23,6 +24,8 @@ export async function updateReqChanges(
   // Setup
   const dynamoGet = new DynamoGet();
   const dynamoAppend = new DynamoAppend();
+  const dynamoUpdate = new DynamoUpdate();
+  let foundPR: any;
 
   // GitHub PR Url
   const htmlUrl = getPRLink(event);
@@ -32,11 +35,18 @@ export async function updateReqChanges(
     dynamoTableName,
     slackUserReqChanges.Slack_Id);
 
-  const foundPR = dynamoQueue.find((pr: PullRequest) => {
-    return pr.url === htmlUrl;
-  });
+  // Team queue
+  const ownerTeam = getSlackGroupAlt(slackUserOwner.Slack_Id, json);
+  const teamQueue = await dynamoGet.getQueue(dynamoTableName, ownerTeam.Slack_Id);
+
+  // Get PR from queue by matching PR html url
+  foundPR = dynamoQueue.find((pr: PullRequest) => pr.url === htmlUrl);
   if (foundPR === undefined) {
-    throw new Error(`GitHub PR Url: ${htmlUrl} not found in any PRs in ${slackUserReqChanges.Slack_Name}'s queue`);
+    // If not found in user's queue, check team queue
+    foundPR = teamQueue.find((pr) => pr.url === htmlUrl);
+    if (foundPR === undefined) {
+      throw new Error(`GitHub PR Url: ${htmlUrl} not found in any PRs in ${slackUserReqChanges.Slack_Name}'s queue`);
+    }
   }
 
   // Make timestamp for last updated time
@@ -50,5 +60,11 @@ export async function updateReqChanges(
   };
   foundPR.events.push(newEvent);
 
-  // ADD MORE LOGIC HERE
+  // Get team options for # of required approvals
+  const teamOptions = getTeamOptionsAlt(slackUserOwner, json);
+  const reqLeadApprovals = teamOptions.Num_Required_Lead_Approvals;
+  const reqMemberApprovals = teamOptions.Num_Required_Member_Approvals;
+
+  // Determine if the slack user requesting changes is a member or lead
+  // If slackUserReqChanges
 }

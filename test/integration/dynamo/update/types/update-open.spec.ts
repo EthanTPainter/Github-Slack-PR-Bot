@@ -12,7 +12,7 @@ describe("Dynamo.UpdateOpen", () => {
   const dynamoGet = new DynamoGet();
   const dynamoReset = new DynamoReset();
 
-  const slackTeam = json.Departments.Devs.DevTeam1.Slack_Team;
+  const slackTeam = json.Departments.Devs.DevTeam1.Slack_Group;
   const slackLead1 = json.Departments.Devs.DevTeam1.Users.Leads.GitHubLead1;
   const slackLead2 = json.Departments.Devs.DevTeam1.Users.Leads.GitHubLead2;
   const slackLead3 = json.Departments.Devs.DevTeam1.Users.Leads.GitHubLead3;
@@ -43,6 +43,7 @@ describe("Dynamo.UpdateOpen", () => {
   });
 
   it("should update a queue with an opened PR -- owned by a member & alert members before leads", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
     const event = {
       pull_request: {
         title: "NEW PR TITLE",

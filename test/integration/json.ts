@@ -13,7 +13,7 @@ export const json = {
           Disable_Dynamo: false,
           Member_Before_Lead: true,
         },
-        Slack_Team: {
+        Slack_Group: {
           Slack_Name: "SlackGroupName",
           Slack_Id: "<SlackGroupId>",
         },
