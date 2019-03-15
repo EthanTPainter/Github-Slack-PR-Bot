@@ -54,6 +54,8 @@ describe("Update.DynamoMerge", () => {
       slackLead3.Slack_Id],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -133,6 +135,8 @@ describe("Update.DynamoMerge", () => {
       leads_alert: [slackLead2.Slack_Id],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -151,6 +155,8 @@ describe("Update.DynamoMerge", () => {
         slackLead2.Slack_Id],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",

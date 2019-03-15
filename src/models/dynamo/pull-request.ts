@@ -8,8 +8,10 @@ export class PullRequest {
   members_alert: string[];
   leads_alert: string[];
   member_complete: boolean;
-  members_approving: string[];
   lead_complete: boolean;
+  members_approving: string[];
   leads_approving: string[];
+  members_req_changes: string[];
+  leads_req_changes: string[];
   events: Event[];
 }

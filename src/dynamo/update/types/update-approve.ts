@@ -8,6 +8,8 @@ import {
   getSlackMembersAlt,
   getSlackGroupAlt,
 } from "../../../json/parse";
+import { updateLeadAlerts } from "./helpers/update-lead-alerts";
+import { updateMemberAlerts } from "./helpers/update-member-alerts";
 
 /**
  * @description Update a PR to include an approved user
@@ -43,13 +45,14 @@ export async function updateApprove(
   const ownerTeam = getSlackGroupAlt(slackUserOwner.Slack_Id, json);
   const teamQueue = await dynamoGet.getQueue(dynamoTableName, ownerTeam.Slack_Id);
 
-  // Get PR from queue by matching PR html url
+  // Check slackUserApproving's queue
   foundPR = dynamoQueue.find((pr: PullRequest) => pr.url === htmlUrl);
   if (foundPR === undefined) {
-    // If not found in User's queue, check team queue
+    // If not found in slackUserApproving's queue, check team queue
     foundPR = teamQueue.find((pr) => pr.url === htmlUrl);
     if (foundPR === undefined) {
-      throw new Error(`PR with url: ${htmlUrl} not found in ${slackUserApproving.Slack_Name}'s queue`);
+      throw new Error(`GitHub PR Url: ${htmlUrl} not found in ${slackUserApproving.Slack_Name}'s queue OR `
+        + `${ownerTeam.Slack_Name}'s queue`);
     }
   }
 
@@ -86,62 +89,23 @@ export async function updateApprove(
     }
   });
   if (foundLead && foundMember) {
-    throw new Error("slackUserApproving set as both a member and lead. Pick one!");
+    throw new Error(`${slackUserApproving.Slack_Name} set as a member and lead. Pick one!`);
   }
 
-  // Keep track of leads who no longer need to alerted
-  const leftoverAlertedLeads: string[] = [];
-  // If slackUserApproving is found as a lead
+  // Update lead or member specific properties
+  let leftoverAlertedLeads: string[] = [];
+  let leftoverAlertedMembers: string[] = [];
   if (foundLead) {
-    // Append new approving lead & modify leads to alert
-    foundPR.leads_approving.push(slackUserApproving.Slack_Id);
-    if (foundPR.leads_approving.length >= reqLeadApprovals) {
-      foundPR.leads_alert.map((slackId: string) => {
-        // Store leftover leads and Reset leads_alert to []
-        if (slackId !== slackUserApproving.Slack_Id) {
-          leftoverAlertedLeads.push(slackId);
-        }
-      });
-      foundPR.leads_alert = [];
-      foundPR.lead_complete = true;
-    }
-    else {
-      const newLeadsToAlert = foundPR.leads_alert.filter((slackId: string) => {
-        return slackId !== slackUserApproving.Slack_Id;
-      });
-      foundPR.leads_alert = newLeadsToAlert;
-    }
+    const result = updateLeadAlerts(foundPR, slackUserOwner, slackUserApproving,
+      teamOptions, true, json);
+    foundPR = result.pr;
+    leftoverAlertedLeads = result.leftLeads;
   }
-
-  // Keep track of members who no longer need to alerted
-  const leftoverAlertedMembers: string[] = [];
-  // If slackUserApproving is found as a member
   if (foundMember) {
-    // Append new approving lead & modify members to alert
-    foundPR.members_approving.push(slackUserApproving.Slack_Id);
-    if (foundPR.members_approving.length >= reqMemberApprovals) {
-      // Store leftover mebers and reset members_alert to []
-      foundPR.members_alert.map((slackId: string) => {
-        if (slackId !== slackUserApproving.Slack_Id) {
-          leftoverAlertedMembers.push(slackId);
-        }
-      });
-      foundPR.members_alert = [];
-      foundPR.member_complete = true;
-      // If members before leads, created list for leads_alert
-      if (teamOptions.Member_Before_Lead) {
-        const slackLeads = getSlackLeadsAlt(slackUserOwner, json);
-        slackLeads.map((lead) => {
-          foundPR.leads_alert.push(lead.Slack_Id);
-        });
-      }
-    }
-    else {
-      const newMembersToAlert = foundPR.members_alert.filter((slackId: string) => {
-        return slackId !== slackUserApproving.Slack_Id;
-      });
-      foundPR.members_alert = newMembersToAlert;
-    }
+    const result = updateMemberAlerts(foundPR, slackUserOwner, slackUserApproving,
+      teamOptions, true, json);
+    foundPR = result.pr;
+    leftoverAlertedMembers = result.leftMembers;
   }
 
   // Update team queue
@@ -170,7 +134,8 @@ export async function updateApprove(
 
     await dynamoUpdate.updatePullRequest(
       dynamoTableName,
-      alertUserId, currentQueue,
+      alertUserId,
+      currentQueue,
       foundPR);
   }));
 }

@@ -56,9 +56,11 @@ describe("Dynamo.UpdateApprove", () => {
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
+      members_req_changes: [],
       leads_alert: [],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -162,6 +164,8 @@ describe("Dynamo.UpdateApprove", () => {
       leads_alert: [],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -258,6 +262,8 @@ describe("Dynamo.UpdateApprove", () => {
       leads_alert: [],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -352,6 +358,8 @@ describe("Dynamo.UpdateApprove", () => {
       leads_alert: [],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -448,6 +456,8 @@ describe("Dynamo.UpdateApprove", () => {
       slackLead3.Slack_Id],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -560,6 +570,8 @@ describe("Dynamo.UpdateApprove", () => {
       slackLead3.Slack_Id],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -675,6 +687,8 @@ describe("Dynamo.UpdateApprove", () => {
       slackLead3.Slack_Id],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -788,6 +802,8 @@ describe("Dynamo.UpdateApprove", () => {
       slackLead3.Slack_Id],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -901,6 +917,8 @@ describe("Dynamo.UpdateApprove", () => {
       leads_alert: [],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -1010,6 +1028,8 @@ describe("Dynamo.UpdateApprove", () => {
       leads_alert: [],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -1119,6 +1139,8 @@ describe("Dynamo.UpdateApprove", () => {
       leads_alert: [],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -1229,6 +1251,8 @@ describe("Dynamo.UpdateApprove", () => {
       leads_alert: [],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -1338,6 +1362,8 @@ describe("Dynamo.UpdateApprove", () => {
       slackLead3.Slack_Id],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -1447,6 +1473,8 @@ describe("Dynamo.UpdateApprove", () => {
       slackLead3.Slack_Id],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -1558,6 +1586,8 @@ describe("Dynamo.UpdateApprove", () => {
       slackLead3.Slack_Id],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -1669,6 +1699,8 @@ describe("Dynamo.UpdateApprove", () => {
       slackLead3.Slack_Id],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -1760,4 +1792,5 @@ describe("Dynamo.UpdateApprove", () => {
     expect(lead2Queue).deep.equal([]);
     expect(lead3Queue).deep.equal([]);
   });
+
 });

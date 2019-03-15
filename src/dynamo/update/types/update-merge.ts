@@ -32,22 +32,15 @@ export async function updateMerge(
   const ownerTeam = getSlackGroupAlt(slackUserOwner.Slack_Id, json);
   const teamQueue = await dynamoGet.getQueue(dynamoTableName, ownerTeam.Slack_Id);
 
-  // If SlackUserOwner is the SlackUserClosing, don't bother checking queue
-  if (slackUserOwner.Slack_Id !== slackUserMerging.Slack_Id) {
-    const dynamoUserQueue = await dynamoGet.getQueue(dynamoTableName, slackUserMerging.Slack_Id);
-    foundPR = dynamoUserQueue.find((pr: PullRequest) => pr.url === htmlUrl);
-    if (foundPR === undefined) {
-      foundPR = teamQueue.find((pr) => pr.url === htmlUrl);
-      if (foundPR === undefined) {
-        throw new Error(`GitHub PR Url: ${htmlUrl} not found in any PRs in ${slackUserMerging.Slack_Name}'s queue`);
-      }
-    }
-  }
-  else {
-    // Not sure which queues have the PR? Use team queue as reference
+  // Get SlackUserMerging's queue
+  const dynamoUserQueue = await dynamoGet.getQueue(dynamoTableName, slackUserMerging.Slack_Id);
+  foundPR = dynamoUserQueue.find((pr: PullRequest) => pr.url === htmlUrl);
+  if (foundPR === undefined) {
+    // If pr not found in user's queue (maybe it's the owner), check teamQueue ffrom the owner
     foundPR = teamQueue.find((pr) => pr.url === htmlUrl);
     if (foundPR === undefined) {
-      throw new Error(`GitHub PR Url: ${htmlUrl} not found in any PRs in ${ownerTeam.Slack_Name}'s queue`);
+      throw new Error(`GitHub PR Url: ${htmlUrl} not found in ${slackUserMerging.Slack_Name}'s queue OR `
+        + `${ownerTeam.Slack_Name}'s queue`);
     }
   }
 

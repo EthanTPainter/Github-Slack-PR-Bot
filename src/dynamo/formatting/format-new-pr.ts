@@ -79,8 +79,10 @@ export function formatNewPullRequest(
     leads_alert: leadIds,
     member_complete: memberComplete,
     members_approving: [],
+    members_req_changes: [],
     lead_complete: leadComplete,
     leads_approving: [],
+    leads_req_changes: [],
     events: [{
       user: slackUser,
       action: "OPENED",

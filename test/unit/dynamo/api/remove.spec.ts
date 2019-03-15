@@ -18,6 +18,8 @@ describe("removePullRequest", () => {
       leads_alert: [],
       lead_complete: false,
       leads_approving: [],
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: {
           Slack_Name: "Ethan",
@@ -37,6 +39,8 @@ describe("removePullRequest", () => {
       leads_alert: [],
       lead_complete: false,
       leads_approving: [],
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: {
           Slack_Name: "Ethan",

@@ -60,6 +60,8 @@ describe("Dynamo.UpdateClose", () => {
       leads_alert: [],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -139,6 +141,8 @@ describe("Dynamo.UpdateClose", () => {
       leads_alert: [slackLead2.Slack_Id],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",
@@ -157,6 +161,8 @@ describe("Dynamo.UpdateClose", () => {
         slackLead2.Slack_Id],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackMember1,
         action: "OPENED",

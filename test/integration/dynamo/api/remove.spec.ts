@@ -46,6 +46,8 @@ describe("Dynamo.Remove", () => {
       leads_alert: [],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackUser,
         action: "OPENED",
@@ -86,6 +88,8 @@ describe("Dynamo.Remove", () => {
       leads_alert: [],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackUser,
         action: "OPENED",
@@ -104,6 +108,8 @@ describe("Dynamo.Remove", () => {
       leads_alert: [],
       leads_approving: [],
       lead_complete: false,
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: slackUser,
         action: "OPENED",

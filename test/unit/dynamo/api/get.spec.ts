@@ -24,6 +24,8 @@ describe("getPullRequest", () => {
       members_approving: [],
       lead_complete: false,
       leads_approving: [],
+      leads_req_changes: [],
+      members_req_changes: [],
       events: [{
         user: {
           Slack_Name: "DillonX",

@@ -33,24 +33,16 @@ export async function updateComment(
   const ownerTeam = getSlackGroupAlt(slackUserOwner.Slack_Id, json);
   const teamQueue = await dynamoGet.getQueue(dynamoTableName, ownerTeam.Slack_Id);
 
-  // If slackUserOwner is the slackUserCommenting, don't bother checking queue
-  if (slackUserOwner.Slack_Id !== slackUserCommenting.Slack_Id) {
-    const dynamoUserQueue = await dynamoGet.getQueue(dynamoTableName,
-      slackUserCommenting.Slack_Id);
-    foundPR = dynamoUserQueue.find((pr) => pr.url === htmlUrl);
-    if (foundPR === undefined) {
-      // If not found in User's queue, check team queue
-      foundPR = teamQueue.find((pr) => pr.url === htmlUrl);
-      if (foundPR === undefined) {
-        throw new Error(`GitHub PR Url: ${htmlUrl} not found in any PRs in ${slackUserCommenting.Slack_Name}'s queue`);
-      }
-    }
-  }
-  else {
-    // Not sure which queues have the PR? Use team queue as reference
+  // Check slackUserCommenting's queue
+  const dynamoUserQueue = await dynamoGet.getQueue(dynamoTableName,
+    slackUserCommenting.Slack_Id);
+  foundPR = dynamoUserQueue.find((pr) => pr.url === htmlUrl);
+  if (foundPR === undefined) {
+    // If not found in slackUserCommenting's queue (maybe it's the owner), check team queue
     foundPR = teamQueue.find((pr) => pr.url === htmlUrl);
     if (foundPR === undefined) {
-      throw new Error(`GitHub PR Url: ${htmlUrl} not found in any PRs in ${ownerTeam.Slack_Name}'s queue`);
+      throw new Error(`GitHub PR Url: ${htmlUrl} not found in ${slackUserCommenting.Slack_Name}'s queue OR `
+        + `${ownerTeam.Slack_Name}'s queue`);
     }
   }
 

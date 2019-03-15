@@ -20,6 +20,8 @@ describe("constructQueueString", () => {
       members_approving: ["EthanP"],
       lead_complete: false,
       leads_approving: ["AndrewC"],
+      leads_req_changes: ["MDinks"],
+      members_req_changes: ["DillonS"],
       events: [{
         user: {
           Slack_Name: "EthanP",
@@ -685,4 +687,58 @@ describe("constructQueueString", () => {
     expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(false);
     expect(result.includes(`Updated: ${pullRequest.events[1].time}`)).equal(false);
   });
+
+  // Extra test added to cover including request changes
+  it("should construct a queue string with members and leads requesting changes", () => {
+    const options: any = {
+      Queue_Include_Req_Changes_Names: true,
+    };
+
+    const result = constructQueueString(pullRequest, options);
+
+    expect(result.includes("Leads Request Changes")).equal(true);
+    expect(result.includes("Members Request Changes")).equal(true);
+    expect(result.includes(pullRequest.members_req_changes[0])).equal(true);
+    expect(result.includes(pullRequest.leads_req_changes[0])).equal(true);
+  });
+
+  it("should consturt a queue string with only members requesting changes", () => {
+    const options: any = {
+      Queue_Include_Req_Changes_Names: true,
+    };
+    pullRequest.leads_req_changes = [];
+
+    const result = constructQueueString(pullRequest, options);
+
+    expect(result.includes("Leads Request Changes")).equal(false);
+    expect(result.includes("Members Request Changes")).equal(true);
+    expect(result.includes(pullRequest.members_req_changes[0])).equal(true);
+  });
+
+  it("should construct a queue string with only leads requesting changes", () => {
+    const options: any = {
+      Queue_Include_Req_Changes_Names: true,
+    };
+    pullRequest.members_req_changes = [];
+
+    const result = constructQueueString(pullRequest, options);
+
+    expect(result.includes("Leads Request Changes")).equal(true);
+    expect(result.includes("Members Request Changes")).equal(false);
+    expect(result.includes(pullRequest.leads_req_changes[0])).equal(true);
+  });
+
+  it("should construct a queue string with neither leads or members requesting changes", () => {
+    const options: any = {
+      Queue_Include_Req_Changes_Names: true,
+    };
+    pullRequest.members_req_changes = [];
+    pullRequest.leads_req_changes = [];
+
+    const result = constructQueueString(pullRequest, options);
+
+    expect(result.includes("Leads Request Changes")).equal(false);
+    expect(result.includes("Members Request Changes")).equal(false);
+  });
+
 });

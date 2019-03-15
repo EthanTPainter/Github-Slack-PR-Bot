@@ -1,8 +1,15 @@
-import { DynamoGet, DynamoAppend, DynamoUpdate } from "../../api";
+import { DynamoGet, DynamoAppend, DynamoUpdate, DynamoRemove } from "../../api";
 import { getPRLink } from "../../../github/parse";
 import { SlackUser, PullRequest } from "../../../models";
 import { DateTime } from "luxon";
-import { getSlackGroupAlt, getTeamOptionsAlt } from "../../../json/parse";
+import {
+  getSlackGroupAlt,
+  getTeamOptionsAlt,
+  getSlackLeadsAlt,
+  getSlackMembersAlt,
+} from "../../../json/parse";
+import { updateLeadAlerts } from "./helpers/update-lead-alerts";
+import { updateMemberAlerts } from "./helpers/update-member-alerts";
 
 /**
  * @description Update PR to include changes requested
@@ -25,6 +32,7 @@ export async function updateReqChanges(
   const dynamoGet = new DynamoGet();
   const dynamoAppend = new DynamoAppend();
   const dynamoUpdate = new DynamoUpdate();
+  const dynamoRemove = new DynamoRemove();
   let foundPR: any;
 
   // GitHub PR Url
@@ -66,5 +74,89 @@ export async function updateReqChanges(
   const reqMemberApprovals = teamOptions.Num_Required_Member_Approvals;
 
   // Determine if the slack user requesting changes is a member or lead
-  // If slackUserReqChanges
+  // If slackUserReqChanges is found as a lead & member, throw error
+  const slackUserLeadsReqChanges = getSlackLeadsAlt(slackUserReqChanges, json);
+  const slackUserMembersReqChanges = getSlackMembersAlt(slackUserReqChanges, json);
+  let foundLead = false;
+  let foundMember = false;
+  slackUserLeadsReqChanges.map((lead) => {
+    if (lead.Slack_Id === slackUserReqChanges.Slack_Id) {
+      foundLead = true;
+    }
+  });
+  slackUserMembersReqChanges.map((member) => {
+    if (member.Slack_Id === slackUserReqChanges.Slack_Id) {
+      foundMember = true;
+    }
+  });
+  if (foundLead && foundMember) {
+    throw new Error(`${slackUserReqChanges.Slack_Name} set as both a member and lead. Pick one`);
+  }
+
+  // Update lead or member specific properties??
+  // If Req_Changes_Stop_Alerts is true, check if number of approvals
+  // + number of requested changes >= required reviews for lead/member
+  // If so, remove this PR from those queues
+  let leftoverAlertedLeads: string[] = [];
+  let leftoverAlertedMembers: string[] = [];
+  if (foundLead) {
+    const result = updateLeadAlerts(foundPR, slackUserOwner,
+      slackUserReqChanges, teamOptions, false, json);
+    foundPR = result.pr;
+    leftoverAlertedLeads = result.leftLeads;
+  }
+  if (foundMember) {
+    const result = updateMemberAlerts(foundPR, slackUserOwner, slackUserReqChanges,
+      teamOptions, false, json);
+    foundPR = result.pr;
+    leftoverAlertedMembers = result.leftMembers;
+  }
+
+  // Update team queue
+  await dynamoUpdate.updatePullRequest(dynamoTableName, ownerTeam.Slack_Id, teamQueue, foundPR);
+
+  // If Req_Changes_Stop_Alerts is TRUE
+  // Remove PR from leftover users & user who request changes
+  // If Req_Changes_Stop_Alerts is FALSE
+  // Only remove user who requested changes to the PR
+  if (teamOptions.Req_Changes_Stop_Alerts) {
+    const removePRFromUsers = leftoverAlertedLeads.concat(leftoverAlertedMembers).concat(slackUserReqChanges.Slack_Id);
+    await Promise.all(removePRFromUsers.map(async (removeUserId) => {
+      const dynamoUserQueue = await dynamoGet.getQueue(
+        dynamoTableName,
+        removeUserId);
+
+      await dynamoRemove.removePullRequest(
+        dynamoTableName,
+        removeUserId,
+        dynamoUserQueue,
+        foundPR);
+    }));
+  }
+  else {
+    const currentQueue = await dynamoGet.getQueue(
+      dynamoTableName,
+      slackUserReqChanges.Slack_Id);
+
+    await dynamoRemove.removePullRequest(
+      dynamoTableName,
+      slackUserReqChanges.Slack_Id,
+      currentQueue,
+      foundPR);
+  }
+
+  // Update all queues with members and leads to alert
+  const allAlertingUserIds = foundPR.leads_alert.concat(foundPR.members_alert);
+  await Promise.all(allAlertingUserIds.map(async (alertUserId: string) => {
+    const currentQueue = await dynamoGet.getQueue(
+      dynamoTableName,
+      alertUserId);
+
+    await dynamoUpdate.updatePullRequest(
+      dynamoTableName,
+      alertUserId,
+      currentQueue,
+      foundPR);
+  }));
+
 }
