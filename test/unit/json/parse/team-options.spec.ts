@@ -19,13 +19,13 @@ describe("getTeamOptions", () => {
               Leads: {
                 Evan: {
                   Slack_Name: "EvanL",
-                  Slack_Id: "<@4444>",
+                  Slack_Id: "<@3333>",
                 },
               },
               Members: {
                 Ethan: {
                   Slack_Name: "EthanP",
-                  Slack_Id: "<@2222>",
+                  Slack_Id: "<@1111>",
                 },
               },
             },
@@ -202,13 +202,13 @@ describe("getTeamOptionsAlt", () => {
               Leads: {
                 Evan: {
                   Slack_Name: "EvanL",
-                  Slack_Id: "<@4444>",
+                  Slack_Id: "<@3333>",
                 },
               },
               Members: {
                 Ethan: {
                   Slack_Name: "EthanP",
-                  Slack_Id: "<@2222>",
+                  Slack_Id: "<@1111>",
                 },
               },
             },

@@ -44,10 +44,13 @@ export const json = {
       Dev_Team_2: {
         Options: {
           Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
-          Check_Mark_Text: "green",
-          X_Mark_Text: "base",
+          Check_Mark_Text: ":heavy_check_mark:",
+          X_Mark_Text: ":X:",
+          Include_Created_Time: true,
+          Include_Updated_Time: true,
           Num_Required_Lead_Approvals: 1,
           Num_Required_Member_Approvals: 1,
+          Disable_Dynamo: false,
           Member_Before_Lead: true,
         },
         Slack_Group: "<!subteam^ID|handle>",

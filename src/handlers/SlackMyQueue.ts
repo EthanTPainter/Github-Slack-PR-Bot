@@ -46,9 +46,6 @@ export async function processMyQueue(
   if (body.user_id === undefined) {
     throw new Error("body.user_id not attched to request");
   }
-  if (typeof body.user_id === "object") {
-    throw new Error("body.user_id sent as an object rather than a string");
-  }
 
   // Format Slack User ID & get Slack User
   const dynamoGet = new DynamoGet();
@@ -71,7 +68,11 @@ export async function processMyQueue(
     callback(null, success);
   }
   catch (error) {
-    logger.error("Uh oh. Error occurred: " + error.message);
-    throw new Error(error.message);
+    const errorMessage = `Uh oh. Error occurred: ${error.message}`;
+    const fail = {
+      body: errorMessage,
+      statusCode: 200,
+    };
+    callback(null, fail);
   }
 }

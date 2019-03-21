@@ -10,7 +10,7 @@ import {
   DynamoAppend,
 } from "../../../../../src/dynamo/api";
 
-describe.only("updateReqChanges", () => {
+describe("updateReqChanges", () => {
 
   const dynamoGet = new DynamoGet();
   const dynamoReset = new DynamoReset();
@@ -34,29 +34,30 @@ describe.only("updateReqChanges", () => {
     await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember3.Slack_Id);
   });
 
-  // afterEach(async () => {
-  //   await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackTeam.Slack_Id);
-  //   await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackLead1.Slack_Id);
-  //   await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackLead2.Slack_Id);
-  //   await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackLead3.Slack_Id);
-  //   await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember1.Slack_Id);
-  //   await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember2.Slack_Id);
-  //   await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember3.Slack_Id);
-  // });
+  afterEach(async () => {
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackTeam.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackLead1.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackLead2.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackLead3.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember1.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember2.Slack_Id);
+    await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember3.Slack_Id);
+  });
 
-  it("member request changes & req changes stop alerts", async () => {
+  it("member request changes, member before lead, req_changes_stop_alerts is true (2 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 2;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      members_alert: [slackMember2.Slack_Id,
+      standard_members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      leads_alert: [],
+      standard_leads_alert: [],
       leads_approving: [],
       lead_complete: false,
       leads_req_changes: [],
@@ -120,20 +121,1609 @@ describe.only("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].members_alert).deep.equal([slackMember3.Slack_Id]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackMember2);
 
-    // PR Owner should have an empty queue
-    expect(member1Queue).deep.equal([]);
+    // PR Owner should be up to date with Team queue
+    // Since another user requested changes
+    expect(member1Queue).deep.equal(teamQueue);
 
     // PR ReqChanges user should have an empty queue
     expect(member2Queue).deep.equal([]);
+
+    // Members 3, 4, etc. should match team queue
+    expect(member3Queue).deep.equal(teamQueue);
 
     // Leads should have empty queues
     expect(lead1Queue).deep.equal([]);
     expect(lead2Queue).deep.equal([]);
     expect(lead3Queue).deep.equal([]);
-
   });
 
+  it("member request changes, member before lead, req_changes_stop_alerts is true (1 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 1;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackMember2,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Team queue should be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackMember2);
+
+    // PR Owner should be up to date with Team queue
+    // since another user requested changes
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // PR ReqChanges user should have an empty queue
+    expect(member2Queue).deep.equal([]);
+
+    // Members 3, 4, etc. should be empty
+    expect(member3Queue).deep.equal([]);
+
+    // Expect lead queues to be empty
+    expect(lead1Queue).deep.equal([]);
+    expect(lead2Queue).deep.equal([]);
+    expect(lead3Queue).deep.equal([]);
+  });
+
+  it("lead request changes, member before lead, req_changes_stop_alerts is true (2 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Lead_Approvals = 2;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackLead1,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Expect team queue to be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+    slackMember3.Slack_Id,
+    slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackLead1);
+
+    // Expect PR owner to match team queue
+    // since another user requsted changes
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // Members 2, 3, etc. should match team queue
+    expect(member2Queue).deep.equal(teamQueue);
+    expect(member3Queue).deep.equal(teamQueue);
+
+    // Expect all lead queues to be empty
+    expect(lead1Queue).deep.equal([]);
+    expect(lead2Queue).deep.equal([]);
+    expect(lead3Queue).deep.equal([]);
+  });
+
+  it("lead request changes, member before lead, req_changes_stop_alerts is true (1 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Lead_Approvals = 1;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackLead1,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Expect team queue to be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+    slackMember3.Slack_Id,
+    slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackLead1);
+
+    // Expect PR owner to match team queue
+    // since another user requsted changes
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // Members 2, 3, etc. should match team queue
+    expect(member2Queue).deep.equal(teamQueue);
+    expect(member3Queue).deep.equal(teamQueue);
+
+    // Expect all lead queues to be empty
+    expect(lead1Queue).deep.equal([]);
+    expect(lead2Queue).deep.equal([]);
+    expect(lead3Queue).deep.equal([]);
+  });
+
+  it("member request changes, member before lead, req_changes_stop_alerts is false (2 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 2;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackMember2,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Team queue should be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackMember2);
+
+    // PR Owner queue should match team queue
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // User requesting changes queue should be empty
+    expect(member2Queue).deep.equal([]);
+
+    // Other member queues should be alerted
+    expect(member3Queue).deep.equal(teamQueue);
+
+    // Lead queues should be empty
+    expect(lead1Queue).deep.equal([]);
+    expect(lead2Queue).deep.equal([]);
+    expect(lead3Queue).deep.equal([]);
+  });
+
+  it("member request changes, member before lead, req_changes_stop_alerts is false (1 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 1;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackMember2,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Team queue should be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackMember2);
+
+    // PR Owner queue should match team queue
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // User requesting changes queue should be empty
+    expect(member2Queue).deep.equal([]);
+
+    // Other member queues should be alerted
+    expect(member3Queue).deep.equal(teamQueue);
+
+    // Lead queues should be empty
+    expect(lead1Queue).deep.equal([]);
+    expect(lead2Queue).deep.equal([]);
+    expect(lead3Queue).deep.equal([]);
+  });
+
+  it("lead request changes, member before lead, req_changes_stop_alerts is false (2 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Lead_Approvals = 2;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackLead1,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Expect team queue to be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+    slackMember3.Slack_Id,
+    slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackLead1);
+
+    // PR Owner's queue should match team queue
+    // Since lead requested changes
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // Members 2, 3, etc. should match team queue
+    expect(member2Queue).deep.equal(teamQueue);
+    expect(member3Queue).deep.equal(teamQueue);
+
+    // Lead queues should be empty
+    expect(lead1Queue).deep.equal([]);
+    expect(lead2Queue).deep.equal([]);
+    expect(lead3Queue).deep.equal([]);
+  });
+
+  it("lead request changes, member before lead, req_changes_stop_alerts is false (1 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Lead_Approvals = 1;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackLead1,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Expect team queue to be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+    slackMember3.Slack_Id,
+    slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackLead1);
+
+    // PR Owner's queue should match team queue
+    // Since lead requested changes
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // Members 2, 3, etc. should match team queue
+    expect(member2Queue).deep.equal(teamQueue);
+    expect(member3Queue).deep.equal(teamQueue);
+
+    // Lead queues should be empty
+    expect(lead1Queue).deep.equal([]);
+    expect(lead2Queue).deep.equal([]);
+    expect(lead3Queue).deep.equal([]);
+  });
+
+  // member & lead
+  it("member request changes, member & lead, req_changes_stop_alerts is true (2 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 2;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [slackLead1.Slack_Id,
+        slackLead2.Slack_Id,
+        slackLead3.Slack_Id,
+      ],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackMember2,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Team queue should be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead1.Slack_Id,
+      slackLead2.Slack_Id, slackLead3.Slack_Id]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackMember2);
+
+    // PR Owner queue should match team queue
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // User requesting changes queue should be empty
+    expect(member2Queue).deep.equal([]);
+
+    // Other member queues should be alerted
+    expect(member3Queue).deep.equal(teamQueue);
+
+    // Lead queues should match team queue
+    expect(lead1Queue).deep.equal(teamQueue);
+    expect(lead2Queue).deep.equal(teamQueue);
+    expect(lead3Queue).deep.equal(teamQueue);
+  });
+
+  it("member request changes, member & lead, req_changes_stop_alerts is true (1 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 1;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [slackLead1.Slack_Id,
+        slackLead2.Slack_Id,
+        slackLead3.Slack_Id,
+      ],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackMember2,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Team queue should be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead1.Slack_Id,
+      slackLead2.Slack_Id, slackLead3.Slack_Id]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackMember2);
+
+    // PR Owner queue should match team queue
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // User requesting changes queue should be empty
+    expect(member2Queue).deep.equal([]);
+
+    // Member queues 2, 3, etc. should be empty
+    expect(member3Queue).deep.equal([]);
+
+    // Lead queues should match team queue
+    expect(lead1Queue).deep.equal(teamQueue);
+    expect(lead2Queue).deep.equal(teamQueue);
+    expect(lead3Queue).deep.equal(teamQueue);
+  });
+
+  it("member request changes, member & lead, req_changes_stop_alerts is false (2 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 2;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [slackLead1.Slack_Id,
+        slackLead2.Slack_Id,
+        slackLead3.Slack_Id,
+      ],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackMember2,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Team queue should be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead1.Slack_Id,
+      slackLead2.Slack_Id, slackLead3.Slack_Id]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackMember2);
+
+    // PR Owner queue should match team queue
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // User requesting changes queue should be empty
+    expect(member2Queue).deep.equal([]);
+
+    // Member queues 2, 3, etc. should match team queue
+    expect(member3Queue).deep.equal(teamQueue);
+
+    // Lead queues should match team queue
+    expect(lead1Queue).deep.equal(teamQueue);
+    expect(lead2Queue).deep.equal(teamQueue);
+    expect(lead3Queue).deep.equal(teamQueue);
+  });
+
+  it("member request changes, member & lead, req_changes_stop_alerts is false (1 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 1;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [slackLead1.Slack_Id,
+        slackLead2.Slack_Id,
+        slackLead3.Slack_Id,
+      ],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackMember2,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Team queue should be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead1.Slack_Id,
+      slackLead2.Slack_Id, slackLead3.Slack_Id]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackMember2);
+
+    // PR Owner queue should match team queue
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // User requesting changes queue should be empty
+    expect(member2Queue).deep.equal([]);
+
+    // Member queues 2, 3, etc. should match team queue
+    expect(member3Queue).deep.equal(teamQueue);
+
+    // Lead queues should match team queue
+    expect(lead1Queue).deep.equal(teamQueue);
+    expect(lead2Queue).deep.equal(teamQueue);
+    expect(lead3Queue).deep.equal(teamQueue);
+  });
+
+  it("lead request changes, member & lead, req_changes_stop_alerts is true (2 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 2;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [slackLead2.Slack_Id,
+        slackLead3.Slack_Id,
+      ],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackLead1,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Team queue should be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+      slackMember3.Slack_Id,
+      slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackLead1);
+
+    // PR Owner queue should match team queue
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // Member queues 2, 3, etc. should match team queue
+    expect(member2Queue).deep.equal(teamQueue);
+    expect(member3Queue).deep.equal(teamQueue);
+
+    // Lead queues should match team queue
+    expect(lead1Queue).deep.equal([]);
+    expect(lead2Queue).deep.equal([]);
+    expect(lead3Queue).deep.equal([]);
+  });
+
+  it("lead request changes, member & lead, req_changes_stop_alerts is true (1 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 1;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [slackLead2.Slack_Id,
+        slackLead3.Slack_Id,
+      ],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackLead1,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Team queue should be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+      slackMember3.Slack_Id,
+      slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackLead1);
+
+    // PR Owner queue should match team queue
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // Member queues 2, 3, etc. should match team queue
+    expect(member2Queue).deep.equal(teamQueue);
+    expect(member3Queue).deep.equal(teamQueue);
+
+    // Lead queues should match team queue
+    expect(lead1Queue).deep.equal([]);
+    expect(lead2Queue).deep.equal([]);
+    expect(lead3Queue).deep.equal([]);
+  });
+
+  it("lead request changes, member & lead, req_changes_stop_alerts is false (2 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 2;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [slackLead2.Slack_Id,
+        slackLead3.Slack_Id,
+      ],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackLead1,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Team queue should be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+      slackMember3.Slack_Id,
+      slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead2.Slack_Id,
+      slackLead3.Slack_Id]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackLead1);
+
+    // PR Owner queue should match team queue
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // Member queues 2, 3, etc. should match team queue
+    expect(member2Queue).deep.equal(teamQueue);
+    expect(member3Queue).deep.equal(teamQueue);
+
+    // Lead queues should match team queue
+    expect(lead1Queue).deep.equal([]);
+    expect(lead2Queue).deep.equal(teamQueue);
+    expect(lead3Queue).deep.equal(teamQueue);
+  });
+
+  it("lead request changes, member & lead, req_changes_stop_alerts is false (1 Req)", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
+    json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 1;
+    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
+    const newPR = {
+      owner: slackMember1,
+      title: "VALID PR TITLE #1",
+      url: "www.github.com/aws/firecracker",
+      standard_members_alert: [slackMember2.Slack_Id,
+      slackMember3.Slack_Id],
+      members_approving: [],
+      member_complete: false,
+      members_req_changes: [],
+      standard_leads_alert: [slackLead2.Slack_Id,
+        slackLead3.Slack_Id,
+      ],
+      leads_approving: [],
+      lead_complete: false,
+      leads_req_changes: [],
+      events: [{
+        user: slackMember1,
+        action: "OPENED",
+        time: "NOW",
+      }],
+    };
+    const event = {
+      pull_request: {
+        html_url: "www.github.com/aws/firecracker",
+      },
+    };
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id,
+      [],
+      newPR);
+    await dynamoAppend.appendPullRequest(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id,
+      [],
+      newPR);
+
+    await updateReqChanges(
+      slackMember1,
+      slackLead1,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Team queue should be up to date
+    expect(teamQueue[0].url).equal(newPR.url);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+      slackMember3.Slack_Id,
+      slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_req_changes).deep.equal([]);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead2.Slack_Id,
+    slackLead3.Slack_Id]);
+    expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+    expect(teamQueue[0].events[0].action).equal("OPENED");
+    expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
+    expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
+    expect(teamQueue[0].events[1].user).deep.equal(slackLead1);
+
+    // PR Owner queue should match team queue
+    expect(member1Queue).deep.equal(teamQueue);
+
+    // Lead requesting changes should be empty
+    expect(lead1Queue).deep.equal([]);
+
+    // Member queues 2, 3, etc. should match team queue
+    expect(member2Queue).deep.equal(teamQueue);
+    expect(member3Queue).deep.equal(teamQueue);
+
+    // lead queues should match team queue
+    expect(lead2Queue).deep.equal(teamQueue);
+    expect(lead3Queue).deep.equal(teamQueue);
+  });
 });

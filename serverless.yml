@@ -59,6 +59,13 @@ functions:
       - http:
           path: get-status
           method: post
+  SlackFixedPRManager:
+    handler: dist/src/handlers/SlackFixedPR.processFixedPR
+    memorySize: 256
+    events:
+      - http:
+          path: fixed-pr
+          method: post
 
 resources:
   Resources:
@@ -78,6 +85,11 @@ resources:
         TracingConfig:
           Mode: Active
     SlackGetQueueManagerLambdaFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        TracingConfig:
+          Mode: Active
+    SlackFixedPRManagerLambdaFunction:
       Type: AWS::Lambda::Function
       Properties:
         TracingConfig:

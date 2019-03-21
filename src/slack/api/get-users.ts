@@ -18,14 +18,13 @@ export async function getUsers(
       token: token,
     },
     headers: {
+      Accept: "application/vnd.github.v3+json",
       Authorization: `Bearer ${token}`,
     },
     json: true,
     method: "POST",
     uri: `${slackApiUri}/users.list`,
   };
-
-  logger.debug("Options: " + JSON.stringify(options));
 
   const result = await rp(options);
   return result;

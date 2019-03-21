@@ -28,14 +28,13 @@ export async function postMessage(
       as_user: true,
     },
     headers: {
+      Accept: "application/vnd.github.v3+json",
       Authorization: `Bearer ${token}`,
     },
     json: true,
     method: "POST",
     uri: `${slackApiUri}/chat.postMessage`,
   };
-
-  logger.info("Options: " + JSON.stringify(options));
 
   const result = await rp(options);
   return result;

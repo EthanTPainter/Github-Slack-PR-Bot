@@ -155,8 +155,7 @@ export function getTeamOptionsAlt(
       // Loop through lead keys for matching SlackUser.Slack_Id
       while (leadCounter < leadValues.length) {
         const selectedLead: any = leadValues[leadCounter];
-        if (selectedLead.Slack_Id === slackUser.Slack_Id
-          && selectedLead.Slack_Name === slackUser.Slack_Name) {
+        if (selectedLead.Slack_Id === slackUser.Slack_Id) {
             return options;
         }
         leadCounter++;
@@ -167,8 +166,7 @@ export function getTeamOptionsAlt(
       // Loop through member keys for matching SlackUser.Slack_Id
       while (memberCounter < memberValues.length) {
         const selectedMember: any = memberValues[memberCounter];
-        if (selectedMember.Slack_Id === slackUser.Slack_Id
-          && selectedMember.Slack_Name === slackUser.Slack_Name) {
+        if (selectedMember.Slack_Id === slackUser.Slack_Id) {
             return options;
         }
         memberCounter++;

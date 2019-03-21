@@ -36,19 +36,12 @@ export async function processGitHubEvent(
     service: "GitHubManager",
   });
 
-  logger.info(`Event: ${JSON.stringify(event)}`);
-
-  // Grab body from event
+  // Grab body from event & get action
   const body = JSON.parse(event.body);
-  logger.debug(`Event body: ${JSON.stringify(body)}`);
-
-  // Use action property to format the response
   const pullRequestAction: string = body.action;
 
   // Construct the Slack message based on PR action and body
-  logger.info(`Constructing slack message using action (${pullRequestAction})`);
   const slackMessage = await constructSlackMessage(pullRequestAction, body, json);
-  logger.debug("Slack Message created:\n" + slackMessage);
 
   // Determine which sub team the user belongs to
   const githubUser = getOwner(event);
@@ -58,7 +51,6 @@ export async function processGitHubEvent(
   const teamOptions = getTeamOptions(githubUser, json);
   if (teamOptions.Disable_Dynamo === false) {
     // Update DynamoDB with new request
-    logger.info("Updating DynamoDB table");
     await updateDynamo(githubUser, event, json, pullRequestAction);
   }
 
@@ -71,7 +63,7 @@ export async function processGitHubEvent(
 
   // Provide success statusCode/Message
   const success = {
-    statusCode: "200",
+    statusCode: 200,
   };
   callback(null, success);
 }

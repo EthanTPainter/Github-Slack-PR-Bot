@@ -68,7 +68,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: [],
       members_approving: [],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -90,7 +90,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(true);
     expect(result.pr.members_approving).deep.equal([slackUserChanging.Slack_Id]);
-    expect(result.pr.members_alert).deep.equal([]);
+    expect(result.pr.standard_members_alert).deep.equal([]);
     expect(result.pr.members_req_changes).deep.equal([]);
 
     expect(result.leftMembers).deep.equal(["<SlackMemberId3>", "<SlackMemberId4>"]);
@@ -100,7 +100,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: [],
       members_approving: [],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -122,7 +122,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(false);
     expect(result.pr.members_approving).deep.equal(["<SlackMemberId2>"]);
-    expect(result.pr.members_alert).deep.equal(["<SlackMemberId3>", "<SlackMemberId4>"]);
+    expect(result.pr.standard_members_alert).deep.equal(["<SlackMemberId3>", "<SlackMemberId4>"]);
     expect(result.pr.members_req_changes).deep.equal([]);
 
     expect(result.leftMembers).deep.equal([]);
@@ -132,7 +132,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: [],
       members_approving: [],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -154,7 +154,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(false);
     expect(result.pr.members_approving).deep.equal([]);
-    expect(result.pr.members_alert).deep.equal(["<SlackMemberId1>"]);
+    expect(result.pr.standard_members_alert).deep.equal(["<SlackMemberId1>"]);
     expect(result.pr.members_req_changes).deep.equal([slackUserChanging.Slack_Id]);
 
     expect(result.leftMembers).deep.equal(["<SlackMemberId3>", "<SlackMemberId4>"]);
@@ -164,7 +164,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: [],
       members_approving: [],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -186,7 +186,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(false);
     expect(result.pr.members_approving).deep.equal([]);
-    expect(result.pr.members_alert).deep.equal(["<SlackMemberId3>", "<SlackMemberId4>", "<SlackMemberId1>"]);
+    expect(result.pr.standard_members_alert).deep.equal(["<SlackMemberId3>", "<SlackMemberId4>", "<SlackMemberId1>"]);
     expect(result.pr.members_req_changes).deep.equal(["<SlackMemberId2>"]);
 
     expect(result.leftMembers).deep.equal([]);
@@ -196,7 +196,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: [],
       members_approving: ["<SlackMemberId3>"],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId4>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId4>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -218,7 +218,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(true);
     expect(result.pr.members_approving).deep.equal(["<SlackMemberId3>", "<SlackMemberId2>"]);
-    expect(result.pr.members_alert).deep.equal([]);
+    expect(result.pr.standard_members_alert).deep.equal([]);
     expect(result.pr.members_req_changes).deep.equal([]);
 
     expect(result.leftMembers).deep.equal(["<SlackMemberId4>"]);
@@ -228,7 +228,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: ["<SlackMemberId3>"],
       members_approving: [],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId4>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId4>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -250,7 +250,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(false);
     expect(result.pr.members_approving).deep.equal([]);
-    expect(result.pr.members_alert).deep.equal([slackUserOwner.Slack_Id]);
+    expect(result.pr.standard_members_alert).deep.equal([slackUserOwner.Slack_Id]);
     expect(result.pr.members_req_changes).deep.equal(["<SlackMemberId3>", "<SlackMemberId2>"]);
 
     expect(result.leftMembers).deep.equal(["<SlackMemberId4>"]);
@@ -260,7 +260,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: [],
       members_approving: ["<SlackMemberId3>"],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId4>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId4>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -282,7 +282,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(false);
     expect(result.pr.members_approving).deep.equal(["<SlackMemberId3>"]);
-    expect(result.pr.members_alert).deep.equal([slackUserOwner.Slack_Id]);
+    expect(result.pr.standard_members_alert).deep.equal([slackUserOwner.Slack_Id]);
     expect(result.pr.members_req_changes).deep.equal(["<SlackMemberId2>"]);
 
     expect(result.leftMembers).deep.equal(["<SlackMemberId4>"]);
@@ -292,7 +292,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: ["<SlackMemberId3>"],
       members_approving: [],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId4>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId4>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -314,7 +314,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(false);
     expect(result.pr.members_approving).deep.equal(["<SlackMemberId2>"]);
-    expect(result.pr.members_alert).deep.equal([]);
+    expect(result.pr.standard_members_alert).deep.equal([]);
     expect(result.pr.members_req_changes).deep.equal(["<SlackMemberId3>"]);
 
     expect(result.leftMembers).deep.equal(["<SlackMemberId4>"]);
@@ -325,7 +325,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: [],
       members_approving: [],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -347,7 +347,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(true);
     expect(result.pr.members_approving).deep.equal([slackUserChanging.Slack_Id]);
-    expect(result.pr.members_alert).deep.equal([]);
+    expect(result.pr.standard_members_alert).deep.equal([]);
     expect(result.pr.members_req_changes).deep.equal([]);
 
     expect(result.leftMembers).deep.equal(["<SlackMemberId3>", "<SlackMemberId4>"]);
@@ -357,7 +357,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: [],
       members_approving: [],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -379,7 +379,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(false);
     expect(result.pr.members_approving).deep.equal(["<SlackMemberId2>"]);
-    expect(result.pr.members_alert).deep.equal(["<SlackMemberId3>", "<SlackMemberId4>"]);
+    expect(result.pr.standard_members_alert).deep.equal(["<SlackMemberId3>", "<SlackMemberId4>"]);
     expect(result.pr.members_req_changes).deep.equal([]);
 
     expect(result.leftMembers).deep.equal([]);
@@ -389,7 +389,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: [],
       members_approving: [],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -411,7 +411,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(false);
     expect(result.pr.members_approving).deep.equal([]);
-    expect(result.pr.members_alert).deep.equal(["<SlackMemberId3>", "<SlackMemberId4>", "<SlackMemberId1>"]);
+    expect(result.pr.standard_members_alert).deep.equal(["<SlackMemberId3>", "<SlackMemberId4>", "<SlackMemberId1>"]);
     expect(result.pr.members_req_changes).deep.equal([slackUserChanging.Slack_Id]);
 
     expect(result.leftMembers).deep.equal([]);
@@ -421,7 +421,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: [],
       members_approving: [],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId3>", "<SlackMemberId4>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -443,7 +443,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(false);
     expect(result.pr.members_approving).deep.equal([]);
-    expect(result.pr.members_alert).deep.equal(["<SlackMemberId3>", "<SlackMemberId4>", "<SlackMemberId1>"]);
+    expect(result.pr.standard_members_alert).deep.equal(["<SlackMemberId3>", "<SlackMemberId4>", "<SlackMemberId1>"]);
     expect(result.pr.members_req_changes).deep.equal(["<SlackMemberId2>"]);
 
     expect(result.leftMembers).deep.equal([]);
@@ -453,7 +453,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: [],
       members_approving: ["<SlackMemberId3>"],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId4>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId4>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -475,7 +475,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(true);
     expect(result.pr.members_approving).deep.equal(["<SlackMemberId3>", "<SlackMemberId2>"]);
-    expect(result.pr.members_alert).deep.equal([]);
+    expect(result.pr.standard_members_alert).deep.equal([]);
     expect(result.pr.members_req_changes).deep.equal([]);
 
     expect(result.leftMembers).deep.equal(["<SlackMemberId4>"]);
@@ -485,7 +485,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: ["<SlackMemberId3>"],
       members_approving: [],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId4>", "<SlackMemberId1>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId4>", "<SlackMemberId1>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -507,7 +507,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(false);
     expect(result.pr.members_approving).deep.equal([]);
-    expect(result.pr.members_alert).deep.equal(["<SlackMemberId4>", "<SlackMemberId1>"]);
+    expect(result.pr.standard_members_alert).deep.equal(["<SlackMemberId4>", "<SlackMemberId1>"]);
     expect(result.pr.members_req_changes).deep.equal(["<SlackMemberId3>", "<SlackMemberId2>"]);
 
     expect(result.leftMembers).deep.equal([]);
@@ -517,7 +517,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: [],
       members_approving: ["<SlackMemberId3>"],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId4>", "<SlackMemberId1>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId4>", "<SlackMemberId1>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -539,7 +539,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(false);
     expect(result.pr.members_approving).deep.equal(["<SlackMemberId3>"]);
-    expect(result.pr.members_alert).deep.equal(["<SlackMemberId4>", "<SlackMemberId1>"]);
+    expect(result.pr.standard_members_alert).deep.equal(["<SlackMemberId4>", "<SlackMemberId1>"]);
     expect(result.pr.members_req_changes).deep.equal(["<SlackMemberId2>"]);
 
     expect(result.leftMembers).deep.equal([]);
@@ -549,7 +549,7 @@ describe("updateMemberAlerts", () => {
     const pr: any = {
       members_req_changes: ["<SlackMemberId3>"],
       members_approving: [],
-      members_alert: ["<SlackMemberId2>", "<SlackMemberId4>", "<SlackMemberId1>"],
+      standard_members_alert: ["<SlackMemberId2>", "<SlackMemberId4>", "<SlackMemberId1>"],
       member_complete: false,
     };
     const slackUserOwner = {
@@ -571,7 +571,7 @@ describe("updateMemberAlerts", () => {
 
     expect(result.pr.member_complete).equal(false);
     expect(result.pr.members_approving).deep.equal(["<SlackMemberId2>"]);
-    expect(result.pr.members_alert).deep.equal(["<SlackMemberId4>", "<SlackMemberId1>"]);
+    expect(result.pr.standard_members_alert).deep.equal(["<SlackMemberId4>", "<SlackMemberId1>"]);
     expect(result.pr.members_req_changes).deep.equal(["<SlackMemberId3>"]);
 
     expect(result.leftMembers).deep.equal([]);
