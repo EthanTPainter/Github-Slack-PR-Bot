@@ -60,16 +60,16 @@ export function updateMemberAlerts(
     if (ownerLead && ownerMember) {
       throw new Error(`${slackUserOwner} set as a member and lead. Pick one!`);
     }
-    // Check if slackUserOwner is already in standard_leads_alert
+    // Check if slackUserOwner is already in leads_alert
     if (ownerLead) {
-      if (!pr.standard_leads_alert.includes(slackUserOwner.Slack_Id)) {
-        pr.standard_leads_alert.push(slackUserOwner.Slack_Id);
+      if (!pr.leads_alert.includes(slackUserOwner.Slack_Id)) {
+        pr.leads_alert.push(slackUserOwner.Slack_Id);
       }
     }
-    // Check if slackUserOwner is already in standard_members_alert
+    // Check if slackUserOwner is already in members_alert
     if (ownerMember) {
-      if (!pr.standard_members_alert.includes(slackUserOwner.Slack_Id)) {
-        pr.standard_members_alert.push(slackUserOwner.Slack_Id);
+      if (!pr.members_alert.includes(slackUserOwner.Slack_Id)) {
+        pr.members_alert.push(slackUserOwner.Slack_Id);
       }
     }
   }
@@ -81,7 +81,7 @@ export function updateMemberAlerts(
     && pr.members_approving.length + membersReqChanges.length
     >= teamOptions.Num_Required_Member_Approvals) {
     // Store leftover members
-    pr.standard_members_alert.map((slackId) => {
+    pr.members_alert.map((slackId) => {
       if (slackId !== slackUserChanging.Slack_Id
         && slackId !== slackUserOwner.Slack_Id) {
         leftoverAlertedMembers.push(slackId);
@@ -89,27 +89,27 @@ export function updateMemberAlerts(
     });
     // If members alert includes pr owner, keep them alerted
     // Otherwise set to empty
-    if (pr.standard_members_alert.includes(slackUserOwner.Slack_Id)) {
-      pr.standard_members_alert = [slackUserOwner.Slack_Id];
+    if (pr.members_alert.includes(slackUserOwner.Slack_Id)) {
+      pr.members_alert = [slackUserOwner.Slack_Id];
     } else {
-      pr.standard_members_alert = [];
+      pr.members_alert = [];
     }
     if (pr.members_approving.length < teamOptions.Num_Required_Member_Approvals) {
       pr.member_complete = false;
     } else {
       pr.member_complete = true;
-      // If members before leads, created list for standard_leads_alert
+      // If members before leads, created list for leads_alert
       if (teamOptions.Member_Before_Lead) {
         const slackLeads = getSlackLeadsAlt(slackUserOwner, json);
         slackLeads.map((lead) => {
-          pr.standard_leads_alert.push(lead.Slack_Id);
+          pr.leads_alert.push(lead.Slack_Id);
         });
       }
     }
   }
   else if (pr.members_approving.length >= teamOptions.Num_Required_Member_Approvals) {
-    pr.standard_members_alert.map((slackId) => {
-      // Store leftover members and reset standard_members_alert to []
+    pr.members_alert.map((slackId) => {
+      // Store leftover members and reset members_alert to []
       if (slackId !== slackUserChanging.Slack_Id
         && slackId !== slackUserOwner.Slack_Id) {
         leftoverAlertedMembers.push(slackId);
@@ -117,10 +117,10 @@ export function updateMemberAlerts(
     });
     // If members alert includes pr owner, keep them alerted
     // Otherwise set to empty
-    if (pr.standard_members_alert.includes(slackUserOwner.Slack_Id)) {
-      pr.standard_members_alert = [slackUserOwner.Slack_Id];
+    if (pr.members_alert.includes(slackUserOwner.Slack_Id)) {
+      pr.members_alert = [slackUserOwner.Slack_Id];
     } else {
-      pr.standard_members_alert = [];
+      pr.members_alert = [];
     }
     // If there are members requesting changes
     // even with other members approving the PR
@@ -134,10 +134,10 @@ export function updateMemberAlerts(
   // Otherwise don't have enough memberss approving/requesting changes
   // OR just approving. Construct new list of members to alert
   else {
-    const newMembersToAlert = pr.standard_members_alert.filter((slackId) => {
+    const newMembersToAlert = pr.members_alert.filter((slackId) => {
       return slackId !== slackUserChanging.Slack_Id;
     });
-    pr.standard_members_alert = newMembersToAlert;
+    pr.members_alert = newMembersToAlert;
   }
   return { pr: pr, leftMembers: leftoverAlertedMembers };
 }

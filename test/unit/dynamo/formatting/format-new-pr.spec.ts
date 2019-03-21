@@ -57,8 +57,8 @@ describe("formatNewPullRequest", () => {
       owner: slackUser,
       title: event.pull_request.title,
       url: event.pull_request.html_url,
-      standard_leads_alert: [],
-      standard_members_alert: ["<@2222>"],
+      leads_alert: [],
+      members_alert: ["<@2222>"],
       member_complete: false,
       members_approving: [],
       lead_complete: false,
@@ -70,9 +70,9 @@ describe("formatNewPullRequest", () => {
       }],
     };
 
-    expect(result.standard_leads_alert).deep.equal(expected.standard_leads_alert);
+    expect(result.leads_alert).deep.equal(expected.leads_alert);
     expect(result.leads_approving).deep.equal(expected.leads_approving);
-    expect(result.standard_members_alert).deep.equal(expected.standard_members_alert);
+    expect(result.members_alert).deep.equal(expected.members_alert);
     expect(result.members_approving).deep.equal(expected.members_approving);
     expect(result.events[0].user).deep.equal(expected.events[0].user);
     expect(result.events[0].action).equal("OPENED");
@@ -86,8 +86,8 @@ describe("formatNewPullRequest", () => {
       owner: slackUser,
       title: event.pull_request.title,
       url: event.pull_request.html_url,
-      standard_leads_alert: [],
-      standard_members_alert: [],
+      leads_alert: [],
+      members_alert: [],
       member_complete: false,
       members_approving: [],
       lead_complete: false,
@@ -99,9 +99,9 @@ describe("formatNewPullRequest", () => {
       }],
     };
 
-    expect(result.standard_leads_alert).deep.equal(expected.standard_leads_alert);
+    expect(result.leads_alert).deep.equal(expected.leads_alert);
     expect(result.leads_approving).deep.equal(expected.leads_approving);
-    expect(result.standard_members_alert).deep.equal(expected.standard_members_alert);
+    expect(result.members_alert).deep.equal(expected.members_alert);
     expect(result.members_approving).deep.equal(expected.members_approving);
     expect(result.events[0].user).deep.equal(expected.events[0].user);
     expect(result.events[0].action).equal("OPENED");
@@ -116,8 +116,8 @@ describe("formatNewPullRequest", () => {
       owner: slackUser,
       title: event.pull_request.title,
       url: event.pull_request.html_url,
-      standard_leads_alert: ["<@1111>"],
-      standard_members_alert: [],
+      leads_alert: ["<@1111>"],
+      members_alert: [],
       member_complete: true,
       members_approving: [],
       lead_complete: false,
@@ -129,9 +129,9 @@ describe("formatNewPullRequest", () => {
       }],
     };
 
-    expect(result.standard_leads_alert).deep.equal(expected.standard_leads_alert);
+    expect(result.leads_alert).deep.equal(expected.leads_alert);
     expect(result.leads_approving).deep.equal(expected.leads_approving);
-    expect(result.standard_members_alert).deep.equal(expected.standard_members_alert);
+    expect(result.members_alert).deep.equal(expected.members_alert);
     expect(result.members_approving).deep.equal(expected.members_approving);
     expect(result.events[0].user).deep.equal(expected.events[0].user);
     expect(result.events[0].action).equal("OPENED");
@@ -146,8 +146,8 @@ describe("formatNewPullRequest", () => {
       owner: slackUser,
       title: event.pull_request.title,
       url: event.pull_request.html_url,
-      standard_leads_alert: [],
-      standard_members_alert: ["<@2222>"],
+      leads_alert: [],
+      members_alert: ["<@2222>"],
       member_complete: false,
       members_approving: [],
       lead_complete: true,
@@ -159,9 +159,9 @@ describe("formatNewPullRequest", () => {
       }],
     };
 
-    expect(result.standard_leads_alert).deep.equal(expected.standard_leads_alert);
+    expect(result.leads_alert).deep.equal(expected.leads_alert);
     expect(result.leads_approving).deep.equal(expected.leads_approving);
-    expect(result.standard_members_alert).deep.equal(expected.standard_members_alert);
+    expect(result.members_alert).deep.equal(expected.members_alert);
     expect(result.members_approving).deep.equal(expected.members_approving);
     expect(result.events[0].user).deep.equal(expected.events[0].user);
     expect(result.events[0].action).equal("OPENED");

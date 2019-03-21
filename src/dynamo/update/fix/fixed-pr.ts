@@ -1,4 +1,5 @@
 import { PullRequest } from "../../../models";
+import { getSlackUserAlt } from "src/json/parse";
 
 /**
  * @description Given a PR has user(s) requesting changes,
@@ -12,7 +13,8 @@ export function updateFixedPR(
   slackUserId: string,
   fixedPRUrl: string,
   slackUserQueue: PullRequest[],
-): void {
+  json: any,
+): string {
 
   // Verify the PR is in the queue
   const foundPR = slackUserQueue.find((pr) => {
@@ -25,9 +27,17 @@ export function updateFixedPR(
   // Get list of members & leads who requested changes
   const membersReqChanges = foundPR.members_req_changes;
   const leadsReqChanges = foundPR.leads_req_changes;
+  const allUsersReqChanges = membersReqChanges.concat(leadsReqChanges);
 
-  // append list of member users to current member alerts
-  // append list of lead users to current lead alerts
+  // Notify all members & leads who requested changes
+  // that the PR is ready to review
+  let allUsersString = "";
+  allUsersReqChanges.map((user) => {
+    allUsersString += `${user} `;
+  });
 
-  // Update PR
+  // Get Slack User from slackUserId & format final string
+  const slackOwner = getSlackUserAlt(slackUserId, json);
+  const fixedString = `${slackOwner.Slack_Name} has fixed PR: ${fixedPRUrl}. ${allUsersString}`;
+  return fixedString;
 }

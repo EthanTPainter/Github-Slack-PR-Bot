@@ -82,3 +82,87 @@ export function getTeamName(
   // Throw error because of user not found
   throw new Error(`GitHub user: ${githubUser} could not be found in JSON file`);
 }
+
+/**
+ * @description Given a Slack user Id, find the team containing
+ *              the slack user id and return that team's name
+ * @param slackUserId github username
+ * @param json JSON config file
+ * @returns String of the team name
+ */
+export function getTeamNameAlt(
+  slackUserId: string,
+  json: any,
+): string {
+  // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
+  const departments = json.Departments;
+  const allDepartmentKeys = Object.keys(departments);
+  // If no teams present, return error
+  if (allDepartmentKeys.length === 0) {
+    throw new Error("No Department found in JSON file");
+  }
+
+  // Otherwise loop through teams (DevTeam, QaTeam, ProdTeam)
+  let departmentCounter = 0;
+  while (departmentCounter < allDepartmentKeys.length) {
+    // Get selectedTeam (DevTeam), and get selectedTeamGroup (DevTeam1)
+    const selectedDepartmentName = allDepartmentKeys[departmentCounter];
+    const selectedDepartment = departments[selectedDepartmentName];
+    const teamKeys = Object.keys(selectedDepartment);
+    let selectedTeamCounter = 0;
+    if (teamKeys.length === 0) {
+      // (Dev_Team_1, SomethingCool1, etc.)
+      throw new Error("No Team found in JSON file");
+    }
+    // Loop through team groups (DevTeam1, DevTeam2, etc.)
+    while (selectedTeamCounter < teamKeys.length) {
+      // Retrieve users from JSON
+      const selectedGroupSubTeam = selectedDepartment[teamKeys[selectedTeamCounter]];
+      if (!selectedGroupSubTeam.Users) {
+        throw new Error(`No Users defined for team: ${teamKeys[selectedTeamCounter]}`);
+      }
+      const users = selectedGroupSubTeam.Users;
+
+      if (!users.Leads) {
+        throw new Error(`Leads not defined for team: ${teamKeys[selectedTeamCounter]}`);
+      }
+      if (!users.Members) {
+        throw new Error(`Members not defined for team: ${teamKeys[selectedTeamCounter]}`);
+      }
+
+      const leadUsers = users.Leads;
+      const memberUsers = users.Members;
+      const memberValues = Object.values(memberUsers);
+      const leadValues = Object.values(leadUsers);
+
+      let leadCounter = 0;
+      // Loop through lead keys for matching GitHub User
+      while (leadCounter < leadValues.length) {
+        const selectedLead: any = leadValues[leadCounter];
+        if (selectedLead.Slack_Id === slackUserId) {
+          return teamKeys[selectedTeamCounter];
+        }
+        leadCounter++;
+      }
+
+      // User not found in Lead group. Check member group
+      let memberCounter = 0;
+      // Loop through member keys for matching GitHub User
+      while (memberCounter < memberValues.length) {
+        const selectedMember: any = memberValues[memberCounter];
+        if (selectedMember.Slack_Id === slackUserId) {
+          return teamKeys[selectedTeamCounter];
+        }
+        memberCounter++;
+      }
+      // If GitHub user not found in lead or member groups
+      // The user must be in a different group
+      selectedTeamCounter++;
+    }
+    // User not found in General Team (DevTeam), look at antoher team
+    departmentCounter++;
+  }
+  // Looped through all teams and couldn't find github user
+  // Throw error because of user not found
+  throw new Error(`Slack user id: ${slackUserId} could not be found in JSON file`);
+}

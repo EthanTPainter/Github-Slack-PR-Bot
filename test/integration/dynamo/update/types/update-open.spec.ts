@@ -90,10 +90,10 @@ describe("Dynamo.UpdateOpen", () => {
         },
       }],
       lead_complete: false,
-      standard_leads_alert: [],
+      leads_alert: [],
       leads_approving: [],
       member_complete: false,
-      standard_members_alert: [
+      members_alert: [
         "<SlackMemberId2>",
         "<SlackMemberId3>",
       ],
@@ -120,10 +120,10 @@ describe("Dynamo.UpdateOpen", () => {
     expect(teamQueue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
     expect(teamQueue[0].events[0].user).deep.equal(expectedUpdatedQueue[0].events[0].user);
     expect(teamQueue[0].lead_complete).deep.equal(expectedUpdatedQueue[0].lead_complete);
-    expect(teamQueue[0].standard_leads_alert).deep.equal(expectedUpdatedQueue[0].standard_leads_alert);
+    expect(teamQueue[0].leads_alert).deep.equal(expectedUpdatedQueue[0].leads_alert);
     expect(teamQueue[0].leads_approving).deep.equal(expectedUpdatedQueue[0].leads_approving);
     expect(teamQueue[0].member_complete).deep.equal(expectedUpdatedQueue[0].member_complete);
-    expect(teamQueue[0].standard_members_alert).deep.equal(expectedUpdatedQueue[0].standard_members_alert);
+    expect(teamQueue[0].members_alert).deep.equal(expectedUpdatedQueue[0].members_alert);
     expect(teamQueue[0].members_approving).deep.equal(expectedUpdatedQueue[0].members_approving);
     expect(teamQueue[0].owner).deep.equal(expectedUpdatedQueue[0].owner);
     expect(teamQueue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
@@ -134,10 +134,10 @@ describe("Dynamo.UpdateOpen", () => {
     expect(member2Queue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
     expect(member2Queue[0].events[0].user).deep.equal(expectedUpdatedQueue[0].events[0].user);
     expect(member2Queue[0].lead_complete).deep.equal(expectedUpdatedQueue[0].lead_complete);
-    expect(member2Queue[0].standard_leads_alert).deep.equal(expectedUpdatedQueue[0].standard_leads_alert);
+    expect(member2Queue[0].leads_alert).deep.equal(expectedUpdatedQueue[0].leads_alert);
     expect(member2Queue[0].leads_approving).deep.equal(expectedUpdatedQueue[0].leads_approving);
     expect(member2Queue[0].member_complete).deep.equal(expectedUpdatedQueue[0].member_complete);
-    expect(member2Queue[0].standard_members_alert).deep.equal(expectedUpdatedQueue[0].standard_members_alert);
+    expect(member2Queue[0].members_alert).deep.equal(expectedUpdatedQueue[0].members_alert);
     expect(member2Queue[0].members_approving).deep.equal(expectedUpdatedQueue[0].members_approving);
     expect(member2Queue[0].owner).deep.equal(expectedUpdatedQueue[0].owner);
     expect(member2Queue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
@@ -147,10 +147,10 @@ describe("Dynamo.UpdateOpen", () => {
     expect(member3Queue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
     expect(member3Queue[0].events[0].user).deep.equal(expectedUpdatedQueue[0].events[0].user);
     expect(member3Queue[0].lead_complete).deep.equal(expectedUpdatedQueue[0].lead_complete);
-    expect(member3Queue[0].standard_leads_alert).deep.equal(expectedUpdatedQueue[0].standard_leads_alert);
+    expect(member3Queue[0].leads_alert).deep.equal(expectedUpdatedQueue[0].leads_alert);
     expect(member3Queue[0].leads_approving).deep.equal(expectedUpdatedQueue[0].leads_approving);
     expect(member3Queue[0].member_complete).deep.equal(expectedUpdatedQueue[0].member_complete);
-    expect(member3Queue[0].standard_members_alert).deep.equal(expectedUpdatedQueue[0].standard_members_alert);
+    expect(member3Queue[0].members_alert).deep.equal(expectedUpdatedQueue[0].members_alert);
     expect(member3Queue[0].members_approving).deep.equal(expectedUpdatedQueue[0].members_approving);
     expect(member3Queue[0].owner).deep.equal(expectedUpdatedQueue[0].owner);
     expect(member3Queue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
@@ -206,14 +206,14 @@ describe("Dynamo.UpdateOpen", () => {
         },
       }],
       lead_complete: false,
-      standard_leads_alert: [
+      leads_alert: [
         "<SlackLeadId1>",
         "<SlackLeadId2>",
         "<SlackLeadId3>",
       ],
       leads_approving: [],
       member_complete: false,
-      standard_members_alert: [
+      members_alert: [
         "<SlackMemberId2>",
         "<SlackMemberId3>",
       ],
@@ -234,10 +234,10 @@ describe("Dynamo.UpdateOpen", () => {
     expect(teamQueue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
     expect(teamQueue[0].events[0].user).deep.equal(expectedUpdatedQueue[0].events[0].user);
     expect(teamQueue[0].lead_complete).deep.equal(expectedUpdatedQueue[0].lead_complete);
-    expect(teamQueue[0].standard_leads_alert).deep.equal(expectedUpdatedQueue[0].standard_leads_alert);
+    expect(teamQueue[0].leads_alert).deep.equal(expectedUpdatedQueue[0].leads_alert);
     expect(teamQueue[0].leads_approving).deep.equal(expectedUpdatedQueue[0].leads_approving);
     expect(teamQueue[0].member_complete).deep.equal(expectedUpdatedQueue[0].member_complete);
-    expect(teamQueue[0].standard_members_alert).deep.equal(expectedUpdatedQueue[0].standard_members_alert);
+    expect(teamQueue[0].members_alert).deep.equal(expectedUpdatedQueue[0].members_alert);
     expect(teamQueue[0].members_approving).deep.equal(expectedUpdatedQueue[0].members_approving);
     expect(teamQueue[0].owner).deep.equal(expectedUpdatedQueue[0].owner);
     expect(teamQueue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
@@ -248,10 +248,10 @@ describe("Dynamo.UpdateOpen", () => {
     expect(lead1Queue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
     expect(lead1Queue[0].events[0].user).deep.equal(expectedUpdatedQueue[0].events[0].user);
     expect(lead1Queue[0].lead_complete).deep.equal(expectedUpdatedQueue[0].lead_complete);
-    expect(lead1Queue[0].standard_leads_alert).deep.equal(expectedUpdatedQueue[0].standard_leads_alert);
+    expect(lead1Queue[0].leads_alert).deep.equal(expectedUpdatedQueue[0].leads_alert);
     expect(lead1Queue[0].leads_approving).deep.equal(expectedUpdatedQueue[0].leads_approving);
     expect(lead1Queue[0].member_complete).deep.equal(expectedUpdatedQueue[0].member_complete);
-    expect(lead1Queue[0].standard_members_alert).deep.equal(expectedUpdatedQueue[0].standard_members_alert);
+    expect(lead1Queue[0].members_alert).deep.equal(expectedUpdatedQueue[0].members_alert);
     expect(lead1Queue[0].members_approving).deep.equal(expectedUpdatedQueue[0].members_approving);
     expect(lead1Queue[0].owner).deep.equal(expectedUpdatedQueue[0].owner);
     expect(lead1Queue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
@@ -261,10 +261,10 @@ describe("Dynamo.UpdateOpen", () => {
     expect(lead2Queue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
     expect(lead2Queue[0].events[0].user).deep.equal(expectedUpdatedQueue[0].events[0].user);
     expect(lead2Queue[0].lead_complete).deep.equal(expectedUpdatedQueue[0].lead_complete);
-    expect(lead2Queue[0].standard_leads_alert).deep.equal(expectedUpdatedQueue[0].standard_leads_alert);
+    expect(lead2Queue[0].leads_alert).deep.equal(expectedUpdatedQueue[0].leads_alert);
     expect(lead2Queue[0].leads_approving).deep.equal(expectedUpdatedQueue[0].leads_approving);
     expect(lead2Queue[0].member_complete).deep.equal(expectedUpdatedQueue[0].member_complete);
-    expect(lead2Queue[0].standard_members_alert).deep.equal(expectedUpdatedQueue[0].standard_members_alert);
+    expect(lead2Queue[0].members_alert).deep.equal(expectedUpdatedQueue[0].members_alert);
     expect(lead2Queue[0].members_approving).deep.equal(expectedUpdatedQueue[0].members_approving);
     expect(lead2Queue[0].owner).deep.equal(expectedUpdatedQueue[0].owner);
     expect(lead2Queue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
@@ -274,10 +274,10 @@ describe("Dynamo.UpdateOpen", () => {
     expect(lead3Queue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
     expect(lead3Queue[0].events[0].user).deep.equal(expectedUpdatedQueue[0].events[0].user);
     expect(lead3Queue[0].lead_complete).deep.equal(expectedUpdatedQueue[0].lead_complete);
-    expect(lead3Queue[0].standard_leads_alert).deep.equal(expectedUpdatedQueue[0].standard_leads_alert);
+    expect(lead3Queue[0].leads_alert).deep.equal(expectedUpdatedQueue[0].leads_alert);
     expect(lead3Queue[0].leads_approving).deep.equal(expectedUpdatedQueue[0].leads_approving);
     expect(lead3Queue[0].member_complete).deep.equal(expectedUpdatedQueue[0].member_complete);
-    expect(lead3Queue[0].standard_members_alert).deep.equal(expectedUpdatedQueue[0].standard_members_alert);
+    expect(lead3Queue[0].members_alert).deep.equal(expectedUpdatedQueue[0].members_alert);
     expect(lead3Queue[0].members_approving).deep.equal(expectedUpdatedQueue[0].members_approving);
     expect(lead3Queue[0].owner).deep.equal(expectedUpdatedQueue[0].owner);
     expect(lead3Queue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
@@ -287,10 +287,10 @@ describe("Dynamo.UpdateOpen", () => {
     expect(member2Queue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
     expect(member2Queue[0].events[0].user).deep.equal(expectedUpdatedQueue[0].events[0].user);
     expect(member2Queue[0].lead_complete).deep.equal(expectedUpdatedQueue[0].lead_complete);
-    expect(member2Queue[0].standard_leads_alert).deep.equal(expectedUpdatedQueue[0].standard_leads_alert);
+    expect(member2Queue[0].leads_alert).deep.equal(expectedUpdatedQueue[0].leads_alert);
     expect(member2Queue[0].leads_approving).deep.equal(expectedUpdatedQueue[0].leads_approving);
     expect(member2Queue[0].member_complete).deep.equal(expectedUpdatedQueue[0].member_complete);
-    expect(member2Queue[0].standard_members_alert).deep.equal(expectedUpdatedQueue[0].standard_members_alert);
+    expect(member2Queue[0].members_alert).deep.equal(expectedUpdatedQueue[0].members_alert);
     expect(member2Queue[0].members_approving).deep.equal(expectedUpdatedQueue[0].members_approving);
     expect(member2Queue[0].owner).deep.equal(expectedUpdatedQueue[0].owner);
     expect(member2Queue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
@@ -300,10 +300,10 @@ describe("Dynamo.UpdateOpen", () => {
     expect(member3Queue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);
     expect(member3Queue[0].events[0].user).deep.equal(expectedUpdatedQueue[0].events[0].user);
     expect(member3Queue[0].lead_complete).deep.equal(expectedUpdatedQueue[0].lead_complete);
-    expect(member3Queue[0].standard_leads_alert).deep.equal(expectedUpdatedQueue[0].standard_leads_alert);
+    expect(member3Queue[0].leads_alert).deep.equal(expectedUpdatedQueue[0].leads_alert);
     expect(member3Queue[0].leads_approving).deep.equal(expectedUpdatedQueue[0].leads_approving);
     expect(member3Queue[0].member_complete).deep.equal(expectedUpdatedQueue[0].member_complete);
-    expect(member3Queue[0].standard_members_alert).deep.equal(expectedUpdatedQueue[0].standard_members_alert);
+    expect(member3Queue[0].members_alert).deep.equal(expectedUpdatedQueue[0].members_alert);
     expect(member3Queue[0].members_approving).deep.equal(expectedUpdatedQueue[0].members_approving);
     expect(member3Queue[0].owner).deep.equal(expectedUpdatedQueue[0].owner);
     expect(member3Queue[0].events[0].action).deep.equal(expectedUpdatedQueue[0].events[0].action);

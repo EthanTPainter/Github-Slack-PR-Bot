@@ -4,6 +4,9 @@ import { XRayInitializer } from "../xray";
 import { requiredEnvs } from "../required-envs";
 import { DynamoGet } from "src/dynamo/api";
 import { updateFixedPR } from "../dynamo/update";
+import { json } from "../json/src/json";
+import { postMessage } from "../slack/api/post-message";
+import { getTeamNameAlt } from "src/json/parse/team-name";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -54,7 +57,7 @@ export async function processFixedPR(
       };
       callback(200, invalidResp);
     }
-    // Check for expected match
+    // Use regex checking for proper URL format
     const expression = "(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\."
       + "[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^"
       + "\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})";
@@ -73,7 +76,16 @@ export async function processFixedPR(
     const slackMessage = await updateFixedPR(
       slackUserId,
       text,
-      userQueue);
+      userQueue,
+      json);
+
+    // Get Team name from slackUserId
+    const teamName = getTeamNameAlt(slackUserId, json);
+
+    await postMessage(requiredEnvs.SLACK_API_URI,
+      requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
+      requiredEnvs[teamName + "_SLACK_TOKEN"],
+      slackMessage);
 
     const success = {
       body: slackMessage,
@@ -82,7 +94,7 @@ export async function processFixedPR(
     callback(null, success);
   }
   catch (error) {
-    const errorMessage = `Uh oh. Erorr occurred: ${error.message}`;
+    const errorMessage = `Uh oh. Error occurred: ${error.message}`;
     const fail = {
       body: errorMessage,
       statusCode: 200,

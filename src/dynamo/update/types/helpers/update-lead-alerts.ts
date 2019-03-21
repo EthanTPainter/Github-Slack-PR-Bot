@@ -63,15 +63,15 @@ export function updateLeadAlerts(
     if (ownerLead && ownerMember) {
       throw new Error(`${slackUserOwner} set as a member and lead. Pick one!`);
     }
-    // Check if slackUserOwner is already in standard_leads_alert
+    // Check if slackUserOwner is already in leads_alert
     if (ownerLead) {
-      if (!pr.standard_leads_alert.includes(slackUserOwner.Slack_Id)) {
-        pr.standard_leads_alert.push(slackUserOwner.Slack_Id);
+      if (!pr.leads_alert.includes(slackUserOwner.Slack_Id)) {
+        pr.leads_alert.push(slackUserOwner.Slack_Id);
       }
     }
     if (ownerMember) {
-      if (!pr.standard_members_alert.includes(slackUserOwner.Slack_Id)) {
-        pr.standard_members_alert.push(slackUserOwner.Slack_Id);
+      if (!pr.members_alert.includes(slackUserOwner.Slack_Id)) {
+        pr.members_alert.push(slackUserOwner.Slack_Id);
       }
     }
   }
@@ -82,8 +82,8 @@ export function updateLeadAlerts(
   if (teamOptions.Req_Changes_Stop_Alerts
     && pr.leads_approving.length + leadsReqChanges.length
     >= teamOptions.Num_Required_Lead_Approvals) {
-    pr.standard_leads_alert.map((slackId) => {
-      // Store leftover leads and reset standard_leads_alert to []
+    pr.leads_alert.map((slackId) => {
+      // Store leftover leads and reset leads_alert to []
       if (slackId !== slackUserChanging.Slack_Id
           && slackId !== slackUserOwner.Slack_Id) {
         leftoverAlertedLeads.push(slackId);
@@ -91,10 +91,10 @@ export function updateLeadAlerts(
     });
     // If leads alert includes pr owner, keep them alerted
     // Otherwise set to empty
-    if (pr.standard_leads_alert.includes(slackUserOwner.Slack_Id)) {
-      pr.standard_leads_alert = [slackUserOwner.Slack_Id];
+    if (pr.leads_alert.includes(slackUserOwner.Slack_Id)) {
+      pr.leads_alert = [slackUserOwner.Slack_Id];
     } else {
-      pr.standard_leads_alert = [];
+      pr.leads_alert = [];
     }
     if (pr.leads_approving.length < teamOptions.Num_Required_Lead_Approvals) {
       pr.lead_complete = false;
@@ -106,8 +106,8 @@ export function updateLeadAlerts(
   // AND leads approving >= required leads approvals
   // Then add slackId
   else if (pr.leads_approving.length >= teamOptions.Num_Required_Lead_Approvals) {
-    pr.standard_leads_alert.map((slackId) => {
-      // Store leftover leads and reset standard_leads_alert to []
+    pr.leads_alert.map((slackId) => {
+      // Store leftover leads and reset leads_alert to []
       if (slackId !== slackUserChanging.Slack_Id
         && slackId !== slackUserOwner.Slack_Id) {
         leftoverAlertedLeads.push(slackId);
@@ -115,10 +115,10 @@ export function updateLeadAlerts(
     });
     // If leads alert includes pr owner, keep them alerted
     // Otherwis set to empty
-    if (pr.standard_leads_alert.includes(slackUserOwner.Slack_Id)) {
-      pr.standard_leads_alert = [slackUserOwner.Slack_Id];
+    if (pr.leads_alert.includes(slackUserOwner.Slack_Id)) {
+      pr.leads_alert = [slackUserOwner.Slack_Id];
     } else {
-      pr.standard_leads_alert = [];
+      pr.leads_alert = [];
     }
     // If there are leads requesting changes
     // even with other leads approving the PR
@@ -132,10 +132,10 @@ export function updateLeadAlerts(
   // Otherwise, don't have enough leads approving/requesting changes
   // OR just approving. Construct new list of leads to alert
   else {
-    const newLeadsToAlert = pr.standard_leads_alert.filter((slackId: string) => {
+    const newLeadsToAlert = pr.leads_alert.filter((slackId: string) => {
       return slackId !== slackUserChanging.Slack_Id;
     });
-    pr.standard_leads_alert = newLeadsToAlert;
+    pr.leads_alert = newLeadsToAlert;
   }
 
   return { pr: pr, leftLeads: leftoverAlertedLeads };

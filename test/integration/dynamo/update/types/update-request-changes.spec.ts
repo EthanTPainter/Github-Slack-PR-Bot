@@ -52,12 +52,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [],
+      leads_alert: [],
       leads_approving: [],
       lead_complete: false,
       leads_req_changes: [],
@@ -121,11 +121,11 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_alert).deep.equal([]);
     expect(teamQueue[0].leads_req_changes).deep.equal([]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -156,12 +156,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [],
+      leads_alert: [],
       leads_approving: [],
       lead_complete: false,
       leads_req_changes: [],
@@ -225,11 +225,11 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_alert).deep.equal([slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_alert).deep.equal([]);
     expect(teamQueue[0].leads_req_changes).deep.equal([]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -260,12 +260,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [],
+      leads_alert: [],
       leads_approving: [],
       lead_complete: false,
       leads_req_changes: [],
@@ -329,13 +329,13 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+    expect(teamQueue[0].members_alert).deep.equal([slackMember2.Slack_Id,
     slackMember3.Slack_Id,
     slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_alert).deep.equal([]);
     expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -364,12 +364,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [],
+      leads_alert: [],
       leads_approving: [],
       lead_complete: false,
       leads_req_changes: [],
@@ -433,13 +433,13 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+    expect(teamQueue[0].members_alert).deep.equal([slackMember2.Slack_Id,
     slackMember3.Slack_Id,
     slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_alert).deep.equal([]);
     expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -468,12 +468,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [],
+      leads_alert: [],
       leads_approving: [],
       lead_complete: false,
       leads_req_changes: [],
@@ -537,11 +537,11 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_alert).deep.equal([]);
     expect(teamQueue[0].leads_req_changes).deep.equal([]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -571,12 +571,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [],
+      leads_alert: [],
       leads_approving: [],
       lead_complete: false,
       leads_req_changes: [],
@@ -640,11 +640,11 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_alert).deep.equal([]);
     expect(teamQueue[0].leads_req_changes).deep.equal([]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -674,12 +674,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [],
+      leads_alert: [],
       leads_approving: [],
       lead_complete: false,
       leads_req_changes: [],
@@ -743,13 +743,13 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+    expect(teamQueue[0].members_alert).deep.equal([slackMember2.Slack_Id,
     slackMember3.Slack_Id,
     slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_alert).deep.equal([]);
     expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -778,12 +778,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [],
+      leads_alert: [],
       leads_approving: [],
       lead_complete: false,
       leads_req_changes: [],
@@ -847,13 +847,13 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+    expect(teamQueue[0].members_alert).deep.equal([slackMember2.Slack_Id,
     slackMember3.Slack_Id,
     slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_alert).deep.equal([]);
     expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -883,12 +883,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [slackLead1.Slack_Id,
+      leads_alert: [slackLead1.Slack_Id,
         slackLead2.Slack_Id,
         slackLead3.Slack_Id,
       ],
@@ -955,11 +955,11 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead1.Slack_Id,
+    expect(teamQueue[0].leads_alert).deep.equal([slackLead1.Slack_Id,
       slackLead2.Slack_Id, slackLead3.Slack_Id]);
     expect(teamQueue[0].leads_req_changes).deep.equal([]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
@@ -990,12 +990,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [slackLead1.Slack_Id,
+      leads_alert: [slackLead1.Slack_Id,
         slackLead2.Slack_Id,
         slackLead3.Slack_Id,
       ],
@@ -1062,11 +1062,11 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_alert).deep.equal([slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead1.Slack_Id,
+    expect(teamQueue[0].leads_alert).deep.equal([slackLead1.Slack_Id,
       slackLead2.Slack_Id, slackLead3.Slack_Id]);
     expect(teamQueue[0].leads_req_changes).deep.equal([]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
@@ -1097,12 +1097,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [slackLead1.Slack_Id,
+      leads_alert: [slackLead1.Slack_Id,
         slackLead2.Slack_Id,
         slackLead3.Slack_Id,
       ],
@@ -1169,11 +1169,11 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead1.Slack_Id,
+    expect(teamQueue[0].leads_alert).deep.equal([slackLead1.Slack_Id,
       slackLead2.Slack_Id, slackLead3.Slack_Id]);
     expect(teamQueue[0].leads_req_changes).deep.equal([]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
@@ -1204,12 +1204,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [slackLead1.Slack_Id,
+      leads_alert: [slackLead1.Slack_Id,
         slackLead2.Slack_Id,
         slackLead3.Slack_Id,
       ],
@@ -1276,11 +1276,11 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
+    expect(teamQueue[0].members_alert).deep.equal([slackMember3.Slack_Id, slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([slackMember2.Slack_Id]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead1.Slack_Id,
+    expect(teamQueue[0].leads_alert).deep.equal([slackLead1.Slack_Id,
       slackLead2.Slack_Id, slackLead3.Slack_Id]);
     expect(teamQueue[0].leads_req_changes).deep.equal([]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
@@ -1311,12 +1311,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [slackLead2.Slack_Id,
+      leads_alert: [slackLead2.Slack_Id,
         slackLead3.Slack_Id,
       ],
       leads_approving: [],
@@ -1382,13 +1382,13 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+    expect(teamQueue[0].members_alert).deep.equal([slackMember2.Slack_Id,
       slackMember3.Slack_Id,
       slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_alert).deep.equal([]);
     expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -1416,12 +1416,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [slackLead2.Slack_Id,
+      leads_alert: [slackLead2.Slack_Id,
         slackLead3.Slack_Id,
       ],
       leads_approving: [],
@@ -1487,13 +1487,13 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+    expect(teamQueue[0].members_alert).deep.equal([slackMember2.Slack_Id,
       slackMember3.Slack_Id,
       slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].leads_alert).deep.equal([]);
     expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -1521,12 +1521,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [slackLead2.Slack_Id,
+      leads_alert: [slackLead2.Slack_Id,
         slackLead3.Slack_Id,
       ],
       leads_approving: [],
@@ -1592,13 +1592,13 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+    expect(teamQueue[0].members_alert).deep.equal([slackMember2.Slack_Id,
       slackMember3.Slack_Id,
       slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead2.Slack_Id,
+    expect(teamQueue[0].leads_alert).deep.equal([slackLead2.Slack_Id,
       slackLead3.Slack_Id]);
     expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
@@ -1627,12 +1627,12 @@ describe("updateReqChanges", () => {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
       url: "www.github.com/aws/firecracker",
-      standard_members_alert: [slackMember2.Slack_Id,
+      members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
       member_complete: false,
       members_req_changes: [],
-      standard_leads_alert: [slackLead2.Slack_Id,
+      leads_alert: [slackLead2.Slack_Id,
         slackLead3.Slack_Id,
       ],
       leads_approving: [],
@@ -1698,13 +1698,13 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].url).equal(newPR.url);
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
-    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
+    expect(teamQueue[0].members_alert).deep.equal([slackMember2.Slack_Id,
       slackMember3.Slack_Id,
       slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
-    expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead2.Slack_Id,
+    expect(teamQueue[0].leads_alert).deep.equal([slackLead2.Slack_Id,
     slackLead3.Slack_Id]);
     expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
     expect(teamQueue[0].events[0].action).equal("OPENED");

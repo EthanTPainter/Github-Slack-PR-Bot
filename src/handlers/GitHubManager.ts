@@ -43,7 +43,7 @@ export async function processGitHubEvent(
   // Construct the Slack message based on PR action and body
   const slackMessage = await constructSlackMessage(pullRequestAction, body, json);
 
-  // Determine which sub team the user belongs to
+  // Determine which team the user belongs to
   const githubUser = getOwner(event);
   const teamName = getTeamName(githubUser, json);
 

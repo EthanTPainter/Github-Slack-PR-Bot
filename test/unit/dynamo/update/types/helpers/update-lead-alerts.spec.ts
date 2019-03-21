@@ -68,7 +68,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: [],
       leads_approving: [],
-      standard_leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
+      leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -89,7 +89,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal([slackUserChanging.Slack_Id]);
-    expect(result.pr.standard_leads_alert).deep.equal([]);
+    expect(result.pr.leads_alert).deep.equal([]);
     expect(result.pr.leads_req_changes).deep.equal([]);
     expect(result.pr.lead_complete).equal(true);
 
@@ -100,7 +100,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: [],
       leads_approving: [],
-      standard_leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
+      leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -121,7 +121,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal([slackUserChanging.Slack_Id]);
-    expect(result.pr.standard_leads_alert).deep.equal(["<SlackLeadId3>", "<SlackLeadId4>"]);
+    expect(result.pr.leads_alert).deep.equal(["<SlackLeadId3>", "<SlackLeadId4>"]);
     expect(result.pr.leads_req_changes).deep.equal([]);
     expect(result.pr.lead_complete).equal(false);
 
@@ -132,7 +132,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: [],
       leads_approving: [],
-      standard_leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
+      leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -153,7 +153,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal([]);
-    expect(result.pr.standard_leads_alert).deep.equal(["<SlackLeadId1>"]);
+    expect(result.pr.leads_alert).deep.equal(["<SlackLeadId1>"]);
     expect(result.pr.leads_req_changes).deep.equal(["<SlackLeadId2>"]);
     expect(result.pr.lead_complete).equal(false);
 
@@ -164,7 +164,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: [],
       leads_approving: [],
-      standard_leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
+      leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -185,7 +185,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal([]);
-    expect(result.pr.standard_leads_alert).deep.equal(["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"]);
+    expect(result.pr.leads_alert).deep.equal(["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"]);
     expect(result.pr.leads_req_changes).deep.equal(["<SlackLeadId2>"]);
     expect(result.pr.lead_complete).equal(false);
 
@@ -196,7 +196,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: [],
       leads_approving: ["<SlackLeadId2>"],
-      standard_leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>"],
+      leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -217,7 +217,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal(["<SlackLeadId2>", "<SlackLeadId3>"]);
-    expect(result.pr.standard_leads_alert).deep.equal([]);
+    expect(result.pr.leads_alert).deep.equal([]);
     expect(result.pr.leads_req_changes).deep.equal([]);
     expect(result.pr.lead_complete).equal(true);
 
@@ -228,7 +228,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: ["<SlackLeadId2>"],
       leads_approving: [],
-      standard_leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"],
+      leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -249,7 +249,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal([]);
-    expect(result.pr.standard_leads_alert).deep.equal(["<SlackLeadId1>"]);
+    expect(result.pr.leads_alert).deep.equal(["<SlackLeadId1>"]);
     expect(result.pr.leads_req_changes).deep.equal(["<SlackLeadId2>", "<SlackLeadId3>"]);
     expect(result.pr.lead_complete).equal(false);
 
@@ -260,7 +260,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: [],
       leads_approving: ["<SlackLeadId2>"],
-      standard_leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>"],
+      leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -281,7 +281,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal(["<SlackLeadId2>"]);
-    expect(result.pr.standard_leads_alert).deep.equal(["<SlackLeadId1>"]);
+    expect(result.pr.leads_alert).deep.equal(["<SlackLeadId1>"]);
     expect(result.pr.leads_req_changes).deep.equal(["<SlackLeadId3>"]);
     expect(result.pr.lead_complete).equal(false);
 
@@ -292,7 +292,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: ["<SlackLeadId2>"],
       leads_approving: [],
-      standard_leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"],
+      leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -313,7 +313,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal(["<SlackLeadId3>"]);
-    expect(result.pr.standard_leads_alert).deep.equal(["<SlackLeadId1>"]);
+    expect(result.pr.leads_alert).deep.equal(["<SlackLeadId1>"]);
     expect(result.pr.leads_req_changes).deep.equal(["<SlackLeadId2>"]);
     expect(result.pr.lead_complete).equal(false);
 
@@ -325,7 +325,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: [],
       leads_approving: [],
-      standard_leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
+      leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -346,7 +346,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal(["<SlackLeadId2>"]);
-    expect(result.pr.standard_leads_alert).deep.equal([]);
+    expect(result.pr.leads_alert).deep.equal([]);
     expect(result.pr.leads_req_changes).deep.equal([]);
     expect(result.pr.lead_complete).equal(true);
 
@@ -357,7 +357,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: [],
       leads_approving: [],
-      standard_leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
+      leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -378,7 +378,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal(["<SlackLeadId2>"]);
-    expect(result.pr.standard_leads_alert).deep.equal(["<SlackLeadId3>", "<SlackLeadId4>"]);
+    expect(result.pr.leads_alert).deep.equal(["<SlackLeadId3>", "<SlackLeadId4>"]);
     expect(result.pr.leads_req_changes).deep.equal([]);
     expect(result.pr.lead_complete).equal(false);
 
@@ -389,7 +389,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: [],
       leads_approving: [],
-      standard_leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
+      leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -410,7 +410,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal([]);
-    expect(result.pr.standard_leads_alert).deep.equal(["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"]);
+    expect(result.pr.leads_alert).deep.equal(["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"]);
     expect(result.pr.leads_req_changes).deep.equal(["<SlackLeadId2>"]);
     expect(result.pr.lead_complete).equal(false);
 
@@ -421,7 +421,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: [],
       leads_approving: [],
-      standard_leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
+      leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -442,7 +442,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal([]);
-    expect(result.pr.standard_leads_alert).deep.equal(["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"]);
+    expect(result.pr.leads_alert).deep.equal(["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"]);
     expect(result.pr.leads_req_changes).deep.equal(["<SlackLeadId2>"]);
     expect(result.pr.lead_complete).equal(false);
 
@@ -453,7 +453,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: [],
       leads_approving: ["<SlackLeadId2>"],
-      standard_leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>"],
+      leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -474,7 +474,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal(["<SlackLeadId2>", "<SlackLeadId3>"]);
-    expect(result.pr.standard_leads_alert).deep.equal([]);
+    expect(result.pr.leads_alert).deep.equal([]);
     expect(result.pr.leads_req_changes).deep.equal([]);
     expect(result.pr.lead_complete).equal(true);
 
@@ -485,7 +485,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: ["<SlackLeadId2>"],
       leads_approving: [],
-      standard_leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"],
+      leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -506,7 +506,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal([]);
-    expect(result.pr.standard_leads_alert).deep.equal(["<SlackLeadId4>", "<SlackLeadId1>"]);
+    expect(result.pr.leads_alert).deep.equal(["<SlackLeadId4>", "<SlackLeadId1>"]);
     expect(result.pr.leads_req_changes).deep.equal(["<SlackLeadId2>", "<SlackLeadId3>"]);
     expect(result.pr.lead_complete).equal(false);
 
@@ -517,7 +517,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: [],
       leads_approving: ["<SlackLeadId2>"],
-      standard_leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>"],
+      leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -538,7 +538,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal(["<SlackLeadId2>"]);
-    expect(result.pr.standard_leads_alert).deep.equal(["<SlackLeadId4>", "<SlackLeadId1>"]);
+    expect(result.pr.leads_alert).deep.equal(["<SlackLeadId4>", "<SlackLeadId1>"]);
     expect(result.pr.leads_req_changes).deep.equal(["<SlackLeadId3>"]);
     expect(result.pr.lead_complete).equal(false);
 
@@ -549,7 +549,7 @@ describe("updateLeadAlerts", () => {
     const pr: any = {
       leads_req_changes: ["<SlackLeadId2>"],
       leads_approving: [],
-      standard_leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"],
+      leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -570,7 +570,7 @@ describe("updateLeadAlerts", () => {
       teamOptions, isApproving, json);
 
     expect(result.pr.leads_approving).deep.equal(["<SlackLeadId3>"]);
-    expect(result.pr.standard_leads_alert).deep.equal(["<SlackLeadId4>", "<SlackLeadId1>"]);
+    expect(result.pr.leads_alert).deep.equal(["<SlackLeadId4>", "<SlackLeadId1>"]);
     expect(result.pr.leads_req_changes).deep.equal(["<SlackLeadId2>"]);
     expect(result.pr.lead_complete).equal(false);
 
