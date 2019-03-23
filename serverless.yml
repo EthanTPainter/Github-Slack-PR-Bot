@@ -28,9 +28,16 @@ package:
     - ./**
   - include:
     - ./node_modules/**
-    - ./dist/**
+    - ./dist/src/**
 
 functions:
+  SNSManager:
+    handler: dist/src/handlers/SNSManager.processRequestToSNS
+    memorySize: 256
+    events:
+      - http:
+          path: sns
+          method: post
   GitHubSlackCommManager:
     handler: dist/src/handlers/GitHubManager.processGitHubEvent
     memorySize: 256
@@ -69,6 +76,11 @@ functions:
 
 resources:
   Resources:
+    SNSManagerLambdaFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        TracingConfig:
+          Mode: Active
     GitHubSlackCommManagerLambdaFunction:
       Type: AWS::Lambda::Function
       Properties:

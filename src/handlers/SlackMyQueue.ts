@@ -1,6 +1,5 @@
 import * as querystring from "querystring";
 import { requiredEnvs } from "../required-envs";
-import { PullRequest } from "../models";
 import { newLogger } from "../logger";
 import { json } from "../json/src/json";
 import { DynamoGet } from "../dynamo/api";
