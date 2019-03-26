@@ -59,7 +59,7 @@ export async function updateComment(
   await dynamoUpdate.updatePullRequest(dynamoTableName, ownerTeam.Slack_Id, teamQueue, foundPR);
 
   // For all members and leads to alert, update each PR from each user queue
-  const allAlertingUserIds = foundPR.leads_alert.concat(foundPR.members_alert);
+  const allAlertingUserIds = foundPR.standard_leads_alert.concat(foundPR.standard_members_alert);
   await Promise.all(allAlertingUserIds.map(async (alertUserId: string) => {
     const currentQueue = await dynamoGet.getQueue(
       dynamoTableName,

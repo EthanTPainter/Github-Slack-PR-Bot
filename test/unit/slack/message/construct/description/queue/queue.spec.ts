@@ -14,14 +14,16 @@ describe("constructQueueString", () => {
       },
       title: "Feature(123): Add new service",
       url: "www.github.com",
-      members_alert: ["<@id123>"],
-      leads_alert: [],
+      standard_members_alert: ["<@id123>"],
+      standard_leads_alert: [],
       member_complete: false,
       members_approving: ["EthanP"],
       lead_complete: false,
       leads_approving: ["AndrewC"],
       leads_req_changes: ["MDinks"],
       members_req_changes: ["DillonS"],
+      req_changes_leads_alert: [],
+      req_changes_members_alert: [],
       events: [{
         user: {
           Slack_Name: "EthanP",

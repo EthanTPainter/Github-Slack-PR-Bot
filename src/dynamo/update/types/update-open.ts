@@ -39,13 +39,13 @@ export async function updateOpen(
   }
   else if (teamOptions.Member_Before_Lead === true
     && teamOptions.Num_Required_Member_Approvals > 0) {
-    const memberIds = newPullRequest.members_alert;
+    const memberIds = newPullRequest.standard_members_alert;
     memberIds.map((memberId: string) => {
       slackUserList.push(memberId);
     });
   } else {
-    const memberIds = newPullRequest.members_alert;
-    const leadIds = newPullRequest.leads_alert;
+    const memberIds = newPullRequest.standard_members_alert;
+    const leadIds = newPullRequest.standard_leads_alert;
     leadIds.map((leadId: string) => {
       slackUserList.push(leadId);
     });
