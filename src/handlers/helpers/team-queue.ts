@@ -1,17 +1,13 @@
-import * as querystring from "querystring";
 import { requiredEnvs } from "../../required-envs";
 import { json } from "../../json/src/json";
 import { DynamoGet } from "../../dynamo/api";
 import { formatTeamQueue } from "../../dynamo/formatting";
 import { getSlackGroupAlt } from "../../json/parse";
-import { SlashResponse } from "../../models";
+import { SlashResponse, RequestBody } from "../../models";
 
 export async function getTeamQueue(
-  event: any,
+  body: RequestBody,
 ): Promise<SlashResponse> {
-  // Convert x-www-urlencoded string to JSON notation
-  const body = querystring.parse(event.body);
-
   // Verify user_id property is not missing
   const userId = body.user_id;
   if (!userId) {

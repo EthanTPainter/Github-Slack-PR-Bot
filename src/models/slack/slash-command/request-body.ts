@@ -3,6 +3,7 @@
  * @description Expected body sent from a slash command
  */
 export class RequestBody {
+    "custom-source": string;
     token: string;
     team_id: string;
     team_domain: string;

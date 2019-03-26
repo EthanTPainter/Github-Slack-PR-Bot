@@ -1,17 +1,13 @@
-import * as querystring from "querystring";
 import { requiredEnvs } from "../../required-envs";
 import { DynamoGet } from "../../dynamo/api";
 import { formatMyQueue } from "../../dynamo/formatting";
 import { json } from "../../json/src/json";
-import { SlashResponse } from "../../models";
+import { SlashResponse, RequestBody } from "../../models";
 
 export async function getQueue(
-  event: any,
+  body: RequestBody,
 ): Promise<SlashResponse> {
   try {
-
-    // Parse Body
-    const body = querystring.parse(event.body);
     if (body.user_id === undefined) {
       throw new Error("body.user_id is not attached to request");
     }

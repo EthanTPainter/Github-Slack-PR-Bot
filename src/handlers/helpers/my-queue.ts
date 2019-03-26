@@ -1,16 +1,12 @@
-import * as querystring from "querystring";
 import { requiredEnvs } from "../../required-envs";
 import { json } from "../../json/src/json";
 import { DynamoGet } from "../../dynamo/api";
 import { formatMyQueue } from "../../dynamo/formatting";
-import { SlashResponse } from "../../models";
+import { SlashResponse, RequestBody } from "../../models";
 
 export async function getMyQueue(
-  event: any,
+  body: RequestBody,
 ): Promise<SlashResponse> {
-  // Convert x-www-urlencoded string to JSON notation
-  const body = querystring.parse(event.body);
-
   // Verify user_id property is not malformed
   if (body.user_id === undefined) {
     throw new Error("body.user_id not attched to request");

@@ -32,47 +32,17 @@ package:
 
 functions:
   SNSManager:
-    handler: dist/src/handlers/SNSManager.processRequestToSNS
+    handler: dist/src/handlers/sns-manager.processRequestToSNS
     memorySize: 256
     events:
       - http:
           path: sns
           method: post
-  GitHubSlackCommManager:
-    handler: dist/src/handlers/GitHubManager.processGitHubEvent
+  GitHubSlackManager:
+    handler: dist/src/handlers/github-slack-manager.processGitHubEvent
     memorySize: 256
     events:
-      - http:
-          path: github
-          method: post
-  SlackTeamQueueManager:
-    handler: dist/src/handlers/SlackTeamQueue.processTeamQueue
-    memorySize: 256
-    events:
-      - http:
-          path: team-status
-          method: post
-  SlackMyQueueManager:
-    handler: dist/src/handlers/SlackMyQueue.processMyQueue
-    memorySize: 256
-    events:
-      - http:
-          path: my-status
-          method: post
-  SlackGetQueueManager:
-    handler: dist/src/handlers/SlackGetQueue.processGetQueue
-    memorySize: 256
-    events:
-      - http:
-          path: get-status
-          method: post
-  SlackFixedPRManager:
-    handler: dist/src/handlers/SlackFixedPR.processFixedPR
-    memorySize: 256
-    events:
-      - http:
-          path: fixed-pr
-          method: post
+      - sqs: ${env:SQS_ARN}
 
 resources:
   Resources:
@@ -81,27 +51,7 @@ resources:
       Properties:
         TracingConfig:
           Mode: Active
-    GitHubSlackCommManagerLambdaFunction:
-      Type: AWS::Lambda::Function
-      Properties:
-        TracingConfig:
-          Mode: Active
-    SlackTeamQueueManagerLambdaFunction:
-      Type: AWS::Lambda::Function
-      Properties:
-        TracingConfig:
-          Mode: Active
-    SlackMyQueueManagerLambdaFunction:
-      Type: AWS::Lambda::Function
-      Properties:
-        TracingConfig:
-          Mode: Active
-    SlackGetQueueManagerLambdaFunction:
-      Type: AWS::Lambda::Function
-      Properties:
-        TracingConfig:
-          Mode: Active
-    SlackFixedPRManagerLambdaFunction:
+    GitHubSlackManagerLambdaFunction:
       Type: AWS::Lambda::Function
       Properties:
         TracingConfig:

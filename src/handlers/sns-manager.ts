@@ -3,6 +3,7 @@ import { requiredEnvs } from "../required-envs";
 import * as AWS from "aws-sdk";
 import { newLogger } from "../logger";
 import { XRayInitializer } from "../xray";
+import { SlashResponse, SNSParams } from "../models";
 
 const logger = newLogger("SNSManager");
 /**
@@ -16,7 +17,7 @@ export async function processRequestToSNS(
   event: any,
   context: any,
   callback: any,
-): Promise<void> {
+): Promise<SlashResponse> {
 
   XRayInitializer.init({
     logger: logger,
@@ -32,7 +33,7 @@ export async function processRequestToSNS(
     slackSource = true;
   }
 
-  // Add custom-source property to new body
+  // Add custom-source property to body
   let newBody: any;
   if (slackSource) {
     const oldBody = querystring.parse(event.body);
@@ -45,23 +46,14 @@ export async function processRequestToSNS(
 
   // SNS logic
   const sns = new AWS.SNS({ apiVersion: requiredEnvs.SNS_API_VERSION });
-  const snsParams = {
-    Message: newBody,
-    TopicArn: requiredEnvs.SNS_ARN,
-  };
+  const snsParams = new SNSParams(newBody, requiredEnvs.SNS_ARN);
+
+  // Publish params to SNS or catch error
   try {
     await sns.publish(snsParams).promise();
+    return new SlashResponse(`Successfully processed request`, 200);
   }
   catch (error) {
-    const failed = {
-      body: `Failed processing request`,
-      statusCode: 200,
-    };
-    callback(null, failed);
+    return new SlashResponse(`Failed processing request`, 200);
   }
-  const success = {
-    body: `Successfully processed request`,
-    statusCode: 200,
-  };
-  callback(null, success);
 }

@@ -1,5 +1,5 @@
 import { PullRequest } from "../../../models";
-import { getSlackUserAlt } from "src/json/parse";
+import { getSlackUserAlt } from "../../../json/parse";
 
 /**
  * @description Given a PR has user(s) requesting changes,

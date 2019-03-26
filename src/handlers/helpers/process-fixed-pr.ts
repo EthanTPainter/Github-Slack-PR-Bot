@@ -1,17 +1,14 @@
-import * as querystring from "querystring";
 import { DynamoGet } from "../../dynamo/api";
 import { requiredEnvs } from "../../required-envs";
 import { json } from "../../json/src/json";
 import { getTeamNameAlt } from "../../json/parse";
 import { updateFixedPR } from "../../dynamo/update";
 import { postMessage } from "../../slack/api/post-message";
-import { SlashResponse } from "../../models";
+import { SlashResponse, RequestBody } from "../../models";
 
 export async function processFixedPR(
-  event: any,
+  body: RequestBody,
 ): Promise<SlashResponse> {
-  // Convert x-www-urlencoded string to JSON notation
-  const body = querystring.parse(event.body);
   if (!body.user_id) {
     const invalidUserIdMessage = `Unable to determine which slack user sent this request`;
     return new SlashResponse(invalidUserIdMessage, 200);
@@ -27,7 +24,7 @@ export async function processFixedPR(
     slackUserId);
 
   // Get fixedPR url from slack text
-  const text = event.text;
+  const text = body.text;
   if (!text) {
     const invalidTextMessage = `Couldn't find a valid GitHub PR Url after /fixed-pr slash command`;
     return new SlashResponse(invalidTextMessage, 200);
@@ -60,10 +57,12 @@ export async function processFixedPR(
       requiredEnvs[teamName + "_SLACK_TOKEN"],
       slackMessage);
 
+    // Let user know the request was successfull
     const success = "Request successfully processed";
     return new SlashResponse(success, 200);
   }
   catch (error) {
+    // Let the user know an error occurred
     const errorMessage = `Uh oh. Error occurred: ${error}`;
     return new SlashResponse(errorMessage, 200);
   }

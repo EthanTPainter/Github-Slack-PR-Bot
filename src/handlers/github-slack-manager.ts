@@ -7,6 +7,18 @@ import { getTeamName, getTeamOptions } from "../json/parse";
 import { getOwner } from "../github/parse";
 import { updateDynamo } from "../dynamo/update";
 import { XRayInitializer } from "../xray";
+import {
+  SQSRecord,
+  SNSMessage,
+  Callback,
+  Context,
+} from "aws-lambda";
+import {
+  getQueue,
+  getMyQueue,
+  processFixedPR,
+  getTeamQueue,
+} from "./helpers";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -24,46 +36,74 @@ const logger = newLogger("GitHubManager");
  * @returns Slack message to team slack channel about the event that occurred
  */
 export async function processGitHubEvent(
-  event: any,
-  context: any,
-  callback: any,
+  event: AWSLambda.SQSEvent,
+  context: Context,
+  callback: Callback,
 ): Promise<any> {
 
   XRayInitializer.init({
     logger: logger,
     disable: requiredEnvs.DISABLE_XRAY,
-    context: "GitHub-Slack-PR-Bot",
-    service: "GitHubManager",
+    context: `GitHub-Slack-PR-Bot`,
+    service: `GitHubSlackManager`,
   });
 
-  // Grab body from event & get action
-  const body = JSON.parse(event.body);
-  const pullRequestAction: string = body.action;
+  // Create an array of SQSEvent messages to process
+  const messages = event.Records.map((record: SQSRecord) => {
+    const parsedBody: SNSMessage = JSON.parse(record.body);
+    return JSON.parse(parsedBody.Message);
+  });
+  logger.debug(`Messages: ${JSON.stringify(messages)}`);
 
-  // Construct the Slack message based on PR action and body
-  const slackMessage = await constructSlackMessage(pullRequestAction, body, json);
+  // Map through messages to process
+  await messages.map(async (message) => {
+    if (message["custom-source"] === "SLACK") {
+      // Determine which slash command was used
+      switch (message.command) {
+        case "/sns":
+          break;
+        case "/team-queue":
+          await getTeamQueue(message);
+          break;
+        case "/my-queue":
+          await getMyQueue(message);
+          break;
+        case "/get-queue":
+          await getQueue(message);
+          break;
+        case "/fixed-pr":
+          await processFixedPR(message);
+          break;
+      }
+    }
+    else if (message["custom-source"] === "GITHUB") {
+      const pullRequestAction: string = message.action;
 
-  // Determine which team the user belongs to
-  const githubUser = getOwner(event);
-  const teamName = getTeamName(githubUser, json);
+      // Construct the Slack message based on PR action and body
+      const slackMessage = await constructSlackMessage(pullRequestAction, message, json);
 
-  // Check whether to disable dynamo
-  const teamOptions = getTeamOptions(githubUser, json);
-  if (teamOptions.Disable_Dynamo === false) {
-    // Update DynamoDB with new request
-    await updateDynamo(githubUser, event, json, pullRequestAction);
-  }
+      // Determine which team the user belongs to
+      const githubUser = getOwner(event);
+      const teamName = getTeamName(githubUser, json);
 
-  // Use team name to get channel name and slack token from required Envs
-  logger.info("Posting slack message to " + requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]);
-  await postMessage(requiredEnvs.SLACK_API_URI,
-    requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
-    requiredEnvs[teamName + "_SLACK_TOKEN"],
-    slackMessage);
+      // Check whether to disable dynamo
+      const teamOptions = getTeamOptions(githubUser, json);
+      if (teamOptions.Disable_Dynamo === false) {
+        // Update DynamoDB with new request
+        await updateDynamo(githubUser, event, json, pullRequestAction);
+      }
 
-  // Provide success statusCode/Message
-  const success = {
-    statusCode: 200,
-  };
-  callback(null, success);
+      // Use team name to get channel name and slack token from required Envs
+      logger.info("Posting slack message to " + requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]);
+      await postMessage(requiredEnvs.SLACK_API_URI,
+        requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
+        requiredEnvs[teamName + "_SLACK_TOKEN"],
+        slackMessage);
+    }
+    else {
+      // This should never happen since the application controls
+      // the custom-source property.
+      logger.error("custom-source not set to Slack or GitHub");
+    }
+  });
 }
