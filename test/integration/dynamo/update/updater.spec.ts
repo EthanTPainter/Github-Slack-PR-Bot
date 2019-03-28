@@ -9,7 +9,7 @@ import {
   updateOpen,
 } from "../../../../src/dynamo/update";
 
-describe.only("updater", () => {
+describe("updater", () => {
 
   const dynamoReset = new DynamoReset();
   const dynamoGet = new DynamoGet();
@@ -42,7 +42,7 @@ describe.only("updater", () => {
   //   await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember3.Slack_Id);
   // });
 
-  describe.only("open pr", () => {
+  describe("open pr", () => {
     it("lead open pr -- member before lead", async () => {
       json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
       json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;

@@ -1,5 +1,5 @@
-import { PullRequest } from "../../models";
 import { DynamoDB } from "aws-sdk";
+import { PullRequest } from "../../models";
 import { newLogger } from "../../../src/logger";
 import { requiredEnvs } from "../../../src/required-envs";
 

@@ -46,6 +46,7 @@ export async function processFixedPR(
       slackUserId,
       text,
       userQueue,
+      requiredEnvs.DYNAMO_TABLE_NAME,
       json);
 
     // Get Team name from slackUserId

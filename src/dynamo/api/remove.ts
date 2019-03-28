@@ -1,7 +1,7 @@
-import { newLogger } from "../../logger";
 import { DynamoDB } from "aws-sdk";
+import { newLogger } from "../../logger";
 import { requiredEnvs } from "../../required-envs";
-import { PullRequest, SlackUser } from "../../models";
+import { PullRequest } from "../../models";
 
 const logger = newLogger("DynamoRemove");
 

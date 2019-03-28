@@ -1,5 +1,15 @@
+import { DateTime } from "luxon";
 import { PullRequest } from "../../../models";
-import { getSlackUserAlt } from "../../../json/parse";
+import {
+  getSlackUserAlt,
+  getTeamOptionsAlt,
+  getSlackGroupAlt,
+} from "../../../json/parse";
+import {
+  DynamoRemove,
+  DynamoUpdate,
+  DynamoGet,
+} from "../../api";
 
 /**
  * @description Given a PR has user(s) requesting changes,
@@ -9,12 +19,13 @@ import { getSlackUserAlt } from "../../../json/parse";
  * @param slackUserQueue Slack user's queue
  * @returns string of the expected slack message
  */
-export function updateFixedPR(
+export async function updateFixedPR(
   slackUserId: string,
   fixedPRUrl: string,
   slackUserQueue: PullRequest[],
+  dynamoTableName: string,
   json: any,
-): string {
+): Promise<string> {
 
   // Verify the PR is in the queue
   const foundPR = slackUserQueue.find((pr) => {
@@ -24,10 +35,78 @@ export function updateFixedPR(
     throw new Error(`Provided PR Url: ${fixedPRUrl}, not found in ${slackUserId} 's queue`);
   }
 
-  // Get list of members & leads who requested changes
-  const membersReqChanges = foundPR.members_req_changes;
-  const leadsReqChanges = foundPR.leads_req_changes;
-  const allUsersReqChanges = membersReqChanges.concat(leadsReqChanges);
+  // Setup
+  const dynamoRemove = new DynamoRemove();
+  const dynamoUpdate = new DynamoUpdate();
+  const dynamoGet = new DynamoGet();
+
+  // Move all users requesting changes to req changes alerts
+  // Make users requesting changes empty
+  foundPR.req_changes_members_alert = foundPR.members_req_changes;
+  foundPR.req_changes_leads_alert = foundPR.leads_req_changes;
+  foundPR.members_req_changes = [];
+  foundPR.leads_req_changes = [];
+
+  // Get list of all members & leads who requested changes
+  const allUsersReqChanges = foundPR.req_changes_members_alert
+    .concat(foundPR.req_changes_leads_alert);
+
+  // Remove PR owner from members or leads to alert
+  foundPR.standard_leads_alert = foundPR.standard_leads_alert
+    .filter((alertedLead) => {
+      return alertedLead !== slackUserId;
+  });
+  foundPR.standard_members_alert = foundPR.standard_members_alert
+    .filter((alertedMember) => {
+      return alertedMember !== slackUserId;
+  });
+
+  // Push new event onto PR events
+  const slackOwner = getSlackUserAlt(slackUserId, json);
+  const currentTime = DateTime.local().toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS);
+  const newEvent = {
+    user: slackOwner,
+    action: "FIXED_PR",
+    time: currentTime,
+  };
+  foundPR.events.push(newEvent);
+
+  // Get team options & check whether to update dynamo
+  const teamOptions = getTeamOptionsAlt(slackOwner, json);
+  if (teamOptions.Disable_Dynamo === false) {
+    // Remove PR from owner's queue since the PR is fixed
+    await dynamoRemove.removePullRequest(
+      dynamoTableName,
+      slackOwner.Slack_Id,
+      slackUserQueue,
+      foundPR,
+    );
+
+    // Update Team Queue
+    const teamGroup = getSlackGroupAlt(slackUserId, json);
+    const teamQueue = await dynamoGet.getQueue(dynamoTableName, slackUserId);
+    await dynamoUpdate.updatePullRequest(
+      dynamoTableName,
+      teamGroup.Slack_Id,
+      teamQueue,
+      foundPR,
+    );
+
+    // Update Dynamo Queues for all other impacted users
+    const impactedUserIds = foundPR.standard_leads_alert
+      .concat(foundPR.standard_members_alert)
+      .concat(foundPR.req_changes_leads_alert)
+      .concat(foundPR.req_changes_members_alert);
+
+    await impactedUserIds.map(async (userId) => {
+      await dynamoUpdate.updatePullRequest(
+        dynamoTableName,
+        userId,
+        slackUserQueue,
+        foundPR,
+      );
+    });
+  }
 
   // Notify all members & leads who requested changes
   // that the PR is ready to review
@@ -37,7 +116,6 @@ export function updateFixedPR(
   });
 
   // Get Slack User from slackUserId & format final string
-  const slackOwner = getSlackUserAlt(slackUserId, json);
   const fixedString = `${slackOwner.Slack_Name} has fixed PR: ${fixedPRUrl}. ${allUsersString}`;
   return fixedString;
 }
