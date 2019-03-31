@@ -4,7 +4,7 @@ import { DynamoGet, DynamoReset } from "../../../../../src/dynamo/api";
 import { requiredEnvs } from "../../../../../src/required-envs";
 import { updateFixedPR } from "../../../../../src/dynamo/update";
 
-describe.only("fixedPR", () => {
+describe("fixedPR", () => {
 
   const dynamoGet = new DynamoGet();
   const dynamoReset = new DynamoReset();
@@ -27,7 +27,6 @@ describe.only("fixedPR", () => {
     await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember3.Slack_Id);
   });
 
-  /*
   after(async () => {
     await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackTeam.Slack_Id);
     await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackLead1.Slack_Id);
@@ -37,7 +36,6 @@ describe.only("fixedPR", () => {
     await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember2.Slack_Id);
     await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember3.Slack_Id);
   });
-  */
 
   it("should update a PR when fixed by PR owner -- member before lead & member req changes", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
@@ -67,7 +65,7 @@ describe.only("fixedPR", () => {
       }],
     };
 
-    await updateFixedPR(
+    const slackString = await updateFixedPR(
       slackMember1.Slack_Id,
       newPR.url,
       [newPR],
@@ -96,6 +94,11 @@ describe.only("fixedPR", () => {
     const member3Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
       slackMember3.Slack_Id);
+
+    // Expect slack string to include specific information
+    expect(slackString.includes(slackMember1.Slack_Name)).equal(true);
+    expect(slackString.includes(newPR.url)).equal(true);
+    expect(slackString.includes(slackMember2.Slack_Id)).equal(true);
 
     // Expect team queue to be up to date
     expect(teamQueue[0].url).equal(newPR.url);
@@ -153,7 +156,7 @@ describe.only("fixedPR", () => {
       }],
     };
 
-    await updateFixedPR(
+    const slackString = await updateFixedPR(
       slackMember1.Slack_Id,
       newPR.url,
       [newPR],
@@ -182,6 +185,11 @@ describe.only("fixedPR", () => {
     const member3Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
       slackMember3.Slack_Id);
+
+    // Expect slack String to have specific information
+    expect(slackString.includes(slackMember1.Slack_Name)).equal(true);
+    expect(slackString.includes(newPR.url)).equal(true);
+    expect(slackString.includes(slackLead1.Slack_Id)).equal(true);
 
     // Team queue should be up to date
     expect(teamQueue[0].url).equal(newPR.url);
@@ -244,7 +252,7 @@ describe.only("fixedPR", () => {
       }],
     };
 
-    await updateFixedPR(
+    const slackString = await updateFixedPR(
       slackMember1.Slack_Id,
       newPR.url,
       [newPR],
@@ -273,6 +281,11 @@ describe.only("fixedPR", () => {
     const member3Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
       slackMember3.Slack_Id);
+
+    // Expect slack string to have specific information
+    expect(slackString.includes(slackMember1.Slack_Name)).equal(true);
+    expect(slackString.includes(newPR.url)).equal(true);
+    expect(slackString.includes(slackMember2.Slack_Id)).equal(true);
 
     // Team queue should be up to date
     expect(teamQueue[0].url).equal(newPR.url);
@@ -335,7 +348,7 @@ describe.only("fixedPR", () => {
       }],
     };
 
-    await updateFixedPR(
+    const slackString = await updateFixedPR(
       slackMember1.Slack_Id,
       newPR.url,
       [newPR],
@@ -364,6 +377,11 @@ describe.only("fixedPR", () => {
     const member3Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
       slackMember3.Slack_Id);
+
+    // Expect slack string to have specific information
+    expect(slackString.includes(slackMember1.Slack_Name)).equal(true);
+    expect(slackString.includes(newPR.url)).equal(true);
+    expect(slackString.includes(slackLead1.Slack_Id)).equal(true);
 
     // Team queue should be up to date
     expect(teamQueue[0].url).equal(newPR.url);

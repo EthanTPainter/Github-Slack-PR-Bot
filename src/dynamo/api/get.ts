@@ -44,7 +44,7 @@ export class DynamoGet {
         throw new Error(`User ID ${slackUserId} queue not found`);
       }
 
-      // Retrun queue for user
+      // Return queue for user
       return item.queue;
     }
     catch (error) {

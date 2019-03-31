@@ -10,7 +10,6 @@ export const json = {
           Include_Updated_Time: true,
           Num_Required_Lead_Approvals: 1,
           Num_Required_Member_Approvals: 1,
-          Req_Changes_Stop_Alerts: true,
           Disable_Dynamo: false,
           Member_Before_Lead: true,
         },

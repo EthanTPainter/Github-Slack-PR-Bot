@@ -1,4 +1,8 @@
 import {
+  DynamoGet,
+  DynamoRemove,
+} from "../../../../../src/dynamo/api";
+import {
   PullRequest,
   SlackUser,
   TeamOptions,
@@ -19,28 +23,59 @@ import {
  * @param json JSON config file
  * @returns a pull request with proper lead
  */
-export function updateLeadAlerts(
+export async function updateLeadAlerts(
   pr: PullRequest,
   slackUserOwner: SlackUser,
   slackUserChanging: SlackUser,
   teamOptions: TeamOptions,
   isApproving: boolean,
+  dynamoTableName: string,
   json: any,
-): { pr: PullRequest, leftLeads: string[] } {
+): Promise<{ pr: PullRequest, leftLeads: string[] }> {
+  // Setup
+  const dynamoGet = new DynamoGet();
+  const dynamoRemove = new DynamoRemove();
 
   // Keep track of leads who no longer need to be alerted
   const leftoverAlertedLeads: string[] = [];
 
   // Determine whether to use # of users requesting changes to impact alerts
   let leadsReqChanges: string[] = [];
-  if (teamOptions.Req_Changes_Stop_Alerts) {
-    leadsReqChanges = pr.leads_req_changes;
-  } else {
-    leadsReqChanges = [];
-  }
+  leadsReqChanges = pr.leads_req_changes.concat(pr.req_changes_leads_alert);
 
   // If slackUserApproving is found as a lead
   if (isApproving) {
+    // Check if the lead requested changes
+    if (pr.req_changes_leads_alert.includes(slackUserChanging.Slack_Id)) {
+      // Remove lead from requesting changes leads to alert
+      pr.req_changes_leads_alert = pr.req_changes_leads_alert.filter((leadId) => {
+        return leadId !== slackUserChanging.Slack_Id;
+      });
+      // Check if there are any members or leads requesting changes to the PR
+      // AND if the pr owner is in the standard member or leads alerted
+      if (pr.leads_req_changes.length === 0
+        && pr.members_req_changes.length === 0
+        && pr.req_changes_leads_alert.length === 0
+        && pr.req_changes_members_alert.length === 0
+        && (pr.standard_leads_alert.includes(slackUserOwner.Slack_Id)
+          || pr.standard_members_alert.includes(slackUserOwner.Slack_Id))) {
+        pr.standard_leads_alert = pr.standard_leads_alert.filter((leadId) => {
+          return leadId !== slackUserOwner.Slack_Id;
+        });
+        pr.standard_members_alert = pr.standard_members_alert.filter((memberId) => {
+          return memberId !== slackUserOwner.Slack_Id;
+        });
+        // Remove slackUserOwner alerted in queue
+        const ownerQueue = await dynamoGet.getQueue(
+          dynamoTableName,
+          slackUserOwner.Slack_Id);
+        await dynamoRemove.removePullRequest(
+          dynamoTableName,
+          slackUserOwner.Slack_Id,
+          ownerQueue,
+          pr);
+      }
+    }
     pr.leads_approving.push(slackUserChanging.Slack_Id);
   }
   else {
@@ -61,7 +96,7 @@ export function updateLeadAlerts(
       }
     });
     if (ownerLead && ownerMember) {
-      throw new Error(`${slackUserOwner} set as a member and lead. Pick one!`);
+      throw new Error(`${slackUserOwner.Slack_Name} set as a member and lead. Pick one!`);
     }
     // Check if slackUserOwner is already in standard_leads_alert
     if (ownerLead) {
@@ -76,16 +111,16 @@ export function updateLeadAlerts(
     }
   }
 
-  // If users requesting changes stop alerts is TRUE
-  // AND leads approving + leads requesting changes >= required lead approvals
-  // Then add slackId
-  if (teamOptions.Req_Changes_Stop_Alerts
-    && pr.leads_approving.length + leadsReqChanges.length
+  // If leads approving + leads requesting changes >= required
+  // lead approvals then add slackId
+  if (pr.leads_approving.length +
+    pr.leads_req_changes.length +
+    pr.req_changes_leads_alert.length
     >= teamOptions.Num_Required_Lead_Approvals) {
     pr.standard_leads_alert.map((slackId) => {
       // Store leftover leads and reset standard_leads_alert to []
       if (slackId !== slackUserChanging.Slack_Id
-          && slackId !== slackUserOwner.Slack_Id) {
+        && slackId !== slackUserOwner.Slack_Id) {
         leftoverAlertedLeads.push(slackId);
       }
     });
@@ -97,33 +132,6 @@ export function updateLeadAlerts(
       pr.standard_leads_alert = [];
     }
     if (pr.leads_approving.length < teamOptions.Num_Required_Lead_Approvals) {
-      pr.lead_complete = false;
-    } else {
-      pr.lead_complete = true;
-    }
-  }
-  // If users requesting changes to stop alerts is false
-  // AND leads approving >= required leads approvals
-  // Then add slackId
-  else if (pr.leads_approving.length >= teamOptions.Num_Required_Lead_Approvals) {
-    pr.standard_leads_alert.map((slackId) => {
-      // Store leftover leads and reset standard_leads_alert to []
-      if (slackId !== slackUserChanging.Slack_Id
-        && slackId !== slackUserOwner.Slack_Id) {
-        leftoverAlertedLeads.push(slackId);
-      }
-    });
-    // If leads alert includes pr owner, keep them alerted
-    // Otherwis set to empty
-    if (pr.standard_leads_alert.includes(slackUserOwner.Slack_Id)) {
-      pr.standard_leads_alert = [slackUserOwner.Slack_Id];
-    } else {
-      pr.standard_leads_alert = [];
-    }
-    // If there are leads requesting changes
-    // even with other leads approving the PR
-    // Consider the PR not lead complete
-    if (pr.leads_req_changes.length > 0) {
       pr.lead_complete = false;
     } else {
       pr.lead_complete = true;

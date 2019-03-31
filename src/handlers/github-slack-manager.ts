@@ -93,12 +93,14 @@ export async function processGitHubEvent(
         await updateDynamo(githubUser, event, json, pullRequestAction);
       }
 
-      // Use team name to get channel name and slack token from required Envs
+      if (teamOptions.Disable_Slack === false) {
+        // Use team name to get channel name and slack token from required Envs
       logger.info("Posting slack message to " + requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]);
       await postMessage(requiredEnvs.SLACK_API_URI,
         requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
         requiredEnvs[teamName + "_SLACK_TOKEN"],
         slackMessage);
+      }
     }
     else {
       // This should never happen since the application controls

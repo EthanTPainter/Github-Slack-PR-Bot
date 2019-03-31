@@ -44,10 +44,9 @@ describe("updateReqChanges", () => {
     await dynamoReset.resetQueue(requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME, slackMember3.Slack_Id);
   });
 
-  it("member request changes, member before lead, req_changes_stop_alerts is true (2 Req)", async () => {
+  it("member request changes, member before lead (2 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 2;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -150,10 +149,10 @@ describe("updateReqChanges", () => {
     expect(lead3Queue).deep.equal([]);
   });
 
-  it("member request changes, member before lead, req_changes_stop_alerts is true (1 Req)", async () => {
+  it("member request changes, member before lead (1 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 1;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
+
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -256,10 +255,10 @@ describe("updateReqChanges", () => {
     expect(lead3Queue).deep.equal([]);
   });
 
-  it("lead request changes, member before lead, req_changes_stop_alerts is true (2 Req)", async () => {
+  it("lead request changes, member before lead (2 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Lead_Approvals = 2;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
+
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -362,10 +361,9 @@ describe("updateReqChanges", () => {
     expect(lead3Queue).deep.equal([]);
   });
 
-  it("lead request changes, member before lead, req_changes_stop_alerts is true (1 Req)", async () => {
+  it("lead request changes, member before lead (1 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Lead_Approvals = 1;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -468,10 +466,9 @@ describe("updateReqChanges", () => {
     expect(lead3Queue).deep.equal([]);
   });
 
-  it("member request changes, member before lead, req_changes_stop_alerts is false (2 Req)", async () => {
+  it("member request changes, member before lead (2 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 2;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -573,10 +570,9 @@ describe("updateReqChanges", () => {
     expect(lead3Queue).deep.equal([]);
   });
 
-  it("member request changes, member before lead, req_changes_stop_alerts is false (1 Req)", async () => {
+  it("member request changes, member before lead (1 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 1;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -678,10 +674,9 @@ describe("updateReqChanges", () => {
     expect(lead3Queue).deep.equal([]);
   });
 
-  it("lead request changes, member before lead, req_changes_stop_alerts is false (2 Req)", async () => {
+  it("lead request changes, member before lead (2 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Lead_Approvals = 2;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -784,10 +779,9 @@ describe("updateReqChanges", () => {
     expect(lead3Queue).deep.equal([]);
   });
 
-  it("lead request changes, member before lead, req_changes_stop_alerts is false (1 Req)", async () => {
+  it("lead request changes, member before lead (1 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Lead_Approvals = 1;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -891,10 +885,10 @@ describe("updateReqChanges", () => {
   });
 
   // member & lead
-  it("member request changes, member & lead, req_changes_stop_alerts is true (2 Req)", async () => {
+  it("member request changes, member & lead (2 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 2;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
+
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -905,8 +899,8 @@ describe("updateReqChanges", () => {
       member_complete: false,
       members_req_changes: [],
       standard_leads_alert: [slackLead1.Slack_Id,
-        slackLead2.Slack_Id,
-        slackLead3.Slack_Id,
+      slackLead2.Slack_Id,
+      slackLead3.Slack_Id,
       ],
       leads_approving: [],
       lead_complete: false,
@@ -978,7 +972,7 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
     expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead1.Slack_Id,
-      slackLead2.Slack_Id, slackLead3.Slack_Id]);
+    slackLead2.Slack_Id, slackLead3.Slack_Id]);
     expect(teamQueue[0].leads_req_changes).deep.equal([]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -1000,10 +994,10 @@ describe("updateReqChanges", () => {
     expect(lead3Queue).deep.equal(teamQueue);
   });
 
-  it("member request changes, member & lead, req_changes_stop_alerts is true (1 Req)", async () => {
+  it("member request changes, member & lead (1 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 1;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
+
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -1014,8 +1008,8 @@ describe("updateReqChanges", () => {
       member_complete: false,
       members_req_changes: [],
       standard_leads_alert: [slackLead1.Slack_Id,
-        slackLead2.Slack_Id,
-        slackLead3.Slack_Id,
+      slackLead2.Slack_Id,
+      slackLead3.Slack_Id,
       ],
       leads_approving: [],
       lead_complete: false,
@@ -1087,7 +1081,7 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
     expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead1.Slack_Id,
-      slackLead2.Slack_Id, slackLead3.Slack_Id]);
+    slackLead2.Slack_Id, slackLead3.Slack_Id]);
     expect(teamQueue[0].leads_req_changes).deep.equal([]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -1109,10 +1103,9 @@ describe("updateReqChanges", () => {
     expect(lead3Queue).deep.equal(teamQueue);
   });
 
-  it("member request changes, member & lead, req_changes_stop_alerts is false (2 Req)", async () => {
+  it("member request changes, member & lead (2 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 2;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -1123,8 +1116,8 @@ describe("updateReqChanges", () => {
       member_complete: false,
       members_req_changes: [],
       standard_leads_alert: [slackLead1.Slack_Id,
-        slackLead2.Slack_Id,
-        slackLead3.Slack_Id,
+      slackLead2.Slack_Id,
+      slackLead3.Slack_Id,
       ],
       leads_approving: [],
       lead_complete: false,
@@ -1196,7 +1189,7 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
     expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead1.Slack_Id,
-      slackLead2.Slack_Id, slackLead3.Slack_Id]);
+    slackLead2.Slack_Id, slackLead3.Slack_Id]);
     expect(teamQueue[0].leads_req_changes).deep.equal([]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -1218,10 +1211,9 @@ describe("updateReqChanges", () => {
     expect(lead3Queue).deep.equal(teamQueue);
   });
 
-  it("member request changes, member & lead, req_changes_stop_alerts is false (1 Req)", async () => {
+  it("member request changes, member & lead (1 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 1;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -1232,8 +1224,8 @@ describe("updateReqChanges", () => {
       member_complete: false,
       members_req_changes: [],
       standard_leads_alert: [slackLead1.Slack_Id,
-        slackLead2.Slack_Id,
-        slackLead3.Slack_Id,
+      slackLead2.Slack_Id,
+      slackLead3.Slack_Id,
       ],
       leads_approving: [],
       lead_complete: false,
@@ -1305,7 +1297,7 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
     expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead1.Slack_Id,
-      slackLead2.Slack_Id, slackLead3.Slack_Id]);
+    slackLead2.Slack_Id, slackLead3.Slack_Id]);
     expect(teamQueue[0].leads_req_changes).deep.equal([]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -1327,10 +1319,10 @@ describe("updateReqChanges", () => {
     expect(lead3Queue).deep.equal(teamQueue);
   });
 
-  it("lead request changes, member & lead, req_changes_stop_alerts is true (2 Req)", async () => {
+  it("lead request changes, member & lead (2 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 2;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
+
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -1341,7 +1333,7 @@ describe("updateReqChanges", () => {
       member_complete: false,
       members_req_changes: [],
       standard_leads_alert: [slackLead2.Slack_Id,
-        slackLead3.Slack_Id,
+      slackLead3.Slack_Id,
       ],
       leads_approving: [],
       lead_complete: false,
@@ -1409,8 +1401,8 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
     expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
-      slackMember3.Slack_Id,
-      slackMember1.Slack_Id]);
+    slackMember3.Slack_Id,
+    slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
@@ -1434,10 +1426,10 @@ describe("updateReqChanges", () => {
     expect(lead3Queue).deep.equal([]);
   });
 
-  it("lead request changes, member & lead, req_changes_stop_alerts is true (1 Req)", async () => {
+  it("lead request changes, member & lead (1 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 1;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = true;
+
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -1448,7 +1440,7 @@ describe("updateReqChanges", () => {
       member_complete: false,
       members_req_changes: [],
       standard_leads_alert: [slackLead2.Slack_Id,
-        slackLead3.Slack_Id,
+      slackLead3.Slack_Id,
       ],
       leads_approving: [],
       lead_complete: false,
@@ -1516,8 +1508,8 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
     expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
-      slackMember3.Slack_Id,
-      slackMember1.Slack_Id]);
+    slackMember3.Slack_Id,
+    slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
@@ -1541,10 +1533,9 @@ describe("updateReqChanges", () => {
     expect(lead3Queue).deep.equal([]);
   });
 
-  it("lead request changes, member & lead, req_changes_stop_alerts is false (2 Req)", async () => {
+  it("lead request changes, member & lead (2 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 2;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -1555,7 +1546,7 @@ describe("updateReqChanges", () => {
       member_complete: false,
       members_req_changes: [],
       standard_leads_alert: [slackLead2.Slack_Id,
-        slackLead3.Slack_Id,
+      slackLead3.Slack_Id,
       ],
       leads_approving: [],
       lead_complete: false,
@@ -1623,13 +1614,13 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
     expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
-      slackMember3.Slack_Id,
-      slackMember1.Slack_Id]);
+    slackMember3.Slack_Id,
+    slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);
     expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead2.Slack_Id,
-      slackLead3.Slack_Id]);
+    slackLead3.Slack_Id]);
     expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
     expect(teamQueue[0].events[0].action).equal("OPENED");
     expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
@@ -1649,10 +1640,9 @@ describe("updateReqChanges", () => {
     expect(lead3Queue).deep.equal(teamQueue);
   });
 
-  it("lead request changes, member & lead, req_changes_stop_alerts is false (1 Req)", async () => {
+  it("lead request changes, member & lead (1 Req)", async () => {
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
     json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 1;
-    json.Departments.Devs.DevTeam1.Options.Req_Changes_Stop_Alerts = false;
     const newPR = {
       owner: slackMember1,
       title: "VALID PR TITLE #1",
@@ -1663,7 +1653,7 @@ describe("updateReqChanges", () => {
       member_complete: false,
       members_req_changes: [],
       standard_leads_alert: [slackLead2.Slack_Id,
-        slackLead3.Slack_Id,
+      slackLead3.Slack_Id,
       ],
       leads_approving: [],
       lead_complete: false,
@@ -1731,8 +1721,8 @@ describe("updateReqChanges", () => {
     expect(teamQueue[0].member_complete).equal(false);
     expect(teamQueue[0].members_approving).deep.equal([]);
     expect(teamQueue[0].standard_members_alert).deep.equal([slackMember2.Slack_Id,
-      slackMember3.Slack_Id,
-      slackMember1.Slack_Id]);
+    slackMember3.Slack_Id,
+    slackMember1.Slack_Id]);
     expect(teamQueue[0].members_req_changes).deep.equal([]);
     expect(teamQueue[0].lead_complete).equal(false);
     expect(teamQueue[0].leads_approving).deep.equal([]);

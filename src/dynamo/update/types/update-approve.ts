@@ -69,8 +69,6 @@ export async function updateApprove(
 
   // Get team options for # of required approvals
   const teamOptions = getTeamOptionsAlt(slackUserOwner, json);
-  const reqLeadApprovals = teamOptions.Num_Required_Lead_Approvals;
-  const reqMemberApprovals = teamOptions.Num_Required_Member_Approvals;
 
   // Determine if the slackUserApproving is a member or lead
   // If slackUserApproving is found as a lead & member, throw error
@@ -96,14 +94,14 @@ export async function updateApprove(
   let leftoverAlertedLeads: string[] = [];
   let leftoverAlertedMembers: string[] = [];
   if (foundLead) {
-    const result = updateLeadAlerts(foundPR, slackUserOwner, slackUserApproving,
-      teamOptions, true, json);
+    const result = await updateLeadAlerts(foundPR, slackUserOwner, slackUserApproving,
+      teamOptions, true, dynamoTableName, json);
     foundPR = result.pr;
     leftoverAlertedLeads = result.leftLeads;
   }
   if (foundMember) {
-    const result = updateMemberAlerts(foundPR, slackUserOwner, slackUserApproving,
-      teamOptions, true, json);
+    const result = await updateMemberAlerts(foundPR, slackUserOwner, slackUserApproving,
+      teamOptions, true, dynamoTableName, json);
     foundPR = result.pr;
     leftoverAlertedMembers = result.leftMembers;
   }

@@ -70,8 +70,6 @@ export async function updateReqChanges(
 
   // Get team options for # of required approvals
   const teamOptions = getTeamOptionsAlt(slackUserOwner, json);
-  const reqLeadApprovals = teamOptions.Num_Required_Lead_Approvals;
-  const reqMemberApprovals = teamOptions.Num_Required_Member_Approvals;
 
   // Determine if the slack user requesting changes is a member or lead
   // If slackUserReqChanges is found as a lead & member, throw error
@@ -93,21 +91,17 @@ export async function updateReqChanges(
     throw new Error(`${slackUserReqChanges.Slack_Name} set as both a member and lead. Pick one`);
   }
 
-  // Update lead or member specific properties??
-  // If Req_Changes_Stop_Alerts is true, check if number of approvals
-  // + number of requested changes >= required reviews for lead/member
-  // If so, remove this PR from those queues
   let leftoverAlertedLeads: string[] = [];
   let leftoverAlertedMembers: string[] = [];
   if (foundLead) {
-    const result = updateLeadAlerts(foundPR, slackUserOwner,
-      slackUserReqChanges, teamOptions, false, json);
+    const result = await updateLeadAlerts(foundPR, slackUserOwner, slackUserReqChanges,
+      teamOptions, false, dynamoTableName, json);
     foundPR = result.pr;
     leftoverAlertedLeads = result.leftLeads;
   }
   if (foundMember) {
-    const result = updateMemberAlerts(foundPR, slackUserOwner, slackUserReqChanges,
-      teamOptions, false, json);
+    const result = await updateMemberAlerts(foundPR, slackUserOwner, slackUserReqChanges,
+      teamOptions, false, dynamoTableName, json);
     foundPR = result.pr;
     leftoverAlertedMembers = result.leftMembers;
   }
@@ -115,35 +109,19 @@ export async function updateReqChanges(
   // Update team queue
   await dynamoUpdate.updatePullRequest(dynamoTableName, ownerTeam.Slack_Id, teamQueue, foundPR);
 
-  // If Req_Changes_Stop_Alerts is TRUE
   // Remove PR from leftover users & user who request changes
-  // If Req_Changes_Stop_Alerts is FALSE
-  // Only remove user who requested changes to the PR
-  if (teamOptions.Req_Changes_Stop_Alerts) {
-    const removePRFromUsers = leftoverAlertedLeads.concat(leftoverAlertedMembers).concat(slackUserReqChanges.Slack_Id);
-    await Promise.all(removePRFromUsers.map(async (removeUserId) => {
-      const dynamoUserQueue = await dynamoGet.getQueue(
-        dynamoTableName,
-        removeUserId);
-
-      await dynamoRemove.removePullRequest(
-        dynamoTableName,
-        removeUserId,
-        dynamoUserQueue,
-        foundPR);
-    }));
-  }
-  else {
-    const currentQueue = await dynamoGet.getQueue(
+  const removePRFromUsers = leftoverAlertedLeads.concat(leftoverAlertedMembers).concat(slackUserReqChanges.Slack_Id);
+  await Promise.all(removePRFromUsers.map(async (removeUserId) => {
+    const dynamoUserQueue = await dynamoGet.getQueue(
       dynamoTableName,
-      slackUserReqChanges.Slack_Id);
+      removeUserId);
 
     await dynamoRemove.removePullRequest(
       dynamoTableName,
-      slackUserReqChanges.Slack_Id,
-      currentQueue,
+      removeUserId,
+      dynamoUserQueue,
       foundPR);
-  }
+  }));
 
   // Update all queues with members and leads to alert
   const allAlertingUserIds = foundPR.standard_leads_alert.concat(foundPR.standard_members_alert);

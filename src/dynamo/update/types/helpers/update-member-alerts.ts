@@ -4,6 +4,10 @@ import {
   SlackUser,
   TeamOptions,
 } from "../../../../models";
+import {
+  DynamoGet,
+  DynamoRemove,
+} from "../../../api";
 
 /**
  * @description Update member complete & members to alert
@@ -18,27 +22,54 @@ import {
  *                    changes
  * @param json JSON config file
  */
-export function updateMemberAlerts(
+export async function updateMemberAlerts(
   pr: PullRequest,
   slackUserOwner: SlackUser,
   slackUserChanging: SlackUser,
   teamOptions: TeamOptions,
   isApproving: boolean,
+  dynamoTableName: string,
   json: any,
-): { pr: PullRequest, leftMembers: string[] } {
+): Promise<{ pr: PullRequest, leftMembers: string[] }> {
+
+  // Setup
+  const dynamoGet = new DynamoGet();
+  const dynamoRemove = new DynamoRemove();
 
   // Keep track of members who no longer need to be alerted
   const leftoverAlertedMembers: string[] = [];
 
-  // Determine whether to use # of users requesting changes to impact alerts
-  let membersReqChanges: string[] = [];
-  if (teamOptions.Req_Changes_Stop_Alerts) {
-    membersReqChanges = pr.members_req_changes;
-  } else {
-    membersReqChanges = [];
-  }
-
   if (isApproving) {
+    // Check if the member requested changes
+    if (pr.req_changes_members_alert.includes(slackUserChanging.Slack_Id)) {
+      pr.req_changes_members_alert = pr.req_changes_members_alert.filter((memberId) => {
+        return memberId !== slackUserChanging.Slack_Id;
+      });
+    }
+    // Check if there are any members or leads requesting changes to the PR
+    // AND if the pr owner is in the standard member or leads alerted
+    if (pr.leads_req_changes.length === 0
+      && pr.members_req_changes.length === 0
+      && pr.req_changes_leads_alert.length === 0
+      && pr.req_changes_members_alert.length === 0
+      && (pr.standard_leads_alert.includes(slackUserOwner.Slack_Id)
+        || pr.standard_members_alert.includes(slackUserOwner.Slack_Id))) {
+      pr.standard_leads_alert = pr.standard_leads_alert.filter((leadId) => {
+        return leadId !== slackUserOwner.Slack_Id;
+      });
+      pr.standard_members_alert = pr.standard_members_alert.filter((memberId) => {
+        return memberId !== slackUserOwner.Slack_Id;
+      });
+      // Remove slackUserOwner alerted in queue
+      const ownerQueue = await dynamoGet.getQueue(
+        dynamoTableName,
+        slackUserOwner.Slack_Id);
+      await dynamoRemove.removePullRequest(
+        dynamoTableName,
+        slackUserOwner.Slack_Id,
+        ownerQueue,
+        pr);
+    }
     pr.members_approving.push(slackUserChanging.Slack_Id);
   } else {
     pr.members_req_changes.push(slackUserChanging.Slack_Id);
@@ -74,11 +105,11 @@ export function updateMemberAlerts(
     }
   }
 
-  // If users requesting changes stop alerts is TRUE
   // AND members approving + members requesting changes >= required member approvals
   // Then add slackId
-  if (teamOptions.Num_Required_Member_Approvals
-    && pr.members_approving.length + membersReqChanges.length
+  if (pr.members_approving.length
+    + pr.members_req_changes.length
+    + pr.req_changes_members_alert.length
     >= teamOptions.Num_Required_Member_Approvals) {
     // Store leftover members
     pr.standard_members_alert.map((slackId) => {
@@ -107,31 +138,7 @@ export function updateMemberAlerts(
       }
     }
   }
-  else if (pr.members_approving.length >= teamOptions.Num_Required_Member_Approvals) {
-    pr.standard_members_alert.map((slackId) => {
-      // Store leftover members and reset standard_members_alert to []
-      if (slackId !== slackUserChanging.Slack_Id
-        && slackId !== slackUserOwner.Slack_Id) {
-        leftoverAlertedMembers.push(slackId);
-      }
-    });
-    // If members alert includes pr owner, keep them alerted
-    // Otherwise set to empty
-    if (pr.standard_members_alert.includes(slackUserOwner.Slack_Id)) {
-      pr.standard_members_alert = [slackUserOwner.Slack_Id];
-    } else {
-      pr.standard_members_alert = [];
-    }
-    // If there are members requesting changes
-    // even with other members approving the PR
-    // Consider the PR not member complete
-    if (pr.members_req_changes.length > 0) {
-      pr.member_complete = false;
-    } else {
-      pr.member_complete = true;
-    }
-  }
-  // Otherwise don't have enough memberss approving/requesting changes
+  // Otherwise don't have enough members approving/requesting changes
   // OR just approving. Construct new list of members to alert
   else {
     const newMembersToAlert = pr.standard_members_alert.filter((slackId) => {
@@ -139,5 +146,6 @@ export function updateMemberAlerts(
     });
     pr.standard_members_alert = newMembersToAlert;
   }
+
   return { pr: pr, leftMembers: leftoverAlertedMembers };
 }

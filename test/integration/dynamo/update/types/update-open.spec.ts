@@ -311,4 +311,131 @@ describe("Dynamo.UpdateOpen", () => {
     expect(member3Queue[0].url).deep.equal(expectedUpdatedQueue[0].url);
   });
 
+  it("should update a queue with an opened PR -- owned by a lead & alert members before leads", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
+    const event = {
+      pull_request: {
+        title: "NEW TITLE",
+        html_url: "www.github.com/EthanTPainter",
+      },
+    };
+
+    await updateOpen(
+      slackLead1,
+      slackTeam,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Team queue should be up to date
+    expect(teamQueue[0].url).deep.equal(event.pull_request.html_url);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember1.Slack_Id,
+    slackMember2.Slack_Id,
+    slackMember3.Slack_Id,
+    ]);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+
+    // Expect PR Owner to have an empty queue
+    expect(lead1Queue).deep.equal([]);
+
+    // Lead 2, 3, etc. queues should be empty
+    expect(lead2Queue).deep.equal([]);
+    expect(lead3Queue).deep.equal([]);
+
+    // All member queues should match team queue
+    expect(member1Queue).deep.equal(teamQueue);
+    expect(member2Queue).deep.equal(teamQueue);
+    expect(member3Queue).deep.equal(teamQueue);
+  });
+
+  it("should update a queue with an opened PR -- owned by a lead & alert members & leads", async () => {
+    json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
+    const event = {
+      pull_request: {
+        title: "NEW TITLE",
+        html_url: "www.github.com/EthanTPainter",
+      },
+    };
+
+    await updateOpen(
+      slackLead1,
+      slackTeam,
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      event,
+      json);
+
+    const teamQueue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackTeam.Slack_Id);
+    const lead1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead1.Slack_Id);
+    const lead2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead2.Slack_Id);
+    const lead3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackLead3.Slack_Id);
+    const member1Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember1.Slack_Id);
+    const member2Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember2.Slack_Id);
+    const member3Queue = await dynamoGet.getQueue(
+      requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+      slackMember3.Slack_Id);
+
+    // Team queue should be up to date
+    expect(teamQueue[0].url).deep.equal(event.pull_request.html_url);
+    expect(teamQueue[0].lead_complete).equal(false);
+    expect(teamQueue[0].member_complete).equal(false);
+    expect(teamQueue[0].standard_leads_alert).deep.equal([slackLead2.Slack_Id,
+    slackLead3.Slack_Id]);
+    expect(teamQueue[0].standard_members_alert).deep.equal([slackMember1.Slack_Id,
+    slackMember2.Slack_Id,
+    slackMember3.Slack_Id,
+    ]);
+    expect(teamQueue[0].leads_approving).deep.equal([]);
+    expect(teamQueue[0].members_approving).deep.equal([]);
+
+    // Expect PR Owner to have an empty queue
+    expect(lead1Queue).deep.equal([]);
+
+    // Lead 2, 3, etc. queues should match team queue
+    expect(lead2Queue).deep.equal(teamQueue);
+    expect(lead3Queue).deep.equal(teamQueue);
+
+    // All member queues should match team queue
+    expect(member1Queue).deep.equal(teamQueue);
+    expect(member2Queue).deep.equal(teamQueue);
+    expect(member3Queue).deep.equal(teamQueue);
+  });
+
 });

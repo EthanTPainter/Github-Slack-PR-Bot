@@ -15,7 +15,6 @@ export const json = {
           Num_Required_Lead_Approvals: 1,
           Num_Required_Member_Approvals: 1,
           Disable_Dynamo: false,
-          Req_Changes_Stop_Alerts: true,
           Member_Before_Lead: true,
         },
         Slack_Group: {
@@ -67,7 +66,6 @@ export const json = {
           Num_Required_Lead_Approvals: 1,
           Num_Required_Member_Approvals: 1,
           Disable_Dynamo: false,
-          Req_Changes_Stop_Alerts: true,
           Member_Before_Lead: true,
         },
         Slack_Group: "Group Slack Name",

@@ -20,19 +20,19 @@ import {
  * @returns string of the expected slack message
  */
 export async function updateFixedPR(
-  slackUserId: string,
+  slackOwnerId: string,
   fixedPRUrl: string,
-  slackUserQueue: PullRequest[],
+  slackOwnerQueue: PullRequest[],
   dynamoTableName: string,
   json: any,
 ): Promise<string> {
 
   // Verify the PR is in the queue
-  const foundPR = slackUserQueue.find((pr) => {
+  const foundPR = slackOwnerQueue.find((pr) => {
     return pr.url === fixedPRUrl;
   });
   if (!foundPR) {
-    throw new Error(`Provided PR Url: ${fixedPRUrl}, not found in ${slackUserId} 's queue`);
+    throw new Error(`Provided PR Url: ${fixedPRUrl}, not found in ${slackOwnerId} 's queue`);
   }
 
   // Setup
@@ -54,15 +54,15 @@ export async function updateFixedPR(
   // Remove PR owner from members or leads to alert
   foundPR.standard_leads_alert = foundPR.standard_leads_alert
     .filter((alertedLead) => {
-      return alertedLead !== slackUserId;
+      return alertedLead !== slackOwnerId;
   });
   foundPR.standard_members_alert = foundPR.standard_members_alert
     .filter((alertedMember) => {
-      return alertedMember !== slackUserId;
+      return alertedMember !== slackOwnerId;
   });
 
   // Push new event onto PR events
-  const slackOwner = getSlackUserAlt(slackUserId, json);
+  const slackOwner = getSlackUserAlt(slackOwnerId, json);
   const currentTime = DateTime.local().toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS);
   const newEvent = {
     user: slackOwner,
@@ -78,13 +78,13 @@ export async function updateFixedPR(
     await dynamoRemove.removePullRequest(
       dynamoTableName,
       slackOwner.Slack_Id,
-      slackUserQueue,
+      slackOwnerQueue,
       foundPR,
     );
 
     // Update Team Queue
-    const teamGroup = getSlackGroupAlt(slackUserId, json);
-    const teamQueue = await dynamoGet.getQueue(dynamoTableName, slackUserId);
+    const teamGroup = getSlackGroupAlt(slackOwnerId, json);
+    const teamQueue = await dynamoGet.getQueue(dynamoTableName, slackOwnerId);
     await dynamoUpdate.updatePullRequest(
       dynamoTableName,
       teamGroup.Slack_Id,
@@ -102,7 +102,7 @@ export async function updateFixedPR(
       await dynamoUpdate.updatePullRequest(
         dynamoTableName,
         userId,
-        slackUserQueue,
+        slackOwnerQueue,
         foundPR,
       );
     });

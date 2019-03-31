@@ -1,8 +1,9 @@
 import { DateTime } from "luxon";
 import { SlackUser } from "../../../models";
-import { DynamoGet, DynamoUpdate } from "../../../dynamo/api";
 import { getPRLink } from "../../../github/parse";
 import { getSlackGroupAlt } from "../../../json/parse";
+import { processCommentingUserReqChanges } from "./helpers/comment-changes-alerts";
+import { DynamoGet, DynamoUpdate, DynamoRemove } from "../../../dynamo/api";
 
 /**
  * @description Update DynamoDB table to add a comment
@@ -54,6 +55,15 @@ export async function updateComment(
     time: currentTime,
   };
   foundPR.events.push(newEvent);
+
+  // If user commenting requested changes
+  // make sure pr owner is alerted
+  await processCommentingUserReqChanges(
+    slackUserOwner,
+    slackUserCommenting,
+    foundPR,
+    dynamoTableName,
+    json);
 
   // Update commented event on team queue
   await dynamoUpdate.updatePullRequest(dynamoTableName, ownerTeam.Slack_Id, teamQueue, foundPR);
