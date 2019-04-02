@@ -52,7 +52,9 @@ export async function updateClose(
   await dynamoRemove.removePullRequest(dynamoTableName, ownerTeam.Slack_Id, teamQueue, foundPR);
 
   // Remove PR from all members and leads to alert
-  const allAlertingUserIds = foundPR.standard_leads_alert.concat(foundPR.standard_members_alert);
+  const allAlertingUserIds = foundPR.standard_leads_alert.concat(foundPR.standard_members_alert)
+    .concat(foundPR.req_changes_leads_alert).concat(foundPR.req_changes_members_alert);
+
   await Promise.all(allAlertingUserIds.map(async (alertUserId: string) => {
     const currentQueue = await dynamoGet.getQueue(dynamoTableName, alertUserId);
     const alertSlackUser = getSlackUserAlt(alertUserId, json);

@@ -72,6 +72,7 @@ describe("updateLeadAlerts", () => {
       members_req_changes: [],
       leads_approving: [],
       standard_leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
+      standard_members_alert: [],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -106,6 +107,7 @@ describe("updateLeadAlerts", () => {
       leads_req_changes: [],
       leads_approving: [],
       standard_leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
+      standard_members_alert: [],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -140,6 +142,7 @@ describe("updateLeadAlerts", () => {
       leads_req_changes: [],
       leads_approving: [],
       standard_leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
+      standard_members_alert: [],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -174,6 +177,7 @@ describe("updateLeadAlerts", () => {
       leads_req_changes: [],
       leads_approving: [],
       standard_leads_alert: ["<SlackLeadId2>", "<SlackLeadId3>", "<SlackLeadId4>"],
+      standard_members_alert: [],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -208,6 +212,7 @@ describe("updateLeadAlerts", () => {
       leads_req_changes: [],
       leads_approving: ["<SlackLeadId2>"],
       standard_leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>"],
+      standard_members_alert: [],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -242,6 +247,7 @@ describe("updateLeadAlerts", () => {
       leads_req_changes: ["<SlackLeadId2>"],
       leads_approving: [],
       standard_leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"],
+      standard_members_alert: [],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -276,6 +282,7 @@ describe("updateLeadAlerts", () => {
       leads_req_changes: [],
       leads_approving: ["<SlackLeadId2>"],
       standard_leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>"],
+      standard_members_alert: [],
       lead_complete: false,
     };
     const slackUserOwner = {
@@ -310,6 +317,7 @@ describe("updateLeadAlerts", () => {
       leads_req_changes: ["<SlackLeadId2>"],
       leads_approving: [],
       standard_leads_alert: ["<SlackLeadId3>", "<SlackLeadId4>", "<SlackLeadId1>"],
+      standard_members_alert: [],
       lead_complete: false,
     };
     const slackUserOwner = {

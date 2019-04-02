@@ -45,36 +45,36 @@ export async function updateLeadAlerts(
 
   // If slackUserApproving is found as a lead
   if (isApproving) {
-    // Check if the lead requested changes
-    if (pr.req_changes_leads_alert.includes(slackUserChanging.Slack_Id)) {
-      // Remove lead from requesting changes leads to alert
-      pr.req_changes_leads_alert = pr.req_changes_leads_alert.filter((leadId) => {
-        return leadId !== slackUserChanging.Slack_Id;
+    // Filter out user from req_changes or req changes alerts
+    pr.leads_req_changes = pr.leads_req_changes.filter((leadId) => {
+      return leadId !== slackUserChanging.Slack_Id;
+    });
+    pr.req_changes_leads_alert = pr.req_changes_leads_alert.filter((leadId) => {
+      return leadId !== slackUserChanging.Slack_Id;
+    });
+    // Check if there are any members or leads requesting changes to the PR
+    // AND if the pr owner is in the standard member or leads alerted
+    if (pr.leads_req_changes.length === 0
+      && pr.members_req_changes.length === 0
+      && pr.req_changes_leads_alert.length === 0
+      && pr.req_changes_members_alert.length === 0
+      && (pr.standard_leads_alert.includes(slackUserOwner.Slack_Id)
+        || pr.standard_members_alert.includes(slackUserOwner.Slack_Id))) {
+      pr.standard_leads_alert = pr.standard_leads_alert.filter((leadId) => {
+        return leadId !== slackUserOwner.Slack_Id;
       });
-      // Check if there are any members or leads requesting changes to the PR
-      // AND if the pr owner is in the standard member or leads alerted
-      if (pr.leads_req_changes.length === 0
-        && pr.members_req_changes.length === 0
-        && pr.req_changes_leads_alert.length === 0
-        && pr.req_changes_members_alert.length === 0
-        && (pr.standard_leads_alert.includes(slackUserOwner.Slack_Id)
-          || pr.standard_members_alert.includes(slackUserOwner.Slack_Id))) {
-        pr.standard_leads_alert = pr.standard_leads_alert.filter((leadId) => {
-          return leadId !== slackUserOwner.Slack_Id;
-        });
-        pr.standard_members_alert = pr.standard_members_alert.filter((memberId) => {
-          return memberId !== slackUserOwner.Slack_Id;
-        });
-        // Remove slackUserOwner alerted in queue
-        const ownerQueue = await dynamoGet.getQueue(
-          dynamoTableName,
-          slackUserOwner.Slack_Id);
-        await dynamoRemove.removePullRequest(
-          dynamoTableName,
-          slackUserOwner.Slack_Id,
-          ownerQueue,
-          pr);
-      }
+      pr.standard_members_alert = pr.standard_members_alert.filter((memberId) => {
+        return memberId !== slackUserOwner.Slack_Id;
+      });
+      // Remove slackUserOwner alerted in queue
+      const ownerQueue = await dynamoGet.getQueue(
+        dynamoTableName,
+        slackUserOwner.Slack_Id);
+      await dynamoRemove.removePullRequest(
+        dynamoTableName,
+        slackUserOwner.Slack_Id,
+        ownerQueue,
+        pr);
     }
     pr.leads_approving.push(slackUserChanging.Slack_Id);
   }
@@ -104,10 +104,18 @@ export async function updateLeadAlerts(
         pr.standard_leads_alert.push(slackUserOwner.Slack_Id);
       }
     }
+    // Check if slackUserOwner is already in standard_members_alert
     if (ownerMember) {
       if (!pr.standard_members_alert.includes(slackUserOwner.Slack_Id)) {
         pr.standard_members_alert.push(slackUserOwner.Slack_Id);
       }
+    }
+    // Check if slackUserChanging has preivously approved the PR
+    // If found, remove lead from approving leads
+    if (pr.leads_approving.includes(slackUserChanging.Slack_Id)) {
+      pr.leads_approving = pr.leads_approving.filter((leadId) => {
+        return leadId !== slackUserChanging.Slack_Id;
+      });
     }
   }
 
