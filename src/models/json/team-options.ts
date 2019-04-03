@@ -1,7 +1,7 @@
 
 export class TeamOptions {
-  Avoid_Slack_Channel_Comment_Alerts_Time_Window: number;   // Time window when repetitive
-                                                            // comments on a PR don't send alerts to Slack
+  Avoid_Comment_Alerts: number;   // Time window (minutes) to prevent multiple alerts
+                                  // for comments by the same user in a short period of time
   Check_Mark_Text: string;                // Text for check marks in Slack
   X_Mark_Text: string;                    // Text for X mark in Slack
   Queue_Include_Created_Time: boolean;    // Incldue Created DateTime

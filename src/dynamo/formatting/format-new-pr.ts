@@ -75,6 +75,7 @@ export function formatNewPullRequest(
     owner: slackUser,
     title: title,
     url: htmlUrl,
+    comment_times: {},
     standard_members_alert: memberIds,
     standard_leads_alert: leadIds,
     member_complete: memberComplete,

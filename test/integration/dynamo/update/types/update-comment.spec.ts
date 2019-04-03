@@ -8,8 +8,10 @@ import {
   DynamoUpdate,
 } from "../../../../../src/dynamo/api";
 import { updateComment } from "../../../../../src/dynamo/update";
+import { Settings } from "luxon";
+import { createISO } from "../../../../../src/dynamo/time";
 
-describe("Update.DynamoComment", () => {
+describe.only("Update.DynamoComment", () => {
 
   const dynamoGet = new DynamoGet();
   const dynamoReset = new DynamoReset();
@@ -46,11 +48,15 @@ describe("Update.DynamoComment", () => {
   });
 
   it("should update a PR with a commented action from owner -- alert members before leads", async () => {
+    // Set Date & time
+    Settings.now = (): number => new Date(2019, 3, 1).valueOf();
+    const currentTime = createISO();
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
     const openedPR = {
       owner: slackMember1,
       title: "ORIGINAL TITLE",
       url: "www.github.com/coveros",
+      comment_times: {},
       standard_members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
@@ -123,6 +129,9 @@ describe("Update.DynamoComment", () => {
     // Expect team queue to have both events
     expect(teamQueue[0].events[0].action).equal(openedPR.events[0].action);
     expect(teamQueue[0].events[1].action).equal("COMMENTED");
+    expect(teamQueue[0].comment_times).deep.equal({
+      [slackMember1.Slack_Id]: currentTime,
+    });
 
     // Expect lead queues to be empty (not alerted)
     expect(lead1Queue).deep.equal([]);
@@ -133,18 +142,20 @@ describe("Update.DynamoComment", () => {
     expect(member1Queue).deep.equal([]);
 
     // Expect members 2 & 3 queues to have both events
-    expect(member2Queue[0].events[0].action).equal(openedPR.events[0].action);
-    expect(member2Queue[0].events[1].action).equal("COMMENTED");
-    expect(member3Queue[0].events[0].action).equal(openedPR.events[0].action);
-    expect(member3Queue[0].events[1].action).equal("COMMENTED");
+    expect(member2Queue).deep.equal(teamQueue);
+    expect(member3Queue).deep.equal(teamQueue);
   });
 
   it("should update a PR with a commented action from owner -- alert members & leads", async () => {
+    // Set Date & time
+    Settings.now = (): number => new Date(2019, 3, 1).valueOf();
+    const currentTime = createISO();
     json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
     const openedPR = {
       owner: slackMember1,
       title: "ORIGINAL TITLE",
       url: "www.github.com/coveros",
+      comment_times: {},
       standard_members_alert: [slackMember2.Slack_Id,
       slackMember3.Slack_Id],
       members_approving: [],
@@ -234,20 +245,18 @@ describe("Update.DynamoComment", () => {
     // Expect team queue to have both events
     expect(teamQueue[0].events[0].action).equal(openedPR.events[0].action);
     expect(teamQueue[0].events[1].action).equal("COMMENTED");
+    expect(teamQueue[0].comment_times).deep.equal({
+      [slackMember1.Slack_Id]: currentTime,
+    });
 
     // Expect lead queues to have both events
-    expect(lead1Queue[0].events[0].action).equal(openedPR.events[0].action);
-    expect(lead1Queue[0].events[1].action).equal("COMMENTED");
-    expect(lead2Queue[0].events[0].action).equal(openedPR.events[0].action);
-    expect(lead2Queue[0].events[1].action).equal("COMMENTED");
-    expect(lead3Queue[0].events[0].action).equal(openedPR.events[0].action);
-    expect(lead3Queue[0].events[1].action).equal("COMMENTED");
+    expect(lead1Queue).deep.equal(teamQueue);
+    expect(lead2Queue).deep.equal(teamQueue);
+    expect(lead3Queue).deep.equal(teamQueue);
 
     // Expect members 2 & 3 queues to have both events
-    expect(member2Queue[0].events[0].action).equal(openedPR.events[0].action);
-    expect(member2Queue[0].events[1].action).equal("COMMENTED");
-    expect(member3Queue[0].events[0].action).equal(openedPR.events[0].action);
-    expect(member3Queue[0].events[1].action).equal("COMMENTED");
+    expect(member2Queue).deep.equal(teamQueue);
+    expect(member3Queue).deep.equal(teamQueue);
   });
 
 });

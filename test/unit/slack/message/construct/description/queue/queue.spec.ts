@@ -14,6 +14,7 @@ describe("constructQueueString", () => {
       },
       title: "Feature(123): Add new service",
       url: "www.github.com",
+      comment_times: {},
       standard_members_alert: ["<@id123>"],
       standard_leads_alert: [],
       member_complete: false,

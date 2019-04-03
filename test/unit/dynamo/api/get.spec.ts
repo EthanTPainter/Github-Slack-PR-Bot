@@ -18,6 +18,7 @@ describe("getPullRequest", () => {
       },
       title: "feat(1234): New feature",
       url: "www.github.com/ethantpainter",
+      comment_times: {},
       standard_members_alert: ["<@UUID123>", "<UUID567>"],
       standard_leads_alert: [],
       member_complete: false,

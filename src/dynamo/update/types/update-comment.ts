@@ -1,9 +1,9 @@
-import { DateTime } from "luxon";
 import { SlackUser } from "../../../models";
 import { getPRLink } from "../../../github/parse";
-import { getSlackGroupAlt } from "../../../json/parse";
+import { createISO, sendCommentSlackAlert } from "../../time";
+import { getSlackGroupAlt, getTeamOptionsAlt } from "../../../json/parse";
 import { processCommentingUserReqChanges } from "./helpers/comment-changes-alerts";
-import { DynamoGet, DynamoUpdate, DynamoRemove } from "../../../dynamo/api";
+import { DynamoGet, DynamoUpdate } from "../../../dynamo/api";
 
 /**
  * @description Update DynamoDB table to add a comment
@@ -13,6 +13,8 @@ import { DynamoGet, DynamoUpdate, DynamoRemove } from "../../../dynamo/api";
  * @param dynamoTableName Name of the dynamo table
  * @param event full event from GitHub webhook
  * @param json JSON config file
+ * @returns boolean whether to send a slack notification
+ *          to slack team channel
  */
 export async function updateComment(
   slackUserOwner: SlackUser,
@@ -20,7 +22,7 @@ export async function updateComment(
   dynamoTableName: string,
   event: any,
   json: any,
-): Promise<void> {
+): Promise<boolean> {
 
   // Setup
   const dynamoGet = new DynamoGet();
@@ -48,7 +50,7 @@ export async function updateComment(
   }
 
   // Make timestamp for last updated time & Add new comment event from slackUserCommenting
-  const currentTime = DateTime.local().toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS);
+  const currentTime = createISO();
   const newEvent = {
     user: slackUserCommenting,
     action: "COMMENTED",
@@ -64,6 +66,15 @@ export async function updateComment(
     foundPR,
     dynamoTableName,
     json);
+
+  // Check whether to send a slack alert & update comment times
+  const teamOptions = getTeamOptionsAlt(slackUserOwner, json);
+  const sendSlackAlert = sendCommentSlackAlert(
+    currentTime,
+    teamOptions,
+    slackUserCommenting,
+    foundPR);
+  foundPR = sendSlackAlert.pr;
 
   // Update commented event on team queue
   await dynamoUpdate.updatePullRequest(dynamoTableName, ownerTeam.Slack_Id, teamQueue, foundPR);
@@ -84,4 +95,5 @@ export async function updateComment(
       foundPR);
   }));
 
+  return sendSlackAlert.alertSlack;
 }

@@ -14,7 +14,7 @@ const logger = newLogger("Dynamo.UpdateClose");
  * @param dynamoTableName Name of the dynamo table
  * @param event full event from GitHub webhook
  * @param json JSON config file
- * @returns void
+ * @returns Whether to notify slack of the closed PR
  */
 export async function updateClose(
   slackUserOwner: SlackUser,
@@ -22,7 +22,7 @@ export async function updateClose(
   dynamoTableName: string,
   event: any,
   json: any,
-): Promise<void> {
+): Promise<boolean> {
 
   // Setup
   const dynamoGet = new DynamoGet();
@@ -61,4 +61,5 @@ export async function updateClose(
     await dynamoRemove.removePullRequest(dynamoTableName, alertSlackUser.Slack_Id, currentQueue, foundPR);
   }));
 
+  return true;
 }

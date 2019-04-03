@@ -23,7 +23,7 @@ export async function updateOpen(
   dynamoTableName: string,
   event: any,
   json: any,
-): Promise<DynamoDB.DocumentClient.UpdateItemOutput> {
+): Promise<boolean> {
 
   // Format an PullRequest as a Dynamo entry
   const newPullRequest = formatNewPullRequest(slackUser, event, json);
@@ -76,11 +76,11 @@ export async function updateOpen(
     dynamoTableName,
     slackTeam.Slack_Id);
 
-  const teamUpdate = await dynamoUpdate.appendPullRequest(
+  await dynamoUpdate.appendPullRequest(
     dynamoTableName,
     slackTeam.Slack_Id,
     currentTeamQueue,
     newPullRequest);
 
-  return teamUpdate;
+  return true;
 }

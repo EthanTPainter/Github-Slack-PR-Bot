@@ -1,7 +1,7 @@
 import { constructSlackMessage } from "../slack/message/construct/constructor";
 import { json } from "../json/src/json";
 import { requiredEnvs } from "../required-envs";
-import { postMessage } from "../slack/api";
+import { postMessage, postEphemeral } from "../slack/api";
 import { newLogger } from "../logger";
 import { getTeamName, getTeamOptions } from "../json/parse";
 import { getOwner } from "../github/parse";
@@ -39,7 +39,7 @@ export async function processGitHubEvent(
   event: AWSLambda.SQSEvent,
   context: Context,
   callback: Callback,
-): Promise<any> {
+): Promise<void> {
 
   XRayInitializer.init({
     logger: logger,
@@ -56,23 +56,24 @@ export async function processGitHubEvent(
   logger.debug(`Messages: ${JSON.stringify(messages)}`);
 
   // Map through messages to process
-  await messages.map(async (message) => {
+  await Promise.all(messages.map(async (message) => {
     if (message["custom-source"] === "SLACK") {
       // Determine which slash command was used
       switch (message.command) {
         case "/sns":
+          logger.debug(`Message: ${JSON.stringify(message)}`);
           break;
         case "/team-queue":
-          await getTeamQueue(message);
+          const teamQueueString = await getTeamQueue(message);
           break;
         case "/my-queue":
-          await getMyQueue(message);
+          const myQueueString = await getMyQueue(message);
           break;
         case "/get-queue":
-          await getQueue(message);
+          const getQueueString = await getQueue(message);
           break;
         case "/fixed-pr":
-          await processFixedPR(message);
+          const fixedPRString = await processFixedPR(message);
           break;
       }
     }
@@ -87,25 +88,37 @@ export async function processGitHubEvent(
       const teamName = getTeamName(githubUser, json);
 
       // Check whether to disable dynamo
+      let alertSlack = true;
       const teamOptions = getTeamOptions(githubUser, json);
       if (teamOptions.Disable_Dynamo === false) {
         // Update DynamoDB with new request
-        await updateDynamo(githubUser, event, json, pullRequestAction);
+        alertSlack = await updateDynamo(githubUser, event, json, pullRequestAction);
       }
 
-      if (teamOptions.Disable_Slack === false) {
+      // Check whether to disable github-to-slack
+      if (teamOptions.Disable_Slack === false && alertSlack) {
+        // Verify team name required envs exist
+        if (!requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]) {
+          logger.error(`Expected environment variable not found: ${teamName}_SLACK_CHANNEL_NAME`);
+          return;
+        }
+        if (!requiredEnvs[teamName + "_SLACK_TOKEN"]) {
+          logger.error(`Expected environment variable not found: ${teamName}_SLACK_TOKEN`);
+          return;
+        }
         // Use team name to get channel name and slack token from required Envs
-      logger.info("Posting slack message to " + requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]);
-      await postMessage(requiredEnvs.SLACK_API_URI,
-        requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
-        requiredEnvs[teamName + "_SLACK_TOKEN"],
-        slackMessage);
+        logger.info("Posting slack message to " + requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]);
+        await postMessage(requiredEnvs.SLACK_API_URI,
+          requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
+          requiredEnvs[teamName + "_SLACK_TOKEN"],
+          slackMessage);
       }
     }
     else {
       // This should never happen since the application controls
       // the custom-source property.
       logger.error("custom-source not set to Slack or GitHub");
+      return;
     }
-  });
+  }));
 }

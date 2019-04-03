@@ -11,6 +11,7 @@ import { getSlackUserAlt, getSlackGroupAlt } from "../../../json/parse";
  * @param dynamoTableName Name of the dynamo table
  * @param event Event from GitHub
  * @param json JSON config file
+ * @returns Whether to notify slack a PR has been merged
  */
 export async function updateMerge(
   slackUserOwner: SlackUser,
@@ -18,7 +19,7 @@ export async function updateMerge(
   dynamoTableName: string,
   event: any,
   json: any,
-): Promise<void> {
+): Promise<boolean> {
 
   // Setup
   const dynamoGet = new DynamoGet();
@@ -57,4 +58,5 @@ export async function updateMerge(
     await dynamoRemove.removePullRequest(dynamoTableName, alertSlackUser.Slack_Id, currentQueue, foundPR);
   }));
 
+  return true;
 }

@@ -36,6 +36,7 @@ describe("Dynamo.Reset", () => {
       },
       title: "VALID PR TITLE #1",
       url: "VALID PR URL #1",
+      comment_times: {},
       standard_members_alert: [],
       members_approving: [],
       member_complete: false,

@@ -5,6 +5,7 @@ export class PullRequest {
   owner: SlackUser;
   title: string;
   url: string;
+  comment_times: { [slackUserID: string]: string };
   standard_members_alert: string[];
   standard_leads_alert: string[];
   req_changes_members_alert: string[];

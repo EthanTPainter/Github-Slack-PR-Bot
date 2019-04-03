@@ -18,6 +18,7 @@ import { updateMemberAlerts } from "./helpers/update-member-alerts";
  * @param dynamoTableName Name of the dynamo table
  * @param event Event sent from the GitHub webhook
  * @param json JSON config file
+ * @returns Whether to alert slack notifications
  */
 export async function updateApprove(
   slackUserOwner: SlackUser,
@@ -25,7 +26,7 @@ export async function updateApprove(
   dynamoTableName: string,
   event: any,
   json: any,
-): Promise<void> {
+): Promise<boolean> {
 
   // Setup
   const dynamoGet = new DynamoGet();
@@ -138,4 +139,6 @@ export async function updateApprove(
       currentQueue,
       foundPR);
   }));
+
+  return true;
 }
