@@ -1,3 +1,4 @@
+const uuid = require("uuid/v4");
 import * as querystring from "querystring";
 import { requiredEnvs } from "../required-envs";
 import * as AWS from "aws-sdk";
@@ -33,15 +34,23 @@ export async function processRequestToSNS(
     slackSource = true;
   }
 
-  // Add custom-source property to body
+  // Add custom-source & messageId
   let newBody: any;
+  // Add unique message identifier
+  const messageId = uuid();
   if (slackSource) {
     const oldBody = querystring.parse(event.body);
-    newBody = JSON.stringify({ "custom-source": "SLACK", ...oldBody });
+    newBody = JSON.stringify({
+      custom_source: "SLACK",
+      unique_message_id: messageId,
+      ...oldBody });
   }
   else {
     const oldBody = JSON.parse(event.body);
-    newBody = JSON.stringify({ "custom-source": "GITHUB", ...oldBody });
+    newBody = JSON.stringify({
+      custom_source: "GITHUB",
+      unique_message_id: messageId,
+      ...oldBody });
   }
 
   // SNS logic
@@ -50,8 +59,9 @@ export async function processRequestToSNS(
 
   // Publish params to SNS or catch error
   try {
+    logger.info(`Publishing: ${newBody}`);
     await sns.publish(snsParams).promise();
-    return new SlashResponse(`Successfully processed request`, 200);
+    return new SlashResponse("", 200);
   }
   catch (error) {
     return new SlashResponse(`Failed processing request`, 200);

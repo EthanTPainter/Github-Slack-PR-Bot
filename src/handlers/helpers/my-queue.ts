@@ -3,8 +3,9 @@ import { json } from "../../json/src/json";
 import { DynamoGet } from "../../dynamo/api";
 import { formatMyQueue } from "../../dynamo/formatting";
 import { SlashResponse, RequestBody } from "../../models";
+import { getSlackUserAlt } from "../../json/parse";
 
-export async function getMyQueue(
+export async function myQueue(
   body: RequestBody,
 ): Promise<SlashResponse> {
   // Verify user_id property is not malformed
@@ -17,13 +18,14 @@ export async function getMyQueue(
   const slackUserId = `<@${body.user_id}>`;
 
   try {
+    const slackUser = getSlackUserAlt(slackUserId, json);
     // Get User Queue
     const userQueue = await dynamoGet.getQueue(
       requiredEnvs.DYNAMO_TABLE_NAME,
       slackUserId);
 
     // Format queue from array to string
-    const formattedQueue = formatMyQueue(userQueue, json);
+    const formattedQueue = formatMyQueue(slackUser, userQueue, json);
     return new SlashResponse(formattedQueue, 200);
   }
   catch (error) {

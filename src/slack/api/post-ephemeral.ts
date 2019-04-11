@@ -6,6 +6,7 @@ const logger = newLogger("PostEphemeral");
 /**
  * @description Post an ephemeral message
  * @param slackApiUri Base Slack API Uri
+ * @param user User to send the message to
  * @param channel Slack channel
  * @param token Slack Token
  * @param message Slack message
@@ -13,6 +14,7 @@ const logger = newLogger("PostEphemeral");
  */
 export async function postEphemeral(
   slackApiUri: string,
+  user: string,
   channel: string,
   token: string,
   message: string,
@@ -24,10 +26,11 @@ export async function postEphemeral(
       channel: channel,
       token: token,
       text: message,
+      user: user,
       as_user: true,
     },
     headers: {
-      Accept: "application/vnd.github.v3+json",
+      Accept: "application/json",
       Authorization: `Bearer ${token}`,
     },
     json: true,

@@ -3,7 +3,7 @@ import { json } from "../json/src/json";
 import { requiredEnvs } from "../required-envs";
 import { postMessage, postEphemeral } from "../slack/api";
 import { newLogger } from "../logger";
-import { getTeamName, getTeamOptions } from "../json/parse";
+import { getTeamName, getTeamOptions, getTeamNameAlt } from "../json/parse";
 import { getOwner } from "../github/parse";
 import { updateDynamo } from "../dynamo/update";
 import { XRayInitializer } from "../xray";
@@ -15,7 +15,7 @@ import {
 } from "aws-lambda";
 import {
   getQueue,
-  getMyQueue,
+  myQueue,
   processFixedPR,
   getTeamQueue,
 } from "./helpers";
@@ -57,27 +57,38 @@ export async function processGitHubEvent(
 
   // Map through messages to process
   await Promise.all(messages.map(async (message) => {
-    if (message["custom-source"] === "SLACK") {
-      // Determine which slash command was used
+    if (message.custom_source === "SLACK") {
+      // Determine which slash command was used & store result of processing
+      let response: any;
       switch (message.command) {
         case "/sns":
-          logger.debug(`Message: ${JSON.stringify(message)}`);
+          logger.info(`Message: ${JSON.stringify(message)}`);
+          response = "HELLO ET";
           break;
         case "/team-queue":
-          const teamQueueString = await getTeamQueue(message);
+          response = await getTeamQueue(message);
           break;
         case "/my-queue":
-          const myQueueString = await getMyQueue(message);
+          response = await myQueue(message);
           break;
         case "/get-queue":
-          const getQueueString = await getQueue(message);
+          response = await getQueue(message);
           break;
         case "/fixed-pr":
-          const fixedPRString = await processFixedPR(message);
+          response = await processFixedPR(message);
           break;
       }
+      const slackUserId = `<@${message.user_id}>`;
+      const teamName = getTeamNameAlt(slackUserId, json);
+      logger.info(`Team Name: ${teamName}`);
+      await postEphemeral(
+        requiredEnvs.SLACK_API_URI,
+        message.user_id,
+        message.channel_id,
+        requiredEnvs.SLACK_BOT_TOKEN,
+        response);
     }
-    else if (message["custom-source"] === "GITHUB") {
+    else if (message.custom_source === "GITHUB") {
       const pullRequestAction: string = message.action;
 
       // Construct the Slack message based on PR action and body
@@ -86,10 +97,10 @@ export async function processGitHubEvent(
       // Determine which team the user belongs to
       const githubUser = getOwner(event);
       const teamName = getTeamName(githubUser, json);
+      const teamOptions = getTeamOptions(githubUser, json);
 
       // Check whether to disable dynamo
       let alertSlack = true;
-      const teamOptions = getTeamOptions(githubUser, json);
       if (teamOptions.Disable_Dynamo === false) {
         // Update DynamoDB with new request
         alertSlack = await updateDynamo(githubUser, event, json, pullRequestAction);
@@ -102,22 +113,20 @@ export async function processGitHubEvent(
           logger.error(`Expected environment variable not found: ${teamName}_SLACK_CHANNEL_NAME`);
           return;
         }
-        if (!requiredEnvs[teamName + "_SLACK_TOKEN"]) {
-          logger.error(`Expected environment variable not found: ${teamName}_SLACK_TOKEN`);
-          return;
-        }
         // Use team name to get channel name and slack token from required Envs
         logger.info("Posting slack message to " + requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]);
-        await postMessage(requiredEnvs.SLACK_API_URI,
+        await postMessage(
+          requiredEnvs.SLACK_API_URI,
           requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
-          requiredEnvs[teamName + "_SLACK_TOKEN"],
+          requiredEnvs.SLACK_BOT_TOKEN,
           slackMessage);
       }
     }
     else {
       // This should never happen since the application controls
       // the custom-source property.
-      logger.error("custom-source not set to Slack or GitHub");
+      logger.info(`Recieved Event: ${message}`);
+      logger.error("Message property custom_source not set to Slack or GitHub");
       return;
     }
   }));

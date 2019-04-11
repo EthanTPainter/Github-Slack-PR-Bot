@@ -1,5 +1,5 @@
 import { SlackUser } from "../../../../../models";
-import { getTeamOptionsAlt } from "../../../../../json/parse";
+import { getTeamOptionsAlt, getSlackMembersAlt } from "../../../../../json/parse";
 
 /**
  * @description Construct the description of the slack message
@@ -16,9 +16,9 @@ export function constructOpenDesc(
   newPR: boolean,
   json: any,
 ): string {
-
-  if (!json || json.Departments === undefined) {
-    throw new Error("JSON is undefined");
+  // Get Team options
+  if (!json || !json.Departments) {
+    throw new Error(`JSON is undefined`);
   }
   const options = getTeamOptionsAlt(slackUser, json);
 
@@ -28,7 +28,7 @@ export function constructOpenDesc(
   let desc: string = "";
 
   // new PR check
-  // The *...* style means the ... is BOLD in Slack
+  // The *...* means the ... is BOLD in Slack
   if (newPR) {
     desc = `${slackUser.Slack_Name} opened this PR. Needs *${numRequiredMemberReviews} Member*`
       + ` and *${numRequiredLeadReviews} lead* reviews`;
@@ -37,8 +37,16 @@ export function constructOpenDesc(
       + ` and *${numRequiredLeadReviews} lead* reviews`;
   }
 
-  // Add SlackGroup
+  // Only alert members
+  if (options.Member_Before_Lead) {
+    const members = getSlackMembersAlt(slackUser, json);
+    members.map((member) => {
+      if (slackUser.Slack_Id !== member.Slack_Id) {
+        desc += ` ${member.Slack_Id} `;
+      }
+    });
+    return desc;
+  }
   desc = desc + ` ${slackGroup.Slack_Id}`;
-
   return desc;
 }

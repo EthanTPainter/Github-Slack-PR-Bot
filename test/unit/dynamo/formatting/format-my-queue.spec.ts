@@ -27,6 +27,10 @@ describe("formatMyQueue", () => {
                   Slack_Name: "daniel.larner",
                   Slack_Id: "<@23456>",
                 },
+                Dillon: {
+                  Slack_Name: "Dillon.sykes",
+                  Slack_Id: "<9999>",
+                },
               },
             },
           },
@@ -64,7 +68,8 @@ describe("formatMyQueue", () => {
       }],
     }];
 
-    const result = formatMyQueue(queue, json);
+    const slackUser = json.Departments.Devs.DTeam.Users.Members.Dillon;
+    const result = formatMyQueue(slackUser, queue, json);
 
     expect(result.includes(queue[0].title)).equal(true);
     expect(result.includes(queue[0].url)).equal(true);
@@ -126,8 +131,9 @@ describe("formatMyQueue", () => {
         time: "NOW",
       }],
     }];
+    const slackUser = json.Departments.Devs.DTeam.Users.Members.Dillon;
 
-    const result = formatMyQueue(queue, json);
+    const result = formatMyQueue(slackUser, queue, json);
 
     expect(result.includes(queue[0].title)).equal(true);
     expect(result.includes(queue[0].url)).equal(true);
@@ -142,8 +148,9 @@ describe("formatMyQueue", () => {
 
   it("should format an empty queue", () => {
     const queue: PullRequest[] = [];
+    const slackUser = json.Departments.Devs.DTeam.Users.Members.Dillon;
 
-    const result = formatMyQueue(queue, json);
+    const result = formatMyQueue(slackUser, queue, json);
 
     expect(result.includes("Nothing found in your queue")).equal(true);
   });
