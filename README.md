@@ -1,36 +1,45 @@
 # GitHub-Slack-PR-Bot
 
 - [Purpose](#purpose)
+- [Overall Architecture](#overall-architecture)
+  - [GitHub Notifications Only](#github-notifications-only)
+  - [Slack Slash Commands Only](#slack-slash-commands-only)
 - [Basic Structure](#basic-structure)
+  - [Environment Variables](#environment-variables)
   - [Options](#options)
-- [Functionality](#functionality)
-  - [Core](#core)
-    - [Making Your JSON Config](#making-your-json-config)
-    - [Sending Alerts to Slack](#sending-alerts-to-slack)
-  - [Current Goals](#current-goals)
-  - [Long Term](#long-term)
+- [Configuration](#configuration)
+  - [Making Your JSON Config](#making-your-json-config)
 
 ## Purpose
 
-This appliction was designed for small development teams, operating
-in different slack channels. These small development teams
-are working on tasks specific to their sprint, but both teams are 
-working within the same three of four repositories.
+This application provides two services:
+1) Communicates PR changes from from GitHub to private team slack channels
+2) Allows slack users to communicate with the bot to review PR statuses
 
-Having a simple, yet effective method of alerting team members about the
-status of PR's made in these repositories (PR's specific to each team)
-is of the utmost importance. We only want to alert team members of PR's 
-specific to the tasks belonging to that team.
+These services can also be implemented independently. Steps are described below.
+
+## Overall Architecture
+If you want to receive slack messages in your team's slack channel about 
+
+(INSERT IMAGE OF ALL ARCHITECTURE HERE)
+
+### GitHub Notifications Only
+
+(INSERT IMAGE OF GITHUB NOTIFICATION ARCHITECTURE HERE)
+
+### Slack Slash Commands Only
+
+(INSERT IMAGE OF SLACK SLASH COMMANDS ARCHITECTURE HERE)
 
 ## Basic Structure
 
 Configuration variables are separated into 2 categories: 
 1) Environment Variables
-2) A JSON Config Variable
+2) JSON Team Option Variables
 
 The environment variables listed either contain confidential data, 
 infrastructure setup, or data to be preserved outside of comitting to a 
-GitHub repository. These include GitHub OAuth tokens, Slack Channel tokens, 
+GitHub repository. These include GitHub OAuth tokens, SNS/SQS Arns, 
 and Dynamo table information.
 
 The JSON config variable contains information that can be committed 
@@ -59,7 +68,7 @@ Environment Variable | Description | Values
 
 ### Options
 
-Options are provided to allow customization of the application.
+Options are provided to allow customization of the application per slack team.
 
 All of the described options are expected to be supplied with values, 
 or errors will be thrown. The `example.json` file in the same
@@ -75,23 +84,20 @@ Option  |   Description   |   Values
 
 ## Functionality
 
-### Core
-
-#### Making Your JSON config
-
 ### JSON config format
 
-Below is the full JSON config.
+Below is an example JSON config for a developer team.
+The team name is `Dev_Team_1`. The team has one lead and 4 members.
 
 ```zsh
 export const json = {
-  Department: {
+  Departments: {
     Dev: {
       Dev_Team_1: {
         Options: {
           Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
           Check_Mark_Text: ":heavy_check_mark:",
-          X_Mark_Text: ":heavy_check_mark:",
+          X_Mark_Text: ":X:",
           Num_Required_Lead_Approvals: 1,
           Num_Required_Member_Approvals: 1,
         },
@@ -133,48 +139,3 @@ export const json = {
 
 Will need to go further into detail at a later date how to create 
 and modify for external teams.
-
-#### Sending Alerts to Slack
-
-The primary goal of this application is to provide messages in each 
-development team's private slack channel about the status of any PR's 
-opened or updated by the team members or team leads. These messages
-should be customized to alert only members necessary
-
-### Current Goals
-
-* Adding DynamoDB integration
-
-Besides sending regular updates to slack chat when PR actions are 
-changed there should also be queues maintained in DynamoDB tables.
-
-The goal is that DynamoDB can maintain statues for the team and each 
-individual on a team. This should allow each member from slack to use 
-a slash command with the bot to know what is in their queue, the team's
-queue, or select users and see their queue's for comparison.
-
-### Long Term
-
-Listed below are all optional features that are interesting to include:
-
-* Jira Integration
-
-For our team's goals, we like to apply labels to our JIRA 
-sub tasks (`NeedsLeadReview`, `NeedsMemberReview`, 
-`LeadReviewWithComments`, `LeadApproved`, etc.). If we could incorporate 
-some slack integration to automatically mark specific sub tasks for us 
-with updated actions, this might help eliminate some disconnect 
-bewtween our GitHub/Slack/JIRA connections.
-
-* Jira Integration (Part 2)
-
-If we could automaticlly mark selected sub tasks with labels, we should be able
-to tell the bot to move them along the swimlanes. However, this gets a bit 
-into the configuration of how we manage this, because it's not generic enough to
-apply in different scenarios.
-
-* Waiting for Slack support
-
-Slack currently doesn't support hyperlinks so adding links
-directly in slack messages may cause messages to appear very long.
-May have to give a link on a separate line for now
