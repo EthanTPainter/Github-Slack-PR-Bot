@@ -1,0 +1,4 @@
+DynamoTableName=pr-bot-dynamo-table
+DynamoTestTableName=pr-bot-dynamo-test-table
+SqsName=pr-bot-sqs
+SnsName=pr-bot-sns
