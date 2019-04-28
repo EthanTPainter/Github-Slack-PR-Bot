@@ -16,7 +16,7 @@ export const json = {
           Num_Required_Member_Approvals: 2,
           Member_Before_Lead: true,
           Disable_Dynamo: false,
-          Disable_Slack: false,
+          Disable_GitHub_Alerts: false,
         },
         Slack_Group: {
           Slack_Name: "Minks",
@@ -24,7 +24,7 @@ export const json = {
         },
         Users: {
           Leads: {
-            GitHub_User_1: {
+            gwely: {
               Slack_Name: "Andrew",
               Slack_Id: "<@UBP6A5PUL>",
             },
@@ -64,7 +64,7 @@ export const json = {
           Num_Required_Member_Approvals: 1,
           Member_Before_Lead: true,
           Disable_Dynamo: false,
-          Disable_Slack: false,
+          Disable_GitHub_Alerts: false,
         },
         Slack_Group: {
           Slack_Name: "Bite Sized Turkeys",
@@ -85,10 +85,6 @@ export const json = {
             turnquistnt: {
               Slack_Name: "Nicholas",
               Slack_Id: "<@U6G80SL4U>",
-            },
-            spbond: {
-              Slack_Name: "Sean",
-              Slack_Id: "<@U9AC0SYET>",
             },
             helwigmegan: {
               Slack_Name: "Megan",
