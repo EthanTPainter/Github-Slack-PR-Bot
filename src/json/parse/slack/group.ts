@@ -187,3 +187,60 @@ export function getSlackGroupAlt(
   }
   throw new Error("No Slack Group found in JSON file");
 }
+
+/**
+ * @description Retrieve the slack group from the Slack Group Slack ID
+ * @param slackGroupId Slack Group id
+ * @param json JSON configuration file
+ * @returns Slack_Id and Slack_Name of the group
+ */
+export function getSlackGroupFromGroupId(
+  slackGroupId: string,
+  json: any,
+): SlackUser {
+  // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
+  const departments = json.Departments;
+  const allDepartmentKeys = Object.keys(departments);
+  // If no teams present, return error
+  if (allDepartmentKeys.length === 0) {
+    // (DevTeam, ThisCoolTeam, etc.)
+    throw new Error("No Department found in JSON file");
+  }
+
+  // Otherwise loop through teams (DevTeam, QaTeam, ProdTeam)
+  let departmentCounter = 0;
+  while (departmentCounter < allDepartmentKeys.length) {
+    // Get selectedTeam (DevTeam), and get selectedTeamGroup (DevTeam1)
+    const selectedDepartmentName = allDepartmentKeys[departmentCounter];
+    const selectedDepartment = departments[selectedDepartmentName];
+    const teamKeys = Object.keys(selectedDepartment);
+    let selectedTeamCounter = 0;
+    if (teamKeys.length === 0) {
+      // (Dev_Team_1, SomethingCool1, etc.)
+      throw new Error("No Team found in JSON file");
+    }
+    // Loop through team groups (DevTeam1, DevTeam2, etc.)
+    while (selectedTeamCounter < teamKeys.length) {
+      // Retrieve users and groups from JSON
+      const selectedTeam = selectedDepartment[teamKeys[selectedTeamCounter]];
+      if (selectedTeam.Users === undefined) {
+        throw new Error(`No Users defined for team: ${teamKeys[selectedTeamCounter]}`);
+      }
+      const group = selectedTeam.Slack_Group;
+      // If group doesn't exist in JSON, skip group
+      if (group === undefined) {
+        selectedTeamCounter = teamKeys.length;
+      } else {
+        // Check if slack group id is found
+        const foundGroupId = group.Slack_Id;
+        if (foundGroupId === slackGroupId) {
+          return group;
+        }
+        selectedTeamCounter = teamKeys.length;
+      }
+    }
+    // User not found in General Team (DevTeam), look at antoher team
+    departmentCounter++;
+  }
+  throw new Error("No Slack Group found in JSON file");
+}
