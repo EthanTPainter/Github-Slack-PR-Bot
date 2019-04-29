@@ -11,6 +11,11 @@ Parameters:
     Type: String
 
 Resources:
+  S3Bucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Ref S3BucketName
+
   TestDynamoTable:
     Type: "AWS::DynamoDB::Table"
     Properties:

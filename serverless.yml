@@ -5,10 +5,19 @@ provider:
   runtime: nodejs8.10
   timeout: 30
   deploymentBucket:
-    name: sc-lambda-${opt:stage}
+    name: ${env:S3_BUCKET_NAME}
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: Allow
       Action: "xray:*"
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - "dynamodb:BatchGetItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:UpdateItem"
+        - "dynamodb:UpdateTable"
+        - "dynamodb:DeleteItem"
       Resource: "*"
 
 plugins:

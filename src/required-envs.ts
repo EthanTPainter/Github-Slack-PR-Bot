@@ -8,6 +8,7 @@ export class EnvModel {
   LOG_LEVEL: string;
   SLS_DEBUG: string;
   DISABLE_XRAY: boolean;
+  S3_BUCKET_NAME: string;
   GITHUB_OAUTH2_TOKEN: string;
   SLACK_API_URI: string;
   DYNAMO_TABLE_NAME: string;
@@ -29,6 +30,7 @@ export const requiredEnvs = envalid.cleanEnv<EnvModel>(process.env, {
   LOG_LEVEL: str({ default: "debug" }),
   SLS_DEBUG: str({ default: "*" }),
   DISABLE_XRAY: bool({ default: false }),
+  S3_BUCKET_NAME: str({ default: "pr-bot-s3-bucket" }),
   GITHUB_OAUTH2_TOKEN: str(),
   SLACK_API_URI: str({ default: "https://slack.com/api" }),
   DYNAMO_TABLE_NAME: str({ default: "pr-bot-table" }),
@@ -38,7 +40,7 @@ export const requiredEnvs = envalid.cleanEnv<EnvModel>(process.env, {
   SNS_API_VERSION: str({ default: "2010-03-31" }),
   SQS_ARN: str(),
   SQS_API_VERSION: str({ default: "2012-11-05" }),
-  INTEGRATION_TEST_DYNAMO_TABLE_NAME: str({ default: "pr-bot-dynamo-test-table" }),
+  INTEGRATION_TEST_DYNAMO_TABLE_NAME: str({ default: "pr-bot-test-table" }),
   SLACK_BOT_TOKEN: str(),
   Mighty_Minks_SLACK_CHANNEL_NAME: str(),
   /* Add Your Team Name following the format:

@@ -9,6 +9,7 @@
     "ci": "npm run clean && npm i && npm run lint && npm run build && npm run test",
     "ci:deploy:dev": "npm run ci && npm run deploy:dev",
     "clean": "rm -rf ./dist && rm -rf ./node_modules",
+    "dynamo:init": "ts-node ./src/init.ts",
     "generate:docs": "typedoc --out docs/ src/",
     "serve:docs": "npm run generate:docs && http-server ./docs -p 7000",
     "deploy:prod": "npm run build && cd dist && serverless deploy -s prod",
