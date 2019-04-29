@@ -18,7 +18,6 @@ export async function postEphemeral(
   channel: string,
   token: string,
   message: string,
-  attachment?: string,
 ): Promise<any> {
 
   const options = {
