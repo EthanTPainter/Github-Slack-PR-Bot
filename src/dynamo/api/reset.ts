@@ -1,7 +1,7 @@
 import { DynamoDB } from "aws-sdk";
 import { newLogger } from "../../logger";
 import { requiredEnvs } from "../../required-envs";
-import { SlackUser, PullRequest } from "../../models";
+import { PullRequest } from "../../models";
 
 const logger = newLogger("DynamoResetPullRequest");
 

@@ -64,6 +64,6 @@ export async function processRequestToSNS(
     return new SlashResponse("", 200);
   }
   catch (error) {
-    return new SlashResponse(`Failed processing request`, 200);
+    return new SlashResponse(`Failed processing request. Please try again!`, 200);
   }
 }

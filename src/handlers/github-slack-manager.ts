@@ -3,7 +3,6 @@ import { json } from "../json/src/json";
 import { requiredEnvs } from "../required-envs";
 import { postMessage, postEphemeral } from "../slack/api";
 import { newLogger } from "../logger";
-import { getTeamName, getTeamOptions, getTeamNameAlt } from "../json/parse";
 import { getOwner } from "../github/parse";
 import { updateDynamo } from "../dynamo/update";
 import { XRayInitializer } from "../xray";
@@ -19,6 +18,14 @@ import {
   processFixedPR,
   getTeamQueue,
 } from "./helpers";
+import {
+  getTeamName,
+  getTeamOptions,
+  getTeamOptionsAlt,
+  getSlackUserAlt,
+} from "../json/parse";
+
+import { SlashResponse } from "../models";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -56,14 +63,18 @@ export async function processGitHubEvent(
   logger.debug(`Messages: ${JSON.stringify(messages)}`);
 
   // Map through messages to process
-  await Promise.all(messages.map(async (message) => {
+  const messageRequests = messages.map(async (message) => {
     if (message.custom_source === "SLACK") {
       // Determine which slash command was used & store result of processing
-      let response: any;
+      let response: SlashResponse;
       switch (message.command) {
         case "/sns":
-          logger.info(`Message: ${JSON.stringify(message)}`);
-          response = "HELLO ET";
+          return;
+        case "/echo":
+          response = {
+            body: "Slash command /echo received!",
+            statusCode: 200,
+          };
           break;
         case "/team-queue":
           response = await getTeamQueue(message);
@@ -77,16 +88,27 @@ export async function processGitHubEvent(
         case "/fixed-pr":
           response = await processFixedPR(message);
           break;
+        default:
+          response = {
+            body: "Unsupported slash command. See README for supported commands",
+            statusCode: 200,
+          };
+          break;
       }
       const slackUserId = `<@${message.user_id}>`;
-      const teamName = getTeamNameAlt(slackUserId, json);
-      logger.info(`Team Name: ${teamName}`);
-      await postEphemeral(
-        requiredEnvs.SLACK_API_URI,
-        message.user_id,
-        message.channel_id,
-        requiredEnvs.SLACK_BOT_TOKEN,
-        response);
+      const slackUser = getSlackUserAlt(slackUserId, json);
+      const teamOptions = getTeamOptionsAlt(slackUser, json);
+      if (teamOptions.Disable_Dynamo === false) {
+        logger.info(`Sending message to ${message.user_id}`);
+        logger.info(`Message to send: ${response.body}`);
+        await postEphemeral(
+          requiredEnvs.SLACK_API_URI,
+          message.user_id,
+          message.channel_id,
+          requiredEnvs.SLACK_BOT_TOKEN,
+          response.body);
+      }
+      return;
     }
     else if (message.custom_source === "GITHUB") {
       const pullRequestAction: string = message.action;
@@ -106,8 +128,8 @@ export async function processGitHubEvent(
         alertSlack = await updateDynamo(githubUser, event, json, pullRequestAction);
       }
 
-      // Check whether to disable github-to-slack
-      if (teamOptions.Disable_Slack === false && alertSlack) {
+      // Check whether to disable github-to-slack notifications
+      if (teamOptions.Disable_GitHub_Alerts === false && alertSlack) {
         // Verify team name required envs exist
         if (!requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]) {
           logger.error(`Expected environment variable not found: ${teamName}_SLACK_CHANNEL_NAME`);
@@ -121,13 +143,15 @@ export async function processGitHubEvent(
           requiredEnvs.SLACK_BOT_TOKEN,
           slackMessage);
       }
+      return;
     }
     else {
       // This should never happen since the application controls
       // the custom-source property.
-      logger.info(`Recieved Event: ${message}`);
+      logger.info(`Recieved Uknown Event: ${JSON.stringify(message)}`);
       logger.error("Message property custom_source not set to Slack or GitHub");
       return;
     }
-  }));
+  });
+  await Promise.all(messageRequests);
 }
