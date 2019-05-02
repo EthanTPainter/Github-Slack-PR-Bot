@@ -5,3 +5,4 @@ dist/
 *.swp
 .serverless
 *.package.yaml
+*.js

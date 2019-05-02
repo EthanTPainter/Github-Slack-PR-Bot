@@ -30,21 +30,29 @@ export async function processFixedPR(
     return new SlashResponse(invalidTextMessage, 200);
   }
   // Use regex checking for proper URL format
-  const expression = "(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\."
-    + "[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^"
-    + "\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})";
+  // tslint:disable-next-line: max-line-length
+  const expression = /https:[/][/](www.github.com|github.com)[/]([A-Za-z0-9-]*)[/]([A-Za-z0-9-]*)[/]([pulls|pull])*[/]([0-9]*)/g;
   const regex = new RegExp(expression);
   if (!text.match(regex)) {
     const invalidUrlMessage = `Invalid URL provided. Make sure to follow this format: `
-      + `/fixed-pr https://www.github.com/org/repo/pull/###`;
+      + `/fixed-pr https://www.github.com/org/repo/pull/123`;
     return new SlashResponse(invalidUrlMessage, 200);
+  }
+  let prURL: string = "";
+  const filteredText = text.match(regex);
+  if (!filteredText) {
+    const noFoundURL = "No github pr url found after /fixed-pr slash command";
+    return new SlashResponse(noFoundURL, 200);
+  }
+  else {
+    prURL = filteredText[0];
   }
 
   try {
     // Process the PR now that it's fixed
     const slackMessage = await updateFixedPR(
       slackUserId,
-      text,
+      prURL,
       userQueue,
       requiredEnvs.DYNAMO_TABLE_NAME,
       json);
@@ -52,20 +60,23 @@ export async function processFixedPR(
     // Get Team name from slackUserId
     const teamName = getTeamNameAlt(slackUserId, json);
 
+    if (!requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]) {
+      const missingEnvName = "";
+      return new SlashResponse(missingEnvName, 200);
+    }
     // Post Fixed PR message in team chat
     await postMessage(requiredEnvs.SLACK_API_URI,
       requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
-      requiredEnvs[teamName + "_SLACK_TOKEN"],
+      requiredEnvs.SLACK_BOT_TOKEN,
       slackMessage);
 
-    // Let user know the request was successfull
-    const success = "Request successfully processed";
-    return new SlashResponse(success, 200);
+    // Return empty response since message should be posted in team chat
+    const empty = "";
+    return new SlashResponse(empty, 200);
   }
   catch (error) {
     // Let the user know an error occurred
     const errorMessage = `Uh oh. Error occurred: ${error}`;
     return new SlashResponse(errorMessage, 200);
   }
-
 }

@@ -87,7 +87,7 @@ export async function processGitHubEvent(
           break;
         case "/fixed-pr":
           response = await processFixedPR(message);
-          break;
+          return;
         default:
           response = {
             body: "Unsupported slash command. See README for supported commands",
@@ -100,7 +100,6 @@ export async function processGitHubEvent(
       const teamOptions = getTeamOptionsAlt(slackUser, json);
       if (teamOptions.Disable_Dynamo === false) {
         logger.info(`Sending message to ${message.user_id}`);
-        logger.info(`Message to send: ${response.body}`);
         await postEphemeral(
           requiredEnvs.SLACK_API_URI,
           message.user_id,
