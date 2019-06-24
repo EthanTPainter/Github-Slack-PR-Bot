@@ -83,8 +83,6 @@ describe("constructSlackMessage", () => {
     const expTitle = event.pull_request.title;
     const expUrl = event.pull_request.html_url;
 
-    console.log("Opened PR Slack Message: \n", result);
-
     expect(result.includes(action)).equal(true);
     expect(result.includes(expTitle)).equal(true);
     expect(result.includes(expUrl)).equal(true);
@@ -96,8 +94,6 @@ describe("constructSlackMessage", () => {
     const result = await constructSlackMessage(action, event, json);
     const expTitle = event.pull_request.title;
     const expUrl = event.pull_request.html_url;
-
-    console.log("Reopened PR Slack Message: \n", result);
 
     expect(result.includes(action)).equal(true);
     expect(result.includes(expTitle)).equal(true);
@@ -111,8 +107,6 @@ describe("constructSlackMessage", () => {
     const result = await constructSlackMessage(action, event, json);
     const expTitle = event.pull_request.title;
     const expUrl = event.pull_request.html_url;
-
-    console.log("Closed PR Slack Message: \n", result);
 
     expect(result.includes(action)).equal(true);
     expect(result.includes(expTitle)).equal(true);
@@ -129,8 +123,6 @@ describe("constructSlackMessage", () => {
     const expUrl = event.pull_request.html_url;
     const expBase = event.pull_request.base.ref;
     const expHead = event.pull_request.head.ref;
-
-    console.log("Merged PR Slack Message: \n", result);
 
     expect(result.includes(expBase)).equal(true);
     expect(result.includes(expHead)).equal(true);
@@ -185,8 +177,6 @@ describe("constructSlackMessage", () => {
     const expTitle = event.pull_request.title;
     const expUrl = event.pull_request.html_url;
 
-    console.log("ReqChanges PR Slack Message: \n", result);
-
     expect(result.includes(realAction)).equal(true);
     expect(result.includes(expTitle)).equal(true);
     expect(result.includes(expUrl)).equal(true);
@@ -200,8 +190,6 @@ describe("constructSlackMessage", () => {
     const realAction = "commented";
     const expTitle = event.pull_request.title;
     const expUrl = event.pull_request.html_url;
-
-    console.log("Commented PR Slack Message: \n", result);
 
     expect(result.includes(realAction)).equal(true);
     expect(result.includes(expTitle)).equal(true);

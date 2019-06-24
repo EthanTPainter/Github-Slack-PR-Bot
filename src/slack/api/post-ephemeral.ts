@@ -37,6 +37,7 @@ export async function postEphemeral(
     uri: `${slackApiUri}/chat.postEphemeral`,
   };
 
+  logger.info(`Sending message to slack user`);
   const result = await rp(options);
   return result;
 }

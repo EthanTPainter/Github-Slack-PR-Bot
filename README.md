@@ -250,13 +250,12 @@ The first step is to deploy an AWS infrastructure. There are three different con
 
 **IMPORTANT:** Deploying all infrastructure, does not mean comitting to always allowing github notifications or slack slash commands. The [options](#options) `Disable_GitHub_Alerts` will disable GitHub notifications to Slack, and `Disable_Dynamo` will disable Slack messages since PR statuses can't be maintained in DynamoDB. Changing these two options for a specific, or all, team(s) and redeploying the lambdas will immediately apply the change in messaging.
 
-As a result, it's advocated to use the [Overall Architecture](#overall-architecture) starting out to understand how each GitHub notifications and Slack slash commands will affect team performance.
+As a result, it's advocated to use the [Overall Architecture](#overall-architecture) starting out to understand how GitHub notifications and Slack slash commands will affect team performance. If GitHub notifications become too overbearing or Slack slash commands don't provide much value, you can redeploy with these options disabled.
 
 To deploy your architecture, you will need to have an AWS account.<br>
 After creating one or logging in, follow the following steps:
 
-1) From the AWS Management Console, Enter `Cloudformation`
-2) There should only be one option from the dropdown. Select it
+1) From the AWS Management Console, Enter `Cloudformation` and select it
 3) On the top left, press the `Create Stack` button
 4) From the `Choose Template` option, choose to upload a template
 5) Press the `Choose File` button and navigate to this repository
@@ -1033,14 +1032,14 @@ Under `Features` on the left sidebar, select `Slash Commands`. Press `Create New
 
 The following list will describe how to setup each command.
 
-**Note**: The Request URL is the same for each command. For `Request URL`, paste the URL from the serverless deploy `endpoint`. This is the same URL you pasted in the GitHub webhook Payload URL. Also make sure to enable 
+**Note**: The Request URL is the same for each command. For `Request URL`, paste the URL from the serverless deploy `endpoint`. This is the same URL you pasted in the GitHub webhook Payload URL. Also make sure to enable escape channels, users, and links sent to your app for **each** slash command.
+
+![Slash-commandEscape-enbaled](./images/Slash-command-enable-escape.png)
 
 #### Creating Echo
 For `Command`, enter `/echo`.
 
 This command is used only for verifying that a slack slash command can be used and a user will receive an output.
-
-![Testing Echo Slash Command](./gifs/Slash-command-echo-test.gif)
 
 #### Creating My Queue
 For `Command`, enter `/my-queue`.

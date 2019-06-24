@@ -26,6 +26,7 @@ export async function getUsers(
     uri: `${slackApiUri}/users.list`,
   };
 
+  logger.info(`Retrieving users from Slack Organization`);
   const result = await rp(options);
   return result;
 }
