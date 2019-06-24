@@ -3,7 +3,8 @@
 ###  Acceptance Criteria
 - [ ] Code Documentation (JsDocs and inline comments)
 - [ ] Removed debug code
-- [ ] Inspected Code Diff
+- [ ] Accompanying unit tests (if possible, integration tests too)
+- [ ] Documentation/Setup README changes
 
 ### An overview of the thinking process
 How you went about developing and testing this locally (eg “I ran this service and the X service and used cURL to confirm the new request behavior was working as expected”)
