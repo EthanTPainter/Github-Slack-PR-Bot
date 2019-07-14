@@ -2,11 +2,11 @@
 
 ## Notification from GitHub
 
-INSERT VIDEO OF SLACK NOTIFICATION
+![](./gifs/GitHub-notification-overview.gif)
 
 ## Slash Command from Slack
 
-INSERT VIDEO OF SLASH COMMAND
+![](./gifs/Slash-command-overview.gif)
 
 - [Purpose](#purpose)
 - [Functionality](#functionality)

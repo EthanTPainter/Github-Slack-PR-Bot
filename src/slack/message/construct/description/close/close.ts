@@ -20,7 +20,7 @@ export function constructCloseDesc(slackUser: SlackUser,
   let desc: string = "";
   // If slackUser and slackUserClosing is the same user
   if (slackUser === slackUserClosing) {
-    desc = `${slackUser.Slack_Name} closed this PR.`;
+    desc = `${slackUser.Slack_Name} closed this PR`;
   }
   else {
     desc = `${slackUserClosing.Slack_Name} closed this PR. Owner: ${slackUser.Slack_Id}`;
