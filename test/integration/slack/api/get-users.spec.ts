@@ -1,9 +1,5 @@
-
 describe("getUsers", () => {
-
-  it("should successfully get users from slack organization", ()_=> {
-    const 
+  it("", () => {
+    return 1 === 1;
   });
-
-  it("")
 });
