@@ -1,9 +1,0 @@
-
-
-describe("postEphemeral", () => {
-
-  it("", () => {
-    
-  });
-
-});
