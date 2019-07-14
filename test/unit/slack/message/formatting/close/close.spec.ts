@@ -30,7 +30,7 @@ describe("constructCloseDesc", () => {
     const slackUserClosing = slackUser;
 
     const result = constructCloseDesc(slackUser, slackUserClosing);
-    const expected = `${slackUser.Slack_Name} closed this PR.`;
+    const expected = `${slackUser.Slack_Name} closed this PR`;
 
     expect(result).equal(expected);
   });
