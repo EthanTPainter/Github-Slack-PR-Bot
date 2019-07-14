@@ -63,7 +63,7 @@ export async function processGitHubEvent(
   logger.debug(`Messages: ${JSON.stringify(messages)}`);
 
   // Map through messages to process
-  const messageRequests = messages.map(async (message) => {
+  await Promise.all(messages.map(async (message) => {
     if (message.custom_source === "SLACK") {
       // Determine which slash command was used & store result of processing
       let response: SlashResponse;
@@ -151,6 +151,5 @@ export async function processGitHubEvent(
       logger.error("Message property custom_source not set to Slack or GitHub");
       return;
     }
-  });
-  await Promise.all(messageRequests);
+  }));
 }
