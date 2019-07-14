@@ -68,6 +68,7 @@ The PR bot responds to the following PR actions:
 4) When a pull request has `changes requested`
 5) When a pull request is `commented` on
 6) When a pull request is `merged`
+7) When a pull request is `reopened`
 
 #### Opened
 When a pull request is opened, there are two possible formats based on [Members_Before_Leads JSON config option](#options)
@@ -85,7 +86,7 @@ Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 
 **Example**:
 
-![GitHub-PR-Bot-Opened-Test](./videos/)
+![](./gifs/GitHub-notification-open.gif)
 
 #### Closed
 When a pull request is closed, there are two possible formats:
@@ -102,7 +103,7 @@ Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 ```
 **Example**:
 
-![GitHub-PR-Bot-Closed-Test](./videos/)
+![](./gifs/GitHub-notification-close.gif)
 
 #### Approved
 When a pull request is approved, there is only one format:
@@ -114,7 +115,7 @@ Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 
 **Example**:
 
-![GitHub-PR-Bot-Approved-Test](./videos/)
+![](./gifs/)
 
 #### Changes Requested
 When a pull request has changes requested, there is only one format:
@@ -126,20 +127,26 @@ Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 
 **Example**:
 
-![GitHub-PR-Bot-Opened-Test](./videos/)
+![](./gifs/)
 
 #### Commented
-When a pull request has been commented on, there is only one format
+When a pull request has been commented on, there is only one format:
 
 **Example**:
 
-![GitHub-PR-Bot-Opened-Test](./videos/)
+![](./gifs/GitHub-notification-comment.gif)
 
 #### Merged
 
 **Example**:
 
-![GitHub-PR-Bot-Opened-Test](./videos/)
+![](./gifs/GitHub-notification-merge.gif)
+
+#### Reopen
+
+**Example**:
+
+![](./gifs/GitHub-notification-reopen.gif)
 
 ### Slack Slash Commands
 **Preface**: To use these slash commands, an app should be created in an organization's slack account.
