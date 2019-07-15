@@ -58,7 +58,7 @@ These services can also be implemented independently. Steps are described below.
 
 ### GitHub Notifications
 **Preface**: GitHub repositories must be configured by creating a [webhook](https://developer.github.com/webhooks/creating/)
-to the SNS Manager Lambda. Otherwise the GitHub notifications will not be sent to the Lambda for processing. The PR bot must
+to the SNS Manager Lambda. Otherwise the GitHub notifications will not be sent to the Lambda for processing.
 
 The PR bot responds to the following PR actions:
 
@@ -75,12 +75,12 @@ When a pull request is opened, there are two possible formats based on [Members_
 
 1) If `Members_Before_Leads is` `false`, this will alert all members & leads of the team
 ```
-slackUsername opened this PR. Needs *peer* and *lead* reviews @Group_Slack_Name
+[Slack User Name] opened this PR. Needs *peer* and *lead* reviews @Group_Slack_Name
 Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 ```
-2) If `Members_Before_Leads` is `true`, Alerting only members of the team
+2) If `Members_Before_Leads` is `true`, this will alert only members of the team
 ```
-slackUsername opened this PR. Needs *peer* and *lead* reviews @slackMember1 @slackMember2 @slackMember3
+[Slack User Name] opened this PR. Needs *peer* and *lead* reviews @slackMember1 @slackMember2 @slackMember3
 Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 ```
 
@@ -93,12 +93,12 @@ When a pull request is closed, there are two possible formats:
 
 1) When the user who opened the PR closes the PR
 ``` 
-slackUsername has closed this PR.
+[Slack User Name] has closed this PR.
 Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 ```
 2) When the user who opened the PR differs from the user who closed it
 ```
-slackUsername has closed this PR. Owner: @SlackUserOwner
+[Slack User Name] has closed this PR. Owner: @SlackUserOwner
 Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 ```
 **Example**:
@@ -109,7 +109,7 @@ Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 When a pull request is approved, there is only one format:
 
 ```
-slackUserName has approved this PR. Owner: @SlackUserOwner
+[Slack User Name] has approved this PR. Owner: @SlackUserOwner
 Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 ```
 
@@ -121,7 +121,7 @@ Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 When a pull request has changes requested, there is only one format:
 
 ```
-slackUserName has requested changes to this PR. Owner: @SlackUserOwner
+[Slack User Name] has requested changes to this PR. Owner: @SlackUserOwner
 Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 ```
 
@@ -132,11 +132,31 @@ Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 #### Commented
 When a pull request has been commented on, there is only one format:
 
+```
+slackUserName has commented on this PR
+Pull Request Title [https://github.com/Organization/Repository/pull/###]
+```
+
 **Example**:
 
 ![](./gifs/GitHub-notification-comment.gif)
 
 #### Merged
+When a pull request has been merged, there are two possible formats:
+
+1) When a pull request is merged by the person who opened the pull request
+
+```
+[Slack User Name] has merged this PR from [branch1] to [branch2]
+Pull Request Title [https://github.com/Organization/Repository/pull/###]
+```
+
+2) When a pull request is merged by someone who isn't the owner
+
+```
+[Slack User Name] has nmerged this PR from [branch1] to [branch2]. Owner: @slackUser
+Pull Request Title [https://github.com/Organization/Repository/pull/###]
+```
 
 **Example**:
 
