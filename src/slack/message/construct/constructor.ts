@@ -16,13 +16,14 @@ const logger = newLogger("Constructor");
  * @description Main function for constructing the slack message
  * @param action Action from the event
  * @param event Event including pull_request, sender, etc.
+ * @param json JSON file of the configuration settings
  * @returns String of the slack message to send to the team channel
  */
 export async function constructSlackMessage(
   action: string,
   event: any,
   json: any,
-  reviewClass?: Review,
+  reviewClass: Review,
 ): Promise<string> {
 
   let slackMessage = "default";
@@ -116,8 +117,8 @@ export async function constructSlackMessage(
        */
       if (decider === "approved") {
         logger.info("Constructing ApprovePR slack message...");
-        if (reviewClass === undefined) {
-          throw new Error("reviewClass parameter must be defined");
+        if (!reviewClass) {
+          throw new Error(`reviewClass parameter must be defined`);
         }
         const approve = await constructApprove(reviewClass, event, json);
 

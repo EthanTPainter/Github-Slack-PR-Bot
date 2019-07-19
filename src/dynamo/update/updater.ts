@@ -76,7 +76,6 @@ export async function updateDynamo(
           json);
         return resp;
       }
-      break;
     }
 
     case "submitted": {
@@ -117,12 +116,11 @@ export async function updateDynamo(
       else {
         throw new Error(`Unsupported event.review.state: ${decider}`);
       }
-      break;
     }
 
     default: {
-      const unsupportedEventType = `event action ${action} not supported in this application`;
-      throw new Error(unsupportedEventType);
+      logger.error(`event action: ${action} not supported in this application`);
+      return false;
     }
   }
 }

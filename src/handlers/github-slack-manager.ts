@@ -16,6 +16,7 @@ import {
 } from "../json/parse";
 
 import { SlashResponse } from "../models";
+import { Review } from "../github/api";
 
 const AWSXRay = require("aws-xray-sdk");
 AWSXRay.captureHTTPsGlobal(require("http"));
@@ -116,10 +117,12 @@ export async function processGitHubEvent(
           const pullRequestAction: string = message.action;
 
           // Construct the Slack message based on PR action and body
+          const reviewClass = new Review();
           const slackMessage = await constructSlackMessage(
             pullRequestAction,
             message,
             json,
+            reviewClass,
           );
 
           // Determine which team the user belongs to
