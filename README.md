@@ -113,10 +113,6 @@ When a pull request is approved, there is only one format:
 Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 ```
 
-**Example**:
-
-![](./gifs/)
-
 #### Changes Requested
 When a pull request has changes requested, there is only one format:
 
@@ -124,10 +120,6 @@ When a pull request has changes requested, there is only one format:
 [Slack User Name] has requested changes to this PR. Owner: @SlackUserOwner
 Pull Request Title  [https://github.com/Organization/Repository/pull/###]
 ```
-
-**Example**:
-
-![](./gifs/)
 
 #### Commented
 When a pull request has been commented on, there is only one format:
