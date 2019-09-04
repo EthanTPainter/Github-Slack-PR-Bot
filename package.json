@@ -1,6 +1,6 @@
 {
   "name": "github-slack-pr-bot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sends alerts to slack after changes to PRs in GitHub",
   "private": true,
   "scripts": {
