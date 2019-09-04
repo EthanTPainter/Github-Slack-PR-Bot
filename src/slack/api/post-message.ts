@@ -14,7 +14,9 @@ const logger = newLogger("PostMessage");
  */
 export async function postMessage(
   slackApiUri: string,
-  channel: string,
+  // TODO: fix channel so it's properly typed as string
+  // Can't type as string because of envalid
+  channel: any,
   token: string,
   message: string,
   attachment?: string,

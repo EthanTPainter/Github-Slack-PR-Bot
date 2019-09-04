@@ -31,7 +31,7 @@
     "aws-sdk": "^2.522.0",
     "aws-xray-sdk": "^2.3.5",
     "dotenv": "^8.1.0",
-    "envalid": "^5.0.0",
+    "envalid": "^4.1.4",
     "luxon": "^1.17.2",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
