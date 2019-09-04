@@ -28,15 +28,15 @@
     "release": "standard-version"
   },
   "dependencies": {
-    "aws-sdk": "^2.394.0",
-    "aws-xray-sdk": "^2.2.0",
-    "dotenv": "^6.2.0",
-    "envalid": "^4.1.4",
-    "luxon": "^1.11.0",
+    "aws-sdk": "^2.522.0",
+    "aws-xray-sdk": "^2.3.5",
+    "dotenv": "^8.1.0",
+    "envalid": "^5.0.0",
+    "luxon": "^1.17.2",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2",
-    "serverless": "^1.45.0",
-    "uuid": "^3.3.2",
+    "request-promise": "^4.2.4",
+    "serverless": "^1.51.0",
+    "uuid": "^3.3.3",
     "winston": "^3.2.1"
   },
   "devDependencies": {
