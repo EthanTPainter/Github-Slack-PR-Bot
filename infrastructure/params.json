@@ -14,8 +14,8 @@
     "ScaleCooldownValue": 60,
 
     "LogLevel": "info",
-    "GithubOAuth2Token": "9d9dd90b90f827f663f07cc886915b44b5aba20f",
+    "GithubOAuth2Token": "",
     "SlackApiUri": "https://slack.com/api",
-    "SlackBotToken": "xoxb-2776280488-529169023975-PxMtF1b4jv3JsVqGeUlUIq0d"
+    "SlackBotToken": ""
   }
 }
