@@ -1,6 +1,5 @@
-export * from "./x-ray";
 export * from "./github";
 export * from "./slack";
 export * from "./dynamo";
 export * from "./json";
-export * from "./sns";
+export * from "./sqs";
