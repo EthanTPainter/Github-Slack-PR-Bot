@@ -1,5 +1,5 @@
 
-export class Review {
+export type GitHubReview = {
     id?: number;
     node_id?: string;
     user: {

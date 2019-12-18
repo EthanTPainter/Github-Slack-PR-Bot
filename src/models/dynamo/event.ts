@@ -1,6 +1,6 @@
 import { SlackUser } from "../slack";
 
-export class Event {
+export type Event = {
   user: SlackUser;
   action: string;
   time: string;

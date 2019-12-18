@@ -1,13 +1,16 @@
-import { Base } from "../base";
-
 /*
- * @Author: Ethan T Painter
  * Model used for when commenting on PR's
  *
- * owner            - User who opened the PR
- * user_commenting  - User who is leaving comments on the PR
+ * description        - Description of the PR
+ * title              - Title of the PR
+ * url                - Link to the PR on the GitHub repo
+ * owner              - User who opened the PR
+ * user_commenting    - User who is leaving comments on the PR
  */
-export class CommentPR extends Base {
+export type CommentPR = {
+  description: string;
+  title: string;
+  url: string;
   owner: string;
   user_commenting: string;
 }

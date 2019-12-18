@@ -1,7 +1,7 @@
 import { SlackUser } from "../slack";
 import { Event } from "./event";
 
-export class PullRequest {
+export type PullRequest = {
   owner: SlackUser;
   title: string;
   url: string;
