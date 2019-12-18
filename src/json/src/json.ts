@@ -1,6 +1,3 @@
-// export const json = {
-//   Departments: {}
-// };
 export const json = {
   Departments: {
     Dev: {
@@ -18,7 +15,6 @@ export const json = {
           Num_Required_Lead_Approvals: 1,
           Num_Required_Member_Approvals: 2,
           Member_Before_Lead: true,
-          Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
         },
         Slack_Group: {
@@ -66,7 +62,6 @@ export const json = {
           Num_Required_Lead_Approvals: 1,
           Num_Required_Member_Approvals: 1,
           Member_Before_Lead: true,
-          Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
         },
         Slack_Group: {

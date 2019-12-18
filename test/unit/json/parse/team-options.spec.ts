@@ -13,7 +13,6 @@ describe("getTeamOptions", () => {
             Options: {
               Check_Mark_Text: ":check:",
               X_Mark_Text: ":X:",
-              Disable_Dynamo: true,
             },
             Users: {
               Leads: {
@@ -34,7 +33,6 @@ describe("getTeamOptions", () => {
             Options: {
               Check_Mark_Text: ":check:",
               X_Mark_Text: ":X:",
-              Disable_Dynamo: false,
             },
             Users: {
               Leads: {
@@ -196,7 +194,6 @@ describe("getTeamOptionsAlt", () => {
             Options: {
               Check_Mark_Text: ":check:",
               X_Mark_Text: ":X:",
-              Disable_Dynamo: true,
             },
             Users: {
               Leads: {
@@ -217,7 +214,6 @@ describe("getTeamOptionsAlt", () => {
             Options: {
               Check_Mark_Text: ":check:",
               X_Mark_Text: ":X:",
-              Disable_Dynamo: false,
             },
             Users: {
               Leads: {
