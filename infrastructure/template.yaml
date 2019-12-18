@@ -1,0 +1,391 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: GitHub PR Bot template
+
+Parameters:
+  QueueName:
+    Type: String
+    Default: pr-bot-queue
+    Description: Name of the SQS queue
+  MemorySize:
+    Type: String
+    Description: Memory (RAM) allocated to each lambda for processing data
+  DynamoTableName:
+    Type: String
+    Default: pr-bot-table
+    Description: Name of the DynamoDB table
+  TestDynamoTableName:
+    Type: String
+    Default: pr-bot-table-test
+    Description: Name of the test DynamoDB table
+  ReadCapacityUnits:
+    Type: Number
+    Default: 5
+    Description: Base or minimum read capacity units for the dynamo table
+  WriteCapacityUnits:
+    Type: Number
+    Default: 5
+    Description: Base or minimum write capacity units for the dynamo table
+  MaxReadCapacityUnits:
+    Type: Number
+    Default: 200
+    Description: Maximum read capacity units for the dynamo table
+  MaxWriteCapacityUnits:
+    Type: Number
+    Default: 200
+    Description: Maximum write capacity units for the dynamo table
+  TargetScalingValue:
+    Type: Number
+    Default: 70
+    Description: Percentage of resources being consumed to trigger scaling
+  ScaleCooldownValue:
+    Type: Number
+    Default: 60
+    Description: The amout of time (in seconds), after a scale in or scale out activity completes before another scale activity can occur
+  LogLevel:
+    Type: String
+    Default: info
+    Description: Log Level for standard logging outside of error logs
+  GithubOAuth2Token:
+    Type: String
+    Description: OAuth2 token created from GitHub
+  SlackApiUri:
+    Type: String
+    Default: https://slack.com/api
+    Description: Slack API URI to communicate with Slack channels
+  SlackBotToken:
+    Type: String
+    Description: Token from the bot created in Slack
+  
+Resources:
+  # DYNAMO RELATED RESOURCES BELOW
+  ScalingRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: 
+            - application-autoscaling.amazonaws.com
+          Action: 
+          - sts:AssumeRole
+
+  ScalingRolePolicy:
+    Type: AWS::IAM::Policy
+    DependsOn: [ScalingRole]
+    Properties:
+      Roles:
+      - !Ref ScalingRole
+      PolicyName: ScalingRolePolicyPolicy
+      PolicyDocument: 
+        Version: '2012-10-17'
+        Statement: 
+        - Effect: Allow
+          Action:
+            - application-autoscaling:*
+            - dynamodb:DescribeTable
+            - dynamodb:UpdateTable
+            - cloudwatch:PutMetricAlarm
+            - cloudwatch:DescribeAlarms
+            - cloudwatch:GetMetricStatistics
+            - cloudwatch:SetAlarmState
+            - cloudwatch:DeleteAlarms
+          Resource: '*'
+      
+  ScalableTableWriteTarget:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    DependsOn: [ScalingRolePolicy, DynamoTable]
+    Properties:
+      MaxCapacity: !Ref MaxWriteCapacityUnits
+      MinCapacity: !Ref WriteCapacityUnits
+      ResourceId: !Sub table/${DynamoTableName}
+      RoleARN: !GetAtt ScalingRole.Arn
+      ScalableDimension: dynamodb:table:WriteCapacityUnits
+      ServiceNamespace: dynamodb
+
+  ScalableTableWritePolicy:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    DependsOn: [ScalingRolePolicy, DynamoTable]
+    Properties:
+      PolicyName: ScalableTablePolicy
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId:
+        Ref: ScalableTableWriteTarget
+      TargetTrackingScalingPolicyConfiguration:
+        TargetValue: !Ref TargetScalingValue
+        ScaleInCooldown: !Ref ScaleCooldownValue
+        ScaleOutCooldown: !Ref ScaleCooldownValue
+        PredefinedMetricSpecification: 
+          PredefinedMetricType: DynamoDBWriteCapacityUtilization
+
+  ScalableTableReadTarget:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    DependsOn: [ScalingRolePolicy, DynamoTable]
+    Properties:
+      MaxCapacity: !Ref MaxReadCapacityUnits
+      MinCapacity: !Ref ReadCapacityUnits
+      ResourceId: !Sub table/${DynamoTableName}
+      RoleARN: !GetAtt ScalingRole.Arn
+      ScalableDimension: dynamodb:table:ReadCapacityUnits
+      ServiceNamespace: dynamodb
+
+  ScalableTableReadPolicy:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    DependsOn: [ScalingRolePolicy, DynamoTable]
+    Properties:
+      PolicyName: ScalableTablePolicy
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId:
+        Ref: ScalableTableReadTarget
+      TargetTrackingScalingPolicyConfiguration:
+        TargetValue: !Ref TargetScalingValue
+        ScaleInCooldown: !Ref ScaleCooldownValue
+        ScaleOutCooldown: !Ref ScaleCooldownValue
+        PredefinedMetricSpecification: 
+          PredefinedMetricType: DynamoDBReadCapacityUtilization
+
+  DynamoTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: slackUserId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: slackUserId
+          KeyType: HASH
+      BillingMode: PROVISIONED
+      SSESpecification:
+        SSEEnabled: false
+      ProvisionedThroughput:
+        ReadCapacityUnits: !Ref ReadCapacityUnits
+        WriteCapacityUnits: !Ref WriteCapacityUnits
+      TableName: !Ref DynamoTableName
+      Tags:
+        - Key: Product
+          Value: PR-Bot
+
+  TestDynamoTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: slackUserId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: slackUserId
+          KeyType: HASH
+      BillingMode: PROVISIONED
+      SSESpecification:
+        SSEEnabled: false
+      ProvisionedThroughput:
+        ReadCapacityUnits: !Ref ReadCapacityUnits
+        WriteCapacityUnits: !Ref WriteCapacityUnits
+      TableName: !Ref TestDynamoTableName
+      Tags:
+        - Key: Product
+          Value: PR-Bot
+
+  # LAMBDA RELATED RESOURCES BELOW
+  SqsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs12.x
+      CodeUri: ./../dist
+      Timeout: 30
+      Handler: src/handlers/sqs-manager.processRequestToSQS
+      FunctionName: pr-bot-sqs-function
+      MemorySize: !Ref MemorySize
+      AutoPublishAlias: live
+      DeploymentPreference:
+        Type: AllAtOnce
+      Environment:
+        Variables:
+          LOG_LEVEL: !Ref LogLevel
+          DYNAMO_TABLE_NAME: !Ref DynamoTableName
+          DYNAMO_API_VERSION: "2012-08-10"
+          DYNAMO_REGION: !Sub ${AWS::Region}
+          SQS_ARN: !GetAtt Queue.Arn
+          SQS_URL: !Ref Queue
+          SQS_API_VERSION: "2012-11-05"
+          INTEGRATION_TEST_DYNAMO_TABLE_NAME: !Ref TestDynamoTableName
+          GITHUB_OAUTH2_TOKEN: !Ref GithubOAuth2Token
+          SLACK_BOT_TOKEN: !Ref SlackBotToken
+          SLACK_API_URI: !Ref SlackApiUri
+      Policies:
+        Statement:
+          - Effect: Allow
+            Action:
+              - logs:PutLogEvents
+              - logs:CreateLogStream
+              - logs:CreateLogGroup
+            Resource: "*"
+          - Effect: Allow
+            Action: 
+              - sqs:sendMessage
+              - sqs:sendMessageBatch
+            Resource:
+              - !GetAtt Queue.Arn
+      Tags:
+        Product: PR-Bot
+
+  SqsFunctionPermission:
+    Type: AWS::Lambda::Permission
+    DependsOn: [SqsFunction]
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref SqsFunction
+      Principal: apigateway.amazonaws.com
+
+  ProcessingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs12.x
+      CodeUri: ./../dist
+      Timeout: 30
+      Handler: src/handlers/processing-manager.processEvent
+      FunctionName: pr-bot-process-function
+      MemorySize: !Ref MemorySize
+      AutoPublishAlias: live
+      DeploymentPreference:
+        Type: AllAtOnce
+      Events:
+        MySQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt Queue.Arn
+            BatchSize: 10
+      Environment:
+        Variables:
+          LOG_LEVEL: !Ref LogLevel
+          DYNAMO_TABLE_NAME: !Ref DynamoTableName
+          DYNAMO_API_VERSION: "2012-08-10"
+          DYNAMO_REGION: !Sub ${AWS::Region}
+          SQS_ARN: !GetAtt Queue.Arn
+          SQS_URL: !Ref Queue
+          SQS_API_VERSION: "2012-11-05"
+          INTEGRATION_TEST_DYNAMO_TABLE_NAME: !Ref TestDynamoTableName
+          GITHUB_OAUTH2_TOKEN: !Ref GithubOAuth2Token
+          SLACK_BOT_TOKEN: !Ref SlackBotToken
+          SLACK_API_URI: !Ref SlackApiUri
+      Policies:
+        Statement:
+          - Effect: Allow
+            Action:
+              - logs:PutLogEvents
+              - logs:CreateLogStream
+              - logs:CreateLogGroup
+            Resource: "*"
+          - Effect: Allow
+            Action:
+              - sqs:GetQueueUrl
+              - sqs:ReceiveMessage
+              - sqs:DeleteMessage
+              - sqs:DeleteMessageBatch
+              - sqs:SendMessage
+              - sqs:SendMessageBatch
+            Resource:
+              - !GetAtt Queue.Arn
+          - Effect: Allow
+            Action:
+              - dynamodb:ListTables
+              - dynamodb:BatchGetItem
+              - dynamodb:DescribeTable
+              - dynamodb:GetItem
+              - dynamodb:GetRecords
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:UpdateTable
+            Resource:
+              - !GetAtt DynamoTable.Arn
+      Tags:
+        Product: PR-Bot
+
+  # API GATEWAY RELATED RESOURCES BELOW
+  ApiGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: PR-Bot-Gateway
+      Tags:
+        - Key: "Product"
+          Value: "PR-Bot"
+
+  SqsResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId:
+        Fn::GetAtt:
+          - "ApiGateway"
+          - "RootResourceId"
+      PathPart: "sqs"
+
+  SqsOptions:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref SqsResource
+      HttpMethod: OPTIONS
+      Integration:
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            ResponseTemplates:
+              application/json: ""
+        PassthroughBehavior: WHEN_NO_MATCH
+        RequestTemplates:
+          application/json: '{"statusCode": 200}'
+        Type: MOCK
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: false
+            method.response.header.Access-Control-Allow-Methods: false
+            method.response.header.Access-Control-Allow-Origin: false
+
+  SqsPostMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      AuthorizationType: NONE
+      ResourceId: !Ref SqsResource
+      HttpMethod: POST
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          !Sub
+            - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunction}/invocations
+            - LambdaFunction: !GetAtt SqsFunction.Arn
+
+  HttpDeployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId: !Ref ApiGateway
+    DependsOn: [ApiGateway, SqsPostMethod]
+
+  HttpStage:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId: !Ref ApiGateway
+      DeploymentId: !Ref HttpDeployment
+      StageName: dev
+      Tags:
+        - Key: "Product"
+          Value: "PR-Bot"
+
+  # SQS RELATED RESOURCES BELOW
+  Queue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Ref QueueName
+      ReceiveMessageWaitTimeSeconds: 20
+      Tags:
+        - Key: Product
+          Value: PR-Bot

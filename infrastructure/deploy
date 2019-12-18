@@ -1,0 +1,6 @@
+CFT_FILE="template.yaml"
+CFT_PACKAGE="$(echo $CFT_FILE | cut -f 1 -d '.').package.yaml"
+CFT_STACK_NAME="pr-bot-stack"
+CFT_BUCKET="sc-cft-packages-dev"
+CFT_BUCKET_PATH="sc-lambda-dev"
+CFT_PARAMS_FILE="./params.json"

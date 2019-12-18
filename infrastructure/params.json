@@ -1,0 +1,21 @@
+{
+  "Parameters": {
+    "QueueName": "pr-bot-queue",
+    "MemorySize": "128",
+
+    "DynamoTableName": "pr-bot-table",
+    "TestDynamoTableName": "pr-bot-table-test",
+
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5,
+    "MaxReadCapacityUnits": 200,
+    "MaxWriteCapacityUnits": 200,
+    "TargetScalingValue": 70,
+    "ScaleCooldownValue": 60,
+
+    "LogLevel": "info",
+    "GithubOAuth2Token": "9d9dd90b90f827f663f07cc886915b44b5aba20f",
+    "SlackApiUri": "https://slack.com/api",
+    "SlackBotToken": "xoxb-2776280488-529169023975-PxMtF1b4jv3JsVqGeUlUIq0d"
+  }
+}

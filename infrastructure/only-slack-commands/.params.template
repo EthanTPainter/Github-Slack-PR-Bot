@@ -1,5 +1,0 @@
-S3BucketName=pr-bot-s3-bucket
-DynamoTableName=pr-bot-dynamo-table
-DynamoTestTableName=pr-bot-dynamo-test-table
-SnsName=pr-bot-sns
-SqsName=pr-bot-sqs
