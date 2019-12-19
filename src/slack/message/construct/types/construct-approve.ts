@@ -4,7 +4,7 @@ import {
   getPath,
   getTitle,
   getPRLink,
-  getLatestReviews,
+  parseLatestReviews,
 } from "../../../../github/parse";
 
 import {
@@ -48,7 +48,7 @@ export async function constructApprove(
     // Get Path and GET any existing reviews
     const path = getPath(event);
     const allReviews = await reviewClass.getReviews(path);
-    const reviews = getLatestReviews(allReviews);
+    const reviews = parseLatestReviews(allReviews);
 
     logger.debug("Latest Reviews: " + JSON.stringify(reviews));
 

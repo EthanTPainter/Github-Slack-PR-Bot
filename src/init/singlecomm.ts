@@ -3,7 +3,7 @@ export const json = {
 		Dev: {
 			Scripter: {
 				Options: {
-					Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+					Avoid_Comment_Alerts: 5,
 					Check_Mark_Text: ":heavy_check_mark:",
 					X_Mark_Text: ":X:",
 					Queue_Include_Created_Time: true,
@@ -54,7 +54,7 @@ export const json = {
 			},
 			Dev_Team_2: {
 				Options: {
-					Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+					Avoid_Comment_Alerts: 5,
 					Check_Mark_Text: ":heavy_check_mark:",
 					X_Mark_Text: ":X:",
 					Queue_Include_Created_Time: true,

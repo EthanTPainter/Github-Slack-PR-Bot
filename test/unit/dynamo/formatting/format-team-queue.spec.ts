@@ -13,7 +13,7 @@ describe("formatTeamQueue", () => {
         Test: {
           TestTeam: {
             Options: {
-              Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+              Avoid_Comment_Alerts: 5,
               Check_Mark_Text: ":check:",
               X_Mark_Text: ":X:",
               Queue_Include_Created_Time: true,

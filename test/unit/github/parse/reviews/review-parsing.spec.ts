@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { Review } from "../../../../../src/models";
-import { getLatestReviews } from "../../../../../src/github/parse";
+import { GitHubReview } from "../../../../../src/models";
+import { parseLatestReviews } from "../../../../../src/github/parse";
 
 describe("getLatestReviews", () => {
   it("should retrieve most recent reviews from unique users", () => {
@@ -28,7 +28,7 @@ describe("getLatestReviews", () => {
       },
     ];
 
-    const result = getLatestReviews(reviewList);
+    const result = parseLatestReviews(reviewList);
     const expected = {
       Greek8eos: "CHANGES_REQUESTED",
       DillonSykes: "APPROVED",
@@ -63,16 +63,16 @@ describe("getLatestReviews", () => {
       },
     ];
 
-    const result = getLatestReviews(reviewList);
+    const result = parseLatestReviews(reviewList);
     const expected = { EthanTPainter: "APPROVED" };
 
     expect(result).deep.equal(expected);
   });
 
   it("should not retrieve any reviews", () => {
-    const reviewList: Review[] = [];
+    const reviewList: GitHubReview[] = [];
 
-    const result = getLatestReviews(reviewList);
+    const result = parseLatestReviews(reviewList);
     const expected = { None: "No Reviews" };
 
     expect(result).deep.equal(expected);

@@ -9,7 +9,7 @@ describe("updateMemberAlerts", () => {
         Devs: {
           DevTeam1: {
             Options: {
-              Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+              Avoid_Comment_Alerts: 5,
               Check_Mark_Text: ":heavy_check_mark:",
               X_Mark_Text: ":X:",
               Include_Created_Time: true,
