@@ -242,7 +242,7 @@ To use, enter the slash command in your slack chat accompanied by @'ing a slack 
 
 ![GitHub-PR-Bot-Get-Queue-One-Test](./gifs/Slash-command-get-queue-one-test.gif)
 
-**Multiple QueueS Example**:
+**Multiple Queues Example**:
 
 ![GitHub-PR-Bot-Get-Queue-Many-Test](./gifs/Slash-command-get-queue-many-test.gif)
 
@@ -257,10 +257,6 @@ This command removes the PR from the owner's queue, and adds it back to the queu
 To use, enter the slash command in your slack chat accompanied by the pull request url.
 
 **Expected Use**: `/fixed-pr https://github.com/Organization/Repository/Pull/###`
-
-**Example**:
-
-![GitHub-PR-Bot-Fixed-PR-Test](./gifs/)
 
 ## Setup 
 
@@ -343,7 +339,7 @@ export const json = {
     DevDepartment: {
       TheMightyDucks: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 10,
+          Avoid_Comment_Alerts: 10,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: false,
@@ -361,7 +357,7 @@ export const json = {
       },
       SouthernTeam: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+          Avoid_Comment_Alerts: 5,
           Check_Mark_Text: ":happy:",
           X_Mark_Text: ":angry:",
           Queue_Include_Created_Time: true,
@@ -381,7 +377,7 @@ export const json = {
     qaDepartment: {
       WeFindAllTheBugs: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 0,
+          Avoid_Comment_Alerts: 0,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: false,
@@ -401,7 +397,7 @@ export const json = {
     Department_for_PROD: {
       OnlyProdTeam: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+          Avoid_Comment_Alerts: 5,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: true,
@@ -428,7 +424,7 @@ export const json = {
     DevDepartment: {
       TheMightyDucks: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 10,
+          Avoid_Comment_Alerts: 10,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: false,
@@ -450,7 +446,7 @@ export const json = {
       },
       SouthernTeam: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+          Avoid_Comment_Alerts: 5,
           Check_Mark_Text: ":happy:",
           X_Mark_Text: ":angry:",
           Queue_Include_Created_Time: true,
@@ -474,7 +470,7 @@ export const json = {
     qaDepartment: {
       WeFindAllTheBugs: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 0,
+          Avoid_Comment_Alerts: 0,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: false,
@@ -498,7 +494,7 @@ export const json = {
     Department_for_PROD: {
       OnlyProdTeam: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+          Avoid_Comment_Alerts: 5,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: true,
@@ -529,7 +525,7 @@ export const json = {
     DevDepartment: {
       TheMightyDucks: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 10,
+          Avoid_Comment_Alerts: 10,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: false,
@@ -555,7 +551,7 @@ export const json = {
       },
       SouthernTeam: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+          Avoid_Comment_Alerts: 5,
           Check_Mark_Text: ":happy:",
           X_Mark_Text: ":angry:",
           Queue_Include_Created_Time: true,
@@ -583,7 +579,7 @@ export const json = {
     qaDepartment: {
       WeFindAllTheBugs: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 0,
+          Avoid_Comment_Alerts: 0,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: false,
@@ -611,7 +607,7 @@ export const json = {
     Department_for_PROD: {
       OnlyProdTeam: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+          Avoid_Comment_Alerts: 5,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: true,
@@ -646,7 +642,7 @@ export const json = {
     DevDepartment: {
       TheMightyDucks: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 10,
+          Avoid_Comment_Alerts: 10,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: false,
@@ -677,7 +673,7 @@ export const json = {
       },
       SouthernTeam: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+          Avoid_Comment_Alerts: 5,
           Check_Mark_Text: ":happy:",
           X_Mark_Text: ":angry:",
           Queue_Include_Created_Time: true,
@@ -711,7 +707,7 @@ export const json = {
     qaDepartment: {
       WeFindAllTheBugs: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 0,
+          Avoid_Comment_Alerts: 0,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: false,
@@ -743,7 +739,7 @@ export const json = {
     Department_for_PROD: {
       OnlyProdTeam: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+          Avoid_Comment_Alerts: 5,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: true,
@@ -782,7 +778,7 @@ export const json = {
     DevDepartment: {
       TheMightyDucks: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 10,
+          Avoid_Comment_Alerts: 10,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: false,
@@ -822,7 +818,7 @@ export const json = {
       },
       SouthernTeam: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+          Avoid_Comment_Alerts: 5,
           Check_Mark_Text: ":happy:",
           X_Mark_Text: ":angry:",
           Queue_Include_Created_Time: true,
@@ -868,7 +864,7 @@ export const json = {
     qaDepartment: {
       WeFindAllTheBugs: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 0,
+          Avoid_Comment_Alerts: 0,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: false,
@@ -906,7 +902,7 @@ export const json = {
     Department_for_PROD: {
       OnlyProdTeam: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+          Avoid_Comment_Alerts: 5,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: true,
@@ -1192,7 +1188,7 @@ or errors will be thrown. The file [raw-example.ts](./src/json/src/raw-example.t
 
 Option  |   Description   |   Values
 ------- | --------------- | ---------
-**Avoid_Slack_Channel_Comment_Alerts_Time_Window:** *number* | When a user comments on a PR, an alert is sent to that user's team slack channel. When a user leaves multiple comments in a short period of time, on one PR, a slack channel could a message about each comment. <br><br> Viewing 5 slack messages each telling the team:<br> `user X has commented on pull request Y` <br> provides as much benefit as one slack message with the same message. <br><br> As a result, a window is provided to limit how often a slack channel can be alerted when a PR is commented on by the same user on the same PR multiple instances in a short period of time | If set to `0`: <br><br> when a user **X** comments on pull request **Y** always send an alert to the team channel anytime a user comments on a PR (**no delays or restrictions**). <br><br> If set to `10`: <br><br> **1**) When a user **X** comments on pull request **Y** send an alert to the team channel from user **X** on pull request **Y** <br>**2**) Any comments from user **X** at this time until `10` minutes after will not be sent to the team's slack channel <br>**3**) After `10` minutes have passed, if user **X** comments on pull request **Y** 
+**Avoid_Comment_Alerts:** *number* | When a user comments on a PR, an alert is sent to that user's team slack channel. When a user leaves multiple comments in a short period of time, on one PR, a slack channel could a message about each comment. <br><br> Viewing 5 slack messages each telling the team:<br> `user X has commented on pull request Y` <br> provides as much benefit as one slack message with the same message. <br><br> As a result, a window is provided to limit how often a slack channel can be alerted when a PR is commented on by the same user on the same PR multiple instances in a short period of time | If set to `0`: <br><br> when a user **X** comments on pull request **Y** always send an alert to the team channel anytime a user comments on a PR (**no delays or restrictions**). <br><br> If set to `10`: <br><br> **1**) When a user **X** comments on pull request **Y** send an alert to the team channel from user **X** on pull request **Y** <br>**2**) Any comments from user **X** at this time until `10` minutes after will not be sent to the team's slack channel <br>**3**) After `10` minutes have passed, if user **X** comments on pull request **Y** 
 **Check_Mark_Text**: *string* | Slack text for representing a check mark icon in slack. This is used to show approval of PRs | Use `:heavy_check_mark:` for a green check mark Slack icon <br><br> Use `:white_check_mark:` for a white check mark Slack icon <br><br> Or use your own text value to represent a check mark in your slack team channel!
 **X_Mark_Text:** *string* | Slack text for representing an X mark icon in slack | Use `:X:` for a bright red x mark  Slack icon <br><br> Use `:heavy_multiplication_x:` for an orange x mark Slack icon <br><br> Or use your own text value to represent an X mark icon in slack!
 **Queue_Include_Created_Time:** *boolean* | When using slash commands to retrieve queues, should each PR description include the time the PR was created? | Set to `true` if you want to see the date and time the pr was created. Set to `false` if you don't want to see the date and time the pr was created. <br><br> **Example**: `PR Title [PR URL]  | Created: ISO Timestamp`
@@ -1215,7 +1211,7 @@ export const json = {
     Dev: {
       Dev_Team_1: {
         Options: {
-          Avoid_Slack_Channel_Comment_Alerts_Time_Window: 5,
+          Avoid_Comment_Alerts: 5,
           Check_Mark_Text: ":heavy_check_mark:",
           X_Mark_Text: ":X:",
           Queue_Include_Created_Time: true,
