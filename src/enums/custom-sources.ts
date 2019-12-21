@@ -1,0 +1,4 @@
+export enum CUSTOM_SOURCES {
+	GITHUB = "GITHUB",
+	SLACK = "SLACK",
+}
