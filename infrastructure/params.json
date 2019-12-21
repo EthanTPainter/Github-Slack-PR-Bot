@@ -1,7 +1,7 @@
 {
   "Parameters": {
     "QueueName": "pr-bot-queue",
-    "MemorySize": "128",
+    "MemorySize": "256",
 
     "DynamoTableName": "pr-bot-table",
     "TestDynamoTableName": "pr-bot-table-test",
@@ -14,8 +14,10 @@
     "ScaleCooldownValue": 60,
 
     "LogLevel": "info",
-    "GithubOAuth2Token": "",
+    "GithubOAuthSSMParameter": "/dev-pr-bot/github-token",
+    "SlackTokenSSMParameter": "/dev-pr-bot/slack-bot-token",
     "SlackApiUri": "https://slack.com/api",
-    "SlackBotToken": ""
+    "ScripterTeamSlackChannelName": "#pr-bot-testing-channel",
+    "ConnectTeamSlackChannelName": "#pr-bot-testing-channel"
   }
 }

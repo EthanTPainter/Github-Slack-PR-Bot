@@ -46,16 +46,22 @@ Parameters:
     Type: String
     Default: info
     Description: Log Level for standard logging outside of error logs
-  GithubOAuth2Token:
+  GithubOAuthSSMParameter:
     Type: String
-    Description: OAuth2 token created from GitHub
+    Description: AWS SSM Parameter for the OAuth2 token created from GitHub
+  SlackTokenSSMParameter:
+    Type: String
+    Description: AWS SSM Parameter for the token from the bot created in Slack
   SlackApiUri:
     Type: String
     Default: https://slack.com/api
     Description: Slack API URI to communicate with Slack channels
-  SlackBotToken:
+  ScripterTeamSlackChannelName:
     Type: String
-    Description: Token from the bot created in Slack
+    Description: Scripter team Slack channel name
+  ConnectTeamSlackChannelName:
+    Type: String
+    Description: Connect team Slack channel name
   
 Resources:
   # DYNAMO RELATED RESOURCES BELOW
@@ -208,10 +214,13 @@ Resources:
           SQS_ARN: !GetAtt Queue.Arn
           SQS_URL: !Ref Queue
           SQS_API_VERSION: "2012-11-05"
+          SSM_API_VERSION: "2014-11-06"
           INTEGRATION_TEST_DYNAMO_TABLE_NAME: !Ref TestDynamoTableName
-          GITHUB_OAUTH2_TOKEN: !Ref GithubOAuth2Token
-          SLACK_BOT_TOKEN: !Ref SlackBotToken
+          GITHUB_OAUTH_TOKEN_SSM_PARAM: !Ref GithubOAuthSSMParameter
+          SLACK_BOT_TOKEN_SSM_PARAM: !Ref SlackTokenSSMParameter
           SLACK_API_URI: !Ref SlackApiUri
+          SCRIPTER_SLACK_CHANNEL_NAME: !Ref ScripterTeamSlackChannelName
+          CONNECT_SLACK_CHANNEL_NAME: !Ref ConnectTeamSlackChannelName
       Policies:
         Statement:
           - Effect: Allow
@@ -264,10 +273,13 @@ Resources:
           SQS_ARN: !GetAtt Queue.Arn
           SQS_URL: !Ref Queue
           SQS_API_VERSION: "2012-11-05"
+          SSM_API_VERSION: "2014-11-06"
           INTEGRATION_TEST_DYNAMO_TABLE_NAME: !Ref TestDynamoTableName
-          GITHUB_OAUTH2_TOKEN: !Ref GithubOAuth2Token
-          SLACK_BOT_TOKEN: !Ref SlackBotToken
+          GITHUB_OAUTH_TOKEN_SSM_PARAM: !Ref GithubOAuthSSMParameter
+          SLACK_BOT_TOKEN_SSM_PARAM: !Ref SlackTokenSSMParameter
           SLACK_API_URI: !Ref SlackApiUri
+          SCRIPTER_SLACK_CHANNEL_NAME: !Ref ScripterTeamSlackChannelName
+          CONNECT_SLACK_CHANNEL_NAME: !Ref ConnectTeamSlackChannelName
       Policies:
         Statement:
           - Effect: Allow
@@ -298,6 +310,11 @@ Resources:
               - dynamodb:UpdateTable
             Resource:
               - !GetAtt DynamoTable.Arn
+          - Effect: Allow
+            Action:
+              - ssm:GetParameter*
+            Resource:
+              - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:*
       Tags:
         Product: PR-Bot
 
