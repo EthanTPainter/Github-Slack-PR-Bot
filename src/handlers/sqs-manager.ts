@@ -1,12 +1,15 @@
 const uuid = require("uuid/v4");
 import * as querystring from "querystring";
-import { requiredEnvs } from "../required-envs";
+import { APIGatewayEvent, Context, Callback } from "aws-lambda";
 import * as AWS from "aws-sdk";
+
+import { requiredEnvs } from "../required-envs";
 import { newLogger } from "../logger";
 import { SlashResponse, SQSParams } from "../models";
-import { APIGatewayEvent } from "aws-lambda";
+import { USER_AGENTS, CUSTOM_SOURCES } from "../../src/enums";
 
 const logger = newLogger("SQSManager");
+
 /**
  * @description Processes GitHub Webhook POST requests
  * and sends each through to an SQS for processing
@@ -16,8 +19,8 @@ const logger = newLogger("SQSManager");
  */
 export async function processRequestToSQS(
 	event: APIGatewayEvent,
-	context: any,
-	callback: any,
+	context: Context,
+	callback: Callback,
 ): Promise<SlashResponse> {
 	// Verify the body is not empty, undefined, or null
 	if (!event.body) {
@@ -29,28 +32,23 @@ export async function processRequestToSQS(
 	}
 
 	// Determine if request is from Slack or GitHub
-	let slackSource = false;
-	const userAgent: string = event.headers["User-Agent"];
-	if (userAgent.includes("Slackbot")) {
-		slackSource = true;
-	}
+	const userAgent = event.headers["User-Agent"];
+	const slackSource = userAgent.includes(USER_AGENTS.SLACKBOT) ? true : false;
 
-	// Add custom-source & messageId
-	let newBody: any;
+	// Add custom-source, messageId, and label new body accordingly
+	let body: any;
 	const messageId = uuid();
-
-	// Label new body accordingly
 	if (slackSource) {
 		const oldBody = querystring.parse(event.body);
-		newBody = JSON.stringify({
-			custom_source: "SLACK",
+		body = JSON.stringify({
+			custom_source: CUSTOM_SOURCES.SLACK,
 			unique_message_id: messageId,
 			...oldBody,
 		});
 	} else {
 		const oldBody = JSON.parse(event.body);
-		newBody = JSON.stringify({
-			custom_source: "GITHUB",
+		body = JSON.stringify({
+			custom_source: CUSTOM_SOURCES.GITHUB,
 			unique_message_id: messageId,
 			...oldBody,
 		});
@@ -58,7 +56,7 @@ export async function processRequestToSQS(
 
 	// SQS initialization
 	const sqs = new AWS.SQS({ apiVersion: requiredEnvs.SQS_API_VERSION });
-	const sqsParams = new SQSParams(newBody, requiredEnvs.SQS_URL);
+	const sqsParams = new SQSParams(body, requiredEnvs.SQS_URL);
 
 	// Publish message to SQS or catch error
 	try {
