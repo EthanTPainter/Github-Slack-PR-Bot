@@ -6,15 +6,15 @@ export type PullRequest = {
   title: string;
   url: string;
   comment_times: { [slackUserID: string]: string };
-  standard_members_alert: string[];
-  standard_leads_alert: string[];
-  req_changes_members_alert: string[];
-  req_changes_leads_alert: string[];
+  standard_members_alert: SlackUser[];
+  standard_leads_alert: SlackUser[];
+  req_changes_members_alert: SlackUser[];
+  req_changes_leads_alert: SlackUser[];
   member_complete: boolean;
   lead_complete: boolean;
-  members_approving: string[];
-  leads_approving: string[];
-  members_req_changes: string[];
-  leads_req_changes: string[];
+  members_approving: SlackUser[];
+  leads_approving: SlackUser[];
+  members_req_changes: SlackUser[];
+  leads_req_changes: SlackUser[];
   events: Event[];
 }
