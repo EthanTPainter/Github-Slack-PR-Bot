@@ -6,9 +6,11 @@ import { PullRequest } from "../../models";
  * @returns array of PRs that have been fully approved by PRs
  */
 export function filterMemberApprovedPRs(queue: PullRequest[]): PullRequest[] {
-  const memberApprovedPRs = queue.filter((memberApprovedPR: PullRequest) => {
-    return memberApprovedPR.member_complete === true
-      && memberApprovedPR.lead_complete === false;
-  });
-  return memberApprovedPRs;
+	const memberApprovedPRs = queue.filter((memberApprovedPR: PullRequest) => {
+		return (
+			memberApprovedPR.member_complete === true &&
+			memberApprovedPR.lead_complete === false
+		);
+	});
+	return memberApprovedPRs;
 }

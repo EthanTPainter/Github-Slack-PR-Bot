@@ -6,9 +6,10 @@ import { PullRequest } from "../../models";
  * @returns array of PRs that are available to merge
  */
 export function filterMergablePRs(queue: PullRequest[]): PullRequest[] {
-  const mergablePRs = queue.filter((mergablePR: PullRequest) => {
-    return mergablePR.member_complete === true
-      && mergablePR.lead_complete === true;
-  });
-  return mergablePRs;
+	const mergablePRs = queue.filter((mergablePR: PullRequest) => {
+		return (
+			mergablePR.member_complete === true && mergablePR.lead_complete === true
+		);
+	});
+	return mergablePRs;
 }

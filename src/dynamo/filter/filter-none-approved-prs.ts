@@ -10,9 +10,11 @@ import { PullRequest } from "../../models";
  *          leads
  */
 export function filterNoFullyApprovedPRs(queue: PullRequest[]): PullRequest[] {
-  const noFullyApprovedPRs = queue.filter((notFullyApprovedPR: PullRequest) => {
-    return notFullyApprovedPR.member_complete === false
-      && notFullyApprovedPR.lead_complete === false;
-  });
-  return noFullyApprovedPRs;
+	const noFullyApprovedPRs = queue.filter((notFullyApprovedPR: PullRequest) => {
+		return (
+			notFullyApprovedPR.member_complete === false &&
+			notFullyApprovedPR.lead_complete === false
+		);
+	});
+	return noFullyApprovedPRs;
 }
