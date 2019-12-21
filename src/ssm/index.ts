@@ -1,0 +1,1 @@
+export { SSMRetriever } from "./retriever";
