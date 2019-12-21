@@ -20,6 +20,7 @@ export async function getUsers(
     headers: {
       Accept: "application/vnd.github.v3+json",
       Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json; charset=utf-8',
     },
     json: true,
     method: "POST",

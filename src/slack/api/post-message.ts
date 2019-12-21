@@ -16,7 +16,7 @@ export async function postMessage(
   slackApiUri: string,
   // TODO: fix channel so it's properly typed as string
   // Can't type as string because of envalid
-  channel: any,
+  channel: string,
   token: string,
   message: string,
   attachment?: string,
@@ -32,6 +32,7 @@ export async function postMessage(
     headers: {
       Accept: "application/vnd.github.v3+json",
       Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json; charset=utf-8',
     },
     json: true,
     method: "POST",

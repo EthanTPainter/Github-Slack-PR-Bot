@@ -16,21 +16,22 @@ export async function postEphemeral(
   slackApiUri: string,
   user: string,
   channel: string,
-  token: string,
+  slackToken: string,
   message: string,
 ): Promise<any> {
 
   const options = {
     body: {
       channel: channel,
-      token: token,
+      token: slackToken,
       text: message,
       user: user,
       as_user: true,
     },
     headers: {
       Accept: "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${slackToken}`,
+      'Content-Type': 'application/json; charset=utf-8',
     },
     json: true,
     method: "POST",
