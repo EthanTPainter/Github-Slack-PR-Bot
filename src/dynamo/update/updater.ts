@@ -117,10 +117,7 @@ export async function updateDynamo(
         throw new Error(`Unsupported event.review.state: ${decider}`);
       }
     }
-
-    default: {
-      logger.error(`event action: ${action} not supported in this application`);
-      return false;
-    }
   }
+
+  return false;
 }
