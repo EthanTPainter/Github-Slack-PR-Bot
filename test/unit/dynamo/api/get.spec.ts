@@ -19,7 +19,16 @@ describe("getPullRequest", () => {
       title: "feat(1234): New feature",
       url: "www.github.com/ethantpainter",
       comment_times: {},
-      standard_members_alert: ["<@UUID123>", "<UUID567>"],
+      standard_members_alert: [
+        {
+          Slack_Id: "<@UUID123>",
+          Slack_Name: "Andrew",
+         },
+         {
+           Slack_Id: "<UUID567>",
+          Slack_Name: "Mark",
+        },
+      ],
       standard_leads_alert: [],
       member_complete: false,
       members_approving: [],

@@ -73,8 +73,10 @@ describe("getLatestReviews", () => {
     const reviewList: GitHubReview[] = [];
 
     const result = parseLatestReviews(reviewList);
-    const expected = { None: "No Reviews" };
+    const expected = {};
 
+    console.log(`Result: ${JSON.stringify(result)}`);
+    expect(Object.keys(result).length).equal(0);
     expect(result).deep.equal(expected);
   });
 });

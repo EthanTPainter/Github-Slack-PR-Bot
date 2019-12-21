@@ -5,7 +5,7 @@ import {
   getPRLink,
 } from "../../../../github/parse";
 
-import { RequestChangesPR } from "../../../../models";
+import { RequestChangesPR, JSONConfig } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";
 import { constructReqChangesDesc } from "../description";
 import { newLogger } from "../../../../logger";
@@ -14,7 +14,7 @@ const logger = newLogger("ConstructReqChanges");
 
 export function constructReqChanges(
   event: any,
-  json: any,
+  json: JSONConfig,
 ): RequestChangesPR {
 
   try {

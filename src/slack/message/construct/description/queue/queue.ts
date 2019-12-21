@@ -1,4 +1,4 @@
-import { PullRequest, TeamOptions } from "../../../../../models";
+import { PullRequest, TeamOptions, SlackUser } from "../../../../../models";
 
 /**
  * @description Construct a pr string given a pullRequest
@@ -41,15 +41,15 @@ export function constructQueueString(
     // If there are leads approving, add to string
     if (leadsApproving.length > 0) {
       prString += `| Leads Approving: `;
-      leadsApproving.map((leadApproving: string) => {
-        prString += `[${leadApproving}] `;
+      leadsApproving.map((leadApproving: SlackUser) => {
+        prString += `[${leadApproving.Slack_Name}] `;
       });
     }
     // If there are members approving, add to string
     if (membersApproving.length > 0) {
       prString += `| Members Approving: `;
-      membersApproving.map((memberApproving: string) => {
-        prString += `[${memberApproving}] `;
+      membersApproving.map((memberApproving: SlackUser) => {
+        prString += `[${memberApproving.Slack_Name}] `;
       });
     }
   }
@@ -59,15 +59,15 @@ export function constructQueueString(
     // If there are leads, add to string
     if (leadsReqChanges.length > 0) {
       prString += `| Leads Request Changes: `;
-      leadsReqChanges.map((leadReqChanges) => {
-        prString += `[${leadReqChanges}] `;
+      leadsReqChanges.map((leadReqChanges: SlackUser) => {
+        prString += `[${leadReqChanges.Slack_Name}] `;
       });
     }
     // If there are members, add to string
     if (membersReqChanges.length > 0) {
       prString += `| Members Request Changes: `;
-      membersReqChanges.map((memberReqChanges) => {
-        prString += `[${memberReqChanges}]`;
+      membersReqChanges.map((memberReqChanges: SlackUser) => {
+        prString += `[${memberReqChanges.Slack_Name}]`;
       });
     }
   }

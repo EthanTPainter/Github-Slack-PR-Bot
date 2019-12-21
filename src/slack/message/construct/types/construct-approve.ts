@@ -19,7 +19,7 @@ import {
   constructApproveDesc,
 } from "../description";
 
-import { ApprovePR } from "../../../../models";
+import { ApprovePR, JSONConfig } from "../../../../models";
 import { getApprovalChecks } from "../checks/approval";
 import { newLogger } from "../../../../logger";
 
@@ -33,7 +33,8 @@ const logger = newLogger("ConstructApprove");
 export async function constructApprove(
   reviewClass: Review,
   event: any,
-  json: any,
+  json: JSONConfig,
+  githubToken: string,
 ): Promise<ApprovePR> {
 
   try {
@@ -47,7 +48,7 @@ export async function constructApprove(
 
     // Get Path and GET any existing reviews
     const path = getPath(event);
-    const allReviews = await reviewClass.getReviews(path);
+    const allReviews = await reviewClass.getReviews(githubToken, path);
     const reviews = parseLatestReviews(allReviews);
 
     logger.debug("Latest Reviews: " + JSON.stringify(reviews));

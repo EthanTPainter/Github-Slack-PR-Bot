@@ -7,7 +7,7 @@ import {
   getPRLink,
 } from "../../../../github/parse";
 
-import { MergePR } from "../../../../models";
+import { MergePR, JSONConfig } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";
 import { constructMergeDesc } from "../description";
 import { newLogger } from "../../../../logger";
@@ -16,7 +16,7 @@ const logger = newLogger("ConstructMerge");
 
 export function constructMerge(
   event: any,
-  json: any,
+  json: JSONConfig,
 ): MergePR {
 
   try {

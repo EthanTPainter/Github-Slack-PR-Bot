@@ -9,6 +9,7 @@ import {
 
 import { Review } from "../../../../src/github/api";
 import { newLogger } from "../../../logger";
+import { JSONConfig } from "src/models";
 
 const logger = newLogger("Constructor");
 
@@ -22,8 +23,9 @@ const logger = newLogger("Constructor");
 export async function constructSlackMessage(
   action: string,
   event: any,
-  json: any,
+  json: JSONConfig,
   reviewClass: Review,
+  githubToken: string,
 ): Promise<string> {
 
   let slackMessage = "default";
@@ -120,7 +122,7 @@ export async function constructSlackMessage(
         if (!reviewClass) {
           throw new Error(`reviewClass parameter must be defined`);
         }
-        const approve = await constructApprove(reviewClass, event, json);
+        const approve = await constructApprove(reviewClass, event, json, githubToken);
 
         /* Construct order of Opened PR Slack message
          * SLACK MESSAGE APPEARANCE:
@@ -174,10 +176,10 @@ export async function constructSlackMessage(
     }
 
     default: {
-      const unsupportedEventType = `event action ${action} not supported in this application`;
-      slackMessage = unsupportedEventType;
-      throw new Error(slackMessage);
+      logger.error(`GitHub action: ${action} not supported`);
+      throw new Error(`Action: ${action} not supported in this application`);
     }
+
   }
   return slackMessage;
 }

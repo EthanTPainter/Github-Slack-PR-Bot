@@ -16,21 +16,22 @@ const logger = newLogger("GetReviews");
  * Output:
  * ["EthanTPainter"]
  */
-export function getApprovingReviews(latestReviews: any): string[] {
-  const approvals: string[] = [];
-  // Check for no reviews
-  if (Object.keys(latestReviews) === ["None"]
-    && Object.values(latestReviews) === ["No Reviews"]) {
-      return [];
-  }
+export function getApprovingReviews(latestReviews: {
+	[githubUsername: string]: string;
+}): string[] {
+	const approvals: string[] = [];
+	// Check for no reviews
+	if (Object.keys(latestReviews).length === 0) {
+		return [];
+	}
 
-  (Object.keys(latestReviews)).forEach((review) => {
-    if (latestReviews[review] === "APPROVED") {
-      approvals.push(review);
-    }
-  });
-  logger.debug("Approving Reviews: " + approvals);
-  return approvals;
+	Object.keys(latestReviews).forEach((review) => {
+		if (latestReviews[review] === "APPROVED") {
+			approvals.push(review);
+		}
+	});
+	logger.debug("Approving Reviews: " + approvals);
+	return approvals;
 }
 
 /**
@@ -49,21 +50,20 @@ export function getApprovingReviews(latestReviews: any): string[] {
  * Output:
  * ["DillonSykes"]
  */
-export function getReqChangesReviews(
-  latestReviews: any,
-): string[] {
-  const approvals: string[] = [];
-  // Check for no reviews
-  if (Object.keys(latestReviews) === ["None"]
-    && Object.values(latestReviews) === ["No Reviews"]) {
-    return [];
-  }
+export function getReqChangesReviews(latestReviews: {
+	[githubUsername: string]: string;
+}): string[] {
+	const approvals: string[] = [];
+	// Check for no reviews
+	if (Object.keys(latestReviews).length === 0) {
+		return [];
+	}
 
-  (Object.keys(latestReviews)).forEach((review) => {
-    if (latestReviews[review] === "CHANGES_REQUESTED") {
-      approvals.push(review);
-    }
-  });
-  logger.debug("Requesting Changes Reviews: " + approvals);
-  return approvals;
+	Object.keys(latestReviews).forEach((review) => {
+		if (latestReviews[review] === "CHANGES_REQUESTED") {
+			approvals.push(review);
+		}
+	});
+	logger.debug("Requesting Changes Reviews: " + approvals);
+	return approvals;
 }

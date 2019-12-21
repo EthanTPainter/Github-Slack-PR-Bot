@@ -9,7 +9,7 @@ import {
   getSlackUser,
 } from "../../../../json/parse";
 
-import { ClosePR } from "../../../../models";
+import { ClosePR, JSONConfig } from "../../../../models";
 import { constructCloseDesc } from "../description";
 import { newLogger } from "../../../../logger";
 
@@ -17,7 +17,7 @@ const logger = newLogger("ConstructClose");
 
 export function constructClose(
   event: any,
-  json: any,
+  json: JSONConfig,
 ): ClosePR {
 
   try {

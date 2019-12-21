@@ -9,6 +9,21 @@ describe("constructComment", () => {
     Departments: {
       Dev: {
         TeamGroup1: {
+          Options: {
+            Avoid_Comment_Alerts: 10,
+            Check_Mark_Text: "",
+            X_Mark_Text: "",
+            Queue_Include_Created_Time: false,
+            Queue_Include_Updated_Time: false,
+            Queue_Include_Approval_Names: false,
+            Queue_Include_Req_Changes_Names: false,
+            Queue_Include_Owner: false,
+            Queue_Include_New_Line: false,
+            Num_Required_Member_Approvals: 0,
+            Num_Required_Lead_Approvals: 0,
+            Disable_GitHub_Alerts: false,
+            Member_Before_Lead: false,
+          },
           Users: {
             Leads: {
               andrew: {

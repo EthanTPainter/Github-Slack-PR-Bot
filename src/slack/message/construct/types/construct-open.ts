@@ -1,4 +1,4 @@
-import { OpenedPR } from "../../../../models";
+import { OpenedPR, JSONConfig } from "../../../../models";
 import { getOwner, getTitle, getPRLink } from "../../../../github/parse";
 import { getSlackUser, getSlackGroup } from "../../../../json/parse";
 import { constructOpenDesc } from "../description";
@@ -8,7 +8,7 @@ const logger = newLogger("ConstructOpen");
 
 export function constructOpen(
   event: any,
-  json: any,
+  json: JSONConfig,
   newPR: boolean,
 ): OpenedPR {
 

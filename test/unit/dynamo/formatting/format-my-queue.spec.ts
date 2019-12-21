@@ -48,7 +48,12 @@ describe("formatMyQueue", () => {
 				title: "feat(1234): New feature",
 				url: "www.github.com/ethantpainter",
 				comment_times: {},
-				standard_members_alert: ["<@23456>"],
+				standard_members_alert: [
+					{
+						Slack_Id: "<@23456>",
+						Slack_Name: "DillonS",
+					},
+				],
 				standard_leads_alert: [],
 				member_complete: false,
 				members_approving: [],
@@ -91,7 +96,12 @@ describe("formatMyQueue", () => {
 				title: "feat(1234): New feature",
 				url: "www.github.com/ethantpainter",
 				comment_times: {},
-				standard_members_alert: ["<@23456>"],
+				standard_members_alert: [
+					{
+						Slack_Id: "<@23456>",
+						Slack_Name: "Matt",
+					},
+				],
 				standard_leads_alert: [],
 				member_complete: false,
 				members_approving: [],
@@ -120,7 +130,12 @@ describe("formatMyQueue", () => {
 				title: "feat(12346): New feature 2",
 				url: "www.github.com/daniellarner",
 				comment_times: {},
-				standard_members_alert: ["<@23456>"],
+				standard_members_alert: [
+					{
+						Slack_Id: "<@23456>",
+						Slack_Name: "Daniel"
+					,}
+				],
 				standard_leads_alert: [],
 				member_complete: false,
 				members_approving: [],

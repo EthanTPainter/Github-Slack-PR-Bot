@@ -1,6 +1,6 @@
 import * as rp from "request-promise";
-import { requiredEnvs } from "../../required-envs";
 import { newLogger } from "../../logger";
+import { GitHubReview } from "../../../src/models";
 
 const logger = newLogger("reviews");
 
@@ -15,16 +15,7 @@ export class Review {
    *         This path references the url:
    *         https://github.com/EthanTPainter/Comparative-Programming/pull/1/reviews
    */
-  async getReviews(path: string): Promise<any> {
-    const BASE_URL: string = "https://api.github.com";
-    // Generate options for HTTP request
-    const options = {
-      url: BASE_URL + path,
-      method: "get",
-    };
-
-    logger.info("Base Options provided: " + JSON.stringify(options));
-
+  async getReviews(githubToken: string, url: string): Promise<GitHubReview[]> {
     /*
     * Make request with request-promise to retrieve GitHub reviews for a PR
     * Always add token to retrieve Reviews because of GitHub API rate limtiing
@@ -35,20 +26,26 @@ export class Review {
     */
     try {
       // Make request with request-promise to retrieve GitHub reviews for a PR
-      const finalOptions = {
-        method: options.method,
-        url: options.url,
+      const options = {
+        method: "get",
+        url,
         headers: {
-          Authorization: `Bearer ${requiredEnvs.GITHUB_OAUTH2_TOKEN}`,
-          "User-Agent": "GitHub-Slack-PR-Bot",
+          Authorization: `token ${githubToken}`,
+          "User-Agent": "PR-Bot",
+          'Content-Type': 'application/json; charset=utf-8',
+          "Connection": "keep-alive"
         },
+        json: true,
       };
-      logger.info("Final Options: " + JSON.stringify(finalOptions));
 
-      const result = await rp(finalOptions);
+      const result = await rp(options);
+      logger.info(`Result: ${JSON.stringify(result)}`);
+
       return result;
     }
     catch (error) {
+      logger.error(`Error making GET request to: ${url}`);
+      logger.error(error.stack);
       throw new Error(error);
     }
   }

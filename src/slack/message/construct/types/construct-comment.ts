@@ -5,7 +5,7 @@ import {
   getPRLink,
 } from "../../../../github/parse";
 
-import { CommentPR } from "../../../../models";
+import { CommentPR, JSONConfig } from "../../../../models";
 import { getSlackUser } from "../../../../json/parse";
 import { constructCommentDesc } from "../description";
 import { newLogger } from "../../../../logger";
@@ -14,7 +14,7 @@ const logger = newLogger("ConstructClose");
 
 export function constructComment(
   event: any,
-  json: any,
+  json: JSONConfig,
 ): CommentPR {
 
   try {
