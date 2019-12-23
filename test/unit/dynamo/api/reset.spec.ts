@@ -15,7 +15,7 @@ describe("putPullRequest", () => {
 
     const result = await dynamo.resetQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id);
+      slackUser);
 
     expect(result).equal(expected);
   });
