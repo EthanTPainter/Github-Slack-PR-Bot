@@ -149,31 +149,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// PR Owner should not have anything in their queue
@@ -275,31 +275,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Team queue should be updated
@@ -388,31 +388,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Team queue should be up to date
@@ -502,31 +502,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// PR owner queue should be empty
@@ -634,31 +634,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Team queue should have an updated queue
@@ -766,31 +766,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Team queue should have an updated queue
@@ -901,31 +901,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Team queue should be up to date
@@ -1038,31 +1038,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Team queue should be up to date
@@ -1165,31 +1165,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Expect the team queue to be up to date
@@ -1294,31 +1294,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Team queue should be up to date
@@ -1423,31 +1423,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Team queue should be up to date
@@ -1554,31 +1554,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Team queue should be up to date
@@ -1679,31 +1679,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Team queue should be up to date
@@ -1809,31 +1809,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Team queue should be up to date
@@ -1938,31 +1938,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Team queue should be up to date
@@ -2068,31 +2068,31 @@ describe("Dynamo.UpdateApprove", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Team queue should be up to date

@@ -53,7 +53,7 @@ describe("getPullRequest", () => {
 
     const result = await dynamo.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id);
+      slackUser);
 
     expect(result).deep.equal(expected);
   });

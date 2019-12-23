@@ -1,4 +1,4 @@
-import { JSONConfig } from "../../../src/models/json";
+import { JSONConfig } from "../../../src/models";
 
 export const json: JSONConfig = {
 	Departments: {

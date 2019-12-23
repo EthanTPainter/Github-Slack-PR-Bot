@@ -1,5 +1,5 @@
 import { DynamoDB } from "aws-sdk";
-import { PullRequest } from "../../models";
+import { PullRequest, SlackUser } from "../../models";
 import { newLogger } from "../../../src/logger";
 import { requiredEnvs } from "../../../src/required-envs";
 
@@ -17,7 +17,7 @@ export class DynamoUpdate {
    */
   async updatePullRequest(
     dynamoTableName: string,
-    slackUserId: string,
+    slackUser: SlackUser,
     currentQueue: PullRequest[],
     updatedPR: PullRequest,
   ): Promise<DynamoDB.DocumentClient.UpdateItemOutput> {
@@ -28,7 +28,7 @@ export class DynamoUpdate {
     newQueue.push(updatedPR);
 
     try {
-      logger.info(`Updating PR with url: ${updatedPR.url} for User ID: ${slackUserId}`);
+      logger.info(`Updating PR with url: ${updatedPR.url} for user ${slackUser.Slack_Name}`);
 
       // Setup
       const dynamoDB = new DynamoDB.DocumentClient({
@@ -38,7 +38,7 @@ export class DynamoUpdate {
 
       const params = {
         TableName: dynamoTableName,
-        Key: { slackUserId: slackUserId },
+        Key: { slackUserId: slackUser.Slack_Id },
         UpdateExpression: `set queue = :d`,
         ExpressionAttributeValues: {
           ":d": newQueue,

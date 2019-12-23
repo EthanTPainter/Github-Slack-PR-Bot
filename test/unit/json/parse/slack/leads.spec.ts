@@ -7,6 +7,21 @@ describe("getSlackLeads", () => {
     Departments: {
       Dep1: {
         Team1: {
+          Options: {
+            Avoid_Comment_Alerts: 5,
+            Check_Mark_Text: ":heavy_check_mark:",
+            X_Mark_Text: ":X:",
+            Queue_Include_Created_Time: true,
+            Queue_Include_Updated_Time: true,
+            Queue_Include_Approval_Names: true,
+            Queue_Include_Req_Changes_Names: true,
+            Queue_Include_Owner: true,
+            Queue_Include_New_Line: false,
+            Num_Required_Lead_Approvals: 1,
+            Num_Required_Member_Approvals: 1,
+            Member_Before_Lead: true,
+            Disable_GitHub_Alerts: false,
+          },
           Users: {
             Members: {},
             Leads: {
@@ -47,6 +62,21 @@ describe("getSlackLeads", () => {
       Departments: {
         Dep1: {
           Team1: {
+            Options: {
+              Avoid_Comment_Alerts: 5,
+              Check_Mark_Text: ":heavy_check_mark:",
+              X_Mark_Text: ":X:",
+              Queue_Include_Created_Time: true,
+              Queue_Include_Updated_Time: true,
+              Queue_Include_Approval_Names: true,
+              Queue_Include_Req_Changes_Names: true,
+              Queue_Include_Owner: true,
+              Queue_Include_New_Line: false,
+              Num_Required_Lead_Approvals: 1,
+              Num_Required_Member_Approvals: 1,
+              Member_Before_Lead: true,
+              Disable_GitHub_Alerts: false,
+            },
             Users: {
               Leads: {
                 Ethan: {
@@ -80,6 +110,21 @@ describe("getSlackLeads", () => {
       Departments: {
         Dep1: {
           Team1: {
+            Options: {
+              Avoid_Comment_Alerts: 5,
+              Check_Mark_Text: ":heavy_check_mark:",
+              X_Mark_Text: ":X:",
+              Queue_Include_Created_Time: true,
+              Queue_Include_Updated_Time: true,
+              Queue_Include_Approval_Names: true,
+              Queue_Include_Req_Changes_Names: true,
+              Queue_Include_Owner: true,
+              Queue_Include_New_Line: false,
+              Num_Required_Lead_Approvals: 1,
+              Num_Required_Member_Approvals: 1,
+              Member_Before_Lead: true,
+              Disable_GitHub_Alerts: false,
+            },
             Users: {
               Leads: {},
               Members: {
@@ -137,7 +182,7 @@ describe("getSlackLeads", () => {
     const subTeam = "Team1";
 
     const expected = new Error(`No Users defined for team: ${subTeam}`);
-    expect(() => getSlackLeads(githubUser, invalidJSON))
+    expect(() => getSlackLeads(githubUser, invalidJSON as any))
       .to.throw(expected.message);
   });
 
@@ -155,7 +200,7 @@ describe("getSlackLeads", () => {
     const subTeam = "Team1";
 
     const expected = new Error(`Leads not defined for team: ${subTeam}`);
-    expect(() => getSlackLeads(githubUser, invalidJSON))
+    expect(() => getSlackLeads(githubUser, invalidJSON as any))
       .to.throw(expected.message);
   });
 
@@ -175,7 +220,7 @@ describe("getSlackLeads", () => {
     const subTeam = "Team";
 
     const expected = new Error(`Members not defined for team: ${subTeam}`);
-    expect(() => getSlackLeads(githubUser, invalidJSON))
+    expect(() => getSlackLeads(githubUser, invalidJSON as any))
       .to.throw(expected.message);
   });
 

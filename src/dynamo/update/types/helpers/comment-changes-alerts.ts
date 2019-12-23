@@ -1,4 +1,4 @@
-import { PullRequest, SlackUser } from "../../../../models";
+import { PullRequest, SlackUser, JSONConfig } from "../../../../models";
 import { DynamoGet, DynamoRemove } from "../../../api";
 import {
   getSlackLeadsAlt,
@@ -10,7 +10,7 @@ export async function processCommentingUserReqChanges(
   slackUserCommenting: SlackUser,
   pr: PullRequest,
   dynamoTableName: string,
-  json: any,
+  json: JSONConfig,
 ): Promise<void> {
   // Setup
   const dynamoGet = new DynamoGet();
@@ -48,7 +48,7 @@ export async function processCommentingUserReqChanges(
     // Get slackUserCommenting's queue
     const userCommentingQueue = await dynamoGet.getQueue(
       dynamoTableName,
-      slackUserCommenting.Slack_Id,
+      slackUserCommenting,
     );
     // Remove PR from slackUserCommenting's queue
     await dynamoRemove.removePullRequest(
@@ -86,7 +86,7 @@ export async function processCommentingUserReqChanges(
     // Get slackUserCommenting's queue
     const userCommentingQueue = await dynamoGet.getQueue(
       dynamoTableName,
-      slackUserCommenting.Slack_Id,
+      slackUserCommenting,
     );
     // Remove PR from slackUserCommenting's queue
     await dynamoRemove.removePullRequest(

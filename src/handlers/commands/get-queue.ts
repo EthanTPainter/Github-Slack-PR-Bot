@@ -11,7 +11,6 @@ export async function getQueue(body: RequestBody): Promise<SlashResponse> {
 			return new SlashResponse("No text attached to request", 200);
 		}
 		const submittedUserId = `<@${body.user_id}>`;
-		console.log(`Text: ${body.text}`);
 
 		// Setup
 		const dynamoGet = new DynamoGet();

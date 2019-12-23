@@ -59,7 +59,7 @@ describe("Dynamo.Remove", () => {
     };
     await dynamoUpdate.updatePullRequest(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id,
+      slackUser,
       [],
       newPR);
     await dynamoRemove.removePullRequest(
@@ -71,7 +71,7 @@ describe("Dynamo.Remove", () => {
     const expectedQueue: any = [];
     const retrievedQueue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id);
+      slackUser);
 
     expect(expectedQueue).deep.equal(retrievedQueue);
   });
@@ -127,7 +127,7 @@ describe("Dynamo.Remove", () => {
     }];
     await dynamoUpdate.updatePullRequest(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id,
+      slackUser,
       [currentQueue[0]],
       currentQueue[1]);
     await dynamoRemove.removePullRequest(
@@ -139,7 +139,7 @@ describe("Dynamo.Remove", () => {
     const expectedQueue = [currentQueue[0]];
     const retrievedQueue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id);
+      slackUser);
 
     expect(expectedQueue).deep.equal(retrievedQueue);
   });

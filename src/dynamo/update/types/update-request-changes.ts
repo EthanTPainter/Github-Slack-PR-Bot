@@ -1,6 +1,6 @@
 import { DynamoGet, DynamoAppend, DynamoUpdate, DynamoRemove } from "../../api";
 import { getPRLink } from "../../../github/parse";
-import { SlackUser, PullRequest } from "../../../models";
+import { SlackUser, PullRequest, JSONConfig } from "../../../models";
 import { DateTime } from "luxon";
 import {
 	getSlackGroupAlt,
@@ -26,14 +26,14 @@ export async function updateReqChanges(
 	slackUserReqChanges: SlackUser,
 	dynamoTableName: string,
 	event: any,
-	json: any,
+	json: JSONConfig,
 ): Promise<boolean> {
 	// Setup
 	const dynamoGet = new DynamoGet();
 	const dynamoAppend = new DynamoAppend();
 	const dynamoUpdate = new DynamoUpdate();
 	const dynamoRemove = new DynamoRemove();
-	let foundPR: any;
+	let foundPR: PullRequest | undefined;
 
 	// GitHub PR Url
 	const htmlUrl = getPRLink(event);
@@ -41,15 +41,12 @@ export async function updateReqChanges(
 	// Get PR from slackUserReqChanges's queue (matching GitHub URL)
 	const dynamoQueue = await dynamoGet.getQueue(
 		dynamoTableName,
-		slackUserReqChanges.Slack_Id,
+		slackUserReqChanges,
 	);
 
 	// Team queue
 	const ownerTeam = getSlackGroupAlt(slackUserOwner.Slack_Id, json);
-	const teamQueue = await dynamoGet.getQueue(
-		dynamoTableName,
-		ownerTeam.Slack_Id,
-	);
+	const teamQueue = await dynamoGet.getQueue(dynamoTableName, ownerTeam);
 
 	// Get PR from queue by matching PR html url
 	foundPR = dynamoQueue.find((pr: PullRequest) => pr.url === htmlUrl);
@@ -136,7 +133,7 @@ export async function updateReqChanges(
 	// Update team queue
 	await dynamoUpdate.updatePullRequest(
 		dynamoTableName,
-		ownerTeam.Slack_Id,
+		ownerTeam,
 		teamQueue,
 		foundPR,
 	);
@@ -149,14 +146,14 @@ export async function updateReqChanges(
 		removePRFromUsers.map(async (removeUserId) => {
 			const dynamoUserQueue = await dynamoGet.getQueue(
 				dynamoTableName,
-				removeUserId.Slack_Id,
+				removeUserId,
 			);
 
 			await dynamoRemove.removePullRequest(
 				dynamoTableName,
 				removeUserId.Slack_Id,
 				dynamoUserQueue,
-				foundPR,
+				foundPR!,
 			);
 		}),
 	);
@@ -168,17 +165,14 @@ export async function updateReqChanges(
 		.concat(foundPR.req_changes_members_alert);
 
 	await Promise.all(
-		allAlertingUserIds.map(async (alertUserId: string) => {
-			const currentQueue = await dynamoGet.getQueue(
-				dynamoTableName,
-				alertUserId,
-			);
+		allAlertingUserIds.map(async (alertUser) => {
+			const currentQueue = await dynamoGet.getQueue(dynamoTableName, alertUser);
 
 			await dynamoUpdate.updatePullRequest(
 				dynamoTableName,
-				alertUserId,
+				alertUser,
 				currentQueue,
-				foundPR,
+				foundPR!,
 			);
 		}),
 	);

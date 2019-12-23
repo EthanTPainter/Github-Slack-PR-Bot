@@ -83,10 +83,10 @@ export async function updateFixedPR(
 
 	// Update Team Queue
 	const teamGroup = getSlackGroupAlt(slackOwnerId, json);
-	const teamQueue = await dynamoGet.getQueue(dynamoTableName, slackOwnerId);
+	const teamQueue = await dynamoGet.getQueue(dynamoTableName, slackOwner);
 	await dynamoUpdate.updatePullRequest(
 		dynamoTableName,
-		teamGroup.Slack_Id,
+		teamGroup,
 		teamQueue,
 		foundPR,
 	);
@@ -100,7 +100,7 @@ export async function updateFixedPR(
 	await impactedUserIds.map(async (user) => {
 		await dynamoUpdate.updatePullRequest(
 			dynamoTableName,
-			user.Slack_Id,
+			user,
 			slackOwnerQueue,
 			foundPR,
 		);

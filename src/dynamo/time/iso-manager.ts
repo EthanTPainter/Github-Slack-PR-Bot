@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { SlackUser, TeamOptions, PullRequest } from "src/models";
+import { SlackUser, TeamOptions, PullRequest } from "../../../src/models";
 
 /**
  * @description Create ISO timestamp of current date & time

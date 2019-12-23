@@ -24,7 +24,7 @@ export async function getTeamQueue(body: RequestBody): Promise<SlashResponse> {
 		const teamName = getSlackGroupAlt(slackUserID, json);
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.DYNAMO_TABLE_NAME,
-			teamName.Slack_Id,
+			teamName,
 		);
 
 		// Format queue from array to string

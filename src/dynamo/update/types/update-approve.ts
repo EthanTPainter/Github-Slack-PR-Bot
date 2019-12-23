@@ -7,6 +7,7 @@ import {
 	getSlackLeadsAlt,
 	getSlackMembersAlt,
 	getSlackGroupAlt,
+	getSlackUserAlt,
 } from "../../../json/parse";
 import { updateLeadAlerts } from "./helpers/update-lead-alerts";
 import { updateMemberAlerts } from "./helpers/update-member-alerts";
@@ -31,7 +32,7 @@ export async function updateApprove(
 	const dynamoGet = new DynamoGet();
 	const dynamoRemove = new DynamoRemove();
 	const dynamoUpdate = new DynamoUpdate();
-	let foundPR: any;
+	let foundPR: PullRequest | undefined;
 
 	// Get url from event
 	const htmlUrl = getPRLink(event);
@@ -39,14 +40,14 @@ export async function updateApprove(
 	// Get queue from slackUserApproving
 	const dynamoQueue = await dynamoGet.getQueue(
 		dynamoTableName,
-		slackUserApproving.Slack_Id,
+		slackUserApproving,
 	);
 
 	// Team queue
 	const ownerTeam = getSlackGroupAlt(slackUserOwner.Slack_Id, json);
 	const teamQueue = await dynamoGet.getQueue(
 		dynamoTableName,
-		ownerTeam.Slack_Id,
+		ownerTeam,
 	);
 
 	// Check slackUserApproving's queue
@@ -136,7 +137,7 @@ export async function updateApprove(
 	// Update team queue
 	await dynamoUpdate.updatePullRequest(
 		dynamoTableName,
-		ownerTeam.Slack_Id,
+		ownerTeam,
 		teamQueue,
 		foundPR,
 	);
@@ -149,14 +150,14 @@ export async function updateApprove(
 		removePRFromUsers.map(async (removeUser) => {
 			const dynamoApproverQueue = await dynamoGet.getQueue(
 				dynamoTableName,
-				removeUser.Slack_Id,
+				removeUser,
 			);
 
 			await dynamoRemove.removePullRequest(
 				dynamoTableName,
 				removeUser.Slack_Id,
 				dynamoApproverQueue,
-				foundPR,
+				foundPR!,
 			);
 		}),
 	);
@@ -168,17 +169,17 @@ export async function updateApprove(
 		.concat(foundPR.req_changes_members_alert);
 
 	await Promise.all(
-		allAlertingUserIds.map(async (alertUserId: string) => {
+		allAlertingUserIds.map(async (alertUser) => {
 			const currentQueue = await dynamoGet.getQueue(
 				dynamoTableName,
-				alertUserId,
+				alertUser,
 			);
 
 			await dynamoUpdate.updatePullRequest(
 				dynamoTableName,
-				alertUserId,
+				alertUser,
 				currentQueue,
-				foundPR,
+				foundPR!,
 			);
 		}),
 	);

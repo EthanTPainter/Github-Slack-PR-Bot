@@ -1,7 +1,7 @@
 import { DynamoDB } from "aws-sdk";
 import { newLogger } from "../../logger";
 import { requiredEnvs } from "../../required-envs";
-import { PullRequest } from "../../models";
+import { PullRequest, SlackUser } from "../../models";
 
 const logger = newLogger("DynamoGetPullRequest");
 
@@ -14,10 +14,11 @@ export class DynamoGet {
 	 */
 	async getQueue(
 		dynamoTableName: string,
-		slackUserId: string,
+		// TODO: Remove any after fixing tests
+		slackUser: SlackUser,
 	): Promise<PullRequest[]> {
 		try {
-			logger.info(`Getting Queue for User ID: ${slackUserId}`);
+			logger.info(`Getting Queue for User: ${slackUser.Slack_Name}`);
 
 			// Setup/Init DocumentClient for DynamoDB
 			const dynamoDB = new DynamoDB.DocumentClient({
@@ -28,7 +29,7 @@ export class DynamoGet {
 			// Provide base params as input
 			const params = {
 				TableName: dynamoTableName,
-				Key: { slackUserId: slackUserId },
+				Key: { slackUserId: slackUser.Slack_Id },
 				AttributesToGet: ["queue"],
 				ReturnValues: "ALL_NEW",
 			};
@@ -37,7 +38,9 @@ export class DynamoGet {
 			const result = await dynamoDB.get(params).promise();
 			const item = result.Item;
 			if (item === undefined) {
-				throw new Error(`User ID ${slackUserId} queue not found`);
+				throw new Error(
+					`User ${slackUser.Slack_Name} queue with ID ${slackUser.Slack_Id} not found`,
+				);
 			}
 
 			// Return queue for user

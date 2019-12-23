@@ -55,14 +55,14 @@ describe("Dynamo.Update", () => {
     };
     await dynamoUpdate.updatePullRequest(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id,
+      slackUser,
       [],
       newPR);
 
     const expectedQueue = [ newPR ];
     const retrievedQueue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id);
+      slackUser);
 
     expect(expectedQueue).deep.equal(retrievedQueue);
   });
@@ -122,14 +122,14 @@ describe("Dynamo.Update", () => {
     };
     await dynamoUpdate.updatePullRequest(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id,
+      slackUser,
       currentQueue,
       updatedPR);
 
     const expectedQueue = [ updatedPR ];
     const retrievedQueue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id);
+      slackUser);
 
     expect(expectedQueue).deep.equal(retrievedQueue);
   });

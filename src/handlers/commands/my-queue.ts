@@ -20,7 +20,7 @@ export async function getMyQueue(body: RequestBody): Promise<SlashResponse> {
 		// Get User Queue
 		const userQueue = await dynamoGet.getQueue(
 			requiredEnvs.DYNAMO_TABLE_NAME,
-			slackUserId,
+			slackUser,
 		);
 
 		// Format queue from array to string

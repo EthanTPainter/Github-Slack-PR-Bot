@@ -1,5 +1,5 @@
 import { newLogger } from "../../../logger";
-import { SlackUser } from "../../../models";
+import { SlackUser, JSONConfig } from "../../../models";
 
 const logger = newLogger("Member");
 /**
@@ -10,7 +10,7 @@ const logger = newLogger("Member");
  */
 export function getSlackMembers(
   githubUser: string,
-  json: any,
+  json: JSONConfig,
 ): SlackUser[] {
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const departments = json.Departments;
@@ -92,7 +92,7 @@ export function getSlackMembers(
  */
 export function getSlackMembersAlt(
   slackUser: SlackUser,
-  json: any,
+  json: JSONConfig,
 ): SlackUser[] {
   // Navigates through JSON file from top to down (DevTeam -> QaTeam -> ProdTeam)
   const teams = json.Departments;

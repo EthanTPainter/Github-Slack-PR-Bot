@@ -62,7 +62,7 @@ export async function updateLeadAlerts(
 			// Remove slackUserOwner alerted in queue
 			const ownerQueue = await dynamoGet.getQueue(
 				dynamoTableName,
-				slackUserOwner.Slack_Id,
+				slackUserOwner,
 			);
 			await dynamoRemove.removePullRequest(
 				dynamoTableName,

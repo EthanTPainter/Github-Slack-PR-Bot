@@ -66,7 +66,7 @@ export async function updateOpen(
 	const updateUserQueues = slackUserList.map(async (user) => {
 		const currentQueue = await dynamoGet.getQueue(
 			dynamoTableName,
-			user.Slack_Id,
+			user,
 		);
 		await dynamoUpdate.appendPullRequest(
 			dynamoTableName,
@@ -80,7 +80,7 @@ export async function updateOpen(
 	// Append new PR to team queue
 	const currentTeamQueue = await dynamoGet.getQueue(
 		dynamoTableName,
-		slackTeam.Slack_Id,
+		slackTeam,
 	);
 
 	await dynamoUpdate.appendPullRequest(

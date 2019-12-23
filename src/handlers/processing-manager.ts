@@ -14,8 +14,7 @@ import { SlashResponse } from "../models";
 import { Review } from "../github/api";
 import { getOwner } from "../github/parse";
 import { SSMRetriever } from "../../src/ssm";
-import { CUSTOM_SOURCES } from "src/enums";
-import { SLASH_COMMANDS } from "src/enums/slash-commands";
+import { CUSTOM_SOURCES, SLASH_COMMANDS } from "../../src/enums";
 
 const logger = newLogger("ProcessingManager");
 
@@ -31,6 +30,7 @@ export async function processEvent(
 	context: Context,
 	callback: Callback,
 ): Promise<void> {
+	// TODO: Add idempotency back
 	// Create an array of SQSEvent messages to process
 	const messages = event.Records.map((record: SQSRecord) => {
 		const parsedBody: any = JSON.parse(record.body);

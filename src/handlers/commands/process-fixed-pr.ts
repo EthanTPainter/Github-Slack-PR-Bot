@@ -1,7 +1,7 @@
 import { DynamoGet } from "../../dynamo/api";
 import { requiredEnvs } from "../../required-envs";
 import { json } from "../../json/src/json";
-import { getTeamNameAlt } from "../../json/parse";
+import { getTeamNameAlt, getSlackUserAlt } from "../../json/parse";
 import { updateFixedPR } from "../../dynamo/update";
 import { postMessage } from "../../slack/api/post-message";
 import { SlashResponse, RequestBody } from "../../models";
@@ -18,11 +18,12 @@ export async function processFixedPR(
 	// Format slack user id & get slack user
 	const dynamoGet = new DynamoGet();
 	const slackUserId = `<@${body.user_id}>`;
+	const slackUser = getSlackUserAlt(slackUserId, json);
 
 	// Get User's queue
 	const userQueue = await dynamoGet.getQueue(
 		requiredEnvs.DYNAMO_TABLE_NAME,
-		slackUserId,
+		slackUser,
 	);
 
 	// Get fixedPR url from slack text

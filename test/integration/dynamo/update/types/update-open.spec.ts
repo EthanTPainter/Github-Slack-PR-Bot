@@ -60,25 +60,25 @@ describe("Dynamo.UpdateOpen", () => {
 
     const teamQueue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackTeam.Slack_Id);
+      slackTeam);
     const lead1Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackLead1.Slack_Id);
+      slackLead1);
     const lead2Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackLead2.Slack_Id);
+      slackLead2);
     const lead3Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackLead3.Slack_Id);
+      slackLead3);
     const member1Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackMember1.Slack_Id);
+      slackMember1);
     const member2Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackMember2.Slack_Id);
+      slackMember2);
     const member3Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackMember3.Slack_Id);
+      slackMember3);
 
     const expectedUpdatedQueue = [{
       events: [{
@@ -176,25 +176,25 @@ describe("Dynamo.UpdateOpen", () => {
 
     const teamQueue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackTeam.Slack_Id);
+      slackTeam);
     const lead1Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackLead1.Slack_Id);
+      slackLead1);
     const lead2Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackLead2.Slack_Id);
+      slackLead2);
     const lead3Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackLead3.Slack_Id);
+      slackLead3);
     const member1Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackMember1.Slack_Id);
+      slackMember1);
     const member2Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackMember2.Slack_Id);
+      slackMember2);
     const member3Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackMember3.Slack_Id);
+      slackMember3);
 
     const expectedUpdatedQueue = [{
       events: [{
@@ -329,25 +329,25 @@ describe("Dynamo.UpdateOpen", () => {
 
     const teamQueue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackTeam.Slack_Id);
+      slackTeam);
     const lead1Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackLead1.Slack_Id);
+      slackLead1);
     const lead2Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackLead2.Slack_Id);
+      slackLead2);
     const lead3Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackLead3.Slack_Id);
+      slackLead3);
     const member1Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackMember1.Slack_Id);
+      slackMember1);
     const member2Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackMember2.Slack_Id);
+      slackMember2);
     const member3Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackMember3.Slack_Id);
+      slackMember3);
 
     // Team queue should be up to date
     expect(teamQueue[0].url).deep.equal(event.pull_request.html_url);
@@ -392,25 +392,25 @@ describe("Dynamo.UpdateOpen", () => {
 
     const teamQueue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackTeam.Slack_Id);
+      slackTeam);
     const lead1Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackLead1.Slack_Id);
+      slackLead1);
     const lead2Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackLead2.Slack_Id);
+      slackLead2);
     const lead3Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackLead3.Slack_Id);
+      slackLead3);
     const member1Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackMember1.Slack_Id);
+      slackMember1);
     const member2Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackMember2.Slack_Id);
+      slackMember2);
     const member3Queue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackMember3.Slack_Id);
+      slackMember3);
 
     // Team queue should be up to date
     expect(teamQueue[0].url).deep.equal(event.pull_request.html_url);

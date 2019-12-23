@@ -236,7 +236,7 @@ describe("GetSlackGroupAlt", () => {
     const team = "DevTeam1";
     const expected = new Error("No Users defined for team: " + team);
 
-    expect(() => getSlackGroupAlt(slackUserId, invalidJSON))
+    expect(() => getSlackGroupAlt(slackUserId, invalidJSON as any))
       .to.throw(expected.message);
   });
 
@@ -255,7 +255,7 @@ describe("GetSlackGroupAlt", () => {
     const team = "DevTeam1";
     const expected = new Error("Leads not defined for team: " + team);
 
-    expect(() => getSlackGroupAlt(slackUserId, invalidJSON))
+    expect(() => getSlackGroupAlt(slackUserId, invalidJSON as any))
       .to.throw(expected.message);
   });
 
@@ -281,7 +281,7 @@ describe("GetSlackGroupAlt", () => {
     const team = "DevTeam1";
     const expected = new Error("Members not defined for team: " + team);
 
-    expect(() => getSlackGroupAlt(slackUserId, invalidJSON))
+    expect(() => getSlackGroupAlt(slackUserId, invalidJSON as any))
       .to.throw(expected.message);
   });
 

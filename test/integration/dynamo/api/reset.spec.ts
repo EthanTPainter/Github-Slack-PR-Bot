@@ -65,7 +65,7 @@ describe("Dynamo.Reset", () => {
     const expectedQueue: any = [];
     const retrievedQueue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id);
+      slackUser);
 
     expect(expectedQueue).deep.equal(retrievedQueue);
   });

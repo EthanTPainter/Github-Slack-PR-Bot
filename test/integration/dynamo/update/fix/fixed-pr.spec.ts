@@ -122,31 +122,31 @@ describe("fixedPR", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Expect slack string to include specific information
@@ -226,31 +226,31 @@ describe("fixedPR", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Expect slack String to have specific information
@@ -334,31 +334,31 @@ describe("fixedPR", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Expect slack string to have specific information
@@ -444,31 +444,31 @@ describe("fixedPR", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		// Expect slack string to have specific information

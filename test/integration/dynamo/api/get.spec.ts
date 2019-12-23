@@ -34,7 +34,7 @@ describe("Dynamo.Get", () => {
 
     const retrievedQueue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id);
+      slackUser);
 
     expect(currentQueue).deep.equal(retrievedQueue);
   });
@@ -72,7 +72,7 @@ describe("Dynamo.Get", () => {
     const expectedQueue = [newPR];
     const retrievedQueue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id);
+      slackUser);
 
     expect(expectedQueue).deep.equal(retrievedQueue);
   });
@@ -135,7 +135,7 @@ describe("Dynamo.Get", () => {
     const expected = currentQueue;
     const retrievedQueue = await dynamoGet.getQueue(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id);
+      slackUser);
 
     expect(expected).deep.equal(retrievedQueue);
   });

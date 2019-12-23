@@ -125,19 +125,19 @@ describe("Dynamo.UpdateClose", () => {
 		// Add PR to all only member & team queues
 		await dynamoUpdate.updatePullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoUpdate.updatePullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoUpdate.updatePullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -153,31 +153,31 @@ describe("Dynamo.UpdateClose", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		expect(teamQueue).deep.equal([]);
@@ -246,19 +246,19 @@ describe("Dynamo.UpdateClose", () => {
 		// Add original PR to specific member, lead, & team queues
 		await dynamoUpdate.updatePullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[originalPR],
 			newPR,
 		);
 		await dynamoUpdate.updatePullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 			[originalPR],
 			newPR,
 		);
 		await dynamoUpdate.updatePullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[originalPR],
 			newPR,
 		);
@@ -266,13 +266,13 @@ describe("Dynamo.UpdateClose", () => {
 		// Add newPR to specific member, lead, & team queues
 		await dynamoUpdate.updatePullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 			[],
 			newPR,
 		);
 		await dynamoUpdate.updatePullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 			[],
 			newPR,
 		);
@@ -288,31 +288,31 @@ describe("Dynamo.UpdateClose", () => {
 
 		const teamQueue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 		);
 		const lead1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead1.Slack_Id,
+			slackLead1,
 		);
 		const lead2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead2.Slack_Id,
+			slackLead2,
 		);
 		const lead3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackLead3.Slack_Id,
+			slackLead3,
 		);
 		const member1Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember1.Slack_Id,
+			slackMember1,
 		);
 		const member2Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 		);
 		const member3Queue = await dynamoGet.getQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 		);
 
 		expect(teamQueue).deep.equal([originalPR]);

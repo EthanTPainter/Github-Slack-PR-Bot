@@ -1,6 +1,6 @@
 import * as sinon from "sinon";
 import { expect } from "chai";
-import { PullRequest, JSONConfig } from "src/models";
+import { JSONConfig } from "../../../../../../src/models";
 
 import { requiredEnvs } from "../../../../../../src/required-envs";
 import { DynamoGet, DynamoRemove } from "../../../../../../src/dynamo/api";
