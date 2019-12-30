@@ -38,7 +38,7 @@ describe("appendPullRequest", () => {
     // Given empty current contents, append new data to array
     const result = await dynamo.appendPullRequest(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id, [], data);
+      slackUser, [], data);
 
     expect(result).equal(data);
   });
@@ -95,7 +95,7 @@ describe("appendPullRequest", () => {
 
     const result = await dynamo.appendPullRequest(
       requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-      slackUser.Slack_Id,
+      slackUser,
       existingData,
       newData);
 

@@ -66,7 +66,7 @@ describe("Dynamo.Append", () => {
 
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackUser.Slack_Id,
+			slackUser,
 			currentQueue,
 			newPR,
 		);
@@ -143,7 +143,7 @@ describe("Dynamo.Append", () => {
 
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackUser.Slack_Id,
+			slackUser,
 			currentQueue,
 			newPR,
 		);
@@ -248,7 +248,7 @@ describe("Dynamo.Append", () => {
 
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackUser.Slack_Id,
+			slackUser,
 			currentQueue,
 			newPR,
 		);

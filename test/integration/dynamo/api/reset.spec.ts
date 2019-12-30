@@ -58,7 +58,7 @@ describe("Dynamo.Reset", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackUser.Slack_Id,
+			slackUser,
 			[],
 			newPR,
 		);

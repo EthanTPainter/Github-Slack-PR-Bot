@@ -119,19 +119,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -243,19 +243,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -366,19 +366,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -486,19 +486,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -606,19 +606,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -728,19 +728,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -845,19 +845,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -965,19 +965,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -1087,19 +1087,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -1214,19 +1214,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -1339,19 +1339,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -1465,19 +1465,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -1591,19 +1591,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -1711,19 +1711,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -1831,19 +1831,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
@@ -1946,19 +1946,19 @@ describe("updateReqChanges", () => {
 		};
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember2.Slack_Id,
+			slackMember2,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackMember3.Slack_Id,
+			slackMember3,
 			[],
 			newPR,
 		);
 		await dynamoAppend.appendPullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
-			slackTeam.Slack_Id,
+			slackTeam,
 			[],
 			newPR,
 		);
