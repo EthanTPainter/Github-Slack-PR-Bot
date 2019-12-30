@@ -12,8 +12,8 @@ export function getMembersApproving(
   slackMemberUsers: SlackUser[],
 ): SlackUser[] {
   const membersApproving: SlackUser[] = [];
-  slackUsersApproving.map((slackUserApproving: SlackUser) => {
-    slackMemberUsers.map((slackMember: SlackUser) => {
+  slackUsersApproving.forEach((slackUserApproving: SlackUser) => {
+    slackMemberUsers.forEach((slackMember: SlackUser) => {
       if (slackMember.Slack_Name === slackUserApproving.Slack_Name
         && slackMember.Slack_Id === slackUserApproving.Slack_Id) {
           membersApproving.push(slackMember);
@@ -34,8 +34,8 @@ export function getMembersReqChanges(
   slackMemberUsers: SlackUser[],
 ): SlackUser[] {
   const membersRequestingChanges: SlackUser[] = [];
-  slackUsersReqChanges.map((slackUserReqChanges: SlackUser) => {
-    slackMemberUsers.map((slackMember: SlackUser) => {
+  slackUsersReqChanges.forEach((slackUserReqChanges: SlackUser) => {
+    slackMemberUsers.forEach((slackMember: SlackUser) => {
       if (slackMember.Slack_Name === slackUserReqChanges.Slack_Name
         && slackMember.Slack_Id === slackUserReqChanges.Slack_Id) {
           membersRequestingChanges.push(slackMember);
@@ -57,8 +57,8 @@ export function getMembersNotApproving(
   slackMemberUsers: SlackUser[],
 ): SlackUser[] {
   const membersNotApproving: SlackUser[] = [];
-  slackUsersNotApproving.map((notApproving: SlackUser) => {
-    slackMemberUsers.map((slackMember: SlackUser) => {
+  slackUsersNotApproving.forEach((notApproving: SlackUser) => {
+    slackMemberUsers.forEach((slackMember: SlackUser) => {
       if (slackMember.Slack_Name === notApproving.Slack_Name
         && slackMember.Slack_Id === notApproving.Slack_Id) {
           membersNotApproving.push(slackMember);

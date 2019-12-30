@@ -12,8 +12,8 @@ export function getLeadsApproving(
   allSlackLeadUsers: SlackUser[],
 ): SlackUser[] {
   const leadsApproving: SlackUser[] = [];
-  slackUsersApproving.map((slackUser: SlackUser) => {
-    allSlackLeadUsers.map((leadUser: SlackUser) => {
+  slackUsersApproving.forEach((slackUser: SlackUser) => {
+    allSlackLeadUsers.forEach((leadUser: SlackUser) => {
       if (leadUser.Slack_Name === slackUser.Slack_Name
           && leadUser.Slack_Id === slackUser.Slack_Id) {
             leadsApproving.push(leadUser);
@@ -36,8 +36,8 @@ export function getLeadsReqChanges(
   allSlackLeadUsers: SlackUser[],
 ): SlackUser[] {
   const leadsReqChanges: SlackUser[] = [];
-  slackUsersReqChanges.map((slackUser: SlackUser) => {
-    allSlackLeadUsers.map((leadUser: SlackUser) => {
+  slackUsersReqChanges.forEach((slackUser: SlackUser) => {
+    allSlackLeadUsers.forEach((leadUser: SlackUser) => {
       if (leadUser.Slack_Name === slackUser.Slack_Name
           && leadUser.Slack_Id === slackUser.Slack_Id) {
             leadsReqChanges.push(leadUser);
@@ -61,8 +61,8 @@ export function getLeadsNotApproving(
   allSlackLeadUsers: SlackUser[],
 ): SlackUser[] {
   const leadsNotApproving: SlackUser[] = [];
-  slackUsersNotApproving.map((notApprovingUser: SlackUser) => {
-    allSlackLeadUsers.map((leadUser: SlackUser) => {
+  slackUsersNotApproving.forEach((notApprovingUser: SlackUser) => {
+    allSlackLeadUsers.forEach((leadUser: SlackUser) => {
       if (leadUser.Slack_Name === notApprovingUser.Slack_Name
           && leadUser.Slack_Id === notApprovingUser.Slack_Id) {
             leadsNotApproving.push(leadUser);

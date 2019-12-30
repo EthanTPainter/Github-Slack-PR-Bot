@@ -63,7 +63,7 @@ export function getUsersNotApproving(
   allSlackUsers: SlackUser[],
 ): SlackUser[] {
   const usersNotApproving: SlackUser[] = [];
-  allSlackUsers.map((slackUser: SlackUser) => {
+  allSlackUsers.forEach((slackUser: SlackUser) => {
     let foundUserApproving = false;
     let foundUserReqChanges = false;
     slackUsersApproving.map((userApproving: SlackUser) => {
