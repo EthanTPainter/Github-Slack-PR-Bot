@@ -19,45 +19,50 @@ import { SlackUser, TeamOptions } from "../../../../models";
  * 4 "2 Required Member Approvals: Dillon :CHECK: Daniel :X: @Member3 @Member4"
  */
 export function constructMemberCheck(
-  json: any,
-  membersApproving: SlackUser[],
-  membersReqChanges: SlackUser[],
-  membersNotApproving: SlackUser[],
-  options: TeamOptions,
+	json: any,
+	membersApproving: SlackUser[],
+	membersReqChanges: SlackUser[],
+	membersNotApproving: SlackUser[],
+	options: TeamOptions,
 ): string {
+	// Prepare beginning member approval string
+	let memberCheck: string;
+	if (
+		options.Num_Required_Member_Approvals === 0 &&
+		membersApproving.length === 0 &&
+		membersReqChanges.length === 0
+	) {
+		return "";
+	} else if (options.Num_Required_Member_Approvals === 0) {
+		memberCheck = "0 Required Member Approvals: ";
+	} else if (options.Num_Required_Member_Approvals === 1) {
+		memberCheck = "1 Required Member Approval: ";
+	} else {
+		memberCheck = `${options.Num_Required_Member_Approvals} Required Member Approvals: `;
+	}
 
-  let memberCheck: string;
-  // Format first segment of Member check statement
-  if (options.Num_Required_Member_Approvals === 0) {
-    memberCheck = "0 Required Member Approvals: ";
-  }
-  else if (options.Num_Required_Member_Approvals === 1) {
-    memberCheck = "1 Required Member Approval: ";
-  } else {
-    memberCheck = `${options.Num_Required_Member_Approvals} Required Member Approvals: `;
-  }
+	// Format who has approved the PR thus far
+	membersApproving.map((slackMember: SlackUser) => {
+		const checkMark = getCheckMarkAlt(slackMember, json);
+		memberCheck += `${slackMember.Slack_Name} ${checkMark} `;
+	});
+	// Format who has requested changed to the PR thus far
+	membersReqChanges.map((slackMember: SlackUser) => {
+		const xMark = getXMarkAlt(slackMember, json);
+		memberCheck += `${slackMember.Slack_Name} ${xMark} `;
+	});
 
-  // Format who has approved the PR thus far
-  membersApproving.map((slackMember: SlackUser) => {
-    const checkMark = getCheckMarkAlt(slackMember, json);
-    memberCheck += `${slackMember.Slack_Name} ${checkMark} `;
-  });
-  // Format who has requested changed to the PR thus far
-  membersReqChanges.map((slackMember: SlackUser) => {
-    const xMark = getXMarkAlt(slackMember, json);
-    memberCheck += `${slackMember.Slack_Name} ${xMark} `;
-  });
-
-  // Determine if current number of approving + requesting changes users
-  // matches or exceeds the expected required number
-  if (membersApproving.length + membersReqChanges.length >=
-    options.Num_Required_Member_Approvals) {
-      return memberCheck;
-  }
-  else {
-    membersNotApproving.map((slackMember: SlackUser) => {
-      memberCheck += `${slackMember.Slack_Id} `;
-    });
-    return memberCheck;
-  }
+	// Determine if current number of approving + requesting changes users
+	// matches or exceeds the expected required number
+	if (
+		membersApproving.length + membersReqChanges.length >=
+		options.Num_Required_Member_Approvals
+	) {
+		return memberCheck;
+	} else {
+		membersNotApproving.map((slackMember: SlackUser) => {
+			memberCheck += `${slackMember.Slack_Id} `;
+		});
+		return memberCheck;
+	}
 }
