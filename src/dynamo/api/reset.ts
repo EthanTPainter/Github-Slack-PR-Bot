@@ -21,6 +21,7 @@ export class DynamoReset {
 
 			// Construct empty PullRequest
 			const emptyPullRequest: PullRequest[] = [];
+			const emptyMessageIds: string[] = [];
 
 			// Setup/Init DocumentClient for DynamoDB
 			const dynamoDB = new DynamoDB.DocumentClient({
@@ -32,9 +33,10 @@ export class DynamoReset {
 			const params = {
 				TableName: dynamoTableName,
 				Key: { slackUserId: slackUser.Slack_Id },
-				UpdateExpression: `set queue = :d`,
+				UpdateExpression: `set queue = :d, messageIds = :mi`,
 				ExpressionAttributeValues: {
 					":d": emptyPullRequest,
+					":mi": emptyMessageIds,
 				},
 			};
 
