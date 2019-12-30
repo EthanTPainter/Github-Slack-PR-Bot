@@ -14,7 +14,7 @@ import {
   getReqChangesReviews,
   getUsersReqChanges,
 } from "../../../../github/parse";
-import { SlackUser } from "../../../../models";
+import { SlackUser, JSONConfig } from "../../../../models";
 import { getTeamOptionsAlt } from "../../../../json/parse";
 
 /**
@@ -30,7 +30,7 @@ import { getTeamOptionsAlt } from "../../../../json/parse";
  * "1 Lead Approvals: @Lead1 @Lead2 @Lead3"
  */
 export function getApprovalChecks(
-  json: any,
+  json: JSONConfig,
   slackOwner: SlackUser,
   allReviews: any,
   slackMemberUsers: SlackUser[],

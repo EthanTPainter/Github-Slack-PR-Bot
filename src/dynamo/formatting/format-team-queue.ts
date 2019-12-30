@@ -1,4 +1,4 @@
-import { PullRequest } from "../../models";
+import { PullRequest, JSONConfig } from "../../models";
 import { newLogger } from "../../logger";
 import { filterMergablePRs } from "../filter/filter-mergable-prs";
 import { filterLeadApprovedPRs } from "../filter/filter-lead-approved-prs";
@@ -13,77 +13,77 @@ const logger = newLogger("FormatTeamQueue");
  * @description Format a queue from a raw DynamoDB stored
  * array into a stringified version to present on Slack
  * @param queue DynamoDB stored queue for a user
- * @param numReqMemberApprovals Number of required member approvals
- * @param numReqLeadApprovals Number of required lead approvals
+ * @param json JSON Config file
+ * @param messageID SQS Event message id
  * @returns String of the DynamoDB queue contents
  */
 export function formatTeamQueue(
-  queue: PullRequest[],
-  json: any,
-  ): string {
-  let formattedQueue = "";
+	queue: PullRequest[],
+	json: JSONConfig,
+): string {
+	let formattedQueue = "";
 
-  // If the queue is empty
-  if (queue.length === 0) {
-    formattedQueue = `Nothing found in the team queue`;
-    return formattedQueue;
-  }
+	// If the queue is empty
+	if (queue.length === 0) {
+		formattedQueue = `Nothing found in the team queue`;
+		return formattedQueue;
+	}
 
-  // Filter out PRs into 4 main categories
-  const mergablePRs = filterMergablePRs(queue);
-  const onlyHasLeadApprovals = filterLeadApprovedPRs(queue);
-  const onlyHasMemberApprovals = filterMemberApprovedPRs(queue);
-  const needsBothApprovals = filterNoFullyApprovedPRs(queue);
+	// Filter out PRs into 4 main categories
+	const mergablePRs = filterMergablePRs(queue);
+	const onlyHasLeadApprovals = filterLeadApprovedPRs(queue);
+	const onlyHasMemberApprovals = filterMemberApprovedPRs(queue);
+	const needsBothApprovals = filterNoFullyApprovedPRs(queue);
 
-  // Format the PRs into a stringified format
-  // Don't format mergable PRs. They're already mergable
-  if (mergablePRs.length > 0) {
-    formattedQueue += "*Mergable PRs*\n";
-  }
-  mergablePRs.map((mergablePR: PullRequest) => {
-    const teamOptions = getTeamOptionsAlt(mergablePR.owner, json);
-    formattedQueue += constructQueueString(mergablePR, teamOptions);
-  });
+	// Format the PRs into a stringified format
+	// Don't format mergable PRs. They're already mergable
+	if (mergablePRs.length > 0) {
+		formattedQueue += "*Mergable PRs*\n";
+	}
+	mergablePRs.map((mergablePR: PullRequest) => {
+		const teamOptions = getTeamOptionsAlt(mergablePR.owner, json);
+		formattedQueue += constructQueueString(mergablePR, teamOptions);
+	});
 
-  if (onlyHasMemberApprovals.length > 0) {
-    formattedQueue += "*Needs Lead Approvals*\n";
-  }
-  // Sort onlyNeedsLeadApprovals by number of peers_approving
-  const sortedMemberApprovals = onlyHasMemberApprovals.sort((a, b) => {
-    return b.members_approving.length - a.members_approving.length;
-  });
-  sortedMemberApprovals.map((sortedMemberApproval: PullRequest) => {
-    const teamOptions = getTeamOptionsAlt(sortedMemberApproval.owner, json);
-    formattedQueue += constructQueueString(sortedMemberApproval, teamOptions);
-  });
+	if (onlyHasMemberApprovals.length > 0) {
+		formattedQueue += "*Needs Lead Approvals*\n";
+	}
+	// Sort onlyNeedsLeadApprovals by number of peers_approving
+	const sortedMemberApprovals = onlyHasMemberApprovals.sort((a, b) => {
+		return b.members_approving.length - a.members_approving.length;
+	});
+	sortedMemberApprovals.map((sortedMemberApproval: PullRequest) => {
+		const teamOptions = getTeamOptionsAlt(sortedMemberApproval.owner, json);
+		formattedQueue += constructQueueString(sortedMemberApproval, teamOptions);
+	});
 
-  if (onlyHasLeadApprovals.length > 0) {
-    formattedQueue += "*Needs Member Approvals*\n";
-  }
-  // Sort onlyNeedsMemberApprovals by number of peers_approving
-  const sortedLeadApprovals = onlyHasLeadApprovals.sort((a, b) => {
-    return b.members_approving.length - a.members_approving.length;
-  });
-  sortedLeadApprovals.map((needLeadApprovalPR: PullRequest) => {
-    const teamOptions = getTeamOptionsAlt(needLeadApprovalPR.owner, json);
-    formattedQueue += constructQueueString(needLeadApprovalPR, teamOptions);
-  });
+	if (onlyHasLeadApprovals.length > 0) {
+		formattedQueue += "*Needs Member Approvals*\n";
+	}
+	// Sort onlyNeedsMemberApprovals by number of peers_approving
+	const sortedLeadApprovals = onlyHasLeadApprovals.sort((a, b) => {
+		return b.members_approving.length - a.members_approving.length;
+	});
+	sortedLeadApprovals.map((needLeadApprovalPR: PullRequest) => {
+		const teamOptions = getTeamOptionsAlt(needLeadApprovalPR.owner, json);
+		formattedQueue += constructQueueString(needLeadApprovalPR, teamOptions);
+	});
 
-  if (needsBothApprovals.length > 0) {
-    formattedQueue += "*Needs Member and Lead Approvals*\n";
-  }
-  // Sort approvals by lead approvals (primary)
-  // and sort this by peer approvals (secondary)
-  const sortedNeedsBothApprovals = needsBothApprovals.sort((a, b) => {
-    if (b.leads_approving.length === a.leads_approving.length) {
-      return b.members_approving.length - a.members_approving.length;
-    }
-    return b.leads_approving.length - a.leads_approving.length;
-  });
-  sortedNeedsBothApprovals.map((needBothApprovalPR: PullRequest) => {
-    const teamOptions = getTeamOptionsAlt(needBothApprovalPR.owner, json);
-    formattedQueue += constructQueueString(needBothApprovalPR, teamOptions);
-  });
+	if (needsBothApprovals.length > 0) {
+		formattedQueue += "*Needs Member and Lead Approvals*\n";
+	}
+	// Sort approvals by lead approvals (primary)
+	// and sort this by peer approvals (secondary)
+	const sortedNeedsBothApprovals = needsBothApprovals.sort((a, b) => {
+		if (b.leads_approving.length === a.leads_approving.length) {
+			return b.members_approving.length - a.members_approving.length;
+		}
+		return b.leads_approving.length - a.leads_approving.length;
+	});
+	sortedNeedsBothApprovals.map((needBothApprovalPR: PullRequest) => {
+		const teamOptions = getTeamOptionsAlt(needBothApprovalPR.owner, json);
+		formattedQueue += constructQueueString(needBothApprovalPR, teamOptions);
+	});
 
-  return formattedQueue;
+	return formattedQueue;
 }
