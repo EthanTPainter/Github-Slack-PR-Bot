@@ -403,6 +403,17 @@ Resources:
     Properties:
       QueueName: !Ref QueueName
       ReceiveMessageWaitTimeSeconds: 20
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt DLQ.Arn
+        maxReceiveCount: 3
+      Tags:
+        - Key: Product
+          Value: PR-Bot
+
+  DLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub ${QueueName}-DLQ
       Tags:
         - Key: Product
           Value: PR-Bot

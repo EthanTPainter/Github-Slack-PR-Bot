@@ -58,7 +58,6 @@ export async function processEvent(
 	await Promise.all(
 		messages.map(async (message) => {
 			logger.info(`Message: ${JSON.stringify(message)}`);
-
 			switch (message.body.custom_source) {
 				case CUSTOM_SOURCES.SLACK: {
 					// Determine which slash command was used
