@@ -1,14 +1,16 @@
-import { DynamoGet } from "../../dynamo/api";
+import { DynamoGet, DynamoUpdate } from "../../dynamo/api";
 import { requiredEnvs } from "../../required-envs";
 import { json } from "../../json/src/json";
 import { getTeamNameAlt, getSlackUserAlt } from "../../json/parse";
 import { updateFixedPR } from "../../dynamo/update";
 import { postMessage } from "../../slack/api/post-message";
 import { SlashResponse, RequestBody } from "../../models";
+import { DynamoFilter } from "../../../src/dynamo/filter/dynamo-filter";
 
 export async function processFixedPR(
 	body: RequestBody,
 	slackToken: string,
+	messageId: string,
 ): Promise<SlashResponse> {
 	if (!body.user_id) {
 		const invalidUserIdMessage = `Unable to determine which slack user sent this request`;
@@ -17,8 +19,29 @@ export async function processFixedPR(
 
 	// Format slack user id & get slack user
 	const dynamoGet = new DynamoGet();
+	const dynamoUpdate = new DynamoUpdate();
+	const dynamoFilter = new DynamoFilter();
 	const slackUserId = `<@${body.user_id}>`;
 	const slackUser = getSlackUserAlt(slackUserId, json);
+
+	// Verify if the message id is in the submitted user's message ids
+	const userMessageIds = await dynamoGet.getMessageIds(
+		requiredEnvs.DYNAMO_TABLE_NAME,
+		slackUser,
+	);
+	const isRepeatedMessageId = dynamoFilter.checkMessageIds(
+		userMessageIds,
+		messageId,
+	);
+	if (isRepeatedMessageId) {
+		return new SlashResponse("", 200);
+	}
+	const newMessageIds = dynamoFilter.addNewMessageId(userMessageIds, messageId);
+	await dynamoUpdate.updateMessageIds(
+		requiredEnvs.DYNAMO_TABLE_NAME,
+		slackUser,
+		newMessageIds,
+	);
 
 	// Get User's queue
 	const userQueue = await dynamoGet.getQueue(

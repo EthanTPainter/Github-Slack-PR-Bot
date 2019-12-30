@@ -3,8 +3,10 @@ import { PullRequest } from "../../models";
 interface IDynamoFilter {
 	filterLeadApprovedPRs(queue: PullRequest[]): PullRequest[];
 	filterMemberApprovedPRs(queue: PullRequest[]): PullRequest[];
-  filterMergablePRs(queue: PullRequest[]): PullRequest[];
-  filterNoFullyApprovedPRs(queue: PullRequest[]): PullRequest[];
+	filterMergablePRs(queue: PullRequest[]): PullRequest[];
+	filterNoFullyApprovedPRs(queue: PullRequest[]): PullRequest[];
+	checkMessageIds(messageIds: string[], newMessageId: string): boolean;
+	addNewMessageId(messageIds: string[], newMessageId: string): string[];
 }
 
 export class DynamoFilter implements IDynamoFilter {
@@ -49,10 +51,10 @@ export class DynamoFilter implements IDynamoFilter {
 		return mergablePRs;
 	}
 
-  /**
-   * @description Filter PRs that are neither fully approved by members or leads
-   * @param queue A queue of PRs 
-   */
+	/**
+	 * @description Filter PRs that are neither fully approved by members or leads
+	 * @param queue A queue of PRs
+	 */
 	filterNoFullyApprovedPRs(queue: PullRequest[]): PullRequest[] {
 		const notFullyApprovedPRs = queue.filter(
 			(notFullyApprovedPR: PullRequest) => {
@@ -63,5 +65,29 @@ export class DynamoFilter implements IDynamoFilter {
 			},
 		);
 		return notFullyApprovedPRs;
+	}
+
+	/**
+	 * @description Check if the message ids already contains the new message id
+	 * @param messageIds list of existing message ids
+	 * @param newMessageId new message id
+	 */
+	checkMessageIds(messageIds: string[], newMessageId: string): boolean {
+		const foundMessageId = messageIds.indexOf(newMessageId) > -1 ? true : false;
+		return foundMessageId;
+	}
+
+	/**
+	 * @description Add the new message id to the message Ids. If the existing message ids
+	 * is already at the max (20), make space for the new message id
+	 * @param messageIds List of message ids
+	 * @param newMessageId new message id
+	 */
+	addNewMessageId(messageIds: string[], newMessageId: string): string[] {
+		messageIds.length < 20
+			? messageIds.push(newMessageId)
+			: messageIds.shift() && messageIds.push(newMessageId);
+
+		return messageIds;
 	}
 }

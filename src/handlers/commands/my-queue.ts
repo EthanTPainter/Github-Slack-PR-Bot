@@ -1,11 +1,15 @@
 import { requiredEnvs } from "../../required-envs";
 import { json } from "../../json/src/json";
-import { DynamoGet } from "../../dynamo/api";
+import { DynamoGet, DynamoUpdate } from "../../dynamo/api";
 import { formatMyQueue } from "../../dynamo/formatting";
 import { SlashResponse, RequestBody } from "../../models";
 import { getSlackUserAlt } from "../../json/parse";
+import { DynamoFilter } from "../../../src/dynamo/filter/dynamo-filter";
 
-export async function getMyQueue(body: RequestBody): Promise<SlashResponse> {
+export async function getMyQueue(
+	body: RequestBody,
+	messageId: string,
+): Promise<SlashResponse> {
 	// Verify user_id property is not malformed
 	if (body.user_id === undefined) {
 		throw new Error("body.user_id not attched to request");
@@ -13,10 +17,35 @@ export async function getMyQueue(body: RequestBody): Promise<SlashResponse> {
 
 	// Format Slack User ID & get Slack User
 	const dynamoGet = new DynamoGet();
+	const dynamoFilter = new DynamoFilter();
+	const dynamoUpdate = new DynamoUpdate();
 	const slackUserId = `<@${body.user_id}>`;
 
 	try {
 		const slackUser = getSlackUserAlt(slackUserId, json);
+
+		// Verify if the message id is in the submitted user's message ids
+		const userMessageIds = await dynamoGet.getMessageIds(
+			requiredEnvs.DYNAMO_TABLE_NAME,
+			slackUser,
+		);
+		const isRepeatedMessageId = dynamoFilter.checkMessageIds(
+			userMessageIds,
+			messageId,
+		);
+		if (isRepeatedMessageId) {
+			return new SlashResponse("", 200);
+		}
+		const newMessageIds = dynamoFilter.addNewMessageId(
+			userMessageIds,
+			messageId,
+		);
+		await dynamoUpdate.updateMessageIds(
+			requiredEnvs.DYNAMO_TABLE_NAME,
+			slackUser,
+			newMessageIds,
+		);
+
 		// Get User Queue
 		const userQueue = await dynamoGet.getQueue(
 			requiredEnvs.DYNAMO_TABLE_NAME,

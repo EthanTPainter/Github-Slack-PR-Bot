@@ -1,7 +1,12 @@
 import { SQSRecord, Callback, Context } from "aws-lambda";
 
 import { json } from "../json/src/json";
-import { getTeamName, getTeamOptions, getSlackUserAlt } from "../json/parse";
+import {
+	getTeamName,
+	getTeamOptions,
+	getSlackUserAlt,
+	getSlackUser,
+} from "../json/parse";
 import { getQueue, getMyQueue, processFixedPR, getTeamQueue } from "./commands";
 
 import { constructSlackMessage } from "../slack/message/construct/constructor";
@@ -15,6 +20,8 @@ import { Review } from "../github/api";
 import { getOwner } from "../github/parse";
 import { SSMRetriever } from "../../src/ssm";
 import { CUSTOM_SOURCES, SLASH_COMMANDS } from "../../src/enums";
+import { DynamoGet, DynamoUpdate } from "../../src/dynamo/api";
+import { DynamoFilter } from "../../src/dynamo/filter/dynamo-filter";
 
 const logger = newLogger("ProcessingManager");
 
@@ -30,11 +37,13 @@ export async function processEvent(
 	context: Context,
 	callback: Callback,
 ): Promise<void> {
-	// TODO: Add idempotency back
-	// Create an array of SQSEvent messages to process
+	// Create an array of SQS Event messages to process
 	const messages = event.Records.map((record: SQSRecord) => {
-		const parsedBody: any = JSON.parse(record.body);
-		return parsedBody;
+		const message = {
+			body: JSON.parse(record.body),
+			messageId: record.messageId,
+		};
+		return message;
 	});
 	logger.debug(`Messages: ${JSON.stringify(messages)}`);
 
@@ -50,11 +59,11 @@ export async function processEvent(
 		messages.map(async (message) => {
 			logger.info(`Message: ${JSON.stringify(message)}`);
 
-			switch (message.custom_source) {
+			switch (message.body.custom_source) {
 				case CUSTOM_SOURCES.SLACK: {
 					// Determine which slash command was used
 					let response: SlashResponse;
-					switch (message.command) {
+					switch (message.body.command) {
 						case SLASH_COMMANDS.ECHO:
 							response = {
 								body: "Slash command /echo received!",
@@ -62,16 +71,20 @@ export async function processEvent(
 							};
 							break;
 						case SLASH_COMMANDS.TEAM_QUEUE:
-							response = await getTeamQueue(message);
+							response = await getTeamQueue(message.body, message.messageId);
 							break;
 						case SLASH_COMMANDS.MY_QUEUE:
-							response = await getMyQueue(message);
+							response = await getMyQueue(message.body, message.messageId);
 							break;
 						case SLASH_COMMANDS.GET_QUEUE:
-							response = await getQueue(message);
+							response = await getQueue(message.body, message.messageId);
 							break;
 						case SLASH_COMMANDS.FIXED_PR:
-							response = await processFixedPR(message, tokens.Slack_Token);
+							response = await processFixedPR(
+								message.body,
+								tokens.Slack_Token,
+								message.messageId,
+							);
 						default:
 							response = {
 								body:
@@ -82,72 +95,109 @@ export async function processEvent(
 					}
 					await postEphemeral(
 						requiredEnvs.SLACK_API_URI,
-						message.user_id,
-						message.channel_id,
+						message.body.user_id,
+						message.body.channel_id,
 						tokens.Slack_Token,
 						response.body,
 					);
 					return;
 				}
 				case CUSTOM_SOURCES.GITHUB: {
-					// Verify if the message is from a webhook init request
-					// Webhook init requests lack a pull_request property
-					if (!message.pull_request) {
-						logger.info(`Webhook from ${message.repository.name} initialized`);
-						return;
-					}
-
-					// Construct the Slack message based on PR action and body
-					const pullRequestAction: string = message.action;
-					const reviewClass = new Review();
-					const slackMessage = await constructSlackMessage(
-						pullRequestAction,
-						message,
-						json,
-						reviewClass,
-						tokens.GitHub_Token,
-					);
-
-					// Determine which team the user belongs to
-					const githubUser = getOwner(message);
-					const teamName = getTeamName(githubUser, json);
-					const teamOptions = getTeamOptions(githubUser, json);
-
-					const alertSlack = await updateDynamo(
-						githubUser,
-						message,
-						json,
-						pullRequestAction,
-					);
-
-					// Check whether to disable github to slack notifications
-					if (teamOptions.Disable_GitHub_Alerts === false && alertSlack) {
-						// Verify the selected team slack channel environment variable exists
-						if (!requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]) {
-							logger.error(
-								`Expected environment variable not found: ${teamName}_SLACK_CHANNEL_NAME`,
+					try {
+						// Verify if the message is from a webhook init request
+						// Webhook init requests lack a pull_request property
+						if (!message.body.pull_request) {
+							logger.info(
+								`Webhook from ${message.body.repository.name} initialized`,
 							);
 							return;
 						}
 
-						// Use team name to post message to team slack channel
-						logger.info(
-							"Posting slack message to " +
-								requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
+						// Verify if the message is a duplicated SQS message
+						// If it is, don't execute the request
+						const dynamoGet = new DynamoGet();
+						const dynamoFilter = new DynamoFilter();
+						const dynamoUpdate = new DynamoUpdate();
+						const githubUsername = getOwner(message.body);
+						const slackUser = getSlackUser(githubUsername, json);
+						const userMessageIds = await dynamoGet.getMessageIds(
+							requiredEnvs.DYNAMO_TABLE_NAME,
+							slackUser,
 						);
-						await postMessage(
-							requiredEnvs.SLACK_API_URI,
-							requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"] as string,
-							tokens.Slack_Token,
-							slackMessage,
+						const isRepeatedMessageId = dynamoFilter.checkMessageIds(
+							userMessageIds,
+							message.messageId,
 						);
+						if (isRepeatedMessageId) {
+							return new SlashResponse("", 200);
+						}
+						const newMessageIds = dynamoFilter.addNewMessageId(
+							userMessageIds,
+							message.messageId,
+						);
+						await dynamoUpdate.updateMessageIds(
+							requiredEnvs.DYNAMO_TABLE_NAME,
+							slackUser,
+							newMessageIds,
+						);
+
+						// Construct the Slack message based on PR action and body
+						const pullRequestAction: string = message.body.action;
+						const reviewClass = new Review();
+						const slackMessage = await constructSlackMessage(
+							pullRequestAction,
+							message.body,
+							json,
+							reviewClass,
+							tokens.GitHub_Token,
+						);
+
+						// Determine which team the user belongs to
+						const githubUser = getOwner(message.body);
+						const teamName = getTeamName(githubUser, json);
+						const teamOptions = getTeamOptions(githubUser, json);
+
+						const alertSlack = await updateDynamo(
+							githubUser,
+							message.body,
+							json,
+							pullRequestAction,
+						);
+
+						// Check whether to disable github to slack notifications
+						if (teamOptions.Disable_GitHub_Alerts === false && alertSlack) {
+							// Verify the selected team slack channel environment variable exists
+							if (!requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"]) {
+								logger.error(
+									`Expected environment variable not found: ${teamName}_SLACK_CHANNEL_NAME`,
+								);
+								return;
+							}
+
+							// Use team name to post message to team slack channel
+							logger.info(
+								"Posting slack message to " +
+									requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"],
+							);
+							await postMessage(
+								requiredEnvs.SLACK_API_URI,
+								requiredEnvs[teamName + "_SLACK_CHANNEL_NAME"] as string,
+								tokens.Slack_Token,
+								slackMessage,
+							);
+						}
+						return;
+					} catch (error) {
+						logger.error(`Error: ${error.stack}`);
 					}
-					return;
+					break;
 				}
 				default: {
 					// This should never happen since the sqs manager controls
 					// the custom-source property
-					logger.info(`Recieved Unknown Event: ${JSON.stringify(message)}`);
+					logger.info(
+						`Recieved Unknown Event: ${JSON.stringify(message.body)}`,
+					);
 					logger.error(
 						`Message property custom_source not set to ${CUSTOM_SOURCES.SLACK} or ${CUSTOM_SOURCES.GITHUB}`,
 					);
