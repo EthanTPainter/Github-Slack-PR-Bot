@@ -30,10 +30,10 @@ export function constructOpenDesc(
   // new PR check
   // The *...* means the ... is BOLD in Slack
   if (newPR) {
-    desc = `${slackUser.Slack_Name} opened this PR. Needs *${numRequiredMemberReviews} Member*`
+    desc = `${slackUser.Slack_Name} opened this PR. Needs *${numRequiredMemberReviews} member*`
       + ` and *${numRequiredLeadReviews} lead* reviews`;
   } else {
-    desc = `${slackUser.Slack_Name} reopened this PR. Needs *${numRequiredMemberReviews} Member*`
+    desc = `${slackUser.Slack_Name} reopened this PR. Needs *${numRequiredMemberReviews} member*`
       + ` and *${numRequiredLeadReviews} lead* reviews`;
   }
 

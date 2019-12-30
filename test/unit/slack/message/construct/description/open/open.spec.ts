@@ -48,7 +48,7 @@ describe("constructOpenDesc", () => {
 
     const result = constructOpenDesc(slackUser, slackGroup, newPR, validJSON);
     const expected = `${slackUser.Slack_Name} opened this PR. Needs `
-      + `*${validJSON.Departments.Devs.Des.Options.Num_Required_Member_Approvals} Member* `
+      + `*${validJSON.Departments.Devs.Des.Options.Num_Required_Member_Approvals} member* `
       + `and *${validJSON.Departments.Devs.Des.Options.Num_Required_Lead_Approvals} lead* `
       + `reviews ${slackGroup.Slack_Id}`;
 
@@ -66,7 +66,7 @@ describe("constructOpenDesc", () => {
 
     const result = constructOpenDesc(slackUser, slackGroup, newPR, validJSON);
     const expected = `${slackUser.Slack_Name} opened this PR. Needs `
-      + `*${validJSON.Departments.Devs.Des.Options.Num_Required_Member_Approvals} Member* `
+      + `*${validJSON.Departments.Devs.Des.Options.Num_Required_Member_Approvals} member* `
       + `and *${validJSON.Departments.Devs.Des.Options.Num_Required_Lead_Approvals} lead* `
       + `reviews ${validJSON.Departments.Devs.Des.Users.Members.Daniel.Slack_Id} `;
 
@@ -83,7 +83,7 @@ describe("constructOpenDesc", () => {
 
     const result = constructOpenDesc(slackUser, slackGroup, newPR, validJSON);
     const expected = `${slackUser.Slack_Name} reopened this PR. Needs `
-      + `*${validJSON.Departments.Devs.Des.Options.Num_Required_Member_Approvals} Member* `
+      + `*${validJSON.Departments.Devs.Des.Options.Num_Required_Member_Approvals} member* `
       + `and *${validJSON.Departments.Devs.Des.Options.Num_Required_Lead_Approvals} lead* `
       + `reviews ${slackGroup.Slack_Id}`;
 
