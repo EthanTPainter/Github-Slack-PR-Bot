@@ -70,7 +70,7 @@ export async function updateMemberAlerts(
 			);
 			await dynamoRemove.removePullRequest(
 				dynamoTableName,
-				slackUserOwner.Slack_Id,
+				slackUserOwner,
 				ownerQueue,
 				pr,
 			);
@@ -160,7 +160,7 @@ export async function updateMemberAlerts(
 						);
 						await dynamoRemove.removePullRequest(
 							dynamoTableName,
-							unalertedLeadId.Slack_Id,
+							unalertedLeadId,
 							currentQueue,
 							pr,
 						);

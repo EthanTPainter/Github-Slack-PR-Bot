@@ -70,7 +70,7 @@ export async function updateOpen(
 		);
 		await dynamoUpdate.appendPullRequest(
 			dynamoTableName,
-			user.Slack_Id,
+			user,
 			currentQueue,
 			newPullRequest,
 		);
@@ -85,7 +85,7 @@ export async function updateOpen(
 
 	await dynamoUpdate.appendPullRequest(
 		dynamoTableName,
-		slackTeam.Slack_Id,
+		slackTeam,
 		currentTeamQueue,
 		newPullRequest,
 	);

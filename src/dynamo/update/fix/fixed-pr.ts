@@ -76,7 +76,7 @@ export async function updateFixedPR(
 	// Remove PR from owner's queue since the PR is fixed
 	await dynamoRemove.removePullRequest(
 		dynamoTableName,
-		slackOwner.Slack_Id,
+		slackOwner,
 		slackOwnerQueue,
 		foundPR,
 	);

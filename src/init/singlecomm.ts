@@ -115,10 +115,10 @@ export const json = {
 					Queue_Include_Approval_Names: true,
 					Queue_Include_Req_Changes_Names: true,
 					Queue_Include_Owner: true,
-					Queue_Include_New_Line: false,
+					Queue_Include_New_Line: true,
 					Num_Required_Lead_Approvals: 1,
 					Num_Required_Member_Approvals: 1,
-					Member_Before_Lead: true,
+					Member_Before_Lead: false,
 					Disable_GitHub_Alerts: false,
 				},
 				Users: {

@@ -151,7 +151,7 @@ export async function updateReqChanges(
 
 			await dynamoRemove.removePullRequest(
 				dynamoTableName,
-				removeUserId.Slack_Id,
+				removeUserId,
 				dynamoUserQueue,
 				foundPR!,
 			);

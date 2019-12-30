@@ -52,7 +52,7 @@ export async function updateMerge(
 	// Remove PR from owner's team queue
 	await dynamoRemove.removePullRequest(
 		dynamoTableName,
-		ownerTeam.Slack_Id,
+		ownerTeam,
 		teamQueue,
 		foundPR,
 	);
@@ -69,7 +69,7 @@ export async function updateMerge(
 			const alertSlackUser = getSlackUserAlt(alertUser.Slack_Id, json);
 			await dynamoRemove.removePullRequest(
 				dynamoTableName,
-				alertSlackUser.Slack_Id,
+				alertSlackUser,
 				currentQueue,
 				foundPR!,
 			);

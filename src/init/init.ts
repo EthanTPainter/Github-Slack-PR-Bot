@@ -1,6 +1,7 @@
 import { json } from "./singlecomm";
 import { DynamoReset } from "../dynamo/api";
 import { requiredEnvs } from "../required-envs";
+import { SlackUser } from "../../src/models";
 
 /**
  * @description Initialize Dynamo table for all users.
@@ -24,19 +25,19 @@ async function dynamoTableInit(): Promise<void> {
 				console.log(`Creating entry for Slack Group: ${slackGroup.Slack_Name}`);
 				await dynamoReset.resetQueue(
 					requiredEnvs.DYNAMO_TABLE_NAME,
-					slackGroup.Slack_Id,
+					slackGroup,
 				);
 			}
 
 			// For each lead in the team
 			Object.keys(json.Departments[department][team].Users.Leads).forEach(
 				async (lead) => {
-					const leadObject =
+					const leadObject: SlackUser =
 						json.Departments[department][team].Users.Leads[lead];
 					console.log(`Creating entry for Lead: ${leadObject.Slack_Name}`);
 					await dynamoReset.resetQueue(
 						requiredEnvs.DYNAMO_TABLE_NAME,
-						leadObject.Slack_Id,
+						leadObject,
 					);
 				},
 			);
@@ -44,12 +45,12 @@ async function dynamoTableInit(): Promise<void> {
 			// For each member in the team
 			Object.keys(json.Departments[department][team].Users.Members).forEach(
 				async (member) => {
-					const memberObject =
+					const memberObject: SlackUser =
 						json.Departments[department][team].Users.Members[member];
 					console.log(`Creating entry for Member: ${memberObject.Slack_Name}`);
 					await dynamoReset.resetQueue(
 						requiredEnvs.DYNAMO_TABLE_NAME,
-						memberObject.Slack_Id,
+						memberObject,
 					);
 				},
 			);

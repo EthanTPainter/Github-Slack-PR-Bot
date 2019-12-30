@@ -66,7 +66,7 @@ export async function updateLeadAlerts(
 			);
 			await dynamoRemove.removePullRequest(
 				dynamoTableName,
-				slackUserOwner.Slack_Id,
+				slackUserOwner,
 				ownerQueue,
 				pr,
 			);

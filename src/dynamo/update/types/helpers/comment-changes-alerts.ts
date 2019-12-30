@@ -53,7 +53,7 @@ export async function processCommentingUserReqChanges(
     // Remove PR from slackUserCommenting's queue
     await dynamoRemove.removePullRequest(
       dynamoTableName,
-      slackUserCommenting.Slack_Id,
+      slackUserCommenting,
       userCommentingQueue,
       pr);
   }
@@ -91,7 +91,7 @@ export async function processCommentingUserReqChanges(
     // Remove PR from slackUserCommenting's queue
     await dynamoRemove.removePullRequest(
       dynamoTableName,
-      slackUserCommenting.Slack_Id,
+      slackUserCommenting,
       userCommentingQueue,
       pr);
   }
