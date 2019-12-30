@@ -33,6 +33,8 @@ describe("updateMemberAlerts", () => {
 							Num_Required_Lead_Approvals: 1,
 							Num_Required_Member_Approvals: 1,
 							Member_Before_Lead: true,
+							Require_Fresh_Approvals: false,
+							Fresh_Approval_Repositories: [],
 						},
 						Slack_Group: {
 							Slack_Name: "SlackGroupName",

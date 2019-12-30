@@ -36,6 +36,8 @@ describe("constructOpen", () => {
             Num_Required_Lead_Approvals: 1,
             Disable_GitHub_Alerts: false,
             Member_Before_Lead: false,
+            Require_Fresh_Approvals: false,
+					  Fresh_Approval_Repositories: [],
           },
           Slack_Group: {
             Slack_Name: "Group_Slack_Name",

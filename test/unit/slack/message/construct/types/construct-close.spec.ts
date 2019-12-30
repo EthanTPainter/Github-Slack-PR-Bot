@@ -36,6 +36,8 @@ describe("constructClose", () => {
             Num_Required_Lead_Approvals: 0,
             Disable_GitHub_Alerts: false,
             Member_Before_Lead: false,
+            Require_Fresh_Approvals: false,
+					  Fresh_Approval_Repositories: [],
           },
           Users: {
             Leads: {

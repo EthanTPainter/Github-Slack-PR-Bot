@@ -18,6 +18,8 @@ export const json: JSONConfig = {
 					Num_Required_Member_Approvals: 1,
 					Member_Before_Lead: true,
 					Disable_GitHub_Alerts: false,
+					Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
 				},
 				Slack_Group: {
 					Slack_Name: "TeamName1",
@@ -65,6 +67,8 @@ export const json: JSONConfig = {
 					Num_Required_Member_Approvals: 1,
 					Member_Before_Lead: true,
 					Disable_GitHub_Alerts: false,
+					Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
 				},
 				Slack_Group: {
 					Slack_Name: "TeamName2",

@@ -24,6 +24,8 @@ describe("constructMemberCheck", () => {
 							Num_Required_Lead_Approvals: 1,
 							Member_Before_Lead: true,
 							Disable_GitHub_Alerts: false,
+							Require_Fresh_Approvals: false,
+							Fresh_Approval_Repositories: [],
 						},
 						Users: {
 							Leads: {},

@@ -20,6 +20,8 @@ describe("getApprovalChecks", () => {
 						Queue_Include_New_Line: false,
 						Member_Before_Lead: true,
 						Disable_GitHub_Alerts: false,
+						Require_Fresh_Approvals: false,
+						Fresh_Approval_Repositories: [],
 					},
 					Slack_Group: {
 						Slack_Name: "Group_Slack_Name",

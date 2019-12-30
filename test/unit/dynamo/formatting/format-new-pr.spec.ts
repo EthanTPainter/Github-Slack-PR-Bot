@@ -44,6 +44,8 @@ describe("formatNewPullRequest", () => {
 							Queue_Include_Req_Changes_Names: false,
 							Queue_Include_Updated_Time: false,
 							X_Mark_Text: "red",
+							Require_Fresh_Approvals: false,
+							Fresh_Approval_Repositories: [],
 						},
 						Users: {
 							Leads: {
