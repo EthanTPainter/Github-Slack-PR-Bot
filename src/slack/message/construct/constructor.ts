@@ -209,7 +209,7 @@ export async function constructSlackMessage(
 
 		default: {
 			logger.error(`GitHub action: ${action} not supported`);
-			throw new Error(`Action: ${action} not supported in this application`);
+			return "";
 		}
 	}
 	return slackMessage;

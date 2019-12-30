@@ -141,6 +141,7 @@ export async function processEvent(
 						);
 
 						// Construct the Slack message based on PR action and body
+						// If slack message is empty, don't process any further
 						const pullRequestAction: string = message.body.action;
 						const reviewClass = new Review();
 						const slackMessage = await constructSlackMessage(
@@ -150,6 +151,9 @@ export async function processEvent(
 							reviewClass,
 							tokens.GitHub_Token,
 						);
+						if (slackMessage.length === 0) {
+							return;
+						}
 
 						// Determine which team the user belongs to
 						const githubUser = getOwner(message.body);
