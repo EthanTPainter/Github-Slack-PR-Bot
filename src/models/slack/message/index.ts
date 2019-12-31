@@ -4,3 +4,4 @@ export * from "./comment";
 export * from "./merge";
 export * from "./open";
 export * from "./request-changes";
+export * from "./synchronize";
