@@ -55,7 +55,7 @@ export async function updateReqChanges(
 		foundPR = teamQueue.find((pr) => pr.url === htmlUrl);
 		if (foundPR === undefined) {
 			throw new Error(
-				`GitHub PR Url: ${htmlUrl} not found in any PRs in ${slackUserReqChanges.Slack_Name}'s queue`,
+				`GitHub PR Url: ${htmlUrl} not found in any PRs in ${slackUserReqChanges.Slack_Name}'s queue or team ${ownerTeam.Slack_Name}'s queue`,
 			);
 		}
 	}
@@ -143,15 +143,15 @@ export async function updateReqChanges(
 		.concat(leftoverAlertedMembers)
 		.concat(slackUserReqChanges);
 	await Promise.all(
-		removePRFromUsers.map(async (removeUserId) => {
+		removePRFromUsers.map(async (removeUser) => {
 			const dynamoUserQueue = await dynamoGet.getQueue(
 				dynamoTableName,
-				removeUserId,
+				removeUser,
 			);
 
 			await dynamoRemove.removePullRequest(
 				dynamoTableName,
-				removeUserId,
+				removeUser,
 				dynamoUserQueue,
 				foundPR!,
 			);
