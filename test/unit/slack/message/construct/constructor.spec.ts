@@ -287,17 +287,17 @@ describe("constructSlackMessage", () => {
 	it("should throw error -- unsupported event type", async () => {
 		const invalidAction = "PullRequest";
 		const reviewClass = new Review();
-		const expected = new Error(
-			`Action: ${invalidAction} not supported in this application`,
-		);
 
-		await constructSlackMessage(
+		const result = await constructSlackMessage(
 			invalidAction,
 			event,
 			json,
 			reviewClass,
 			githubToken,
-		).should.be.rejectedWith(Error, expected.message);
+		);
+		const expected = "";
+
+		chai.assert.equal(result, expected);
 	});
 
 	it("should throw error -- approve type but reviewClass not provided", async () => {
