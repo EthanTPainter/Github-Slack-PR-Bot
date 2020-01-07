@@ -266,6 +266,7 @@ Resources:
             BatchSize: 10
       Environment:
         Variables:
+          AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
           LOG_LEVEL: !Ref LogLevel
           DYNAMO_TABLE_NAME: !Ref DynamoTableName
           DYNAMO_API_VERSION: "2012-08-10"
