@@ -86,12 +86,12 @@ describe("constructQueueString", () => {
 		expect(result.includes("\n\t")).equal(true); // Expect newline & indent
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Owner: ${pullRequest.owner.Slack_Name}`)).equal(
@@ -124,12 +124,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
@@ -159,12 +159,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
@@ -194,12 +194,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
@@ -361,12 +361,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
@@ -396,12 +396,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
@@ -431,12 +431,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
@@ -466,12 +466,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
@@ -633,12 +633,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
@@ -668,12 +668,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
@@ -703,12 +703,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
@@ -738,12 +738,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
@@ -965,12 +965,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
@@ -1000,12 +1000,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
@@ -1035,12 +1035,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
@@ -1070,12 +1070,12 @@ describe("constructQueueString", () => {
 		);
 		expect(
 			result.includes(
-				`Leads Approving: [${pullRequest.leads_approving[0].Slack_Name}]`,
+				`Leads Approving: ${pullRequest.leads_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(
 			result.includes(
-				`Members Approving: [${pullRequest.members_approving[0].Slack_Name}]`,
+				`Members Approving: ${pullRequest.members_approving[0].Slack_Name}`,
 			),
 		).equal(true);
 		expect(result.includes(`Created: ${pullRequest.events[0].time}`)).equal(
