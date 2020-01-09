@@ -101,7 +101,7 @@ describe("constructOpenDesc", () => {
 
     const expected = new Error("JSON is undefined");
 
-    expect(() => constructOpenDesc(slackUser, slackGroup, newPR, invalidJSON))
+    expect(() => constructOpenDesc(slackUser, slackGroup, newPR, invalidJSON as any))
       .to.throw(expected.message);
   });
 
@@ -116,7 +116,7 @@ describe("constructOpenDesc", () => {
 
     const expected = new Error("JSON is undefined");
 
-    expect(() => constructOpenDesc(slackUser, slackGroup, newPR, invalidJSON))
+    expect(() => constructOpenDesc(slackUser, slackGroup, newPR, invalidJSON as any))
       .to.throw(expected.message);
   });
 

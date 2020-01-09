@@ -6,9 +6,13 @@ import {
 	getPRLink,
 	getRepositoryName,
 } from "../../../../../src/github/parse";
-import { getSlackUser, getTeamOptionsAlt } from "../../../../../src/json/parse";
+import {
+	getSlackUser,
+	getTeamOptionsAlt,
+	getSlackGroup,
+} from "../../../../../src/json/parse";
 import { DynamoGet } from "../../../../../src/dynamo/api";
-import { requiredEnvs } from "../../../../../src/required-envs";
+import { findPrInQueues } from "../../../../../src/dynamo/update/types/helpers";
 
 const logger = newLogger("constructSynchronize");
 
@@ -16,59 +20,45 @@ const logger = newLogger("constructSynchronize");
  * @description Construct synchronize event slack message string (Push events to a PR)
  * @param event GitHub Event
  * @param json JSON Config file
+ * @param dynamoTableName The dynamo table name
  */
 export async function constructSynchronize(
 	event: any,
 	json: JSONConfig,
+	dynamoTableName: string,
 ): Promise<SynchronizePR> {
 	// Synchronize Properties
 	const owner = getOwner(event);
 	const repoName = getRepositoryName(event);
+	const team = getSlackGroup(owner, json);
 	const slackUser = getSlackUser(owner, json);
 
 	// Get team options to get fresh approval settings
 	const teamOptions = getTeamOptionsAlt(slackUser, json);
+	const eventPrUrl = getPRLink(event);
 
 	// Get queue for the owner to see current approvals
 	const dynamo = new DynamoGet();
-	const userQueue = await dynamo.getQueue(
-		requiredEnvs.DYNAMO_TABLE_NAME,
-		slackUser,
-	);
-	const eventPrUrl = getPRLink(event);
-	const userPr = userQueue.find((pullRequest) => {
-		return pullRequest.url === eventPrUrl;
-	});
+	const userQueue = await dynamo.getQueue(dynamoTableName, slackUser);
+	const teamQueue = await dynamo.getQueue(dynamoTableName, team);
 
-	// If for some reason the pr is not found in the user's queue, ignore the synchronize event
-	if (!userPr) {
-		logger.error(
-			`Unable to find pull request URL in ${slackUser.Slack_Name}'s queue`,
-		);
-		return {
-			description: "",
-			title: "",
-			url: "",
-			reset_approving_users: [],
-			alert: false,
-		};
-	}
+	const pr = findPrInQueues(eventPrUrl, slackUser, userQueue, team, teamQueue);
 
 	// Assuming the PR is found, check team options whether to alert
 	const alert =
 		teamOptions.Require_Fresh_Approvals &&
 		teamOptions.Fresh_Approval_Repositories.includes(repoName) &&
-		(userPr.leads_approving.length > 0 || userPr.members_approving.length > 0)
+		(pr.leads_approving.length > 0 || pr.members_approving.length > 0)
 			? true
 			: false;
 
 	// If alert is true, set to any members and leads approving. Otherwise set to empty
 	const reset_approving_users = alert
-		? userPr.leads_approving.concat(userPr.members_approving)
+		? pr.leads_approving.concat(pr.members_approving)
 		: [];
 
 	// Base properties
-	const description = "";
+	const description = `Fresh approvals are required on this PR`;
 	const title = getTitle(event);
 	const url = getPRLink(event);
 

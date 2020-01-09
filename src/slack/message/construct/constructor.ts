@@ -11,6 +11,7 @@ import {
 import { Review } from "../../../../src/github/api";
 import { newLogger } from "../../../logger";
 import { JSONConfig } from "../../../../src/models";
+import { requiredEnvs } from "../../../../src/required-envs";
 
 const logger = newLogger("Constructor");
 
@@ -228,7 +229,11 @@ export async function constructSlackMessage(
 				 * ----------------DESCRIPTION--------------
 				 * ----------------URL----------------------
 				 */
-				const push = await constructSynchronize(event, json);
+				const push = await constructSynchronize(
+					event,
+					json,
+					requiredEnvs.DYNAMO_TABLE_NAME,
+				);
 				// If the alert property is false, don't return a valid slack message
 				if (push.alert === false) {
 					return "";
