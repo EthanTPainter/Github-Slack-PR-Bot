@@ -92,6 +92,7 @@ describe("Dynamo.UpdateApprove", () => {
 	it("member approves -- 2 req member approvals & alert members before leads", async () => {
 		json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = true;
 		json.Departments.Devs.DevTeam1.Options.Num_Required_Member_Approvals = 2;
+
 		const newPR = {
 			owner: slackMember1,
 			title: "VALID PR TITLE #1",
@@ -186,12 +187,8 @@ describe("Dynamo.UpdateApprove", () => {
 		// should have this PR in their queue
 		expect(member3Queue[0].url).equal(newPR.url);
 		expect(member3Queue[0].member_complete).equal(false);
-		expect(member3Queue[0].members_approving).deep.equal([
-			slackMember2.Slack_Id,
-		]);
-		expect(member3Queue[0].standard_members_alert).deep.equal([
-			slackMember3.Slack_Id,
-		]);
+		expect(member3Queue[0].members_approving).deep.equal([slackMember2]);
+		expect(member3Queue[0].standard_members_alert).deep.equal([slackMember3]);
 		expect(member3Queue[0].events[0].action).equal(newPR.events[0].action);
 		expect(member3Queue[0].events[0].user).deep.equal(slackMember1);
 		expect(member3Queue[0].events[1].action).equal("APPROVED");
@@ -205,10 +202,8 @@ describe("Dynamo.UpdateApprove", () => {
 		// Expect team queue to be updated with approved PR
 		expect(teamQueue[0].url).equal(newPR.url);
 		expect(teamQueue[0].member_complete).equal(false);
-		expect(teamQueue[0].members_approving).deep.equal([slackMember2.Slack_Id]);
-		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember3.Slack_Id,
-		]);
+		expect(teamQueue[0].members_approving).deep.equal([slackMember2]);
+		expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3]);
 		expect(teamQueue[0].events[0].action).equal(newPR.events[0].action);
 		expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
 		expect(teamQueue[0].events[1].action).equal("APPROVED");
@@ -306,7 +301,7 @@ describe("Dynamo.UpdateApprove", () => {
 		expect(teamQueue[0].url).equal(newPR.url);
 		expect(teamQueue[0].member_complete).equal(true);
 		expect(teamQueue[0].standard_members_alert).deep.equal([]);
-		expect(teamQueue[0].members_approving).deep.equal([slackMember2.Slack_Id]);
+		expect(teamQueue[0].members_approving).deep.equal([slackMember2]);
 		expect(teamQueue[0].events[0].action).equal(newPR.events[0].action);
 		expect(teamQueue[0].events[0].user).deep.equal(newPR.events[0].user);
 		expect(teamQueue[0].events[1].action).equal("APPROVED");
@@ -420,16 +415,16 @@ describe("Dynamo.UpdateApprove", () => {
 		expect(teamQueue[0].events[0].action).equal(newPR.events[0].action);
 		expect(teamQueue[0].events[0].user).deep.equal(newPR.events[0].user);
 		expect(teamQueue[0].lead_complete).equal(false);
-		expect(teamQueue[0].leads_approving).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_approving).deep.equal([slackLead1]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember2.Slack_Id,
-			slackMember3.Slack_Id,
+			slackMember2,
+			slackMember3,
 		]);
 
-		// PR owner queue should be empty
+		// PR owner should not be alerted
 		expect(member1Queue).deep.equal([]);
 
 		// PR approver and all leads should have empty queues
@@ -544,16 +539,18 @@ describe("Dynamo.UpdateApprove", () => {
 		// 2, 3, 4, etc.
 		expect(member2Queue[0].url).equal(newPR.url);
 		expect(member2Queue[0].lead_complete).equal(true);
-		expect(member2Queue[0].leads_approving).deep.equal([slackLead1.Slack_Id]);
+		expect(member2Queue[0].leads_approving).deep.equal([slackLead1]);
 		expect(member2Queue[0].standard_leads_alert).deep.equal([]);
 		expect(member2Queue[0].member_complete).equal(false);
 		expect(member2Queue[0].members_approving).deep.equal([]);
 		expect(member2Queue[0].standard_members_alert).deep.equal([
-			slackMember2.Slack_Id,
-			slackMember3.Slack_Id,
+			slackMember2,
+			slackMember3,
 		]);
-
 		expect(member3Queue).deep.equal(member2Queue);
+
+		// Team queue should match user queue
+		expect(teamQueue).deep.equal(member3Queue);
 	});
 
 	it("member approves -- 2 req member approvals & alert members & leads", async () => {
@@ -664,10 +661,8 @@ describe("Dynamo.UpdateApprove", () => {
 		// Team queue should have an updated queue
 		expect(teamQueue[0].url).equal(newPR.url);
 		expect(teamQueue[0].member_complete).equal(false);
-		expect(teamQueue[0].members_approving).deep.equal([slackMember2.Slack_Id]);
-		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember3.Slack_Id,
-		]);
+		expect(teamQueue[0].members_approving).deep.equal([slackMember2]);
+		expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3]);
 		expect(teamQueue[0].events[0].action).equal(newPR.events[0].action);
 		expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
 		expect(teamQueue[0].events[1].action).equal("APPROVED");
@@ -796,7 +791,7 @@ describe("Dynamo.UpdateApprove", () => {
 		// Team queue should have an updated queue
 		expect(teamQueue[0].url).equal(newPR.url);
 		expect(teamQueue[0].member_complete).equal(true);
-		expect(teamQueue[0].members_approving).deep.equal([slackMember2.Slack_Id]);
+		expect(teamQueue[0].members_approving).deep.equal([slackMember2]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
@@ -931,16 +926,16 @@ describe("Dynamo.UpdateApprove", () => {
 		// Team queue should be up to date
 		expect(teamQueue[0].url).equal(newPR.url);
 		expect(teamQueue[0].lead_complete).equal(false);
-		expect(teamQueue[0].leads_approving).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_approving).deep.equal([slackLead1]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([
-			slackLead2.Slack_Id,
-			slackLead3.Slack_Id,
+			slackLead2,
+			slackLead3,
 		]);
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember2.Slack_Id,
-			slackMember3.Slack_Id,
+			slackMember2,
+			slackMember3,
 		]);
 		expect(teamQueue[0].events[0].action).equal(newPR.events[0].action);
 		expect(teamQueue[0].events[0].user).deep.equal(newPR.events[0].user);
@@ -1068,13 +1063,13 @@ describe("Dynamo.UpdateApprove", () => {
 		// Team queue should be up to date
 		expect(teamQueue[0].url).equal(newPR.url);
 		expect(teamQueue[0].lead_complete).equal(true);
-		expect(teamQueue[0].leads_approving).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_approving).deep.equal([slackLead1]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember2.Slack_Id,
-			slackMember3.Slack_Id,
+			slackMember2,
+			slackMember3,
 		]);
 		expect(teamQueue[0].events[0].action).equal(newPR.events[0].action);
 		expect(teamQueue[0].events[0].user).deep.equal(newPR.events[0].user);
@@ -1201,13 +1196,11 @@ describe("Dynamo.UpdateApprove", () => {
 		expect(teamQueue[0].events[2].action).equal("APPROVED");
 		expect(teamQueue[0].events[2].user).deep.equal(slackLead1);
 		expect(teamQueue[0].lead_complete).equal(false);
-		expect(teamQueue[0].leads_approving).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_approving).deep.equal([slackLead1]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
 		expect(teamQueue[0].member_complete).equal(false);
-		expect(teamQueue[0].members_approving).deep.equal([slackMember2.Slack_Id]);
-		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember3.Slack_Id,
-		]);
+		expect(teamQueue[0].members_approving).deep.equal([slackMember2]);
+		expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3]);
 
 		// PR Owner should have an empty queue
 		expect(member1Queue).deep.equal([]);
@@ -1330,13 +1323,11 @@ describe("Dynamo.UpdateApprove", () => {
 		expect(teamQueue[0].events[2].action).equal("APPROVED");
 		expect(teamQueue[0].events[2].user).deep.equal(slackLead1);
 		expect(teamQueue[0].lead_complete).equal(true);
-		expect(teamQueue[0].leads_approving).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_approving).deep.equal([slackLead1]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
 		expect(teamQueue[0].member_complete).equal(false);
-		expect(teamQueue[0].members_approving).deep.equal([slackMember2.Slack_Id]);
-		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember3.Slack_Id,
-		]);
+		expect(teamQueue[0].members_approving).deep.equal([slackMember2]);
+		expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3]);
 
 		// PR Owner's queue should be empty
 		expect(member1Queue).deep.equal([]);
@@ -1459,13 +1450,13 @@ describe("Dynamo.UpdateApprove", () => {
 		expect(teamQueue[0].events[2].action).equal("APPROVED");
 		expect(teamQueue[0].events[2].user).deep.equal(slackLead1);
 		expect(teamQueue[0].lead_complete).equal(false);
-		expect(teamQueue[0].leads_approving).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_approving).deep.equal([slackLead1]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([
-			slackLead2.Slack_Id,
-			slackLead3.Slack_Id,
+			slackLead2,
+			slackLead3,
 		]);
 		expect(teamQueue[0].member_complete).equal(true);
-		expect(teamQueue[0].members_approving).deep.equal([slackMember2.Slack_Id]);
+		expect(teamQueue[0].members_approving).deep.equal([slackMember2]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([]);
 
 		// PR Owner queue should be empty
@@ -1590,10 +1581,10 @@ describe("Dynamo.UpdateApprove", () => {
 		expect(teamQueue[0].events[2].action).equal("APPROVED");
 		expect(teamQueue[0].events[2].user).deep.equal(slackLead1);
 		expect(teamQueue[0].lead_complete).equal(true);
-		expect(teamQueue[0].leads_approving).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_approving).deep.equal([slackLead1]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
 		expect(teamQueue[0].member_complete).equal(true);
-		expect(teamQueue[0].members_approving).deep.equal([slackMember2.Slack_Id]);
+		expect(teamQueue[0].members_approving).deep.equal([slackMember2]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([]);
 
 		// PR Owner queue is empty
@@ -1715,16 +1706,14 @@ describe("Dynamo.UpdateApprove", () => {
 		expect(teamQueue[0].events[2].action).equal("APPROVED");
 		expect(teamQueue[0].events[2].user).deep.equal(slackMember2);
 		expect(teamQueue[0].lead_complete).equal(false);
-		expect(teamQueue[0].leads_approving).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_approving).deep.equal([slackLead1]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([
-			slackLead2.Slack_Id,
-			slackLead3.Slack_Id,
+			slackLead2,
+			slackLead3,
 		]);
 		expect(teamQueue[0].member_complete).equal(false);
-		expect(teamQueue[0].members_approving).deep.equal([slackMember2.Slack_Id]);
-		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember3.Slack_Id,
-		]);
+		expect(teamQueue[0].members_approving).deep.equal([slackMember2]);
+		expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3]);
 
 		// PR owner's queue is empty
 		expect(member1Queue).deep.equal([]);
@@ -1845,13 +1834,11 @@ describe("Dynamo.UpdateApprove", () => {
 		expect(teamQueue[0].events[2].action).equal("APPROVED");
 		expect(teamQueue[0].events[2].user).deep.equal(slackMember2);
 		expect(teamQueue[0].lead_complete).equal(true);
-		expect(teamQueue[0].leads_approving).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_approving).deep.equal([slackLead1]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
 		expect(teamQueue[0].member_complete).equal(false);
-		expect(teamQueue[0].members_approving).deep.equal([slackMember2.Slack_Id]);
-		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember3.Slack_Id,
-		]);
+		expect(teamQueue[0].members_approving).deep.equal([slackMember2]);
+		expect(teamQueue[0].standard_members_alert).deep.equal([slackMember3]);
 
 		// PR owner's queue is empty
 		expect(member1Queue).deep.equal([]);
@@ -1974,13 +1961,13 @@ describe("Dynamo.UpdateApprove", () => {
 		expect(teamQueue[0].events[2].action).equal("APPROVED");
 		expect(teamQueue[0].events[2].user).deep.equal(slackMember2);
 		expect(teamQueue[0].lead_complete).equal(false);
-		expect(teamQueue[0].leads_approving).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_approving).deep.equal([slackLead1]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([
-			slackLead2.Slack_Id,
-			slackLead3.Slack_Id,
+			slackLead2,
+			slackLead3,
 		]);
 		expect(teamQueue[0].member_complete).equal(true);
-		expect(teamQueue[0].members_approving).deep.equal([slackMember2.Slack_Id]);
+		expect(teamQueue[0].members_approving).deep.equal([slackMember2]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([]);
 
 		// PR Owner queue is empty
@@ -2104,10 +2091,10 @@ describe("Dynamo.UpdateApprove", () => {
 		expect(teamQueue[0].events[2].action).equal("APPROVED");
 		expect(teamQueue[0].events[2].user).deep.equal(slackMember2);
 		expect(teamQueue[0].lead_complete).equal(true);
-		expect(teamQueue[0].leads_approving).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_approving).deep.equal([slackLead1]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
 		expect(teamQueue[0].member_complete).equal(true);
-		expect(teamQueue[0].members_approving).deep.equal([slackMember2.Slack_Id]);
+		expect(teamQueue[0].members_approving).deep.equal([slackMember2]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([]);
 
 		// PR owner queue should be empty

@@ -73,6 +73,7 @@ export function updatePrOnChangesRequested(
 		updatedPR.standard_members_alert,
 		updatedPR.members_approving,
 		membersReqChanges,
+		leadsReqChanges,
 		updatedPR.req_changes_members_alert,
 		teamOptions,
 	);

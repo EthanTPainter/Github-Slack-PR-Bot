@@ -21,13 +21,14 @@ export function getStandardMemberAlerts(
 	standardMemberAlerts: SlackUser[],
 	membersApproving: SlackUser[],
 	membersReqChanges: SlackUser[],
+	leadsReqChanges: SlackUser[],
 	fixedPRmembers: SlackUser[],
 	teamOptions: TeamOptions,
 ): SlackUser[] {
-  // If there are no member approvals required, don't alert
-  if (teamOptions.Num_Required_Member_Approvals === 0) {
-    return [];
-  }
+	// If there are no member approvals required, don't alert
+	if (teamOptions.Num_Required_Member_Approvals === 0) {
+		return [];
+	}
 
 	// If the PR Changer is a lead
 	if (prChangerIsLead) {
@@ -61,9 +62,12 @@ export function getStandardMemberAlerts(
 			newStandardMemberAlerts = [];
 		}
 
-		// If there are any members requesting changes AND the PR owner is a member
+		// If there are any members or leads requesting changes AND the PR owner is a member
 		// Add the member to the standard member alerts
-		if (membersReqChanges.length > 0 && !prOwnerIsLead) {
+		if (
+			(membersReqChanges.length > 0 || leadsReqChanges.length > 0) &&
+			!prOwnerIsLead
+		) {
 			newStandardMemberAlerts.push(prOwner);
 		}
 
@@ -74,9 +78,9 @@ export function getStandardMemberAlerts(
 	// First remove the PR changer from standard member alerts
 	let newStandardMemberAlerts = standardMemberAlerts.filter((member) => {
 		return member.Slack_Id !== prChanger.Slack_Id;
-  });
-  
-  // The members approving + members req changes + fixed PR members >= required member approvals
+	});
+
+	// The members approving + members req changes + fixed PR members >= required member approvals
 	// Set the members to alert to an empty list
 	if (
 		membersApproving.length +

@@ -2,6 +2,7 @@ import { SlackUser, PullRequest, JSONConfig } from "../../../models";
 import { DynamoGet, DynamoRemove } from "../../../dynamo/api";
 import { getPRLink } from "../../../github/parse";
 import { getSlackUserAlt, getSlackGroupAlt } from "../../../json/parse";
+import { findPrInQueues } from "./helpers/find-pr-in-queues";
 
 /**
  * @description Update DynamoDB table for merged PRs
@@ -23,7 +24,6 @@ export async function updateMerge(
 	// Setup
 	const dynamoGet = new DynamoGet();
 	const dynamoRemove = new DynamoRemove();
-	let foundPR: PullRequest | undefined;
 
 	// Get GitHub PR Url
 	const htmlUrl = getPRLink(event);
@@ -37,17 +37,15 @@ export async function updateMerge(
 		dynamoTableName,
 		slackUserMerging,
 	);
-	foundPR = dynamoUserQueue.find((pr: PullRequest) => pr.url === htmlUrl);
-	if (foundPR === undefined) {
-		// If pr not found in user's queue (maybe it's the owner), check teamQueue ffrom the owner
-		foundPR = teamQueue.find((pr) => pr.url === htmlUrl);
-		if (foundPR === undefined) {
-			throw new Error(
-				`GitHub PR Url: ${htmlUrl} not found in ${slackUserMerging.Slack_Name}'s queue OR ` +
-					`${ownerTeam.Slack_Name}'s queue`,
-			);
-		}
-	}
+
+	// Find PR in user or team queue
+	const foundPR = findPrInQueues(
+		htmlUrl,
+		slackUserMerging,
+		dynamoUserQueue,
+		ownerTeam,
+		teamQueue,
+	);
 
 	// Remove PR from owner's team queue
 	await dynamoRemove.removePullRequest(

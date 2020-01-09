@@ -137,6 +137,7 @@ export function updatePrOnApprove(
 		updatedPR.standard_members_alert,
 		approvingMembers,
 		updatedPR.members_req_changes,
+		updatedPR.leads_req_changes,
 		updatedPR.req_changes_members_alert,
 		teamOptions,
 	);

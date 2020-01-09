@@ -11,7 +11,7 @@ import { updateComment } from "../../../../../src/dynamo/update";
 import { Settings } from "luxon";
 import { createISO } from "../../../../../src/dynamo/time";
 
-describe("Update.DynamoComment", () => {
+describe("Dynamo.UpdateComment", () => {
 	const dynamoGet = new DynamoGet();
 	const dynamoReset = new DynamoReset();
 	const dynamoUpdate = new DynamoUpdate();

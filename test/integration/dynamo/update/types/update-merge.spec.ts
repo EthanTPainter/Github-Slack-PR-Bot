@@ -8,7 +8,7 @@ import {
 import { requiredEnvs } from "../../../../../src/required-envs";
 import { updateMerge } from "../../../../../src/dynamo/update";
 
-describe("Update.DynamoMerge", () => {
+describe("Dynamo.UpdateMerge", () => {
 	const dynamoReset = new DynamoReset();
 	const dynamoGet = new DynamoGet();
 	const dynamoUpdate = new DynamoUpdate();

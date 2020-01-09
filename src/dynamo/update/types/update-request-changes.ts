@@ -1,15 +1,12 @@
-import { DynamoGet, DynamoAppend, DynamoUpdate, DynamoRemove } from "../../api";
+import { DateTime } from "luxon";
+
+import { DynamoGet, DynamoUpdate, DynamoRemove } from "../../api";
 import { getPRLink } from "../../../github/parse";
 import { SlackUser, PullRequest, JSONConfig } from "../../../models";
-import { DateTime } from "luxon";
-import {
-	getSlackGroupAlt,
-	getTeamOptionsAlt,
-	getSlackLeadsAlt,
-	getSlackMembersAlt,
-} from "../../../json/parse";
-import { updateLeadAlerts } from "./helpers/update-lead-alerts";
-import { updateMemberAlerts } from "./helpers/update-member-alerts";
+import { getSlackGroupAlt, getTeamOptionsAlt } from "../../../json/parse";
+import { findPrInQueues } from "./helpers/find-pr-in-queues";
+import { checkIfUserIsLead, checkIfUserIsMember } from "./helpers";
+import { updatePrOnChangesRequested } from "./helpers/update-pr-on-changes-requested";
 
 /**
  * @description Update PR to include changes requested
@@ -30,7 +27,6 @@ export async function updateReqChanges(
 ): Promise<boolean> {
 	// Setup
 	const dynamoGet = new DynamoGet();
-	const dynamoAppend = new DynamoAppend();
 	const dynamoUpdate = new DynamoUpdate();
 	const dynamoRemove = new DynamoRemove();
 	let foundPR: PullRequest | undefined;
@@ -49,99 +45,63 @@ export async function updateReqChanges(
 	const teamQueue = await dynamoGet.getQueue(dynamoTableName, ownerTeam);
 
 	// Get PR from queue by matching PR html url
-	foundPR = dynamoQueue.find((pr: PullRequest) => pr.url === htmlUrl);
-	if (foundPR === undefined) {
-		// If not found in user's queue, check team queue
-		foundPR = teamQueue.find((pr) => pr.url === htmlUrl);
-		if (foundPR === undefined) {
-			throw new Error(
-				`GitHub PR Url: ${htmlUrl} not found in any PRs in ${slackUserReqChanges.Slack_Name}'s queue or team ${ownerTeam.Slack_Name}'s queue`,
-			);
-		}
-	}
+	foundPR = findPrInQueues(
+		htmlUrl,
+		slackUserReqChanges,
+		dynamoQueue,
+		ownerTeam,
+		teamQueue,
+	);
 
 	// Make timestamp for last updated time
 	const currentTime = DateTime.local().toLocaleString(
 		DateTime.DATETIME_FULL_WITH_SECONDS,
 	);
 
-	// Add new changes requested event from slackUserReqChanges
+	// Create new event from slackUserReqChanges
 	const newEvent = {
 		user: slackUserReqChanges,
 		action: "CHANGES_REQUESTED",
 		time: currentTime,
 	};
-	foundPR.events.push(newEvent);
 
 	// Get team options for # of required approvals
 	const teamOptions = getTeamOptionsAlt(slackUserOwner, json);
 
 	// Determine if the slack user requesting changes is a member or lead
 	// If slackUserReqChanges is found as a lead & member, throw error
-	const slackUserLeadsReqChanges = getSlackLeadsAlt(slackUserReqChanges, json);
-	const slackUserMembersReqChanges = getSlackMembersAlt(
-		slackUserReqChanges,
-		json,
-	);
-	let foundLead = false;
-	let foundMember = false;
-	slackUserLeadsReqChanges.map((lead) => {
-		if (lead.Slack_Id === slackUserReqChanges.Slack_Id) {
-			foundLead = true;
-		}
-	});
-	slackUserMembersReqChanges.map((member) => {
-		if (member.Slack_Id === slackUserReqChanges.Slack_Id) {
-			foundMember = true;
-		}
-	});
+	const foundLead = checkIfUserIsLead(slackUserReqChanges, json);
+	const foundMember = checkIfUserIsMember(slackUserReqChanges, json);
 	if (foundLead && foundMember) {
 		throw new Error(
 			`${slackUserReqChanges.Slack_Name} set as both a member and lead. Pick one`,
 		);
 	}
 
-	let leftoverAlertedLeads: SlackUser[] = [];
-	let leftoverAlertedMembers: SlackUser[] = [];
-	if (foundLead) {
-		const result = await updateLeadAlerts(
-			foundPR,
-			slackUserOwner,
-			slackUserReqChanges,
-			teamOptions,
-			false,
-			dynamoTableName,
-			json,
-		);
-		foundPR = result.pr;
-		leftoverAlertedLeads = result.leftLeads;
-	}
-	if (foundMember) {
-		const result = await updateMemberAlerts(
-			foundPR,
-			slackUserOwner,
-			slackUserReqChanges,
-			teamOptions,
-			false,
-			dynamoTableName,
-			json,
-		);
-		foundPR = result.pr;
-		leftoverAlertedMembers = result.leftMembers;
-	}
+	// Construct new PR from the existing PR
+	const updatedPR = updatePrOnChangesRequested(
+		slackUserOwner,
+		slackUserReqChanges,
+		foundMember,
+		teamOptions,
+		foundPR,
+		newEvent,
+		json,
+	);
 
 	// Update team queue
 	await dynamoUpdate.updatePullRequest(
 		dynamoTableName,
 		ownerTeam,
 		teamQueue,
-		foundPR,
+		updatedPR.pr,
 	);
 
 	// Remove PR from leftover users & user who request changes
-	const removePRFromUsers = leftoverAlertedLeads
-		.concat(leftoverAlertedMembers)
+	const removePRFromUsers = updatedPR.leftoverLeads
+		.concat(updatedPR.leftoverMembers)
 		.concat(slackUserReqChanges);
+
 	await Promise.all(
 		removePRFromUsers.map(async (removeUser) => {
 			const dynamoUserQueue = await dynamoGet.getQueue(
@@ -153,16 +113,16 @@ export async function updateReqChanges(
 				dynamoTableName,
 				removeUser,
 				dynamoUserQueue,
-				foundPR!,
+				updatedPR.pr,
 			);
 		}),
 	);
 
 	// Update all queues with members and leads to alert
-	const allAlertingUserIds = foundPR.standard_leads_alert
-		.concat(foundPR.standard_members_alert)
-		.concat(foundPR.req_changes_leads_alert)
-		.concat(foundPR.req_changes_members_alert);
+	const allAlertingUserIds = updatedPR.pr.standard_leads_alert
+		.concat(updatedPR.pr.standard_members_alert)
+		.concat(updatedPR.pr.req_changes_leads_alert)
+		.concat(updatedPR.pr.req_changes_members_alert);
 
 	await Promise.all(
 		allAlertingUserIds.map(async (alertUser) => {
@@ -172,7 +132,7 @@ export async function updateReqChanges(
 				dynamoTableName,
 				alertUser,
 				currentQueue,
-				foundPR!,
+				updatedPR.pr,
 			);
 		}),
 	);

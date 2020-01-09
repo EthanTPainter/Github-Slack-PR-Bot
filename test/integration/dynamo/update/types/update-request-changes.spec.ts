@@ -8,7 +8,7 @@ import {
 	DynamoAppend,
 } from "../../../../../src/dynamo/api";
 
-describe("updateReqChanges", () => {
+describe("Dynamo.UpdateReqChanges", () => {
 	const dynamoGet = new DynamoGet();
 	const dynamoReset = new DynamoReset();
 	const dynamoAppend = new DynamoAppend();
@@ -55,7 +55,7 @@ describe("updateReqChanges", () => {
 		);
 	});
 
-	afterEach(async () => {
+	after(async () => {
 		await dynamoReset.resetQueue(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
 			slackTeam,
@@ -178,12 +178,10 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember3.Slack_Id,
-			slackMember1.Slack_Id,
+			slackMember3,
+			slackMember1,
 		]);
-		expect(teamQueue[0].members_req_changes).deep.equal([
-			slackMember2.Slack_Id,
-		]);
+		expect(teamQueue[0].members_req_changes).deep.equal([slackMember2]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
@@ -301,12 +299,8 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].url).equal(newPR.url);
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
-		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember1.Slack_Id,
-		]);
-		expect(teamQueue[0].members_req_changes).deep.equal([
-			slackMember2.Slack_Id,
-		]);
+		expect(teamQueue[0].standard_members_alert).deep.equal([slackMember1]);
+		expect(teamQueue[0].members_req_changes).deep.equal([slackMember2]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
@@ -425,15 +419,15 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember2.Slack_Id,
-			slackMember3.Slack_Id,
-			slackMember1.Slack_Id,
+			slackMember2,
+			slackMember3,
+			slackMember1,
 		]);
 		expect(teamQueue[0].members_req_changes).deep.equal([]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
-		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1]);
 		expect(teamQueue[0].events[0].action).equal("OPENED");
 		expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
 		expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
@@ -545,15 +539,15 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember2.Slack_Id,
-			slackMember3.Slack_Id,
-			slackMember1.Slack_Id,
+			slackMember2,
+			slackMember3,
+			slackMember1,
 		]);
 		expect(teamQueue[0].members_req_changes).deep.equal([]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
-		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1]);
 		expect(teamQueue[0].events[0].action).equal("OPENED");
 		expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
 		expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
@@ -665,12 +659,10 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember3.Slack_Id,
-			slackMember1.Slack_Id,
+			slackMember3,
+			slackMember1,
 		]);
-		expect(teamQueue[0].members_req_changes).deep.equal([
-			slackMember2.Slack_Id,
-		]);
+		expect(teamQueue[0].members_req_changes).deep.equal([slackMember2]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
@@ -786,12 +778,8 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].url).equal(newPR.url);
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
-		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember1.Slack_Id,
-		]);
-		expect(teamQueue[0].members_req_changes).deep.equal([
-			slackMember2.Slack_Id,
-		]);
+		expect(teamQueue[0].standard_members_alert).deep.equal([slackMember1]);
+		expect(teamQueue[0].members_req_changes).deep.equal([slackMember2]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
@@ -904,15 +892,15 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember2.Slack_Id,
-			slackMember3.Slack_Id,
-			slackMember1.Slack_Id,
+			slackMember2,
+			slackMember3,
+			slackMember1,
 		]);
 		expect(teamQueue[0].members_req_changes).deep.equal([]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
-		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1]);
 		expect(teamQueue[0].events[0].action).equal("OPENED");
 		expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
 		expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
@@ -1024,15 +1012,15 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember2.Slack_Id,
-			slackMember3.Slack_Id,
-			slackMember1.Slack_Id,
+			slackMember2,
+			slackMember3,
+			slackMember1,
 		]);
 		expect(teamQueue[0].members_req_changes).deep.equal([]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
-		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1]);
 		expect(teamQueue[0].events[0].action).equal("OPENED");
 		expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
 		expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
@@ -1146,18 +1134,16 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember3.Slack_Id,
-			slackMember1.Slack_Id,
+			slackMember3,
+			slackMember1,
 		]);
-		expect(teamQueue[0].members_req_changes).deep.equal([
-			slackMember2.Slack_Id,
-		]);
+		expect(teamQueue[0].members_req_changes).deep.equal([slackMember2]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([
-			slackLead1.Slack_Id,
-			slackLead2.Slack_Id,
-			slackLead3.Slack_Id,
+			slackLead1,
+			slackLead2,
+			slackLead3,
 		]);
 		expect(teamQueue[0].leads_req_changes).deep.equal([]);
 		expect(teamQueue[0].events[0].action).equal("OPENED");
@@ -1272,18 +1258,14 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].url).equal(newPR.url);
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
-		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember1.Slack_Id,
-		]);
-		expect(teamQueue[0].members_req_changes).deep.equal([
-			slackMember2.Slack_Id,
-		]);
+		expect(teamQueue[0].standard_members_alert).deep.equal([slackMember1]);
+		expect(teamQueue[0].members_req_changes).deep.equal([slackMember2]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([
-			slackLead1.Slack_Id,
-			slackLead2.Slack_Id,
-			slackLead3.Slack_Id,
+			slackLead1,
+			slackLead2,
+			slackLead3,
 		]);
 		expect(teamQueue[0].leads_req_changes).deep.equal([]);
 		expect(teamQueue[0].events[0].action).equal("OPENED");
@@ -1398,18 +1380,16 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember3.Slack_Id,
-			slackMember1.Slack_Id,
+			slackMember3,
+			slackMember1,
 		]);
-		expect(teamQueue[0].members_req_changes).deep.equal([
-			slackMember2.Slack_Id,
-		]);
+		expect(teamQueue[0].members_req_changes).deep.equal([slackMember2]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([
-			slackLead1.Slack_Id,
-			slackLead2.Slack_Id,
-			slackLead3.Slack_Id,
+			slackLead1,
+			slackLead2,
+			slackLead3,
 		]);
 		expect(teamQueue[0].leads_req_changes).deep.equal([]);
 		expect(teamQueue[0].events[0].action).equal("OPENED");
@@ -1523,18 +1503,14 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].url).equal(newPR.url);
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
-		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember1.Slack_Id,
-		]);
-		expect(teamQueue[0].members_req_changes).deep.equal([
-			slackMember2.Slack_Id,
-		]);
+		expect(teamQueue[0].standard_members_alert).deep.equal([slackMember1]);
+		expect(teamQueue[0].members_req_changes).deep.equal([slackMember2]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([
-			slackLead1.Slack_Id,
-			slackLead2.Slack_Id,
-			slackLead3.Slack_Id,
+			slackLead1,
+			slackLead2,
+			slackLead3,
 		]);
 		expect(teamQueue[0].leads_req_changes).deep.equal([]);
 		expect(teamQueue[0].events[0].action).equal("OPENED");
@@ -1650,15 +1626,15 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember2.Slack_Id,
-			slackMember3.Slack_Id,
-			slackMember1.Slack_Id,
+			slackMember2,
+			slackMember3,
+			slackMember1,
 		]);
 		expect(teamQueue[0].members_req_changes).deep.equal([]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
-		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1]);
 		expect(teamQueue[0].events[0].action).equal("OPENED");
 		expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
 		expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
@@ -1770,15 +1746,15 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember2.Slack_Id,
-			slackMember3.Slack_Id,
-			slackMember1.Slack_Id,
+			slackMember2,
+			slackMember3,
+			slackMember1,
 		]);
 		expect(teamQueue[0].members_req_changes).deep.equal([]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
-		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1]);
 		expect(teamQueue[0].events[0].action).equal("OPENED");
 		expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
 		expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");
@@ -1889,15 +1865,15 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember2.Slack_Id,
-			slackMember3.Slack_Id,
-			slackMember1.Slack_Id,
+			slackMember2,
+			slackMember3,
+			slackMember1,
 		]);
 		expect(teamQueue[0].members_req_changes).deep.equal([]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
-		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1]);
 
 		// PR Owner queue should match team queue
 		expect(member1Queue).deep.equal(teamQueue);
@@ -2005,15 +1981,15 @@ describe("updateReqChanges", () => {
 		expect(teamQueue[0].member_complete).equal(false);
 		expect(teamQueue[0].members_approving).deep.equal([]);
 		expect(teamQueue[0].standard_members_alert).deep.equal([
-			slackMember2.Slack_Id,
-			slackMember3.Slack_Id,
-			slackMember1.Slack_Id,
+			slackMember2,
+			slackMember3,
+			slackMember1,
 		]);
 		expect(teamQueue[0].members_req_changes).deep.equal([]);
 		expect(teamQueue[0].lead_complete).equal(false);
 		expect(teamQueue[0].leads_approving).deep.equal([]);
 		expect(teamQueue[0].standard_leads_alert).deep.equal([]);
-		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1.Slack_Id]);
+		expect(teamQueue[0].leads_req_changes).deep.equal([slackLead1]);
 		expect(teamQueue[0].events[0].action).equal("OPENED");
 		expect(teamQueue[0].events[0].user).deep.equal(slackMember1);
 		expect(teamQueue[0].events[1].action).equal("CHANGES_REQUESTED");

@@ -68,7 +68,18 @@ export function getStandardLeadAlerts(
 
 	// If the prChanger is a member, return the standard leads
 	if (!prChangerIsLead) {
-		return standardLeadAlerts;
+		// Make sure there are no leads approving in the standard lead alerts
+		const newStandardLeadAlerts = standardLeadAlerts.filter((lead) => {
+			// Look through leads approving for any matching leads
+			const foundLeadApproving = leadsApproving.find((approvingLead) => {
+				return lead.Slack_Id === approvingLead.Slack_Id;
+			});
+			if (foundLeadApproving) {
+				return false;
+			}
+			return true;
+		});
+		return newStandardLeadAlerts;
 	}
 
 	// If the prChanger is approving

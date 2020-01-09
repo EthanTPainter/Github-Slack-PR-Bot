@@ -1,10 +1,17 @@
 import { newLogger } from "../../logger";
 import { updateOpen } from "./types/update-open";
 import { getSlackUser, getSlackGroup } from "../../json/parse";
-import { updateClose, updateMerge, updateApprove, updateReqChanges } from "./types";
 import { getSender } from "../../github/parse";
 import { updateComment } from "./types/update-comment";
 import { requiredEnvs } from "../../required-envs";
+import { JSONConfig } from "../../../src/models";
+import {
+	updateClose,
+	updateMerge,
+	updateApprove,
+	updateReqChanges,
+	updateFresh,
+} from "./types";
 
 const logger = newLogger("Updater");
 
@@ -18,106 +25,120 @@ const logger = newLogger("Updater");
  * @returns Void
  */
 export async function updateDynamo(
-  githubUser: string,
-  event: any,
-  json: any,
-  action: string,
+	githubUser: string,
+	event: any,
+	json: JSONConfig,
+	action: string,
 ): Promise<boolean> {
+	const slackUserOwner = getSlackUser(githubUser, json);
+	const slackGroupOwner = getSlackGroup(githubUser, json);
 
-  const slackUserOwner = getSlackUser(githubUser, json);
-  const slackGroupOwner = getSlackGroup(githubUser, json);
+	switch (action) {
+		case "opened": {
+			logger.info("Update DynamoDB for an Opened PR");
+			const resp = await updateOpen(
+				slackUserOwner,
+				slackGroupOwner,
+				requiredEnvs.DYNAMO_TABLE_NAME,
+				event,
+				json,
+			);
+			return resp;
+		}
 
-  switch (action) {
+		case "reopened": {
+			logger.info("Update DynamoDB for a Reopened PR");
+			const resp = await updateOpen(
+				slackUserOwner,
+				slackGroupOwner,
+				requiredEnvs.DYNAMO_TABLE_NAME,
+				event,
+				json,
+			);
+			return resp;
+		}
 
-    case "opened": {
-      logger.info("Update DynamoDB for an Opened PR");
-      const resp = await updateOpen(
-        slackUserOwner,
-        slackGroupOwner,
-        requiredEnvs.DYNAMO_TABLE_NAME,
-        event,
-        json);
-      return resp;
-    }
+		case "closed": {
+			const decider: boolean = event.pull_request.merged;
+			const githubUserSender = getSender(event);
+			const slackUserSender = getSlackUser(githubUserSender, json);
 
-    case "reopened": {
-      logger.info("Update DynamoDB for a Reopened PR");
-      const resp = await updateOpen(
-        slackUserOwner,
-        slackGroupOwner,
-        requiredEnvs.DYNAMO_TABLE_NAME,
-        event,
-        json);
-      return resp;
-    }
+			if (decider) {
+				logger.info("Update DynamoDB for a Merged PR");
+				const resp = await updateMerge(
+					slackUserOwner,
+					slackUserSender,
+					requiredEnvs.DYNAMO_TABLE_NAME,
+					event,
+					json,
+				);
+				return resp;
+			} else {
+				logger.info("Update DynamoDB for a Closed PR");
+				const resp = await updateClose(
+					slackUserOwner,
+					slackUserSender,
+					requiredEnvs.DYNAMO_TABLE_NAME,
+					event,
+					json,
+				);
+				return resp;
+			}
+		}
 
-    case "closed": {
-      const decider: boolean = event.pull_request.merged;
-      const githubUserSender = getSender(event);
-      const slackUserSender = getSlackUser(githubUserSender, json);
+		case "submitted": {
+			const decider: string = event.review.state;
+			const githubUserSender = getSender(event);
+			const slackUserSender = getSlackUser(githubUserSender, json);
 
-      if (decider) {
-        logger.info("Update DynamoDB for a Merged PR");
-        const resp = await updateMerge(
-          slackUserOwner,
-          slackUserSender,
-          requiredEnvs.DYNAMO_TABLE_NAME,
-          event,
-          json);
-        return resp;
-      }
-      else {
-        logger.info("Update DynamoDB for a Closed PR");
-        const resp = await updateClose(
-          slackUserOwner,
-          slackUserSender,
-          requiredEnvs.DYNAMO_TABLE_NAME,
-          event,
-          json);
-        return resp;
-      }
-    }
+			if (decider === "approved") {
+				logger.info("Update DynamoDB for an Approved PR");
+				const resp = await updateApprove(
+					slackUserOwner,
+					slackUserSender,
+					requiredEnvs.DYNAMO_TABLE_NAME,
+					event,
+					json,
+				);
+				return resp;
+			} else if (decider === "changes_requested") {
+				logger.info("Update DynamoDB for a changes requested PR");
+				const resp = await updateReqChanges(
+					slackUserOwner,
+					slackUserSender,
+					requiredEnvs.DYNAMO_TABLE_NAME,
+					event,
+					json,
+				);
+				return resp;
+			} else if (decider === "commented") {
+				logger.info("Update DynamoDB for a Commented PR");
+				const resp = await updateComment(
+					slackUserOwner,
+					slackUserSender,
+					requiredEnvs.DYNAMO_TABLE_NAME,
+					event,
+					json,
+				);
+				return resp;
+			} else {
+				throw new Error(`Unsupported event.review.state: ${decider}`);
+			}
+		}
 
-    case "submitted": {
-      const decider: string = event.review.state;
-      const githubUserSender = getSender(event);
-      const slackUserSender = getSlackUser(githubUserSender, json);
+		// When commit(s) are pushed to a PR
+		case "synchronize": {
+			logger.info("Update DynamoDB after a push to a PR branch");
+			const resp = await updateFresh(
+				slackUserOwner,
+				slackGroupOwner,
+				requiredEnvs.DYNAMO_TABLE_NAME,
+				event,
+				json,
+			);
+			return resp;
+		}
+	}
 
-      if (decider === "approved") {
-        logger.info("Update DynamoDB for an Approved PR");
-        const resp = await updateApprove(
-          slackUserOwner,
-          slackUserSender,
-          requiredEnvs.DYNAMO_TABLE_NAME,
-          event,
-          json);
-        return resp;
-      }
-      else if (decider === "changes_requested") {
-        logger.info("Update DynamoDB for a changes requested PR");
-        const resp = await updateReqChanges(
-          slackUserOwner,
-          slackUserSender,
-          requiredEnvs.DYNAMO_TABLE_NAME,
-          event,
-          json);
-        return resp;
-      }
-      else if (decider === "commented") {
-        logger.info("Update DynamoDB for a Commented PR");
-        const resp = await updateComment(
-          slackUserOwner,
-          slackUserSender,
-          requiredEnvs.DYNAMO_TABLE_NAME,
-          event,
-          json);
-        return resp;
-      }
-      else {
-        throw new Error(`Unsupported event.review.state: ${decider}`);
-      }
-    }
-  }
-
-  return false;
+	return false;
 }

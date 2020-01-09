@@ -3,6 +3,7 @@ import { DynamoGet, DynamoRemove } from "../../../dynamo/api";
 import { getSlackUserAlt, getSlackGroupAlt } from "../../../json/parse";
 import { getPRLink } from "../../../github/parse";
 import { newLogger } from "../../../logger";
+import { findPrInQueues } from "./helpers/find-pr-in-queues";
 
 const logger = newLogger("Dynamo.UpdateClose");
 
@@ -26,7 +27,6 @@ export async function updateClose(
 	// Setup
 	const dynamoGet = new DynamoGet();
 	const dynamoRemove = new DynamoRemove();
-	let foundPR: PullRequest | undefined;
 
 	// GitHub PR Url
 	const htmlUrl = getPRLink(event);
@@ -35,22 +35,20 @@ export async function updateClose(
 	const ownerTeam = getSlackGroupAlt(slackUserOwner.Slack_Id, json);
 	const teamQueue = await dynamoGet.getQueue(dynamoTableName, ownerTeam);
 
-	// Get SlackUserClosing's queue
+	// SlackUserClosing's queue
 	const dynamoUserQueue = await dynamoGet.getQueue(
 		dynamoTableName,
 		slackUserClosing,
 	);
-	foundPR = dynamoUserQueue.find((pr: PullRequest) => pr.url === htmlUrl);
-	if (foundPR === undefined) {
-		// If pr not found in user's queue (maybe it's the owner), check teamQueue from the owner
-		foundPR = teamQueue.find((pr) => pr.url === htmlUrl);
-		if (foundPR === undefined) {
-			throw new Error(
-				`GitHub PR Url: ${htmlUrl} not found in ${slackUserClosing.Slack_Name}'s queue OR ` +
-					`${ownerTeam.Slack_Name}'s queue`,
-			);
-		}
-	}
+
+	// Get PR from user or team queues
+	const foundPR = findPrInQueues(
+		htmlUrl,
+		slackUserClosing,
+		dynamoUserQueue,
+		ownerTeam,
+		teamQueue,
+	);
 
 	// Remove PR from owner's team queue
 	await dynamoRemove.removePullRequest(
@@ -74,7 +72,7 @@ export async function updateClose(
 				dynamoTableName,
 				alertSlackUser,
 				currentQueue,
-				foundPR!,
+				foundPR,
 			);
 		}),
 	);

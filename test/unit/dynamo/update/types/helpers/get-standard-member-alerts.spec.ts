@@ -36,6 +36,7 @@ describe("getStandardMemberAlerts", () => {
 			[prChanger],
 			[],
 			[],
+			[],
 			options as any,
 		);
 
@@ -73,6 +74,7 @@ describe("getStandardMemberAlerts", () => {
 			[],
 			[prChanger],
 			[],
+			[],
 			options as any,
 		);
 
@@ -91,11 +93,6 @@ describe("getStandardMemberAlerts", () => {
 			Slack_Id: "<OtherMemberId1>",
 			Slack_Name: "Other Member 1",
 		};
-		const otherMember2 = {
-			Slack_Id: "<OtherMemberId2>",
-			Slack_Name: "Other Member 2",
-		};
-
 		const options = {
 			Num_Required_Member_Approvals: 1,
 		};
@@ -108,6 +105,7 @@ describe("getStandardMemberAlerts", () => {
 			true,
 			[],
 			[otherMember1, prChanger],
+			[],
 			[],
 			[],
 			options as any,
@@ -137,6 +135,7 @@ describe("getStandardMemberAlerts", () => {
 			[prOwner],
 			[],
 			[prChanger],
+			[],
 			[],
 			options as any,
 		);
@@ -174,6 +173,7 @@ describe("getStandardMemberAlerts", () => {
 			[otherMember1, prChanger],
 			[],
 			[],
+			[],
 			options as any,
 		);
 
@@ -205,6 +205,7 @@ describe("getStandardMemberAlerts", () => {
 			[prOwner],
 			[],
 			[otherMember1, prChanger],
+			[],
 			[],
 			options as any,
 		);
@@ -245,6 +246,7 @@ describe("getStandardMemberAlerts", () => {
 			[prChanger],
 			[],
 			[],
+			[],
 			options as any,
 		);
 
@@ -279,6 +281,7 @@ describe("getStandardMemberAlerts", () => {
 			false,
 			[prChanger, otherMember1, otherMember2],
 			[prChanger],
+			[],
 			[],
 			[],
 			options as any,
@@ -317,6 +320,7 @@ describe("getStandardMemberAlerts", () => {
 			[prChanger],
 			[],
 			[],
+			[],
 			options as any,
 		);
 
@@ -352,6 +356,7 @@ describe("getStandardMemberAlerts", () => {
 			[otherMember1, otherMember2, prOwner],
 			[],
 			[prChanger],
+			[],
 			[],
 			options as any,
 		);
@@ -389,6 +394,7 @@ describe("getStandardMemberAlerts", () => {
 			[otherMember1, prChanger],
 			[],
 			[],
+			[],
 			options as any,
 		);
 
@@ -424,6 +430,7 @@ describe("getStandardMemberAlerts", () => {
 			[otherMember2, prChanger],
 			[],
 			[otherMember1, prChanger],
+			[],
 			[],
 			options as any,
 		);
@@ -464,6 +471,7 @@ describe("getStandardMemberAlerts", () => {
 			[],
 			[],
 			[],
+			[],
 			options as any,
 		);
 
@@ -499,6 +507,7 @@ describe("getStandardMemberAlerts", () => {
 			true,
 			true,
 			standardMemberAlerts,
+			[],
 			[],
 			[],
 			[],

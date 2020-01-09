@@ -5,14 +5,12 @@ import { requiredEnvs } from "../../../../../src/required-envs";
 import { json } from "../../../json";
 import {
 	DynamoGet,
-	DynamoAppend,
 	DynamoReset,
 	DynamoUpdate,
 } from "../../../../../src/dynamo/api";
 
 describe("Dynamo.UpdateClose", () => {
 	const dynamoGet = new DynamoGet();
-	const dynamoAppend = new DynamoAppend();
 	const dynamoReset = new DynamoReset();
 	const dynamoUpdate = new DynamoUpdate();
 
@@ -122,7 +120,7 @@ describe("Dynamo.UpdateClose", () => {
 				html_url: "www.github.com/ethantpainter",
 			},
 		};
-		// Add PR to all only member & team queues
+		// Add PR to only member & team queues
 		await dynamoUpdate.updatePullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
 			slackMember2,
@@ -138,6 +136,112 @@ describe("Dynamo.UpdateClose", () => {
 		await dynamoUpdate.updatePullRequest(
 			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
 			slackTeam,
+			[],
+			newPR,
+		);
+
+		// Update Queues to close/remove the PR
+		await updateClose(
+			slackMember1,
+			slackMember1,
+			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+			event,
+			json,
+		);
+
+		const teamQueue = await dynamoGet.getQueue(
+			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+			slackTeam,
+		);
+		const lead1Queue = await dynamoGet.getQueue(
+			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+			slackLead1,
+		);
+		const lead2Queue = await dynamoGet.getQueue(
+			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+			slackLead2,
+		);
+		const lead3Queue = await dynamoGet.getQueue(
+			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+			slackLead3,
+		);
+		const member1Queue = await dynamoGet.getQueue(
+			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+			slackMember1,
+		);
+		const member2Queue = await dynamoGet.getQueue(
+			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+			slackMember2,
+		);
+		const member3Queue = await dynamoGet.getQueue(
+			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+			slackMember3,
+		);
+
+		expect(teamQueue).deep.equal([]);
+		expect(lead1Queue).deep.equal([]);
+		expect(lead2Queue).deep.equal([]);
+		expect(lead3Queue).deep.equal([]);
+		expect(member1Queue).deep.equal([]);
+		expect(member2Queue).deep.equal([]);
+		expect(member3Queue).deep.equal([]);
+	});
+
+	it("should update queues with a closed PR -- remove queue from request changes groups", async () => {
+		json.Departments.Devs.DevTeam1.Options.Member_Before_Lead = false;
+
+		const newPR = {
+			owner: slackMember1,
+			title: "VALID PR TITLE #1",
+			url: "www.github.com/ethantpainter",
+			comment_times: {},
+			standard_members_alert: [slackMember1],
+			members_approving: [],
+			member_complete: false,
+			standard_leads_alert: [],
+			leads_approving: [slackLead3],
+			lead_complete: false,
+			leads_req_changes: [slackLead1],
+			members_req_changes: [slackMember3],
+			req_changes_leads_alert: [slackLead2],
+			req_changes_members_alert: [slackMember2],
+			events: [
+				{
+					user: slackMember1,
+					action: "OPENED",
+					time: "NOW",
+				},
+			],
+		};
+		const event = {
+			pull_request: {
+				title: "NEW PR TITLE",
+				html_url: "www.github.com/ethantpainter",
+			},
+		};
+
+		// Add PR to member, lead, and team queues
+		await dynamoUpdate.updatePullRequest(
+			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+			slackTeam,
+			[],
+			newPR,
+		);
+		await dynamoUpdate.updatePullRequest(
+			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+			slackMember1,
+			[],
+			newPR,
+		);
+		await dynamoUpdate.updatePullRequest(
+			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+			slackMember2,
+			[],
+			newPR,
+		);
+		await dynamoUpdate.updatePullRequest(
+			requiredEnvs.INTEGRATION_TEST_DYNAMO_TABLE_NAME,
+			slackLead2,
 			[],
 			newPR,
 		);

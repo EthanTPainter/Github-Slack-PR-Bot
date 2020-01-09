@@ -4,6 +4,7 @@ import { createISO, sendCommentSlackAlert } from "../../time";
 import { getSlackGroupAlt, getTeamOptionsAlt } from "../../../json/parse";
 import { processCommentingUserReqChanges } from "./helpers/comment-changes-alerts";
 import { DynamoGet, DynamoUpdate } from "../../../dynamo/api";
+import { findPrInQueues } from "./helpers/find-pr-in-queues";
 
 /**
  * @description Update DynamoDB table to add a comment
@@ -26,7 +27,6 @@ export async function updateComment(
 	// Setup
 	const dynamoGet = new DynamoGet();
 	const dynamoUpdate = new DynamoUpdate();
-	let foundPR: PullRequest | undefined;
 
 	// GitHub PR Url
 	const htmlUrl = getPRLink(event);
@@ -40,17 +40,15 @@ export async function updateComment(
 		dynamoTableName,
 		slackUserCommenting,
 	);
-	foundPR = dynamoUserQueue.find((pr) => pr.url === htmlUrl);
-	if (foundPR === undefined) {
-		// If not found in slackUserCommenting's queue (maybe it's the owner), check team queue
-		foundPR = teamQueue.find((pr) => pr.url === htmlUrl);
-		if (foundPR === undefined) {
-			throw new Error(
-				`GitHub PR Url: ${htmlUrl} not found in ${slackUserCommenting.Slack_Name}'s queue OR ` +
-					`${ownerTeam.Slack_Name}'s queue`,
-			);
-		}
-	}
+
+	// Get PR from user or team queues
+	const foundPR = findPrInQueues(
+		htmlUrl,
+		slackUserCommenting,
+		dynamoUserQueue,
+		ownerTeam,
+		teamQueue,
+	);
 
 	// Make timestamp for last updated time & Add new comment event from slackUserCommenting
 	const currentTime = createISO();
@@ -61,16 +59,6 @@ export async function updateComment(
 	};
 	foundPR.events.push(newEvent);
 
-	// If user commenting requested changes
-	// make sure pr owner is alerted
-	await processCommentingUserReqChanges(
-		slackUserOwner,
-		slackUserCommenting,
-		foundPR,
-		dynamoTableName,
-		json,
-	);
-
 	// Check whether to send a slack alert & update comment times
 	const teamOptions = getTeamOptionsAlt(slackUserOwner, json);
 	const sendSlackAlert = sendCommentSlackAlert(
@@ -79,21 +67,21 @@ export async function updateComment(
 		slackUserCommenting,
 		foundPR,
 	);
-	foundPR = sendSlackAlert.pr;
+	const updatedPR = sendSlackAlert.pr;
 
 	// Update commented event on team queue
 	await dynamoUpdate.updatePullRequest(
 		dynamoTableName,
 		ownerTeam,
 		teamQueue,
-		foundPR,
+		updatedPR,
 	);
 
 	// For all members and leads to alert, update each PR from each user queue
-	const allAlertingUserIds = foundPR.standard_leads_alert
-		.concat(foundPR.standard_members_alert)
-		.concat(foundPR.req_changes_leads_alert)
-		.concat(foundPR.req_changes_members_alert);
+	const allAlertingUserIds = updatedPR.standard_leads_alert
+		.concat(updatedPR.standard_members_alert)
+		.concat(updatedPR.req_changes_leads_alert)
+		.concat(updatedPR.req_changes_members_alert);
 
 	await Promise.all(
 		allAlertingUserIds.map(async (alertUser) => {
@@ -103,7 +91,7 @@ export async function updateComment(
 				dynamoTableName,
 				alertUser,
 				currentQueue,
-				foundPR!,
+				updatedPR,
 			);
 		}),
 	);

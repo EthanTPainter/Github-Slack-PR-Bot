@@ -1,5 +1,3 @@
-import { DynamoDB } from "aws-sdk";
-
 import { DynamoGet, DynamoAppend } from "../../api";
 import { formatNewPullRequest } from "../../formatting/format-new-pr";
 import { getTeamOptionsAlt } from "../../../json/parse";
@@ -58,7 +56,7 @@ export async function updateOpen(
 
 	// For each user in the slackUserList,
 	// 1) Get Most recent queue for the user
-	// 2) Append newPullRequest to the existing queue
+	// 2) Append new pull request to the existing queue
 
 	const dynamoGet = new DynamoGet();
 	const dynamoUpdate = new DynamoAppend();
@@ -82,7 +80,6 @@ export async function updateOpen(
 		dynamoTableName,
 		slackTeam,
 	);
-
 	await dynamoUpdate.appendPullRequest(
 		dynamoTableName,
 		slackTeam,

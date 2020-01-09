@@ -5,6 +5,7 @@ import {
 	constructMerge,
 	constructReqChanges,
 	constructApprove,
+	constructSynchronize,
 } from "./types";
 
 import { Review } from "../../../../src/github/api";
@@ -27,8 +28,6 @@ export async function constructSlackMessage(
 	reviewClass: Review,
 	githubToken: string,
 ): Promise<string> {
-	let slackMessage = "default";
-
 	switch (action) {
 		/* When a PR is opened
 		 * Construct OpenPR Object and format slack message
@@ -43,10 +42,10 @@ export async function constructSlackMessage(
 			 * -------------- TITLE --------------------
 			 * -------------- URL ----------------------
 			 */
-			slackMessage =
+			const openedSlackMessage =
 				open.description + "\n" + open.title + "  [" + open.url + "]";
-			logger.debug("Opened Slack Message:\n" + slackMessage);
-			break;
+			logger.debug(`Opened Slack Message:\n ${openedSlackMessage}`);
+			return openedSlackMessage;
 		}
 
 		/* When a PR is reopened (PR was previously CLOSED)
@@ -62,10 +61,10 @@ export async function constructSlackMessage(
 			 * -------------- TITLE --------------------
 			 * -------------- URL ----------------------
 			 */
-			slackMessage =
+			const reopenedSlackMessage =
 				open.description + "\n" + open.title + "  [" + open.url + "]";
-			logger.debug("Reopened Slack Message:\n" + slackMessage);
-			break;
+			logger.debug(`Reopened Slack Message:\n ${reopenedSlackMessage}`);
+			return reopenedSlackMessage;
 		}
 
 		/* When a PR has been closed OR merged
@@ -83,9 +82,10 @@ export async function constructSlackMessage(
 				 * -------------- TITLE --------------------
 				 * -------------- URL ----------------------
 				 */
-				slackMessage =
+				const closedSlackMessage =
 					merge.description + "\n" + merge.title + "  [" + merge.url + "]";
-				logger.debug("Merged Slack Message:\n" + slackMessage);
+				logger.debug("Merged Slack Message:\n" + closedSlackMessage);
+				return closedSlackMessage;
 			} else {
 				logger.info("Constructing Closed PR slack message...");
 				// Construct ClosePR Object and format slack message
@@ -96,11 +96,11 @@ export async function constructSlackMessage(
 				 * -------------- TITLE --------------------
 				 * -------------- URL ----------------------
 				 */
-				slackMessage =
+				const closedSlackMessage =
 					close.description + "\n" + close.title + "  [" + close.url + "]";
-				logger.debug("Closed Slack Message:\n" + slackMessage);
+				logger.debug("Closed Slack Message:\n" + closedSlackMessage);
+				return closedSlackMessage;
 			}
-			break;
 		}
 
 		/* When a review has been submitted for a PR
@@ -128,10 +128,10 @@ export async function constructSlackMessage(
 				 * -------------- DESCRIPTION --------------
 				 * ---------------- TITLE ------------------
 				 * ----------------- URL -------------------
-				 * --------------- Member CHECK --------------
+				 * --------------- MEMBER CHECK ------------
 				 * --------------- LEAD CHECK --------------
 				 */
-				slackMessage =
+				const approvedSlackMessage =
 					approve.description +
 					"\n" +
 					approve.title +
@@ -139,7 +139,8 @@ export async function constructSlackMessage(
 					approve.url +
 					"] \n" +
 					approve.approvals;
-				logger.debug("Approved Slack Message:\n" + slackMessage);
+				logger.debug("Approved Slack Message:\n" + approvedSlackMessage);
+				return approvedSlackMessage;
 			}
 			// When a user requests changes on a PR. This is arguably the most important feat
 			else if (decider === "changes_requested") {
@@ -151,14 +152,17 @@ export async function constructSlackMessage(
 				 * -------------- TITLE --------------------
 				 * -------------- URL ----------------------
 				 */
-				slackMessage =
+				const changesRequestedSlackMessage =
 					changes.description +
 					"\n" +
 					changes.title +
 					"  [" +
 					changes.url +
 					"]";
-				logger.debug("Requested Changes Slack Message:\n" + slackMessage);
+				logger.debug(
+					"Requested Changes Slack Message:\n" + changesRequestedSlackMessage,
+				);
+				return changesRequestedSlackMessage;
 			} else if (decider === "commented") {
 				logger.info("Constructing commentPR slack message");
 				/* When a user comments on a PR
@@ -169,22 +173,27 @@ export async function constructSlackMessage(
 				 * -------------- URL ----------------------
 				 */
 				const comment = constructComment(event, json);
-				slackMessage =
+				const commentSlackMessage =
 					comment.description +
 					"\n" +
 					comment.title +
 					"  [" +
 					comment.url +
 					"]";
-				logger.debug("Commented Slack Message:\n" + slackMessage);
+				logger.debug("Commented Slack Message:\n" + commentSlackMessage);
+				return commentSlackMessage;
 			} else {
 				// Not approved or requested changes, throw error for unsupported state
 				throw new Error(
 					`Review submitted for PR. Unsupported event.review.state: ${decider}`,
 				);
 			}
-			break;
 		}
+
+		/**
+		 * When a comment is created on a PR
+		 * Construct the slack message for a user commenting on a PR
+		 */
 		case "created": {
 			if (event.comment) {
 				logger.info(`Constructing commentPR slack message`);
@@ -193,18 +202,56 @@ export async function constructSlackMessage(
 				 * encourage using "request_changes" for many comments
 				 * SLACK MESSAGE APPEARANCE:
 				 * -------------- DESCRIPTION --------------
+				 * -------------- TITLE --------------------
 				 * -------------- URL ----------------------
 				 */
 				const comment = constructComment(event, json);
-				slackMessage =
+				const commentSlackMessage =
 					comment.description +
 					"\n" +
 					comment.title +
 					"  [" +
 					comment.url +
 					"]";
-				logger.debug("Commented Slack Message:\n" + slackMessage);
+				logger.debug(`Commented Slack Message:\n ${commentSlackMessage}`);
+				return commentSlackMessage;
 			}
+			break;
+		}
+
+		case "synchronize": {
+			// Verify that the event has a pull request attached to it
+			if (event.pull_request) {
+				logger.info(`Constructing a fresh approval slack message`);
+				/* When a user pushes a commit to a PR
+				 * SLACK MESSAGE APPEARANCE:
+				 * ----------------DESCRIPTION--------------
+				 * ----------------URL----------------------
+				 */
+				const push = await constructSynchronize(event, json);
+				// If the alert property is false, don't return a valid slack message
+				if (push.alert === false) {
+					return "";
+				}
+				// Create list of affected approving users
+				const usersAffected: string[] = [];
+				push.reset_approving_users.forEach((formerApprovingUser) => {
+					usersAffected.push(formerApprovingUser.Slack_Id);
+				});
+
+				const synchronizeSlackMessage =
+					push.description +
+					"\n" +
+					push.title +
+					"[" +
+					push.url +
+					"]" +
+					"\nPrevious Approving Users: " +
+					usersAffected.toString();
+				logger.debug(`Synchronize Slack Message:\n ${synchronizeSlackMessage}`);
+				return synchronizeSlackMessage;
+			}
+			break;
 		}
 
 		default: {
@@ -212,5 +259,5 @@ export async function constructSlackMessage(
 			return "";
 		}
 	}
-	return slackMessage;
+	return "";
 }
