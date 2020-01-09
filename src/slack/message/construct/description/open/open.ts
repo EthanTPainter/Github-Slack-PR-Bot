@@ -1,4 +1,4 @@
-import { SlackUser } from "../../../../../models";
+import { SlackUser, JSONConfig } from "../../../../../models";
 import { getTeamOptionsAlt, getSlackMembersAlt } from "../../../../../json/parse";
 
 /**
@@ -14,7 +14,7 @@ export function constructOpenDesc(
   slackUser: SlackUser,
   slackGroup: SlackUser,
   newPR: boolean,
-  json: any,
+  json: JSONConfig,
 ): string {
   // Get Team options
   if (!json || !json.Departments) {

@@ -39,8 +39,6 @@ export class Review {
       };
 
       const result = await rp(options);
-      logger.info(`Result: ${JSON.stringify(result)}`);
-
       return result;
     }
     catch (error) {

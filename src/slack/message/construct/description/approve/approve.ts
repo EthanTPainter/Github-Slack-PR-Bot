@@ -79,7 +79,6 @@ export function getLeadList(
   leads: string[],
   leadsExempt: string[],
 ): string[] {
-
   const group: string[] = [];
   let counter: number = 0;
   // Loop through leads. If a lead is in leadsExempt

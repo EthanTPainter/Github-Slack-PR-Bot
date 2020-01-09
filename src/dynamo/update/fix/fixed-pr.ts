@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { PullRequest } from "../../../models";
+import { PullRequest, JSONConfig } from "../../../models";
 import {
 	getSlackUserAlt,
 	getTeamOptionsAlt,
@@ -13,6 +13,9 @@ import { DynamoRemove, DynamoUpdate, DynamoGet } from "../../api";
  * PR is fixed
  * @param slackUserId Slack user's id
  * @param slackUserQueue Slack user's queue
+ * @param slackOwnerQueue PR Owner's queue
+ * @param dynamoTableName Name of the dynamo table
+ * @param json JSON Config file
  * @returns string of the expected slack message
  */
 export async function updateFixedPR(
@@ -20,7 +23,7 @@ export async function updateFixedPR(
 	fixedPRUrl: string,
 	slackOwnerQueue: PullRequest[],
 	dynamoTableName: string,
-	json: any,
+	json: JSONConfig,
 ): Promise<string> {
 	// Verify the PR is in the queue
 	const foundPR = slackOwnerQueue.find((pr) => {

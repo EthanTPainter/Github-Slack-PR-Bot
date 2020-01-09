@@ -1,4 +1,4 @@
-import { PullRequest } from "../../models";
+import { PullRequest, JSONConfig } from "../../models";
 import { newLogger } from "../../logger";
 import { getTeamOptionsAlt } from "../../json/parse";
 import { constructQueueString } from "../../slack/message/construct/description";
@@ -15,7 +15,7 @@ export function formatMyQueue(
 	submittedUserId: string,
 	owner: SlackUser,
 	queue: PullRequest[],
-	json: any,
+	json: JSONConfig,
 ): string {
 	let formattedQueue = "";
 
