@@ -75,7 +75,6 @@ describe("getLatestReviews", () => {
     const result = parseLatestReviews(reviewList);
     const expected = {};
 
-    console.log(`Result: ${JSON.stringify(result)}`);
     expect(Object.keys(result).length).equal(0);
     expect(result).deep.equal(expected);
   });

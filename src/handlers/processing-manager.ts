@@ -141,7 +141,7 @@ export async function processEvent(
 						);
 
 						// Construct the Slack message based on PR action and body
-						// If slack message is empty, don't process any further
+						// If slack message is empty or PR action is not synchronize, don't process any further
 						const pullRequestAction: string = message.body.action;
 						const reviewClass = new Review();
 						const slackMessage = await constructSlackMessage(

@@ -42,14 +42,14 @@ export function constructQueueString(
     if (leadsApproving.length > 0) {
       prString += `| Leads Approving: `;
       leadsApproving.map((leadApproving: SlackUser) => {
-        prString += `[${leadApproving.Slack_Name}] `;
+        prString += `${leadApproving.Slack_Name} `;
       });
     }
     // If there are members approving, add to string
     if (membersApproving.length > 0) {
       prString += `| Members Approving: `;
       membersApproving.map((memberApproving: SlackUser) => {
-        prString += `[${memberApproving.Slack_Name}] `;
+        prString += `${memberApproving.Slack_Name} `;
       });
     }
   }
@@ -60,14 +60,14 @@ export function constructQueueString(
     if (leadsReqChanges.length > 0) {
       prString += `| Leads Request Changes: `;
       leadsReqChanges.map((leadReqChanges: SlackUser) => {
-        prString += `[${leadReqChanges.Slack_Name}] `;
+        prString += `${leadReqChanges.Slack_Name} `;
       });
     }
     // If there are members, add to string
     if (membersReqChanges.length > 0) {
       prString += `| Members Request Changes: `;
       membersReqChanges.map((memberReqChanges: SlackUser) => {
-        prString += `[${memberReqChanges.Slack_Name}]`;
+        prString += `${memberReqChanges.Slack_Name} `;
       });
     }
   }

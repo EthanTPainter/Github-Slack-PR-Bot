@@ -113,7 +113,7 @@ export async function updateFixedPR(
 	// that the PR is ready to review
 	let allUsersString = "";
 	allUsersReqChanges.map((user) => {
-		allUsersString += `${user} `;
+		allUsersString += `${user.Slack_Id} `;
 	});
 
 	// Get Slack User from slackUserId & format final string
