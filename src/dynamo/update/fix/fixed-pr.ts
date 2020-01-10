@@ -1,10 +1,6 @@
 import { DateTime } from "luxon";
 import { PullRequest, JSONConfig } from "../../../models";
-import {
-	getSlackUserAlt,
-	getTeamOptionsAlt,
-	getSlackGroupAlt,
-} from "../../../json/parse";
+import { getSlackUserAlt, getSlackGroupAlt } from "../../../json/parse";
 import { DynamoRemove, DynamoUpdate, DynamoGet } from "../../api";
 
 /**
@@ -95,12 +91,12 @@ export async function updateFixedPR(
 	);
 
 	// Update Dynamo Queues for all other impacted users
-	const impactedUserIds = foundPR.standard_leads_alert
+	const impactedUsers = foundPR.standard_leads_alert
 		.concat(foundPR.standard_members_alert)
 		.concat(foundPR.req_changes_leads_alert)
 		.concat(foundPR.req_changes_members_alert);
 
-	await impactedUserIds.map(async (user) => {
+	await impactedUsers.map(async (user) => {
 		await dynamoUpdate.updatePullRequest(
 			dynamoTableName,
 			user,
