@@ -28,8 +28,6 @@
   - [Creating Slack App And Bot](#creating-slack-app-and-bot)
   - [Deploying Lambdas](#deploying-lambdas)
     - [Creating a JSON Config](#creating-a-json-config)
-    - [Setting Environment Variables](#setting-environment-variables)
-    - [Running deploy scripts](#Running-deploy-scripts)
   - [Adding GitHub webhooks](#adding-github-webhooks)
   - [Creating Slack slash commands](#creating-slack-slash-commands)
     - [Creating Echo](#creating-echo)
@@ -38,9 +36,6 @@
     - [Creating Get Queue](#creating-get-queue)
     - [Creating Fixed PR](#creating-fixed-pr)
 - [Architecture](#architecture)
-  - [Overall Architecture](#overall-architecture)
-  - [GitHub Notifications Only](#github-notifications-only)
-  - [Slack Slash Commands Only](#slack-slash-commands-only)
 - [Basic Structure](#basic-structure)
   - [Environment Variables](#environment-variables)
   - [Options](#options)
@@ -353,6 +348,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         }
       },
       SouthernTeam: {
@@ -371,6 +368,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: true,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         }
       }
     },
@@ -391,6 +390,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         }
       }
     },
@@ -411,6 +412,8 @@ export const json = {
           Member_Before_Lead: false,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         }
       }
     }
@@ -438,6 +441,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "The Mighty Ducks",
@@ -460,6 +465,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: true,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "The Southerners",
@@ -484,6 +491,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "We Find All The Bugs",
@@ -508,6 +517,8 @@ export const json = {
           Member_Before_Lead: false,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "PROD",
@@ -539,6 +550,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "The Mighty Ducks",
@@ -565,6 +578,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: true,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "The Southerners",
@@ -593,6 +608,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "We Find All The Bugs",
@@ -621,6 +638,8 @@ export const json = {
           Member_Before_Lead: false,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "PROD",
@@ -656,6 +675,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "The Mighty Ducks",
@@ -687,6 +708,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: true,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "The Southerners",
@@ -721,6 +744,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "We Find All The Bugs",
@@ -753,6 +778,8 @@ export const json = {
           Member_Before_Lead: false,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "PROD",
@@ -792,6 +819,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "The Mighty Ducks",
@@ -832,6 +861,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: true,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "The Southerners",
@@ -878,6 +909,8 @@ export const json = {
           Member_Before_Lead: true,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "We Find All The Bugs",
@@ -916,6 +949,8 @@ export const json = {
           Member_Before_Lead: false,
           Disable_Dynamo: false,
           Disable_GitHub_Alerts: false,
+          Require_Fresh_Approvals: false,
+					Fresh_Approval_Repositories: [],
         },
         Slack_Group: {
           Slack_Name: "PROD",
@@ -940,59 +975,7 @@ export const json = {
   }
 };
 ```
-That completes the JSON configuration process.
-
-#### Setting Environment Variables
-At the root level, create a file `.env`. This will be used to store all of your environment variables.
-
-The application already provides default values for most of the [environment variables](#environment-variables). There are however those that **must** be supplied by the user. Those variables will be covered here:
-
-1. S3_BUCKET_NAME
-
-When you created the AWS infrastructure, you supplied the parameter `S3BucketName` with a value. If you need to find the s3 bucket, go to the AWS Management Console, enter S3, and select it. Search for the pr-bot s3 bucket for help finding it.
-
-2. GITHUB_OAUTH2_TOKEN
-
-The GitHub Oauth2 Token can be created via [instructions from GitHub](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line). Make sure the token has access to public and private repositories.
-
-3. DYNAMO_TABLE_NAME
-
-When you created the AWS infrastructure you supplied the parameter `DynamoTableName` with a value. Copy the name used to create the Dynamo table.
-
-4. SNS_ARN
-
-After deploying the AWS infrastructure, type `SNS` into the AWS Management Console. Select SNS and search for the name you gave to your PR bot sns. Under `Details`, view the `ARN` associated value. Copy the arn.
-
-5. SQS_ARN
-
-After deploying the AWS infrastructure, type `SQS` into the AWS Management Console. Select SQS and search for the name you gave to your PR bot sqs. Under `Details`, view the `ARN` associated value. Copy the arn.
-
-6. SLACK_BOT_TOKEN
-
-Return to your [organization's Slack Apps](https://api.slack.com/apps) and select your PR Bot App. Navigate to `Oauth & Permissions` on the left sidebar, and copy the `Bot User OAuth Access Token`.
-
-At this point, your current `.env` file should appear similar to this:
-```
-S3_BUCKET_NAME="pr-bot-s3-bucket"
-GITHUB_OAUTH2_TOKEN="9d987...."
-DYNAMO_TABLE_NAME="pr-bot-table"
-SNS_ARN="arn:aws:sns:..."
-SQS_ARN="arn:aws:sqs:..."
-SLACK_BOT_TOKEN="xoxb-..."
-```
-
-7. Add All team names from your `./src/json/src/json.ts` to `src/required-envs.ts`
-
-The class `EnvModel` should have the team names added in the following format:
-```
-[TEAM_NAME]_SLACK_CHANNEL_NAME: string
-```
-The `const requiredEnvs` should have the team names also added in the following format:
-```
-[TEAM_NAME]_SLACK_CHANNEL_NAME: str(),
-```
-
-For further assistance, this is how we would add team names from the example provided earlier in [Creating a JSON Config](#creating-a-json-config):
+Once this JSON config is finalized, the only thing left to do is add the team names to the environment variables [help](#environment-variables). Using the model we created above, this is how the new environment variables would be added.
 
 ```
 export class EnvModel {
@@ -1011,23 +994,6 @@ export const requiredEnvs = envalid.cleanEnv<EnvModel>(process.env, {
   OnlyProdTeam: str();
 }
 ```
-
-#### Running Deploy Scripts
-
-After setting all environment variables, run the following scripts:
-
-```
-npm i
-npm run build
-npm run deploy:dev
-```
-This will deploy your lambdas with a `dev` stage. You can deploy lambdas with a `qa` or `prod` stage with `npm run deploy:qa` or `npm run deploy:prod` respectively. After serverless deploys your lambdas, look at the output of the deploy to view `endpoints`. Under it, you should a `POST - URL`. Copy the URL. It will be needed for later.
-
-If you want your application to use Slack slash commands, run:
-```
-npm run dynamo:init
-```
-This will initialize the Dynamo table with all of your User and Slack_Group Slack Ids and their queues.
 
 ### Adding GitHub Webhooks
 Now that our AWS infrastructure and lambdas are deployed, we need to connect our public or private repositories to our lambda.
@@ -1081,10 +1047,7 @@ Expected use: `/fixed-pr https://github.com/organization/repository/pull/###`
 
 ## Architecture
 
-### Overall Architecture
-**IMPORTANT**: Deploying all infrastructure
-
-If this application will be used to:
+This application will be used to:
 1) Receive slack messages in your team's slack channel from GitHub
 2) Use the Slack PR bot slash commands to receive PR statuses 
 
@@ -1099,42 +1062,6 @@ The first lambda will process requests and publish each to an SNS. The SNS will 
 A second lambda will be listening to the SQS, and pull off messages as they appear.
 With DynamoDB enabled, a dynamo table will keep a status of current PRs (who has approved them, who has request changes, etc.).
 The lambda will finish by sending an alert/notification to the Slack channel belonging to the team.
-
-### GitHub Notifications Only
-If this appplication will only be used to:
-1) Receive slack messages in your team's slack channel from GitHub
-
-Architecture Diagram
-
-![GitHub-PR-Bot-GitHub-Notifications-Only](./images/GitHub-PR-Bot-Architecture-Diagram-only-github.png)
-
-*Note*: The SQS is not a standard SQS queue. It must be a FIFO (first-in-first-out) queue.
-This is set to enable exactly once delivery to lambdas, preventing duplicate alerts
-sent to a Slack channel.
-
-#### Explanation
-
-GitHub will send events to the lambda **only** about PR changes. All used event types are described in [GitHub Notifications](#github-notifications).
-The first lambda will process GitHub events and publish them to a FIFO queue.
-The second lambda listens to the FIFO queue and pulls off any available messages.
-The lambda then processes the event and sends a Slack message to a team's slack channel.
-
-### Slack Slash Commands Only
-If this application will only be used to:
-1) Use the Slack PR bot slash commands to receive PR statuses 
-
-Architecture Diagram
-
-![GitHub-PR-Bot-Slack-Slash-Commands-Only](./images/GitHub-PR-Bot-Architecture-Diagram-only-slash-commands.png)
-
-#### Explanation
-This architecture nearly mirrors the architecture used for [Overall Architecture](#overall-architecture).
-If there are no existing GitHub webhooks connected to the first lambda, only Slack slash commands will make requests.
-If there are existing webhooks connected to the first lambda, make sure to set `Disable_GitHub_Alerts` to `true`.
-
-Slack slash commands will be processed by the first lambda. All slack slash commands are found [here](#slack-slash-commands).
-The first lambda will process and publish messages to a standard SQS.
-The second lambda will poll the SQS for messages, process them, and post the result back to slack user who made the request.
 
 ## Basic Structure
 
@@ -1154,7 +1081,7 @@ for an organization's setup. JSON config files are located located at `/src/json
 
 ### Environment Variables
 
-All required environment variables are provided in the file: `.env.deploy.template`.
+A sample of required environment variables are provided in the file: `params.template`.
 
 The table below will go further into detail about each variable and it's purpose.
 
@@ -1264,14 +1191,14 @@ export const json = {
 
 The first key, `Departments`, is required. However, the next two layers of keys, `Dev` and `Dev_Team_1`, are completely renameable.
 The department name `Dev` could be changed to `QA`, `Prod`, `Unknown_Department`, etc.
-The team name `Dev_Team_1` can be changed to `DevTeam`, `BestTeam`, etc.
+The team name `Dev_Team_1` can be changed to `DevTeam`, `BestTeam`, `OnlyCommenters`, etc.
 
-Within each team key, such as `Dev_Team_1`, there **must** be the following keys: `Options`, `Slack_Group`, and `Users`.
+Within each team key, such as `Dev_Team_1`, there **must** be the following keys: `Options`, and `Users`. The `Slack_Group` property is optional. It is recommended to use it.
 
 The `Options` key should have all of the properties described [here](#options).
 
 The `Slack_Group` key should have `Slack_Name` and `Slack_Id` properties.
-The `Slack_Name` property is the display name of the team. This name is used to reference users/teams without alerting them.
+The `Slack_Name` property is the display name of the team. This name is used to reference the team name without alerting the users on the team.
 The `Slack_Id` property is the Slack code format for making a reference to a Slack Team.
 This Slack Id, when used, alerts the user or users of the team.
 
@@ -1294,9 +1221,6 @@ Members: {
 }
 ```
 
-The `Slack_Name` and `Slack_Id` properties on each lead and member represent the same information provided above about the `Slack_Group`.
-The `Slack_Name` describes the user's name without directly referencing, or alerting them on Slack. Can be set to any name.
-The `Slack_Id` describes the user's Slack reference, used to directly alert them of a message from the PR Bot. Set ID provided through slack (format: `<@UBP6A5PUL>`)
+The `Slack_Name` and `Slack_Id` properties on each lead and member represent the same information provided above about the `Slack_Group`. The `Slack_Name` describes the user's name without directly referencing, or alerting them on Slack. Can be set to any name. The `Slack_Id` describes the user's Slack reference, used to directly alert them of a message from the PR Bot. Set ID provided through slack (format: `<@UBP6A5PUL>`)
 
-To view your organization's users and find your team's slack IDs, I'd recommend this [Slack API tester](https://api.slack.com/methods/users.list/test).
-The `users.list` should list all slack users in the organization, allowing you to search it for names and find the corresponding IDs.
+To view your organization's users and find your team's slack IDs, I'd recommend this [Slack API tester](https://api.slack.com/methods/users.list/test). The `users.list` should list all slack users in the organization, allowing you to search it for names and find the corresponding IDs.
