@@ -4,4 +4,5 @@ export enum SLASH_COMMANDS {
   MY_QUEUE = "/my-queue",
   GET_QUEUE = "/get-queue",
   FIXED_PR = "/fixed-pr",
+  REQUEST_MORE_CHANGES = "/request-more-changes",
 }

@@ -1,13 +1,14 @@
 import { SQSRecord, Callback, Context } from "aws-lambda";
 
 import { json } from "../json/src/json";
+import { getTeamName, getTeamOptions, getSlackUser } from "../json/parse";
 import {
-	getTeamName,
-	getTeamOptions,
-	getSlackUserAlt,
-	getSlackUser,
-} from "../json/parse";
-import { getQueue, getMyQueue, processFixedPR, getTeamQueue } from "./commands";
+	getQueue,
+	getMyQueue,
+	processFixedPR,
+	getTeamQueue,
+	requestMoreChanges,
+} from "./commands";
 
 import { constructSlackMessage } from "../slack/message/construct/constructor";
 import { requiredEnvs } from "../required-envs";
@@ -84,6 +85,14 @@ export async function processEvent(
 								tokens.Slack_Token,
 								message.messageId,
 							);
+							break;
+						case SLASH_COMMANDS.REQUEST_MORE_CHANGES:
+							response = await requestMoreChanges(
+								message.body,
+								tokens.Slack_Token,
+								message.messageId,
+							);
+							break;
 						default:
 							response = {
 								body:
