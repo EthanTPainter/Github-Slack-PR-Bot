@@ -19,7 +19,7 @@
     "release": "standard-version"
   },
   "dependencies": {
-    "aws-sdk": "^2.522.0",
+    "aws-sdk": "^2.814.0",
     "dotenv": "^8.1.0",
     "envalid": "^4.1.4",
     "luxon": "^1.17.2",
